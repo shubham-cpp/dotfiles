@@ -1,0 +1,16 @@
+! -*- coding: utf-8 -*-
+! 2014-09-10
+! make caps lock do escape
+! from http://xahlee.info/
+
+! keycode   9 = Escape NoSymbol Escape
+! keycode  66 = Caps_Lock NoSymbol Caps_Lock
+! This code will make caps behave like escape
+! clear Lock
+! keycode 66 = Escape NoSymbol Escape
+
+! This code is to swap caps with escape
+! remove Lock = Caps_Lock
+! add Lock = Escape
+! keysym Caps_Lock = Escape
+! keysym Escape = Caps_Lock

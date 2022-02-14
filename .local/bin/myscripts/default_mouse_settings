@@ -1,0 +1,12 @@
+#! /bin/sh
+
+touchpad=$(xinput list | grep -i "touchpad" | grep -oP "[0-9]{2}")
+tapclick=$(xinput list-props "$touchpad" | grep -i -m1 Tapping | grep -oP "[0-9]{3}")
+natscroll=$(xinput list-props "$touchpad" | grep -i -m1 Natural\ Scroll | grep -oP "[0-9]{3}")
+accel=$(xinput list-props "$touchpad" | grep -i -m1 Accel | grep -oP "[0-9]{3}" | head -n1)
+
+xinput set-prop "$touchpad" "$tapclick" 1
+# To set the Natural Scrolling
+xinput set-prop "$touchpad" "$natscroll" 1
+# To setup the accel speed of the mouse
+xinput set-prop "$touchpad" "$accel" 0.35

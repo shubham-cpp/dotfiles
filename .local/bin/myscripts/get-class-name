@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+    # | sed -e 's/"//g' \
+
+die() {
+    if [ ! -f $1 ]; then
+        notify-send -u critical "Software Missing" "$2 is not installed"
+        exit 1
+    fi
+}
+
+
+die /usr/bin/xprop Xprop
+die /usr/bin/xclip Xclip
+
+xprop WM_CLASS \
+    | grep -o '"[^"]*"' \
+    | tail -n1 \
+    | xargs -I % sh -c "notify-send 'Window Name' %; echo % | xclip -i -r -sel clip" && exit 0
+
+notify-send "Error" "While getting class name Maybe xclip isnt installed" -u critical

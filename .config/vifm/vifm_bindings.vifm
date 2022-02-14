@@ -1,0 +1,34 @@
+nnoremap gdp :cd ~/Documents/Programming<cr>
+nnoremap gdd :cd ~/Documents/dotfiles/<cr>
+nnoremap gda :cd ~/Documents/College/Degree<cr>
+nnoremap gdb :cd ~/Documents/Books<cr>
+nnoremap gdP :cd ~/Documents/Phone<cr>
+
+nnoremap gD  :cd ~/Downloads/<cr>
+nnoremap gdi :cd ~/Downloads/ISOs<cr>
+nnoremap gdc :cd ~/Downloads/Programs/Cool-Ones<cr>
+nnoremap gdg :cd ~/Downloads/GitClones<cr>
+
+nnoremap gV  :cd ~/Videos<cr>
+nnoremap gp  :cd ~/Pictures<cr>
+nnoremap gP  :cd ~/Public<cr>
+
+nnoremap gcb :cd ~/.config/bspwm<cr>
+nnoremap gcd :cd ~/.config/doom<cr>
+nnoremap gcl :cd ~/.config/lf<cr>
+nnoremap gcn :cd ~/.config/nvim<cr>
+nnoremap gcq :cd ~/.config/qtile<cr>
+nnoremap gcQ :cd ~/.config/qutebrowser<cr>
+nnoremap gcr :cd ~/.config/ranger<cr>
+nnoremap gcs :cd ~/.config/sxhkd<cr>
+nnoremap gcv :cd ~/.config/vifm<cr>
+nnoremap gcz :cd ~/.config/zsh<cr>
+
+nnoremap glm :cd ~/.local/bin/myscripts<cr>
+nnoremap gls :cd ~/.local/share/suckless<cr>
+nnoremap glf :cd ~/.local/share/fonts<cr>
+nnoremap gli :cd ~/.local/share/icons<cr>
+nnoremap glt :cd ~/.local/share/Trash/files<cr>
+
+nnoremap gm :cd /run/media/shubham<cr>
+nnoremap g2 :cd "/home/shubham/.local/share/Steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"<cr>

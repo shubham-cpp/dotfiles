@@ -1,0 +1,166 @@
+Xft.dpi: 96
+Xft.autohint: 1
+Xft.antialias: 1
+Xft.hintstyle: hintmedium
+Xft.hinting: true
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
+
+! Basic settings
+xterm*termName: xterm-256color
+xterm*locale: true
+xterm*utf8: 1
+xterm*utf8Fonts: always
+xterm*dynamicColors: true
+
+! UI components
+xterm*toolBar: false
+xterm*scrollBar: false
+xterm*geometry: 90x25
+xterm*internalBorder: 0
+xterm*externalBorder: 0
+
+xterm*cursorColor: #61AFEF
+xterm*cursorBlink: true
+xterm*cursorOffTime: 300
+xterm*cursorOnTime: 800
+xterm*cursorUnderLine: false
+xterm*pointerShape: XTerm
+
+! Bell
+xterm*bellIsUrgent: false
+xterm*bellSupressTime: 100
+xterm*marginBell: false
+xterm*visualBell: false
+
+! Text highlighting
+xterm*highlightColor: XtDefaultForeground
+xterm*highlightReverse: true
+xterm*highlightSelection: true
+xterm*trimSelection: true
+xterm*highlightTextColor: XtDefaultBackground
+
+! Font settings
+xterm*faceName: JetBrainsMono Nerd Font
+xterm*faceSize: 10
+xterm*renderFont: true
+xterm*boldColors: true
+! xterm*faceSize1: 9.5
+xterm*faceSize2: 12
+xterm*faceSize3: 15
+xterm*faceSize4: 18.25
+xterm*faceSize5: 20.5
+xterm*faceSize6: 25.5
+xterm*forceBoxChars: false
+xterm*limitFontsets: 5
+xterm*scaleHeight: 1.0
+
+! Scroll and output
+xterm*jumpScroll: true
+xterm*multiScroll: true
+xterm*saveLines: 9999
+xterm*scrollKey: true
+xterm*scrollTtyKeypress: true
+xterm*scrollTtyOutput: false
+
+! Backspace behaviour
+xterm*backarrowKey: false
+xterm*metaSendsEscape: true
+xterm*ttyModes: erase ^?
+
+! Key bindings.  Use C-S-{c,v} to copy/paste as in GNOME terminal.  The
+! keys "Prior" and "Next" represent PgUp and PgDown respectively.
+xterm*selectToClipboard: true
+xterm*translations: #override \n\
+	Ctrl Shift <KeyPress>C: select-end(SELECT, CLIPBOARD) \n\
+	Ctrl Shift <KeyPress>V: insert-selection(SELECT, CLIPBOARD) \n\
+	Ctrl <KeyPress>-: smaller-vt-font() \n\
+	Ctrl <KeyPress>=: larger-vt-font() \n\
+	Ctrl <KeyPress>0: set-vt-font(d) \n\
+    <Key>F12: maximize() \n\
+    Ctrl <Key>F12: restore()
+
+XTerm*charClass: 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+Xterm*on2Clicks: regex [^/@ \n]+
+xterm*on3Clicks:  regex [^ \n]+
+xterm*on4Clicks:  regex [^#$]+
+XTerm*fullscreen: never
+! Space Duck
+*.background: #0f111b
+*.foreground: #ecf0c1
+*.cursorColor: #61AFEF
+*.color0:  #000000
+*.color8:  #686f9a
+*.color1:  #e33400
+*.color9:  #e33400
+*.color2:  #5ccc96
+*.color10: #5ccc96
+*.color3:  #b3a1e6
+*.color11: #b3a1e6
+*.color4:  #00a3cc
+*.color12: #00a3cc
+*.color5:  #f2ce00
+*.color13: #f2ce00
+*.color6:  #7a5ccc
+*.color14: #7a5ccc
+*.color7:  #686f9a
+*.color15: #f0f1ce
+
+! brogrammer theme
+xterm*background: #070b0f
+xterm*color0:   #1f1f1f
+xterm*color8:   #d6dae4
+xterm*color1:   #f71118
+xterm*color9:   #de342e
+xterm*color2:   #2cc55d
+xterm*color10:  #1dd260
+xterm*color3:   #ecb90f
+xterm*color11:  #f2bd09
+xterm*color4:   #2a84d2
+xterm*color12:  #0f80d5
+xterm*color5:   #4e59b7
+xterm*color13:  #524fb9
+xterm*color6:   #0f80d5
+xterm*color14:  #0f7cda
+xterm*color7:   #d6dae4
+xterm*color15:  #ffffff
+
+st*font: JetBrainsMono Nerd Font:pixelsize=14:antialias=true:autohint=true
+
+!! URxvt.perl-ext-common: default,bidi,matcher,url-select,resize-font,tabbedex
+!! URxvt*font: xft:FuraCode Nerd Font:style=Retina:size=12,xft:Hack Nerd Font Mono:style=Regular:size=15
+!! ! URxvt.letterSpace: -1
+!! URxvt*skipBuiltinGlyphs: true
+!! URxvt.iso14755: false
+!! URxvt.iso14755_52: false
+!! URxvt*saveLines: 12000
+!! URxvt*scrollBar: false
+!!
+!! URxvt.depth: 32
+!! URxvt.background: [90]#190a11
+!! ! Plugins
+!! URxvt.bidi.enabled: 1
+!! URxvt.url-launcher: /usr/bin/xdg-open
+!! URxvt.matcher.button: 1
+!! URxvt.keysym.C-Delete: perl:matcher:last
+!! URxvt.keysym.M-Delete: perl:matcher:list
+!! URxvt.colorUL: #4682B4
+!! URxvt.keysym.M-u: perl:url-select:select_next
+!! URxvt.url-select.launcher: /usr/bin/xdg-open
+!! URxvt.url-select.underline: true
+!! URxvt.keysym.C-minus:     resize-font:smaller
+!! URxvt.keysym.C-equal:     resize-font:bigger
+!! URxvt.keysym.C-plus:      resize-font:reset
+!! URxvt.keysym.C-question:  resize-font:show
+!! URxvt.tabbedex.autohide: true
+!! ! URxvt.tabbedex.reopen-on-close: yes
+!! URxvt.keysym.C-S-T: perl:tabbedex:new_tab
+!! URxvt.keysym.C-Tab: perl:tabbedex:next_tab
+!! URxvt.keysym.C-S-Tab: perl:tabbedex:prev_tab
+!! URxvt.keysym.C-PgDown: perl:tabbedex:move_tab_left
+!! URxvt.keysym.C-PgUp: perl:tabbedex:move_tab_right
+!! URxvt.keysym.C-S-Left: perl:tabbedex:move_tab_left
+!! URxvt.keysym.C-S-Right: perl:tabbedex:move_tab_right
+!! URxvt.keysym.C-S-R: perl:tabbedex:rename_tab
+!! URxvt.keysym.Control-Left:    \033[1;5D
+!! URxvt.keysym.Control-Right:    \033[1;5C

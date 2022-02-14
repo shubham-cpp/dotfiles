@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+SESSION="$1"
+
+case "$SESSION" in
+    Pierian | pie)
+
+    # Start New Session with our name
+    tmux new -d -s "$SESSION"
+
+    # Name first Window and start zsh
+    # tmux rename-window -t 1 'Main'
+    tmux send-keys -t "$SESSION" 'clear' C-m 'z pie' C-m 'pipenv shell' C-m
+
+    # Create and setup pane for hugo server
+    tmux new-window -t "$SESSION":2 -n 'Vifm'
+    tmux send-keys -t "$SESSION":2 'z free' C-m 'vif' C-m
+
+    # Attach Session, on the Main window
+    tmux attach-session -t "$SESSION":1 || tmux switchc -t "$SESSION":1
+    ;;
+    *)
+        printf "This project is not configured yet\nValid Options pie"
+    ;;
+esac

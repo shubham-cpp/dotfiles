@@ -1,0 +1,7 @@
+#!/bin/sh
+rofi -show run -modi run -location 1 -width 100 \
+		 -tokenize \
+		 -lines 2 -line-margin 0 -line-padding 1 \
+		 -separator-style none -columns 9 -bw 0 \
+		 -hide-scrollbar \
+		 -kb-row-select "Tab" -kb-row-tab ""

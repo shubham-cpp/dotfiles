@@ -1,0 +1,6 @@
+#!/bin/sh
+# rg --files "$HOME" -g '!GitClones' | rofi -dmenu -i -p 'Open' -width 99 | xargs -0 -r -I % xdg-open %
+# rg --files "$HOME" -g '!GitClones' | dmenu -i -p 'Open' -l 20 | xargs -0 -r -I % xdg-open %
+rg --files ~/ --iglob '!.*' --iglob '!Git*' --iglob '!Project-Imgs' \
+    | rofi -dmenu -i -p "Open" -width 99 -async-pre-read 10 \
+    | xargs -r -I{} sh -c "setsid -f xdg-open '{}'"

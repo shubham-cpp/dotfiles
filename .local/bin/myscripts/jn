@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+stop() {
+    jupyter-"$1" stop
+}
+
+list() {
+    jupyter "$1" list | tail -n1
+}
+
+launch() {
+    setsid -f jupyter "$1" >/dev/null 2>&1
+    sleep 3
+    list "$1"
+}
+
+case "$1" in
+    ll) launch lab ;;
+    la) launch lab ;;
+    ls) list   lab ;;
+    lk) stop   lab ;;
+
+    nl) launch notebook ;;
+    na) launch notebook ;;
+    ns) list   notebook ;;
+    nk) stop   notebook ;;
+esac

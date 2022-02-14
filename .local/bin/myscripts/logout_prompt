@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+# options="logout\npoweroff\nreboot"
+
+operation=$(printf "logout\npoweroff\nreboot" | dmenu -i -p "Logout Prompt:")
+
+case "$operation" in
+    logout ) notify-send "In Progress" "Still some work left todo"
+        ;;
+    poweroff ) poweroff || loginctl poweroff
+        ;;
+    reboot ) reboot || loginctl reboot
+        ;;
+esac

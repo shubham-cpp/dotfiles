@@ -1,0 +1,7 @@
+#!/bin/sh
+###############################
+## This file is used to launch greenclip as clipboard manager
+## and then use rofi to select from clipboard history
+###############################
+# greenclip print | dmenu -i -l 20 | xclip -i -r -sel clip
+rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/colors-rofi-dark.rasi -no-sort

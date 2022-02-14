@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# First get the window name using xdotool
+win_name="$(xdotool getwindowfocus getwindowname)"
+save_location="$HOME/Pictures/Screen-Shots"
+pic_name="$win_name"_$(date +%s).png
+
+which maim > /dev/null || $(notify-send -u critical "Error" "Maim is not installed" && exit 1 )
+
+notify_ss(){
+    notify-send "Maim" "Screenshot Taken[ $1 ]"
+}
+case $1 in
+    "full") maim -u "$save_location/$pic_name" && notify_ss "Full" ;;
+    "focus") maim -u -i "$(xdotool getactivewindow)" | tee "$save_location"/"$pic_name" | xclip -sel clip -t image/png && notify_ss "Focus";;
+    "clip") maim -s | xclip -sel clip -t image/png ;;
+    "select") maim -st 9999999 | \
+        convert - \( +clone -background black -shadow 80x3+5+5 \) +swap \
+            -background none -layers merge +repage \
+                "$save_location"/"$pic_name";;
+esac

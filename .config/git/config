@@ -1,0 +1,26 @@
+[user]
+	name = Shubham Pawar
+	email = shubhampawar3007@gmail.com
+[core]
+	excludesfile = ~/.config/git/ignore
+[init]
+	defaultBranch = main
+[alias]
+	logline = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
+[diff]
+    tool = nvimdiff
+[difftool]
+    prompt = false
+# [difftool "meld"]
+#     cmd = meld "$LOCAL" "$REMOTE"
+
+[merge]
+    tool = nvimdiff
+    conflictstyle=diff3
+
+[mergetool]
+    prompt = false
+
+# [mergetool "vimdiff"]
+# 	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'

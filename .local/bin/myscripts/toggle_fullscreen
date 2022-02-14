@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if bspc node -t fullscreen; then
+    bspc query -N -n .local.window.\!hidden.\!focused | xargs -r -I{} bspc node {} -g hidden
+else
+    bspc node -t \~fullscreen
+    bspc query -N -n .local.window.hidden.\!focused | xargs -r -I{} bspc node {} -g hidden
+fi

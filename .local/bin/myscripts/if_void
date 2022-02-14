@@ -1,0 +1,17 @@
+#!/bin/sh
+
+os_name=$(cut -d' ' -f1 /etc/issue.new-0.142_11)
+
+run() {
+    if ! pgrep "$1"; then
+        $@ &
+    fi
+}
+if [ "$os_name" = "Void" ]; then
+    run lxappearance
+    pidof -s runit &&
+	! pidof -s pulseaudio >/dev/null 2>&1 &&
+	setsid -f pulseaudio --start --exit-idle-time=-1 >/dev/null 2>&1
+    run brightnessctl s 20
+    run /usr/libexec/polkit-gnome-authentication-agent-1
+fi

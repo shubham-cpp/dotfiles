@@ -1,0 +1,180 @@
+# terminal emulator
+super +{_,shift +} Return
+    {$TERMINAL || st,kitty}
+super + {KP_Enter,KP_End}
+    {alacritty,xterm}
+
+super + F12
+    tdrop -am -w 60% -h 55% -x 20% -y 25% -p "bspc rule -a St -o state=floating" st
+    # tdrop -am -w 99% -y 3% -p "bspc rule -a St -o state=floating" st
+#tdrop -am -p "bspc rule -a Zathura -o state=floating" zathura
+
+# Launch Filemanager
+super +{_,shift + } e
+    {thunar || pcmanfm || nemo ,alacritty -e vifmrun}
+
+super +{_,shift +} w
+    {  $BROWSER || firefox, qutebrowser || brave || chromium }
+
+super + control + s
+    logout_prompt
+
+super + {_,shift + } d
+    {dmenu_run_history -i,rofi -show run -async-pre-read}
+super + @g
+    qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical
+super + {r,v,y,p}
+    {rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+super + alt + {c,g}
+    {open-rcs,open-games}
+
+{_,shift + }@Print
+    take_ss {full,focus}
+
+control + alt + {p,c,v,e}
+    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+
+super +{_,shift + } Escape
+    {pkill -USR1 -x sxhkd && notify-send -t 1000 "BSPWM" "SXHKD Restarted",xkill}
+# super + alt + r
+#     pkill -USR1 -x sxhkd && notify-send -t 1000 "BSPWM" "SXHKD Restarted"
+
+# Control the Brightness
+XF86MonBrightness{Up,Down}
+    brightnessctl s 10{+,-} && polybar-msg hook mbrightness 1 &&  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
+
+shift + XF86MonBrightness{Up,Down}
+    brightnessctl s {200,30} && polybar-msg hook mbrightness 1
+# Changing the Volume
+# pactl set-sink-volume @DEFAULT_SINK@ -5%
+XF86Audio{Raise,Lower}Volume
+    audio {inc,dec}
+# pactl set-sink-mute @DEFAULT_SINK@ toggle
+XF86AudioMute
+    audio toggle
+
+# Know Specfic bspwm settings
+
+# quit/restart bspwm
+super + ctrl + {x,r}
+    bspc {quit,wm -r}
+# close and kill DONT USE SUPER + SHIFT + Q
+super + {shift,ctrl} + q
+    bspc node -{c,k}
+
+# focus the next/previous desktop in the current monitor
+super + bracket{left,right}
+    bspc desktop -f {prev,next}.local
+
+# move focused window to prev/next desktop
+super + shift + bracket{left,right}
+    bspc node -d {prev,next}.local -f
+
+# focus the last node/desktop
+super + Tab
+    bspc desktop -f last
+
+# Cycle through desktops that are occupied
+super + {comma,period}
+    bspc desktop -f {prev,next}.occupied
+# Cycle through desktops that are occupied
+super + {_,shift + } grave
+    bspc desktop -f {next,prev}.occupied
+#
+# state/flags
+#
+# set the window state
+super + {t,shift + t,s}
+	bspc node -t \~{tiled,pseudo_tiled,floating}
+
+super + @f
+    toggle_fullscreen
+super + @m
+    bspc desktop -l tiled || bspc desktop -l monocle
+
+# set the node flags
+super + ctrl + {m,x,y,z}
+	bspc node -g {marked,locked,sticky,private}
+
+# focus the node in the given direction
+super + {_,shift + }{h,j,k,l}
+	bspc node -{f,s} {west,next.local.!hidden.window,prev.local.!hidden.window,east}
+
+super + {_,shift + }{Left,Down,Up,Right}
+	bspc node -{f,s} {west,next.local.!hidden.window,prev.local.!hidden.window,east}
+
+# focus the older or newer node in the focus history
+super + {o,i}
+	bspc wm -h off; \
+	bspc node {older,newer} -f; \
+	bspc wm -h on
+
+# focus or send to the given desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+# super + {1-9,0}
+# 	target='^{1-9,10}'; \
+#     [ "$(bspc query --desktops --desktop "$target")" != "$(bspc query --desktops --desktop)" ] \
+#     && bspc desktop --focus "$target" || bspc desktop --focus last.local
+# super + shift + {1-9,0}
+# 	bspc node -d '^{1-9,10}'
+# Smart way to switching between workspaces
+super + ctrl + {1-9,0}
+    workspace=$(bspc query -D -d .occupied | sed -n {1-9,10}p) && \
+    bspc desktop -f $workspace
+#
+# preselect
+#
+
+# preselect the direction
+super + ctrl + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# preselect the ratio
+super + ctrl + shift + {1-9}
+	bspc node -o 0.{1-9}
+
+# cancel the preselection for the focused node
+super + ctrl + space
+	bspc node -p cancel
+
+# cancel the preselection for the focused desktop
+super + ctrl + shift + space
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+#
+# focus/swap
+#
+# focus the node in the given direction
+alt + {_,shift + }Tab
+    bspc node -f '{next,prev}.local.!hidden.window'
+#
+# move/resize
+#
+# expand a window by moving one of its side outward
+super + alt + {h,j,k,l}
+	resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
+super + alt + {Left,Down,Up,Right}
+	resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
+
+# Flip layout vertically/horizontally
+super + {_,shift + }a
+	bspc node @/ --flip {vertical,horizontal}
+
+#Rotate desktop
+super + space
+	bspc node @/ --rotate {90,-90}
+
+# move a floating window
+super + ctrl + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+super + {_,shift + } b
+    lapav {hide,show}
+
+
+# Increase/decrease window gap on focused desktop
+#super + bracket{left,right}
+	#bspc config -d focused window_gap $((`bspc config -d focused window_gap` {-,+} 3 ))
+# The numpad keys dont work as expected. So turn off numlock then run xev and get the keycodes of numpad keys
+# TODO : Save this trick as function in vim g/<pattern>.+ or - <num>,.d
+# ffmpeg -i input.mp4 -filter_complex "[0:v] fps=12,scale=1080:-1,split [a][b];[a] palettegen [p];[b][p] paletteuse" output.gif

@@ -1,0 +1,167 @@
+# Basic Settings
+
+set previewer ~/.config/lf/pv
+set cleaner ~/.config/lf/cls
+
+set shell bash
+set shellopts '-eu'
+set ifs "\n"
+
+set hidden
+set drawbox
+set icons
+set scrolloff 10
+set ignorecase
+set incsearch
+set tabstop 4
+set number
+set relativenumber
+set ratios 1:2:3
+
+cmd open ${{
+    case $(file --mime-type "$f" -bL) in
+        text/*|application/json) $EDITOR -p "$fx";;
+        video/*) setsid -f xdg-open "$fx" ;;
+        application/pdf) zathura --fork "$fx" ;;
+        image/gif) setsif -f viewnior "$fx" ;;
+        image/*) setsif -f sxiv "$fx" ;;
+        *) setsid -f xdg-open "$fx" ;;
+    esac
+}}
+
+cmd paste_async &{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    case "$mode" in
+        copy)
+            rsync -av --ignore-existing --progress -- "$@" . |
+            stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+            while IFS= read -r line; do
+                lf -remote "send $id echo $line"
+            done
+            ;;
+        move) mv -n -- "$@" .;;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
+
+# Trash cli bindings
+cmd delete_trash ${{
+  files=$(printf "$fx" | tr '\n' ';')
+  while [ "$files" ]; do
+    # extract the substring from start of string up to delimiter.
+    # this is the first "element" of the string.
+    file=${files%%;*}
+
+    trash-put "$(basename "$file")"
+    # if there's only one element left, set `files` to an empty string.
+    # this causes us to exit this `while` loop.
+    # else, we delete the first "element" of the string from files, and move onto the next.
+    if [ "$files" = "$file" ]; then
+      files=''
+    else
+      files="${files#*;}"
+    fi
+  done
+}}
+
+cmd mkfile ${{
+  printf "File Name: "
+  read ans
+  $EDITOR $ans
+}}
+
+cmd mkdir %{{
+    IFS=" "
+    mkdir -p -- "$*"
+    lf -remote "send $id select \"$*\""
+}}
+
+cmd chmod ${{
+  printf "Mode Bits: "
+  read ans
+
+  for file in "$fx"
+  do
+    chmod $ans $file
+  done
+}}
+
+cmd sudomkfile ${{
+  printf "File Name: "
+  read ans
+  sudo $EDITOR $ans
+}}
+
+cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
+
+# cmd aj %lf -remote "send $id cd '$(autojump $1)'"
+cmd z ${{
+    location="$($RANGER_ZLUA -e $1)"
+    lf -remote "send $id cd \"$location\""
+}}
+cmd setwallpaper %nitrogen --set-scaled "$f"
+
+cmd fzf_jump ${{
+  res="$(fd --maxdepth 3 . | fzf --reverse --header='Jump to location')"
+  if [ -f "$res" ]; then
+    cmd="select"
+  elif [ -d "$res" ]; then
+    cmd="cd"
+  fi
+  lf -remote "send $id $cmd \"$res\""
+}}
+
+# Archive bindings
+cmd unarchive $aunpack -e "$f"
+cmd bulkrename $vimv
+
+# File Openers
+map ee $$EDITOR "$f"
+map u $view "$f"
+#map , m
+map m
+map o
+map n
+map d
+map c
+map e
+map f
+
+# Broot Mapping
+map f fzf_jump
+map ex unarchive
+map zz push :z<space>
+# map X quitcd
+# Basic Functions
+map . set hidden!
+map i $~/.config/lf/pv.sh "$f"
+map dd delete
+map p paste
+map D delete_trash
+map P paste_async
+map x cut
+map y copy
+map <enter> open
+map mf mkfile
+map mr sudomkfile
+map md push :mkdir<space>
+map <c-n> push :mkdir<space>
+map ms $mkscript
+map ch chmod
+map bg setwallpaper
+map r rename
+map R reload
+map cl clear
+map A rename                  #  at the very end
+map I push   A<c-a>           #  at the very beginning
+map c push   A<c-u>           #  new rename
+map i push   A<a-b><a-b><a-f> #  before extention
+map a push   A<a-b>           #  after extention
+map U unselect
+map B bulkrename
+map ec push :open ~/.config/lf/lfrc<cr>
+
+source ~/.config/lf/lf_bindings

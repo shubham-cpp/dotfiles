@@ -1,0 +1,323 @@
+colorscheme dracula
+
+" Essentials    {{{
+set number
+set relativenumber
+
+" Default editor
+set vicmd=nvim
+
+set syscalls
+" This is how many directories to store in the directory history.
+set history=100
+
+set trash
+
+set timefmt=%m/%d\ %H:%M
+" So that keybindings show up qucikly
+set timeoutlen=3500
+
+set dotfiles
+" Automatically resolve symbolic links on l or Enter.
+set nofollowlinks
+
+" With this option turned on you can run partially entered commands with
+" unambiguous beginning using :! (e.g. :!Te instead of :!Terminal or :!Te<tab>).
+set fastrun
+
+" Natural sort of (version) numbers within text.
+set sortnumbers
+
+" Maximum number of changes that can be undone.
+set undolevels=100
+
+" If you would like to run an executable file when you
+" press return on the file name set this.
+set norunexec
+
+" Show list of matches on tab completion in command-line mode
+set wildmenu
+
+" Display completions in a form of popup with descriptions of the matches
+set wildstyle=popup
+
+" Display suggestions in normal, visual and view modes for keys, marks and
+" registers (at most 5 files).  In other view, when available.
+set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
+
+" Ignore case in search patterns unless it contains at least one uppercase
+" letter
+set ignorecase
+set smartcase
+
+" Don't highlight search results automatically
+set nohlsearch
+
+" Use increment searching (search while typing)
+set incsearch
+
+" Try to leave some space from cursor to upper/lower border in lists
+set scrolloff=4
+
+" Don't do too many requests to slow file systems
+if !has('win')
+    set slowfs=curlftpfs
+endif
+" What should be saved automatically between vifm sessions.  Drop "savedirs"
+" value if you don't want vifm to remember last visited directories for you.
+set vifminfo=dhistory,chistory,state,tui,shistory,
+    \phistory,fhistory,dirstack,registers,bookmarks,bmarks
+" }}}
+
+" Set custom status line look
+" set statusline="  %t%= %A %10u:%-7g %15E %20d  "
+" set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
+set statusline="  %t%= %A %10u:%-7g %15E %20d  "
+
+" Custom Commands {{{
+" The following macros can be used in a command
+" %a is replaced with the user arguments.
+" %c the current file under the cursor.
+" %C the current file under the cursor in the other directory.
+" %f the current selected file, or files.
+" %F the current selected file, or files in the other directory.
+" %b same as %f %F.
+" %d the current directory name.
+" %D the other window directory name.
+" %m run the command in a menu window
+" silently extract selected archives in background
+command extract aunpack -e %f >/dev/null 2>&1
+command df df -h %m 2> /dev/null
+command diff vim -d %f %F
+command link ln -s %d/%f %D
+command! archive apack -q %a.zip %f
+command! run !! ./%f
+command! make !!make %a
+" command! setbg !!ln -sf %d/%c ~/.config/wall.png && feh --no-fehbg --bg-fill ~/.config/wall.png
+command! setbg !!cp %d/%c ~/.config/wall.png && feh --no-fehbg --bg-fill ~/.config/wall.png
+command! mkcd :mkdir %a | cd %a
+command! vgrep nvim "+grep %a"
+command! reload :write | restart
+command! zlua :execute 'cd' fnameescape(term('$RANGER_ZLUA -e %a'))
+command! Fzfdir :set noquickview | :execute 'cd' fnameescape(term('fd --type d | fzf --reverse --height 20 2>/dev/tty'))
+command! Fzffile :set noquickview | :execute 'edit' fnameescape(term('rg --files --follow | fzf --reverse --height 50 --preview="highlight -O xterm256 {}" 2>/dev/tty'))
+
+" }}}
+
+" Set File Types for Opening {{{
+
+" Pdf
+filextype *.pdf,*.epub
+        \ {View in zathura}
+        \ setsid -f xdg-open %c %i > /dev/null 2>&1
+
+" PostScript
+filextype *.ps,*.eps,*.ps.gz,*.djvu
+        \ {View in zathura}
+        \ setsid -f xdg-open %f > /dev/null 2>&1
+
+" Audio
+filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+       \ {Play using ffplay}
+       \ setsid -f mpv --no-audio-display %c > /dev/null 2>&1
+
+" Video
+filextype *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+         \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+         \*.as[fx]
+        \ {View using mpv}
+        \ setsid -f mpv %f > /dev/null 2>&1
+
+" Web
+filextype *.html,*.htm
+        \ {Open with firefox}
+        \ nvim %f &,
+" Object
+filetype *.o nm %f | less
+
+" Man page
+filetype *.[1-8] man ./%c
+
+" Images
+filextype <image/*>
+        \ setsid -f xdg-open %f > /dev/null 2>&1
+
+
+" SHA1
+filetype *.sha1
+       \ {Check SHA1 hash sum}
+       \ sha1sum -c %f %S,
+
+" SHA256
+filetype *.sha256
+       \ {Check SHA256 hash sum}
+       \ sha256sum -c %f %S,
+
+" SHA512
+filetype *.sha512
+       \ {Check SHA512 hash sum}
+       \ sha512sum -c %f %S,
+" Torrent
+filetype *.torrent
+        \ setsid -f qbittorrent %f > /dev/null 2>&1
+" Office files
+filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
+        \ setsid -f libreoffice %f > /dev/null 2>&1
+
+" }}}
+
+" File previews {{{
+
+fileviewer *.exe
+            \ echo Binary file: no preview available. %i
+
+fileviewer *.[1-8]
+            \ man -- %c | col -b
+
+fileviewer *.docx
+            \ docx2txt < %c
+
+" view contents of archive files on opening them
+fileviewer *.7z,*.bz2,*.cab,*.cpio,*.deb,*.gz,
+        \*.msi,*.pkg,*.rar,*.tar,*.tgz,*.xz,*.zip
+        \ als -- %f | head -n30
+
+fileviewer *.iso
+            \ iso-info %c
+
+" VIFMIMG settings for Video,Image,etc preview {{{
+fileviewer *.pdf
+        \ vifmimg pdf %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.epub
+        \ epub2txt %c
+        " \ vifmimg epub %px %py %pw %ph %c
+        " \ %pc
+        " \ vifmimg clear
+
+    fileviewer <video/*>
+        \ mediainfo %c
+        " \ vifmimg video %px %py %pw %ph %c
+        " \ %pc
+        " \ vifmimg clear
+
+    fileviewer <image/*>
+        \ vifmimg draw %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer <audio/*>
+        \ vifmimg audio %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer <font/*>
+        \ vifmimg font %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+    " }}}
+
+" Programming Languages {{{
+fileviewer *.vim,*.vifm
+            \ highlight -O xterm256 --style dante --line-range=1-40 --syntax vim %c
+
+fileviewer *.[ch],*.[ch]pp,*.[ch]xx,*.[jt]s,*.[jt]sx,*.java,*.jsp,*.html,*.css,*.diff
+            \ highlight -O xterm256 --style dante --line-range=1-40 %c
+fileviewer *.py,*.pyc,*.hs,*.lhs,*.lua,*.go,*.sql,*.db,*.sqlite3,*.md,*.wiki,*.el
+            \ highlight -O xterm256 --style dante --line-range=1-40 %c
+fileviewer *.txt,*.conf,*.json,*.yaml,*.bash,*.sh,*.fish,*.zsh,.zshrc,.zhistory
+            \ highlight -O xterm256 --style dante --line-range=1-40 %c
+
+" fileviewer *.[ch],*.[ch]pp,*.[ch]xx,*.js,*.jsx,*.java,*.jsp,*.html,*.css
+"             \ env -uCOLORTERM bat --color always --wrap never --line-range :40 -pp %c
+" fileviewer *.py,*.pyc,*.hs,*.lhs,*.lua,*.go,*.sql,*.db,*.sqlite3,*.md,*.wiki
+"             \ env -uCOLORTERM bat --color always --wrap never --line-range :40 -pp %c
+" fileviewer *.txt,*.conf,*.json,*.yaml,*.bash,*.sh,*.fish,*.zsh,.zshrc,.zhistory
+"             \ env -uCOLORTERM bat --color always --wrap never --line-range :40 -pp %c
+
+fileviewer *.o,*.out
+            \ nm %c | less
+ " }}}
+
+" }}}
+
+" My Commands   {{{
+nmap ; :
+nnoremap q :q<cr>
+" map extraction command
+nnoremap ex :extract<CR>
+noremap aa :archive<space>
+noremap ea :archive<space>
+nnoremap ee :edit<CR>
+
+" open mapping
+nnoremap om :!setsid -f mpv %d >/dev/null 2>&1<cr>
+nnoremap os :!setsid -f sxiv %d >/dev/null 2>&1<cr>
+nnoremap od :!setsid -f thunar %d >/dev/null 2>&1<cr>
+" System mapping
+nnoremap > :!vifmimg inc<CR>
+nnoremap < :!vifmimg dec<CR>
+nnoremap J 5j
+nnoremap K 5k
+nnoremap <bs> h
+nnoremap . za
+nnoremap <space> tj
+nnoremap bg :setbg<cr>
+nnoremap gh :cd<cr>
+" Start shell in current directory
+nnoremap s :shell<cr>
+nnoremap cz :zlua<space>
+nnoremap ,w :set wrap!<cr>
+nnoremap ,t :!$TERMINAL &<cr>
+nnoremap ,c :write | edit $MYVIFMRC | restart<cr>
+
+nnoremap mkd :mkcd<space>
+nnoremap md :mkdir<space>
+nnoremap mf :touch<space>
+nnoremap mx :chmod +x %f<cr>
+
+" Interaction with system clipboard {{{
+if executable('xclip')
+    " Yank current directory path into the clipboard
+    nnoremap yd :!echo %d | xclip %i<cr>
+    " Yank current file path into the clipboard
+    nnoremap yf :!echo %c:p | xclip %i<cr>
+elseif executable('xsel')
+    " Yank current directory path into primary and selection clipboards
+    nnoremap yd :!echo -n %d | xsel --input --primary %i &&
+                \ echo -n %d | xsel --clipboard --input %i<cr>
+    " Yank current file path into into primary and selection clipboards
+    nnoremap yf :!echo -n %c:p | xsel --input --primary %i &&
+                \ echo -n %c:p | xsel --clipboard --input %i<cr>
+endif " }}}
+
+nnoremap <C-f> :Fzfdir<cr>
+nnoremap <C-e> :Fzffile<cr>
+" nnoremap <C-h> <C-w>h
+nnoremap <C-j> :tabprevious<cr>
+nnoremap <C-k> :tabnext<cr>
+" nnoremap <C-l> <C-w>l
+nnoremap <C-o> <C-w>o
+nnoremap <C-s> <C-w>s
+nnoremap <C-v> <C-w>v
+nnoremap <C-r> :reload<cr>
+" Tabs
+nnoremap <C-n> :tabnew<cr>
+nnoremap Q :qa<cr>
+
+nnoremap w :view<cr>
+vnoremap w :view<cr>gv
+nnoremap I cw<c-a>
+nnoremap cc cw<c-u>
+nnoremap ce cW
+nnoremap A cw
+
+" }}}
+
+"All the Marks
+mark h ~/
+" Set icons in Vifm
+source ~/Downloads/GitClones/vifm_devicons/favicons.vifm
+source ~/.config/vifm/vifm_bindings.vifm

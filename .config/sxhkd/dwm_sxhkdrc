@@ -1,0 +1,47 @@
+super + {KP_Enter,KP_End}
+    {alacritty,xterm}
+
+super + shift + Return
+    kitty
+
+super + Escape
+	pkill -USR1 -x sxhkd && notify-send -t 1000 "DWM" "SXHKD Restarted"
+    # && pkill -RTMIN+1 bliss && notify-send -t 1000 "DWM" "Bliss Restarted"
+
+# Launch Filemanager
+super +{_,shift + } e
+    {thunar || pcmanfm || nemo ,alacritty -e vifmrun}
+
+super +{_,shift +} w
+    {  $BROWSER || firefox, chromium || brave || flatpak run com.github.Eloston.UngoogledChromium}
+
+super + @g
+    qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
+super + {shift+d,r,v,y,p}
+    {rofi -show run -async-pre-read,rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+
+super + alt + {c,g}
+    {open-rcs,open-games}
+
+control + alt + {p,c,v,e}
+    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+
+super + control + s
+    logout_prompt
+
+{_,shift + }@Print
+    take_ss {full,focus} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
+
+#Raises volume
+XF86Audio{Raise,Lower}Volume
+    audio {inc,dec}
+#Mute
+XF86AudioMute
+    audio toggle
+
+#Brightness up
+XF86MonBrightness{Up,Down}
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g) && kill -54 $(pidof dwmblocks)
+
+shift + XF86MonBrightness{Up,Down}
+    brightnessctl s {200,30}

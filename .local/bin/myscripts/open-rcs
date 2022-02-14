@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Try to Open all the rc files(in vim) using dmenu
+options="awesome\nalacritty\nbspwm\nnvim\npolybar\nqtile\nsxhkd\nkitty\nXresources\nxprofile\nprofile\nzsh"
+
+myTerm=$([ -f $(which st) ] && printf "st" || printf "xterm")
+file_name=$(printf "$options" | dmenu -i -p "Which File ?")
+#echo $file_name
+
+[ -n "$file_name" ] &&
+     case "$file_name" in
+        awesome)   "$myTerm" -e "$EDITOR" "$HOME"/.config/awesome/rc.lua        ;;
+        alacritty) "$myTerm" -e "$EDITOR" "$HOME"/.config/alacritty/alacritty.yml ;;
+        bspwm)     "$myTerm" -e "$EDITOR" "$HOME"/.config/bspwm/bspwmrc         ;;
+        polybar)   "$myTerm" -e "$EDITOR" "$HOME"/.config/polybar/config.ini    ;;
+        profile)   "$myTerm" -e "$EDITOR" "$HOME"/.config/X11/profile           ;;
+        qtile)     "$myTerm" -e "$EDITOR" "$HOME"/.config/qtile/config.py       ;;
+        kitty)     "$myTerm" -e "$EDITOR" "$HOME"/.config/kitty/kitty.conf      ;;
+        sxhkd)     "$myTerm" -e "$EDITOR" "$HOME"/.config/sxhkd/sxhkdrc         ;;
+        nvim)      "$myTerm" -e "$EDITOR" "$HOME"/.config/nvim/init.vim         ;;
+        xprofile)  "$myTerm" -e "$EDITOR" "$HOME"/.config/X11/xprofile          ;;
+        Xresources)"$myTerm" -e "$EDITOR" "$HOME"/.config/X11/Xresources        ;;
+        zshrc)     "$myTerm" -e "$EDITOR" "$HOME"/.config/zsh/.zshrc            ;;
+        *) notify-send -t 1500 "Invalid Option or Couldn\'t launch for some reason"
+     esac

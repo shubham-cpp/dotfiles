@@ -1,0 +1,17 @@
+{
+  "link": {
+    "prefix": ["li", "ln", "link"],
+    "body": ["[${1:name}](https://${2:url}) $0"],
+    "description": "Insert link"
+  },
+  "image": {
+    "prefix": ["img", "image"],
+    "body": ["![${1:caption}](https://${2:url}) $0"],
+    "description": "Insert image link"
+  },
+  "Insert fenced code block": {
+    "prefix": "code",
+    "body": ["```${1:language}", "${TM_SELECTED_TEXT}$0", "```"],
+    "description": "Insert fenced code block"
+  }
+}

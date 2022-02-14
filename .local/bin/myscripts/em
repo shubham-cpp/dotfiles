@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+
+pgrep emacs > /dev/null 2>&1 || (emacs --bg-daemon > /dev/null 2>&1 && notify-send "Starting Emacs" "Please Be Patient")
+emacsclient -cn $@

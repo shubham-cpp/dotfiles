@@ -1,0 +1,22 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+
+# Which is equivalent to
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_status\
+$python\
+$cmd_duration\
+$line_break\
+$time\
+$character"""
+
+# [character]
+# success_symbol = "[](bold green)"
+# error_symbol = "[✗](bold red) "
+# vicmd_symbol = "[](bold blue) "

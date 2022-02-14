@@ -1,0 +1,12 @@
+#!/bin/sh
+
+game_name=$(printf "FM20 CS16 Minecraft Hollow" | tr ' ' '\n' | dmenu -fn "JetBrainsMono Nerd Font:size=11" -i -p 'Play :')
+
+[ -n "$game_name" ] &&
+    case "$game_name" in
+    FM20) steam steam://rungameid/1100600 ;;
+    CS16) xdg-open "$WINEPREFIX"/drive_c/Games/Counter-Strike\ 1.6\ eXtreme\ v6/hl.exe ;;
+    Minecraft) bash "$HOME"/Downloads/Compressed/Games/Minecraft_Linux/Minecraft_1.16.4/start-forge.sh ;;
+    Hollow) bash "$HOME"/Downloads/Compressed/Games/Hollow\ Knight/start.sh ;;
+    *) echo "Invalid Choice" ;;
+    esac

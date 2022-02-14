@@ -1,0 +1,31 @@
+# Aliases for emacs commands
+alias ff find-file $1
+
+# Changing "ls" to "exa"
+alias ls exa -al --color=always --group-directories-first --icons $*  # my preferred listing
+alias la exa -a --color=always --group-directories-first --icons $*   # all files and dirs
+alias ll exa -l --color=always --group-directories-first --icons $*   # long format
+alias lt exa -aT --color=always --group-directories-first --icons $*  # tree listing
+
+# Merge Xresources
+alias merge xrdb -merge ~/.config/X11/Xresources
+
+# Aliases for doom emacs utilties
+alias dsync    ~/.config/emacs/bin/doom sync
+alias ddoctor  ~/.config/emacs/bin/doom doctor
+alias dupgrade ~/.config/emacs/bin/doom upgrade
+alias dpurge   ~/.config/emacs/bin/doom purge
+
+# Confirm before overwriting something
+# alias cp cp -i $1
+# alias mv mv -i $1
+alias rm trash-put $*
+
+alias yay paru $*
+alias yays paru -S --noredownload --needed $*
+alias yayr paru -Rcns $*
+
+alias .. cd ..
+alias ... cd ../..
+
+alias sel_font fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip

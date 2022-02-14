@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+case "$1" in
+    l|list)
+        xbps-query -l | cut -d" " -f2 | rev | cut -d'-' -f2- | rev | fzf --multi --preview "xbps-query -S {}"
+        ;;
+    r|repo)
+        xbps-query -Rs \* | cut -d" " -f2 | rev | cut -d'-' -f2- | rev | fzf --multi --preview "xbps-query -S {}"
+        ;;
+    *) printf "Invalid option\nPass either (l)ist or (r)epo" ;;
+esac

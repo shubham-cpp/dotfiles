@@ -1,0 +1,38 @@
+# Movement
+map gD  cd ~/Downloads/
+map gV  cd ~/Videos
+map gp  cd ~/Pictures
+# map gpp  cd ~/Pictures
+
+map gdd cd ~/Documents/dotfiles
+map gdb cd ~/Documents/Books
+map gdp cd ~/Documents/Programming
+map gdP cd ~/Documents/Phone
+map gdD cd ~/Documents/College/Degree
+
+map gdc cd ~/Downloads/Programs/Cool-Ones
+map gdi cd ~/Downloads/ISOs
+map gdA cd ~/Downloads/Compressed/Asus
+map gdg cd ~/Downloads/GitClones/
+
+# map gcq cd ~/.config/qtile
+map gca cd ~/.config/awesome
+map gcA cd ~/.config/alacritty
+map gcb cd ~/.config/bspwm
+map gcd cd ~/.config/doom
+map gcl cd ~/.config/lf
+map gcn cd ~/.config/nvim
+map gck cd ~/.config/kitty
+map gcq cd ~/.config/qutebrowser
+map gcs cd ~/.config/sxhkd
+map gcv cd ~/.config/vifm
+map gcr cd ~/.config/rofi
+map gcz cd ~/.config/zsh
+
+map glm cd ~/.local/bin/myscripts
+map gls cd ~/.local/share/suckless
+map glf cd ~/.local/share/fonts
+map glt cd ~/.local/share/Trash/files
+
+map gm cd /run/media/shubham
+map gf2 cd "/home/shubham/.steam/steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"

@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+fname=${1%.*}
+if [ -f "$1" ]; then
+    case "$1" in
+    *.c)    gcc -g -Wall -Wextra -Wfloat-equal -Wundef -Wstrict-prototypes -Wcast-align -Waggregate-return -Wunreachable-code -Wunreachable-code -Wpointer-arith -Wshadow -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -O3 -foptimize-strlen -ffunction-sections -pipe "$1" -o "$fname".out
+            ./"$fname".out ;;
+    *.cpp)  g++ -std=c++17 -g -Wall -Wextra -Wfloat-equal -Wundef  -Wcast-align -Waggregate-return -Wunreachable-code -Wunreachable-code -Wpointer-arith -Wshadow -Wwrite-strings -Wlogical-op -Wmissing-declarations -Wredundant-decls -Woverloaded-virtual -Ofast "$1" -o "$fname".out
+            ./"$fname".out ;;
+    *.java) javac "$1" && java "$fname" ;;
+    *.js)   echo "TODO" ;;
+    *.sh)   chmod +x "$1" && ./"$1" ;;
+    *.py)   python -u "$1" ;;
+    *.lua)  luajit "$1" ;;
+    *)      echo "'$1' cannot run with run" ;;
+    esac
+else
+    echo "'$1' is not a valid file"
+fi

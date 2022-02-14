@@ -1,0 +1,1 @@
+/home/shubham/.config/X11/profile

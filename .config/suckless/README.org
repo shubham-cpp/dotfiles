@@ -1,0 +1,46 @@
+#+TITLE: Sucless Softwares That I use
+#+AUTHOR: Shubham Pawar
+
+* Dmenu
+Colorscheme generated using pywal
+** Patches
+- [[https://tools.suckless.org/dmenu/patches/fuzzymatch/][fuzzymatch]] :: Enables fuzzy matching for dmenu,so type less
+- [[https://tools.suckless.org/dmenu/patches/fuzzyhighlight/][fuzzyhighlight]] :: Highlights words that matched using fuzzymatch
+- [[https://tools.suckless.org/dmenu/patches/numbers/][numbers]] :: displays no. of matched strings vs total strings. Helpful for [[https://github.com/shubham-cpp/my-configs/blob/master/myscripts/.local/bin/myscripts/superp][superp]] script
+** Preview
+#+CAPTION: Preview of the dmenu config
+#+NAME:   fig:A
+[[./imgs/dmenu_preview.png]]
+* ST
+Colorscheme based on space duck check [[https://github.com/shubham-cpp/my-configs/blob/master/X11/.config/X11/Xresources][Xresources]] file for color settings. To make sure st doesn't crash when emojis are detected make sure [[https://aur.archlinux.org/packages/libxft-bgra/][libxft-bgra]]
+#+begin_src sh
+# On Arch
+yay -S --needed libxft-bgra
+#+end_src
+For debian based users check [[https://github.com/ra-c/libxft-bgra-debian][libxft-bgra-debian
+]] repo
+** Patches
+- [[https://st.suckless.org/patches/alpha/][alpha]] :: For transparency
+- [[https://st.suckless.org/patches/blinking_cursor/][blinking_cursor]] :: Old habbit from xterm
+- [[https://st.suckless.org/patches/copyurl/][copyurl]] :: Pressing Alt+L copies any url to clipboard
+- [[https://st.suckless.org/patches/delkey/][delkey]] :: Make backspace behave like its meant to be
+- [[https://st.suckless.org/patches/font2/][font2]] :: Add alternative font for emojis,powerline symbols,etc
+- [[https://st.suckless.org/patches/ligatures/][ligatures]] :: Programming is better with ligatures on
+- [[https://st.suckless.org/patches/scrollback/][scrollback]] :: St doesn't come with scrollback by default.. Who doesn't need scrollback
+- [[https://st.suckless.org/patches/xresources/][xresources]] :: Change colorscheme,fonts,etc without recompiling
+* DWM
+A dynamic window manager that sucks out of box but becomes a beast with pacthes. I use [[https://github.com/LukeSmithxyz/dwmblocks][dwmblocks]] for statusbar which support signaling and clicking. The dwmblocks scripts are also avaiable in [[https://github.com/shubham-cpp/my-configs/tree/master/suckless/.local/share/suckless/dwm-62/status-bar/scripts][scripts]] folder
+** Patches
+- [[https://dwm.suckless.org/patches/actualfullscreen/][actualfullscreen]] :: True fullscreen
+- [[https://dwm.suckless.org/patches/centeredmaster/][centeredmaster]] :: A useful layout when working on projects
+- [[https://dwm.suckless.org/patches/focusadjacenttag/][focusadjacenttag]] :: Focus on immediate left/right tag. Can also move windows to immediate left/right
+- [[https://dwm.suckless.org/patches/hide_vacant_tags/][hide_vacant_tags]] :: Show only active tags(Tags where windows exists)
+- [[https://dwm.suckless.org/patches/noborder/][noborder]] :: Hide border when there's only one window or window is floating
+- [[https://dwm.suckless.org/patches/restartsig/][restartsig]] :: Have a keybinding so after compiling dwm you can restart dwm instead of loggin off and then in
+- [[https://dwm.suckless.org/patches/rotatestack/][rotatestack]] :: Move window position on stack
+- [[https://dwm.suckless.org/patches/save_floats/][save_floats]] :: Saves size and position of every floating window before it is forced into tiled mode
+- [[https://dwm.suckless.org/patches/steam/][steam]] :: Solve some basic problems of dwm with steam
+- [[https://dwm.suckless.org/patches/switchtotag/][switchtotag]] :: Add a rule for windows to appear on specific tag
+- [[https://dwm.suckless.org/patches/systray/][systray]] :: Systray support for dwm
+- [[https://dwm.suckless.org/patches/xresources/][xresources]] :: Configure fonts and colors without recompiling. Easy life
+- [[https://dwm.suckless.org/patches/statuscmd/][statuscmd]] :: Fix weird symbol issues on statusbar(Fonts not being rendered properly)

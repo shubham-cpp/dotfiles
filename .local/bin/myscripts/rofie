@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rofimoji -s 'moderate' || rofi -show emoji -modi emoji -width 100 \
+                 -line-margin 0 -line-padding 1 \
+                 -separator-style none \
+                 -hide-scrollbar \
+                 -kb-row-select "Tab" -kb-row-tab ""

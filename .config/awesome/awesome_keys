@@ -1,0 +1,44 @@
+super +{_,shift +} Return
+    {$TERMINAL || st,kitty}
+super + {KP_Enter,KP_End}
+    {alacritty,xterm}
+
+super + F12
+    tdrop -am -w 60% -h 55% -x 20% -y 25% st -c 'Minipad'
+#tdrop -am -p "bspc rule -a Zathura -o state=floating" zathura
+
+# Launch Filemanager
+super +{_,shift + } e
+    {$FILE_BROWSER || thunar,alacritty -e vifmrun}
+
+super +{_,shift + } w
+    {$BROWSER || firefox, brave || qutebrowser || chromium || firefox}
+
+super + control + s
+    logout_prompt
+    #prompt "Wanna Shutdown?" "poweroff"
+
+super + {_,shift + } d
+    {dmenu_run_history -i -p "Search :" || notify-send "Failed" "dmenu_run_history not installed" -u critical,rofi -show run -async-pre-read}
+super + g
+    galculator || gnome-calculator || qalculate-gtk || notify-send "Error" "Calculator App not installed" -u critical
+super + {r,v,y,p}
+    {rofi -show drun -async-pre-read,virtualbox || VirtualBox,clipboard,superp}
+
+super + alt + {c,g}
+    {open-rcs,open-games}
+
+{_,shift + }@Print
+    take_ss {full,focus} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
+
+alt + @Print
+    flameshot screen -c || notify-send "Failed to take Screenshot" "Flameshot is not installed." -u critical
+
+control + alt + {p,c,v,e}
+    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+
+super + Escape
+    pkill -USR1 -x sxhkd && notify-send -t 1000 "Awesome" "SXHKD Restarted"
+
+super + bracket{left,right}
+    awesome-client 'require"awful".tag.view{prev,next}()'

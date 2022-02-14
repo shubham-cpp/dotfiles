@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+hidden() {
+    bspc query -N -n .local.window.hidden \
+        | xargs -r -I{} sh -c 'printf "%s:%s\n" {} "$(xprop -id {} WM_NAME | cut -d\= -f2)"' \
+        | dmenu -l 5 -i -p "Show:" \
+        | cut -d':' -f1 \
+        | xargs -r -I{} bspc node {} -g hidden="${1:-on}"
+}
+
+case "$1" in
+    hide | h)
+        if [ -z "$2" ]; then
+            bspc node -g hidden=on
+        else
+            hidden
+        fi
+        ;;
+    show | s)
+        hidden off
+        ;;
+    *)
+        notify-send "Lapav Script Error" "Please pass argument\nEither hide or show"
+        ;;
+esac

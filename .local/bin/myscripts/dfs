@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+arg=$HOME/Documents/dotfiles/
+
+rg --hidden --files "$arg" --files-without-match="$HOME"/.config/git/ignore  -g '!.git*' -g '!*.bak' \
+    | sed 's#'$arg'##g' \
+    | fzf --reverse \
+    | xargs -r -I {} nvim "$arg"{} \
+    || echo "Please provide a directory"
