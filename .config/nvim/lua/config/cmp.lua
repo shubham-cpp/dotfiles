@@ -26,10 +26,13 @@ cmp.setup({
 		end,
 	},
 	mapping = {
-		["<C-d>"] = cmp.mapping.scroll_docs(-4),
-		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete(),
-		["<C-e>"] = cmp.mapping.close(),
+		["<C-b>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+		["<C-f>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+		["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+		["<C-e>"] = cmp.mapping({
+			i = cmp.mapping.abort(),
+			c = cmp.mapping.close(),
+		}),
 		["<CR>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
@@ -54,20 +57,23 @@ cmp.setup({
 			end
 		end, { "i", "s" }),
 	},
-	sources = {
+	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lsp_signature_help" },
 		{ name = "nvim_lua" },
 		{ name = "vsnip" },
+	}, {
 		{ name = "path" },
 		{
 			name = "buffer",
-			keyword_length = 3,
-			get_bufnrs = function()
-				return vim.api.nvim_list_bufs()
-			end,
+			option = {
+				keyword_length = 3,
+				get_bufnrs = function()
+					return { vim.api.nvim_get_current_buf() }
+				end,
+			},
 		},
-	},
+	}),
 	formatting = {
 		format = require("lspkind").cmp_format({
 			with_text = true, -- do not show text alongside icons
