@@ -45,16 +45,17 @@ use({
 	"nvim-telescope/telescope.nvim",
 	config = get_config("telescope"),
 	requires = { { "nvim-lua/plenary.nvim" } },
-	keys = {
-		"<leader>fs",
-		"<leader>fz",
-		"<leader>fc",
-		"<leader>fH",
-		"<leader>fh",
-		"<leader>ff",
-		"<leader>fn",
-		"<leader>fd",
-	},
+	event = "BufWinEnter",
+	-- keys = {
+	-- 	"<leader>fs",
+	-- 	"<leader>fz",
+	-- 	"<leader>fc",
+	-- 	"<leader>fH",
+	-- 	"<leader>fh",
+	-- 	"<leader>ff",
+	-- 	"<leader>fn",
+	-- 	"<leader>fd",
+	-- },
 })
 use({ "natecraddock/telescope-zf-native.nvim" })
 use({ "ibhagwan/fzf-lua", event = "BufWinEnter", config = get_config("fzf-lua") })
@@ -209,6 +210,21 @@ use({
 	config = get_config("sessions"),
 })
 use({ "folke/which-key.nvim", after = "indent-blankline.nvim", config = get_config("which-key") })
+-- }}}
+-- Note Taking {{{
+use({
+	"renerocksai/telekasten.nvim",
+	requires = {
+		{ "iamcco/markdown-preview.nvim", ft = { "md", "markdown" } },
+		{
+			"renerocksai/calendar-vim",
+			cmd = { "Calendar", "CalendarH", "CalendarT" },
+		},
+		{ "mzlogin/vim-markdown-toc", cmd = { "GenTocGFM", "GenTocGitLab", "GenTocMarked" } },
+	},
+	config = get_config("telekasten"),
+	keys = { "<leader>nn", "<leader>nf", "<leader>nd", "<leader>ns" },
+})
 -- }}}
 -- Additional FileTypes {{{
 -- use("kovetskiy/sxhkd-vim")
