@@ -35,4 +35,4 @@ map glf cd ~/.local/share/fonts
 map glt cd ~/.local/share/Trash/files
 
 map gm cd /run/media/shubham
-map gf2 cd "/home/shubham/.steam/steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"
+map gf2 cd "/home/shubham/.local/share/Steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"

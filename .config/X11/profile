@@ -64,7 +64,7 @@ export LESSHISTFILE=-
 export LESS='-R --use-color -Dd+r$Du+b'
 export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export _JAVA_AWT_WM_NONREPARENTING=1
-# export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export _ZL_DATA="$HOME/Downloads/Compressed/zlua"
 export RANGER_ZLUA="$HOME/Downloads/Programs/Cool-Ones/z.lua/z.lua"
 export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
