@@ -1,14 +1,16 @@
+;;; init.el --- -*- lexical-binding: t -*-
+
+;;; Commentary: Personal config with all
+;;; Code:
 (setq gc-cons-threshold most-positive-fixnum)
 
-(setq comp-async-report-warnings-errors nil) ;; native-comp warning
-(setq byte-compile-warnings '(not free-vars unresolved noruntime lexical make-local))
-
 (defun efs/display-startup-time ()
+  "Show the startup time."
   (message "Emacs loaded in %s with %d garbage collections."
-           (format "%.2f seconds"
-                   (float-time
-                    (time-subtract after-init-time before-init-time)))
-           gcs-done))
+	   (format "%.2f seconds"
+		   (float-time
+		    (time-subtract after-init-time before-init-time)))
+	   gcs-done))
 
 (add-hook 'emacs-startup-hook #'efs/display-startup-time)
 
@@ -20,9 +22,9 @@
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
+	(url-retrieve-synchronously
+	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	 'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -35,9 +37,9 @@
 
 (use-package gcmh
   :diminish gcmh-mode
+  :custom
+  (gcmh-idle-delay 5)
   :config
-  (setq gcmh-idle-delay 5
-        gcmh-high-cons-threshold (* 16 1024 1024))  ; 16mb
   (gcmh-mode 1))
 
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 105)
@@ -70,20 +72,24 @@
 (use-package mwheel
   :straight nil
   :config (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))
-                mouse-wheel-progressive-speed nil))
+		        mouse-wheel-progressive-speed nil))
 
 (use-package evil
   :init
   (setq evil-want-C-u-scroll t
-        evil-split-window-below t
-        evil-vsplit-window-below t
-        evil-want-keybinding nil
-        evil-undo-system 'undo-fu
-        evil-want-Y-yank-to-eol t
-        evil-kill-on-visual-paste nil
-        evil-shift-width 2)
+	evil-split-window-below t
+	evil-vsplit-window-below t
+	evil-want-keybinding nil
+	evil-undo-system 'undo-fu
+	evil-want-Y-yank-to-eol t
+	evil-kill-on-visual-paste nil
+	evil-shift-width 2)
   :hook (after-init . evil-mode)
   :preface
+(defun my/escape-and-nohl ()
+    (interactive)
+    (keyboard-escape-quit)
+    (evil-ex-nohighlight))
   (defun ian/save-and-kill-this-buffer ()
     (interactive)
     (save-buffer)
@@ -108,10 +114,7 @@
   (define-key evil-insert-state-map (kbd "C-S-v") 'yank)
   (define-key evil-normal-state-map (kbd ",w") 'save-buffer)
   (define-key evil-normal-state-map (kbd "0") 'evil-first-non-blank)
-  (global-set-key (kbd "<escape>") #'(lambda()
-                                      (interactive)
-                                      (keyboard-escape-quit)
-                                      (evil-ex-nohighlight)))
+  (global-set-key (kbd "<escape>") #'my/escape-and-nohl)
   (evil-ex-define-cmd "q" #'kill-this-buffer)
   (evil-ex-define-cmd "wq" #'ian/save-and-kill-this-buffer)
   (evil-global-set-key 'motion "j" 'evil-next-visual-line)
@@ -120,7 +123,7 @@
 (use-package evil-collection
   :after evil
   :config
-  ;; (setq evil-collection-company-use-tng nil)
+  (setq evil-collection-company-use-tng nil)
   (evil-collection-init))
 
 (use-package general
@@ -138,11 +141,11 @@
     "Maximize buffer"
     (interactive)
     (if (and (= 1 (length (window-list)))
-             (assoc ?_ register-alist))
-        (jump-to-register ?_)
+	     (assoc ?_ register-alist))
+	(jump-to-register ?_)
       (progn
-        (window-configuration-to-register ?_)
-        (delete-other-windows))))
+	(window-configuration-to-register ?_)
+	(delete-other-windows))))
   :config
   (general-create-definer sp/leader-keys
     :keymaps 'override
@@ -191,11 +194,11 @@
     "wq" '(evil-window-delete :which-key "delete window")
     "w+" 'balance-windows
     "w-" #'((lambda()
-             (interactive)
-             (evil-window-decrease-width 10)) :which-key "Win size--")
+	     (interactive)
+	     (evil-window-decrease-width 10)) :which-key "Win size--")
     "w=" #'((lambda()
-             (interactive)
-             (evil-window-decrease-width -10)) :which-key "Win size++"))
+	     (interactive)
+	     (evil-window-decrease-width -10)) :which-key "Win size++"))
   (sp/leader-keys
     "e"  '(:ignore t :which-key "Eval")
     "ed" '(eval-defun :which-key "function")
@@ -260,8 +263,8 @@
 
 (use-package undo-fu
   :bind (:map evil-normal-state-map
-              ("u" . undo-fu-only-undo)
-              ("C-r" . undo-fu-only-redo)))
+	      ("u" . undo-fu-only-undo)
+	      ("C-r" . undo-fu-only-redo)))
 
 (use-package undo-fu-session
   :after undo-fu
@@ -275,8 +278,8 @@
 
 (use-package evil-numbers
   :bind (:map evil-normal-state-map
-              ("g =" . evil-numbers/inc-at-pt)
-              ("g -" . evil-numbers/dec-at-pt)))
+	      ("g =" . evil-numbers/inc-at-pt)
+	      ("g -" . evil-numbers/dec-at-pt)))
     ;;; 1 alphanumeric 2
 
 (use-package cus-edit
@@ -291,32 +294,32 @@
     (cons (concat "[CRM] " (car args)) (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
   (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
+	'(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   (setq enable-recursive-minibuffers t)
   :preface
   (defvar ian/indent-width 4)
   :config
   (setq frame-title-format '("Yay-Evil")
-        ring-bell-function 'ignore
-        visible-bell t
-        scroll-margin 12
-        idle-update-delay 1.0
-        browse-url-browser-function 'xwidget-webkit-browse-url
-        frame-resize-pixelwise t)
+	ring-bell-function 'ignore
+	visible-bell t
+	scroll-margin 12
+	idle-update-delay 1.0
+	browse-url-browser-function 'xwidget-webkit-browse-url
+	frame-resize-pixelwise t)
   (fset 'yes-or-no-p 'y-or-n-p)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   ;; Always use spaces for indentation
   (setq-default indent-tabs-mode nil
-                tab-width ian/indent-width)
+		tab-width ian/indent-width)
   (setq inhibit-startup-screen t))
 
 (use-package files
   :straight nil
   :config
   (setq confirm-kill-processes nil
-        create-lockfiles nil))
+	create-lockfiles nil))
 
 (use-package elec-pair
   :straight nil
@@ -340,9 +343,9 @@
   :config
   (global-auto-revert-mode +1)
   (setq auto-revert-interval 5
-        auto-revert-check-vc-info t
-        global-auto-revert-non-file-buffers t
-        auto-revert-verbose nil))
+	auto-revert-check-vc-info t
+	global-auto-revert-non-file-buffers t
+	auto-revert-verbose nil))
 
 (use-package ediff
   :straight nil
@@ -404,7 +407,8 @@
   :hook ((prog-mode emacs-lisp-mode) . rainbow-delimiters-mode))
 
 (use-package rainbow-mode
-  :hook ((rjsx-mode web-mode scss-mode) . rainbow-mode))
+  :hook ((rjsx-mode web-mode scss-mode) . rainbow-mode)
+  :bind* ("C-c r" . rainbow-mode))
 
 (use-package highlight-indent-guides
   :custom
@@ -453,7 +457,7 @@
    (centaur-tabs-set-modified-marker t)
    (centaur-tabs-modified-marker "•"))
   :bind (("<C-next>" . centaur-tabs-forward)
-         ("<C-prior>" . centaur-tabs-backward))
+	 ("<C-prior>" . centaur-tabs-backward))
   :config
   (centaur-tabs-mode t))
 
@@ -471,7 +475,7 @@
   :config
   ;; Configure Orderless
   (setq affe-regexp-function #'orderless-pattern-compiler
-        affe-highlight-function #'orderless--highlight)
+	affe-highlight-function #'orderless--highlight)
 
   ;; Manual preview key for `affe-grep'
   (consult-customize affe-grep :preview-key (kbd "M-.")))
@@ -480,22 +484,22 @@
   :after marginalia
   :custom
   (orderless-matching-styles '(orderless-initialism
-                               orderless-literal
-                               orderless-regexp))
+			       orderless-literal
+			       orderless-regexp))
   (completion-styles '(orderless))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles
-                                          partial-completion)))))
+					  partial-completion)))))
 
 (use-package vertico
   :after orderless
   :init
   (setq completion-in-region-function
-        (lambda (&rest args)
-          (apply (if vertico-mode
-                     #'consult-completion-in-region
-                   #'completion--in-region)
-                 args)))
+	(lambda (&rest args)
+	  (apply (if vertico-mode
+		     #'consult-completion-in-region
+		   #'completion--in-region)
+		 args)))
   (setq read-buffer-completion-ignore-case t)
   (vertico-mode)
   (setq vertico-cycle t)
@@ -505,19 +509,19 @@
     folder, otherwise delete a character backward"
     (interactive "p")
     (if minibuffer-completing-file-name
-        (if (string-match-p "/." (minibuffer-contents))
-            (zap-up-to-char (- arg) ?/)
-          (delete-minibuffer-contents))
+	(if (string-match-p "/." (minibuffer-contents))
+	    (zap-up-to-char (- arg) ?/)
+	  (delete-minibuffer-contents))
       (delete-backward-char arg)))
   :bind (:map vertico-map
-              ("?" . minibuffer-completion-help)
-              ("C-j" . vertico-next)
-              ("C-k" . vertico-previous)
-              ("C-d" . vertico-scroll-down)
-              ("C-u" . vertico-scroll-up)
-              ;; ("<backspace>" . sp/minibuffer-backward-kill)
-              ("C-<backspace>" . sp/minibuffer-backward-kill)
-              ))
+	      ("?" . minibuffer-completion-help)
+	      ("C-j" . vertico-next)
+	      ("C-k" . vertico-previous)
+	      ("C-d" . vertico-scroll-down)
+	      ("C-u" . vertico-scroll-up)
+	      ;; ("<backspace>" . sp/minibuffer-backward-kill)
+	      ("C-<backspace>" . sp/minibuffer-backward-kill)
+	      ))
 
 (use-package savehist
   :hook (vertico-mode . savehist-mode)
@@ -573,8 +577,8 @@
 
 (use-package avy
   :bind (:map evil-normal-state-map
-              ("s" . evil-avy-goto-char-2)
-              ("S" . evil-avy-goto-word-0)))
+	      ("s" . evil-avy-goto-char-2)
+	      ("S" . evil-avy-goto-word-0)))
 
 (use-package vterm
   :commands vterm
@@ -594,9 +598,9 @@
   (evil-normalize-keymaps)
 
   (setq eshell-history-size  10000
-        eshell-buffer-maximum-lines 10000
-        eshell-hist-ignoredups t
-        eshell-scroll-to-bottom-on-input t))
+	eshell-buffer-maximum-lines 10000
+	eshell-hist-ignoredups t
+	eshell-scroll-to-bottom-on-input t))
 
 (use-package eshell-git-prompt
   :after eshell)
@@ -662,20 +666,24 @@ Even playing with symbol, when inside a string, it becomes a word"
 
 (use-package company
   :defer t
+  :preface
+    (defun my/company-backtab ()
+      (interactive)
+      (company-complete-common-or-cycle -1))
   :bind (:map company-active-map
-              ("<tab>"  . company-indent-or-complete-common)
-              ([tab]  . company-indent-or-complete-common)
-              ("<backtab>" . (lambda() (interactive) (company-complete-common-or-cycle -1)))
-              ("C-n"    . company-select-next)
-              ("C-p"    . company-select-previous)
-              ("C-j" . company-select-next-or-abort)
-              ("C-k" . company-select-previous-or-abort)
-              ("C-w"    . backward-kill-word)
-              ("C-g"    . company-abort)
-              ("C-c"    . company-search-abort)
-              ("C-s"  . company-search-candidates)
-              ("C-l" . company-other-backend)
-              ("C-o" . company-search-toggle-filtering))
+	      ("<tab>"  . company-indent-or-complete-common)
+	      ([tab]  . company-indent-or-complete-common)
+	      ("<backtab>" . my/company-backtab)
+	      ("C-n"    . company-select-next)
+	      ("C-p"    . company-select-previous)
+	      ("C-j" . company-select-next-or-abort)
+	      ("C-k" . company-select-previous-or-abort)
+	      ("C-w"    . backward-kill-word)
+	      ("C-g"    . company-abort)
+	      ("C-c"    . company-search-abort)
+	      ("C-s"  . company-search-candidates)
+	      ("C-l" . company-other-backend)
+	      ("C-o" . company-search-toggle-filtering))
   :hook ((prog-mode org-mode) . company-mode)
   :custom
   (company-minimum-prefix-length 2)
@@ -714,7 +722,7 @@ Even playing with symbol, when inside a string, it becomes a word"
   :hook (prog-mode . lsp-mode)
   :init
   (setq lsp-keymap-prefix "C-l"
-        lsp-completion-provider :none)
+	lsp-completion-provider :none)
   :custom
   (lsp-disabled-clients '((python-mode . pyls)))
   (lsp-eslint-run "onSave")
@@ -749,10 +757,7 @@ Even playing with symbol, when inside a string, it becomes a word"
   (lsp-ui-peek-peek-height 25))
 
 (use-package yasnippet
-  :hook ((lsp-deferred org-mode) . yas-minor-mode)
-  ;; :config
-  ;; (yas-global-mode 1)
-  )
+  :hook ((lsp-deferred org-mode) . yas-minor-mode))
 
 (use-package yasnippet-snippets
   :after yasnippet)
@@ -760,11 +765,11 @@ Even playing with symbol, when inside a string, it becomes a word"
 (use-package flycheck
   :hook (prog-mode . flycheck-mode)
   :preface
-  (defun typescript-mode-setup ()
+  (defun my/typescript-mode-setup ()
     "Custom setup for Typescript mode"
-    (setq flycheck-checker 'javascript-eslint))
+    (setq flycheck-checker #'javascript-eslint))
   :config
-  (add-hook 'typescript-mode-hook 'typescript-mode-setup)
+  (add-hook 'typescript-mode-hook #'my/typescript-mode-setup)
   (general-define-key
    :states 'normal
    :keymaps 'flycheck-mode-map
@@ -780,9 +785,9 @@ Even playing with symbol, when inside a string, it becomes a word"
   :config
   ;; Enable add-node-modules-path for specific modes
   (dolist (mode '(typescript-mode-hook
-                  rjsx-mode-hook
-                  json-mode-hook
-                  web-mode-hook))
+		  rjsx-mode-hook
+		  json-mode-hook
+		  web-mode-hook))
     (add-hook mode #'add-node-modules-path)))
 
 (use-package format-all
@@ -803,11 +808,9 @@ Even playing with symbol, when inside a string, it becomes a word"
   :hook (rjsx-mode . lsp-deferred))
 
 (use-package jest
-  ;; :after (js2-mode rjsx-mode)
   :hook ((js2-mode rjsx-mode typescript-mode) . jest-minor-mode))
 
 (use-package npm-mode
-  ;; :after (js2-mode rjsx-mode typescript-mode)
   :hook ((js2-mode rjsx-mode typescript-mode) . npm-mode))
 
 (use-package web-mode
@@ -815,7 +818,7 @@ Even playing with symbol, when inside a string, it becomes a word"
   :mode ("\\.html?\\'" "\\.css\\'")
   :config
   (setq web-mode-enable-current-element-highlight t
-        web-mode-enable-current-column-highlight t)
+	web-mode-enable-current-column-highlight t)
   (general-define-key
    :prefix ","
    :states 'motion
@@ -830,9 +833,9 @@ Even playing with symbol, when inside a string, it becomes a word"
 (use-package lsp-tailwindcss
   :after (rjsx-mode web-mode)
   :straight (lsp-tailwindcss
-             :type git
-             :host github
-             :repo "merrickluo/lsp-tailwindcss")
+	     :type git
+	     :host github
+	     :repo "merrickluo/lsp-tailwindcss")
   :init
   (setq lsp-tailwindcss-add-on-mode t))
 
@@ -850,7 +853,7 @@ Even playing with symbol, when inside a string, it becomes a word"
 (use-package yaml-mode
   :mode ("\\.yml\\'" "\\.yaml\\'")
   :config
-  (evil-define-key 'insert yaml-mode-map "RET" 'newline-and-indent))
+  (evil-define-key 'insert yaml-mode-map "RET" #'newline-and-indent))
 
 (use-package lsp-pyright
   :preface
@@ -991,10 +994,10 @@ Even playing with symbol, when inside a string, it becomes a word"
   (org-roam-directory "~/Documents/Notes/Roam")
   (org-roam-completion-everywhere t)
   :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n i" . org-roam-node-insert)
-         :map org-mode-map
-         ("C-M-i"    . completion-at-point))
+	 ("C-c n f" . org-roam-node-find)
+	 ("C-c n i" . org-roam-node-insert)
+	 :map org-mode-map
+	 ("C-M-i"    . completion-at-point))
   :commands (org-roam-buffer-toggle org-roam-node-insert org-roam-node-find)
   :config
   (org-roam-setup))

@@ -1,3 +1,5 @@
+;;; early-init.el --- -*- lexical-binding: t -*-
+
 (setq package-enable-at-startup nil)
 (when (fboundp 'native-compile-async)
     (setq comp-deferred-compilation t
