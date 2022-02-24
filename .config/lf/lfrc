@@ -18,6 +18,10 @@ set number
 set relativenumber
 set ratios 1:2:3
 
+cmd batch-rename ${{
+  /bin/sh -c "vimv $(echo -e "$fx" | xargs -i echo "\\'{}\\'" | xargs echo)"
+}}
+
 cmd open ${{
     case $(file --mime-type "$f" -bL) in
         text/*|application/json) $EDITOR -p "$fx";;
@@ -152,7 +156,8 @@ map <c-n> push :mkdir<space>
 map ms $mkscript
 map ch chmod
 map bg setwallpaper
-map r rename
+map rr rename
+map rb batch-rename
 map R reload
 map cl clear
 map A rename                  #  at the very end
