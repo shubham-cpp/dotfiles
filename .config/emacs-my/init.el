@@ -21,16 +21,29 @@
 (setq user-emacs-directory "~/.cache/emacs-my")
 (setq package-user-dir (expand-file-name (concat user-emacs-directory "/elpa")))
 
+(require 'package)
+(setq package-archives
+      '(("melpa" . "https://melpa.org/packages/")
+        ("elpa" . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+(package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
 (eval-and-compile
   (setq confirm-kill-processes nil
 	create-lockfiles nil
 	use-package-always-ensure t
-        use-package-expand-minimally t
+	use-package-expand-minimally t
 	read-file-name-completion-ignore-case t
 	read-buffer-completion-ignore-case t
 	completion-ignore-case t
 	global-auto-revert-non-file-buffers t
 	display-line-numbers-type 'relative
+	indent-tabs-mode nil
+	browse-url-browser-function 'xwidget-webkit-browse-url
+	frame-resize-pixelwise t
 	completion-styles '(partial-completion
 			    substring
 			    initials
@@ -38,31 +51,10 @@
 	completion-category-overrides '((file
 					 (styles
 					  partial-completion)))))
-(savehist-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(save-place-mode 1)
 (global-auto-revert-mode +1)
-(recentf-mode +1)
 (global-display-line-numbers-mode t)
-
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-;; Install use-package
-(straight-use-package 'use-package)
-(setq use-package-verbose t)
-(use-package straight
-  :custom (straight-use-package-by-default t))
+;; (eval-when-compile (require 'use-package))
 
 ;; Fonts
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 105)
@@ -73,37 +65,46 @@
 
 ;; Default packages
 (use-package cus-edit
-  :straight nil
+  :ensure nil
   :config
   (setq custom-file (concat user-emacs-directory "customs.el")))
 
+(use-package savehist
+  :ensure nil
+  :hook (vertico-mode . savehist-mode))
+
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode)
+  :custom (save-place-limit 100))
+
 (use-package flyspell
-  :straight nil
+  :ensure nil
   :init
   (setq ispell-program-name "aspell")
   :hook ((markdown-mode org-mode) . flyspell-mode))
 
-;;(use-package recentf
-;;  :straight nil
-;;  :custom
-;;  (recentf-save-file "~/.cache/recentf")
-;;  (recentf-max-menu-items 25)
-;;  :bind
-;;  ([remap recentf-open-file] . consult-recent-file)
-;;  :config
-;;  (recentf-mode))
+(use-package recentf
+  :ensure nil
+  :custom
+  (recentf-save-file "~/.cache/recentf")
+  (recentf-max-menu-items 25)
+  :bind
+  ([remap recentf-open-file] . consult-recent-file)
+  :config
+  (recentf-mode))
 
 (use-package uniquify
-  :straight nil
+  :ensure nil
   :custom
   (uniquify-buffer-name-style 'forward))
 
 (use-package mwheel
-  :straight nil
+  :ensure nil
   :config (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))
 		mouse-wheel-progressive-speed nil))
 (use-package paren
-  :straight nil
+  :ensure nil
   :after evil-collection
   :custom
   (show-paren-delay 0.1)
@@ -113,11 +114,11 @@
   :config (show-paren-mode 1))
 
 (use-package elec-pair
-  :straight nil
+  :ensure nil
   :hook ((prog-mode emacs-lisp-mode org-mode) . electric-pair-mode))
 
 ;; (use-package hideshow
-;;   :straight nil
+;;   :ensure nil
 ;;   :hook ((prog-mode emacs-lisp-mode) . hs-minor-mode)
 ;;   :config
 ;;   (eval-and-compile
@@ -125,7 +126,7 @@
 
 ;; Dired
 (use-package dired
-  :straight nil
+  :ensure nil
   :commands (dired dired-jump)
   :init
   (setq trash-directory (expand-file-name (format "%s/.cache/trash-emacs" (getenv "HOME")))
@@ -176,6 +177,8 @@
 ;; Tabs
 (use-package centaur-tabs
   :demand
+  :init
+  (tab-bar-mode -1)
   :custom
   ((centaur-tabs-set-icons t)
    (centaur-tabs-gray-out-icons 'buffer)
@@ -254,7 +257,7 @@
     "Maximize buffer"
     (interactive)
     (if (and (= 1 (length (window-list)))
-	     (assoc ?_ register-alist))
+             (assoc ?_ register-alist))
 	(jump-to-register ?_)
       (progn
 	(window-configuration-to-register ?_)
@@ -264,7 +267,103 @@
     :keymaps 'override
     :states  '(insert emacs normal visual)
     :prefix "SPC"
-    :global-prefix "M-SPC"))
+    :global-prefix "M-SPC")
+
+  (sp/leader-keys
+    "." '(find-file :which-key "find file")
+    "," '(consult-recent-file :which-key "recent files")
+    "/" '(evil-commentary-line :which-key "toggle comment")
+    "f" '(nil :which-key "files")
+    "fb" '(consult-bookmark :which-key "bookmarks")
+    "ff" '(find-file :which-key "find file")
+    "ff" '(find-file-other-window :which-key "find file(other)")
+    "fd" '(dired-jump :which-key "open dired")
+    "fr" '(consult-recent-file :which-key "recent files")
+    "fR" '(rename-file :which-key "rename file")
+    "fs" '(save-buffer :which-key "save buffer")
+    "fS" '(evil-write-all :which-key "save all buffers")
+    "fp" '(affe-find :which-key "Fzf"))
+  ;; Buffer
+  (sp/leader-keys
+    "b" '(nil :which-key "buffer")
+    "bb" '(consult-buffer :which-key "switch buffers")
+    "bd" '(evil-delete-buffer :which-key "delete buffer")
+    "bi" '(clone-indirect-buffer  :which-key "indirect buffer")
+    "br" '(revert-buffer :which-key "revert buffer")
+    "bn" '(next-buffer :which-key "switch to next buffer")
+    "bp" '(previous-buffer :which-key "switch to prev buffer")
+    "bk" '(kill-this-buffer :which-key "kill current buffer")
+    "bK" '(kill-buffer :which-key "kill buffer"))
+  (sp/leader-keys
+    "w" '(nil :which-key "window")
+    "wm" '(jib/toggle-maximize-buffer :which-key "maximize buffer")
+    "ws" '(jib/split-window-vertically-and-switch :which-key "split below")
+    "wv" '(jib/split-window-horizontally-and-switch :which-key "split right")
+    "wN" '(make-frame :which-key "make frame")
+    "wd" '(evil-window-delete :which-key "delete window")
+    "wl" '(evil-window-right :which-key "evil-window-right")
+    "wh" '(evil-window-left :which-key "evil-window-left")
+    "wj" '(evil-window-down :which-key "evil-window-down")
+    "wk" '(evil-window-up :which-key "evil-window-up")
+    "wz" '(text-scale-adjust :which-key "text zoom")
+    "wo" 'delete-other-windows
+    "ww" 'evil-window-next
+    "wq" '(evil-window-delete :which-key "delete window")
+    "w+" 'balance-windows
+    "w-" #'((lambda()
+	      (interactive)
+	      (evil-window-decrease-width 10)) :which-key "Win size--")
+    "w=" #'((lambda()
+	      (interactive)
+	      (evil-window-decrease-width -10)) :which-key "Win size++"))
+  (sp/leader-keys
+    "e"  '(:ignore t :which-key "Eval")
+    "ed" '(eval-defun :which-key "function")
+    "ee" '(eval-last-sexp :which-key "current expr")
+    "ex" '(eval-expression :which-key "whole expression"))
+  (sp/leader-keys
+    "h" '(nil :which-key "help/emacs")
+    "hv" '(describe-variable :which-key "des. variable")
+    "hb" '(describe-bindings :which-key "des. bindings")
+    "hM" '(describe-mode :which-key "des. mode")
+    "hf" '(describe-function :which-key "des. func")
+    "hF" '(describe-face :which-key "des. face")
+    "hk" '(describe-key :which-key "des. key")
+    "hm" '(nil :which-key "switch mode")
+    "hme" '(emacs-lisp-mode :which-key "elisp mode")
+    "hmo" '(org-mode :which-key "org mode")
+    "hmt" '(text-mode :which-key "text mode"))
+  (sp/leader-keys
+    "o"   '(:ignore t :which-key "org mode")
+    "oi"  '(:ignore t :which-key "insert")
+    "oil" '(org-insert-link :which-key "insert link")
+    "on"  '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+    "oa"  '(org-agenda :which-key "status")
+    "ot"  '(org-todo-list :which-key "todos")
+    "oc"  '(org-capture t :which-key "capture")
+    "ox"  '(org-export-dispatch t :which-key "export"))
+  (sp/leader-keys
+    "t" '(nil :which-key "toggles")
+    "tT" '(toggle-truncate-lines :which-key "truncate lines")
+    "tv" '(visual-line-mode :which-key "visual line mode")
+    "ta" '(mixed-pitch-mode :which-key "variable pitch mode")
+    "tc" '(visual-fill-column-mode :which-key "visual fill column mode")
+    "te" '(eshell-toggle :which-key "eshell")
+    "tv" '(vterm-other-window :which-key "vterm(other)")
+    "tt" '(load-theme :which-key "load theme")
+    "tR" '(read-only-mode :which-key "read only mode")
+    "tr" '(display-fill-column-indicator-mode :which-key "fill column indicator")
+    "tm" '(hide-mode-line-mode :which-key "hide modeline mode"))
+  (general-define-key
+   :keymaps 'dired-mode-map
+   :states 'normal
+   "h" 'dired-single-up-directory
+   "H" 'dired-omit-mode
+   "l" 'dired-single-buffer
+   ;; "y" 'dired-ranger-copy
+   ;; "X" 'dired-ranger-move
+   ;; "p" 'dired-ranger-paste
+   ))
 
 (use-package evil-surround
   :after evil-collection
@@ -303,11 +402,11 @@
 
 (use-package evil-numbers
   :bind ((:map evil-visual-state-map
-	       ("g =" . evil-numbers/inc-at-pt)
-	       ("g -" . evil-numbers/dec-at-pt))
+               ("g =" . evil-numbers/inc-at-pt)
+               ("g -" . evil-numbers/dec-at-pt))
 	 (:map evil-normal-state-map
-	       ("g =" . evil-numbers/inc-at-pt)
-	       ("g -" . evil-numbers/dec-at-pt))))
+               ("g =" . evil-numbers/inc-at-pt)
+               ("g -" . evil-numbers/dec-at-pt))))
 
 (use-package evil-goggles
   :after evil-collection
@@ -323,16 +422,16 @@
 
 (use-package evil-args
   :bind ((:map evil-inner-text-objects-map
-	       ("a" . evil-inner-arg))
+               ("a" . evil-inner-arg))
 	 (:map evil-outer-text-objects-map
-	       ("a" . evil-outer-arg))
+               ("a" . evil-outer-arg))
 	 (:map evil-normal-state-map
-	       ("L" . evil-forward-arg)
-	       ("H" . evil-backward-arg)
-	       ("K" . evil-jump-out-args))
+               ("L" . evil-forward-arg)
+               ("H" . evil-backward-arg)
+               ("K" . evil-jump-out-args))
 	 (:map evil-motion-state-map
-	       ("L" . evil-forward-arg)
-	       ("H" . evil-backward-arg))))
+               ("L" . evil-forward-arg)
+               ("H" . evil-backward-arg))))
 
 ;; Selection Frameworks
 
@@ -343,7 +442,7 @@
   :config
   ;; Configure Orderless
   ;;  (setq affe-regexp-function #'orderless-pattern-compiler
-  ;;	affe-highlight-function #'orderless--highlight)
+  ;;    affe-highlight-function #'orderless--highlight)
 
   ;; Manual preview key for `affe-grep'
   (consult-customize affe-grep :preview-key (kbd "M-.")))
@@ -352,12 +451,12 @@
 ;;   :after marginalia
 ;;   :custom
 ;;   (orderless-matching-styles '(orderless-initialism
-;; 			       orderless-literal
-;; 			       orderless-regexp))
+;;                 orderless-literal
+;;                 orderless-regexp))
 ;;   (completion-styles '(orderless))
 ;;   (completion-category-defaults nil)
 ;;   (completion-category-overrides '((file (styles
-;; 					  partial-completion)))))
+;;                    partial-completion)))))
 
 (use-package vertico
   :after which-key
@@ -380,16 +479,16 @@
     (interactive "p")
     (if minibuffer-completing-file-name
 	(if (string-match-p "/." (minibuffer-contents))
-	    (zap-up-to-char (- arg) ?/)
+            (zap-up-to-char (- arg) ?/)
 	  (delete-minibuffer-contents))
       (delete-backward-char arg)))
   :bind (:map vertico-map
-	      ("?" . minibuffer-completion-help)
-	      ("C-j" . vertico-next)
-	      ("C-k" . vertico-previous)
-	      ("C-d" . vertico-scroll-down)
-	      ("C-u" . vertico-scroll-up)
-	      ("C-<backspace>" . sp/minibuffer-backward-kill)))
+              ("?" . minibuffer-completion-help)
+              ("C-j" . vertico-next)
+              ("C-k" . vertico-previous)
+              ("C-d" . vertico-scroll-down)
+              ("C-u" . vertico-scroll-up)
+              ("C-<backspace>" . sp/minibuffer-backward-kill)))
 
 (use-package consult
   ;; :hook (completion-list-mode . consult-preview-at-point-mode)
@@ -458,17 +557,10 @@
    :states 'normal
    :keymaps 'flycheck-mode-map
    "] g" '(flycheck-next-error :which-key "Next error")
-   "[ g" '(flycheck-previous-error :which-key "Prev error"))
-  (general-define-key
-   :keymaps 'dired-mode-map
-   :states 'normal
-   "h" 'dired-single-up-directory
-   "H" 'dired-omit-mode
-   "l" 'dired-single-buffer
-   ;; "y" 'dired-ranger-copy
-   ;; "X" 'dired-ranger-move
-   ;; "p" 'dired-ranger-paste
-   ))
+   "[ g" '(flycheck-previous-error :which-key "Prev error")))
+
+(use-package flycheck-pos-tip
+  :hook (flycheck-mode . flycheck-pos-tip-mode))
 
 ;; Code Completion
 (use-package company
@@ -526,172 +618,6 @@
   (add-hook 'prog-mode-hook #'format-all-ensure-formatter)
   (add-hook 'python-mode-hook #'(lambda ()
                                   (setq-local format-all-formatters '(("Python" yapf))))))
-(use-package flycheck-pos-tip
-  :hook (flycheck-mode . flycheck-pos-tip-mode))
-
-;; LSP
-
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :hook (prog-mode . lsp-mode)
-  :init
-  (setq lsp-keymap-prefix "C-l"
-	lsp-completion-provider :none
-	lsp-clients-clangd-args "--header-insertion-decorators=0 --background-index -pch-storage=memory --clang-tidy --suggest-missing-includes --cross-file-rename --completion-style=detailed"
-	lsp-css-lint-box-model "warning"
-	lsp-css-lint-duplicate-properties "warning"
-	lsp-css-lint-empty-rules "error"
-	lsp-css-lint-float "error"
-	lsp-css-lint-zero-units "warning"
-	lsp-lua-completion-call-snippet "Both"
-	lsp-lua-hint-enable t
-	lsp-lua-workspace-max-preload 2000
-	lsp-lua-workspace-preload-file-size 1000
-	lsp-lua-diagnostics-disable ["lowercase-global"]
-	lsp-lua-diagnostics-globals ["describe"]
-	lsp-lua-runtime-unicode-name t)
-  :custom
-  (lsp-disabled-clients '((python-mode . pyls)))
-  (lsp-eslint-run "onSave")
-  (lsp-eslint-auto-fix-on-save t)
-  :config
-  (lsp-enable-which-key-integration t)
-  (general-define-key
-   :states '(normal visual motion)
-   :keymaps 'lsp-mode-map
-   :prefix "g"
-   "d" '(lsp-find-definition :which-key "Goto defination")
-   "r" '(lsp-find-references :which-key "Find references")
-   "a" '(lsp-ui-sideline-apply-code-actions :which-key "Code actions")
-   "o" '(lsp-organize-imports :which-key "Organize Imports")
-   "I" '(lsp-javascript-rename-file :which-key "JS rename file")
-   "R" '(lsp-rename :which-key "Rename")))
-
-(use-package lsp-ui
-  :hook ((lsp-mode lsp-deferred) . lsp-ui-mode)
-  :custom
-  (lsp-ui-doc-position 'bottom)
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-use-childframe t)
-  (lsp-ui-doc-include-signature t)
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-flycheck-enable t)
-  (lsp-ui-flycheck-list-position 'right)
-  (lsp-ui-flycheck-live-reporting t)
-  (lsp-ui-peek-enable t)
-  (lsp-ui-peek-list-width 60)
-  (lsp-ui-peek-peek-height 25))
-
-(use-package yasnippet
-  :hook ((lsp-deferred org-mode) . yas-minor-mode))
-
-(use-package yasnippet-snippets
-  :after yasnippet)
-
-;; Additional modes
-(use-package add-node-modules-path
-  :after (rjsx-mode typescript-mode)
-  :config
-  ;; Enable add-node-modules-path for specific modes
-  (dolist (mode '(typescript-mode-hook
-		  rjsx-mode-hook
-		  json-mode-hook
-		  web-mode-hook))
-    (add-hook mode #'add-node-modules-path)))
-
-(use-package typescript-mode
-  :mode "\\.ts\\'"
-  :hook (typescript-mode . lsp-deferred)
-  :config
-  (setq typescript-indent-level 2))
-
-(use-package js2-mode
-  :mode "\\.js\\'"
-  :hook (js2-mode . lsp-deferred))
-
-(use-package rjsx-mode
-  :mode ("\\.tsx\\'" "\\.jsx\\'")
-  :hook (rjsx-mode . lsp-deferred))
-
-(use-package jest
-  :hook ((js2-mode rjsx-mode typescript-mode) . jest-minor-mode))
-
-(use-package npm-mode
-  :hook ((js2-mode rjsx-mode typescript-mode) . npm-mode))
-
-(use-package web-mode
-  :hook (web-mode . lsp-deferred)
-  :mode ("\\.html?\\'" "\\.css\\'")
-  :config
-  (setq web-mode-enable-current-element-highlight t
-	web-mode-enable-current-column-highlight t)
-  (general-define-key
-   :prefix ","
-   :states 'motion
-   :keymaps 'web-mode-map
-   "i" '(web-mode-buffer-indent :which-key "web mode indent")
-   "c" '(web-mode-fold-or-unfold :which-key "web mode toggle fold")
-   ))
-
-(use-package emmet-mode
-  :hook ((web-mode rjsx-mode) . emmet-mode)
-  :preface
-  (defun my/emmet-jsx ()
-    (setq-local emmet-expand-jsx-className? t))
-  :config
-  (setq emmet-insert-flash-time 0.001)
-  (add-hook 'js-jsx-mode-hook #'my/emmet-jsx)
-  (add-hook 'web-mode-hook #'my/emmet-jsx))
-
-(use-package scss-mode
-  :mode "\\.scss\\'"
-  :custom
-  (scss-compile-at-save nil)
-  :config
-  (web-mode))
-
-(use-package lsp-tailwindcss
-  :after (rjsx-mode web-mode)
-  :straight (lsp-tailwindcss
-	     :type git
-	     :host github
-	     :repo "merrickluo/lsp-tailwindcss")
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
-
-(use-package json-mode
-  :hook (lsp-deferred . json-mode))
-
-(use-package yaml-mode
-  :hook (lsp-deferred . yaml-mode))
-;; :config
-;; (evil-define-key 'insert yaml-mode-map "RET" #'newline-and-indent))
-
-(use-package lsp-pyright
-  :preface
-  (defun my/pyright-start()
-    (interactive)
-    (require 'lsp-pyright)
-    (lsp-deferred))
-  :hook (python-mode . my/pyright-start))
-
-(use-package lsp-tailwindcss
-  :after (rjsx-mode web-mode)
-  :straight (lsp-tailwindcss
-	     :type git
-	     :host github
-	     :repo "merrickluo/lsp-tailwindcss")
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
-
-(use-package grip-mode
-  :commands (grip-mode))
-
-(use-package markdown-mode
-  :hook (markdown-mode . auto-fill-mode)
-  :config
-  (set-face-attribute 'markdown-code-face nil :inherit 'org-block))
-
 ;; Enhance defaults
 
 (use-package which-key
@@ -862,8 +788,166 @@
   :config
   (eshell-syntax-highlighting-global-mode +1))
 
-;; Hacks
+;; LSP
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook (prog-mode . lsp-mode)
+  :init
+  (setq lsp-keymap-prefix "C-l"
+	lsp-completion-provider :none
+	lsp-clients-clangd-args "--header-insertion-decorators=0 --background-index -pch-storage=memory --clang-tidy --suggest-missing-includes --cross-file-rename --completion-style=detailed"
+	lsp-css-lint-box-model "warning"
+	lsp-css-lint-duplicate-properties "warning"
+	lsp-css-lint-empty-rules "error"
+	lsp-css-lint-float "error"
+	lsp-css-lint-zero-units "warning"
+	lsp-lua-completion-call-snippet "Both"
+	lsp-lua-hint-enable t
+	lsp-lua-workspace-max-preload 2000
+	lsp-lua-workspace-preload-file-size 1000
+	lsp-lua-diagnostics-disable ["lowercase-global"]
+	lsp-lua-diagnostics-globals ["describe"]
+	lsp-lua-runtime-unicode-name t)
+  :custom
+  (lsp-disabled-clients '((python-mode . pyls)))
+  (lsp-eslint-run "onSave")
+  (lsp-eslint-auto-fix-on-save t)
+  :config
+  (lsp-enable-which-key-integration t)
+  (general-define-key
+   :states '(normal visual motion)
+   :keymaps 'lsp-mode-map
+   :prefix "g"
+   "d" '(lsp-find-definition :which-key "Goto defination")
+   "r" '(lsp-find-references :which-key "Find references")
+   "a" '(lsp-ui-sideline-apply-code-actions :which-key "Code actions")
+   "o" '(lsp-organize-imports :which-key "Organize Imports")
+   "I" '(lsp-javascript-rename-file :which-key "JS rename file")
+   "R" '(lsp-rename :which-key "Rename")))
 
+(use-package lsp-ui
+  :hook ((lsp-mode lsp-deferred) . lsp-ui-mode)
+  :custom
+  (lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-use-childframe t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-flycheck-enable t)
+  (lsp-ui-flycheck-list-position 'right)
+  (lsp-ui-flycheck-live-reporting t)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-peek-list-width 60)
+  (lsp-ui-peek-peek-height 25))
+
+(use-package yasnippet
+  :hook ((lsp-deferred org-mode) . yas-minor-mode))
+
+(use-package yasnippet-snippets
+  :after yasnippet)
+
+;; Additional modes
+(use-package add-node-modules-path
+  :after (rjsx-mode typescript-mode)
+  :config
+  ;; Enable add-node-modules-path for specific modes
+  (dolist (mode '(typescript-mode-hook
+		  rjsx-mode-hook
+		  json-mode-hook
+		  web-mode-hook))
+    (add-hook mode #'add-node-modules-path)))
+
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
+
+(use-package js2-mode
+  :mode "\\.js\\'"
+  :hook (js2-mode . lsp-deferred))
+
+(use-package rjsx-mode
+  :mode ("\\.tsx\\'" "\\.jsx\\'")
+  :hook (rjsx-mode . lsp-deferred))
+
+(use-package jest
+  :hook ((js2-mode rjsx-mode typescript-mode) . jest-minor-mode))
+
+(use-package npm-mode
+  :hook ((js2-mode rjsx-mode typescript-mode) . npm-mode))
+
+(use-package web-mode
+  :hook (web-mode . lsp-deferred)
+  :mode ("\\.html?\\'" "\\.css\\'")
+  :config
+  (setq web-mode-enable-current-element-highlight t
+	web-mode-enable-current-column-highlight t)
+  (general-define-key
+   :prefix ","
+   :states 'motion
+   :keymaps 'web-mode-map
+   "i" '(web-mode-buffer-indent :which-key "web mode indent")
+   "c" '(web-mode-fold-or-unfold :which-key "web mode toggle fold")
+   ))
+
+(use-package emmet-mode
+  :hook ((web-mode rjsx-mode) . emmet-mode)
+  :preface
+  (defun my/emmet-jsx ()
+    (setq-local emmet-expand-jsx-className? t))
+  :config
+  (setq emmet-insert-flash-time 0.001)
+  (add-hook 'js-jsx-mode-hook #'my/emmet-jsx)
+  (add-hook 'web-mode-hook #'my/emmet-jsx))
+
+(use-package scss-mode
+  :mode "\\.scss\\'"
+  :custom
+  (scss-compile-at-save nil)
+  :config
+  (web-mode))
+
+(use-package json-mode
+  :hook (lsp-deferred . json-mode))
+
+(use-package yaml-mode
+  :hook (lsp-deferred . yaml-mode)
+  :config
+  (evil-define-key 'insert yaml-mode-map "RET" #'newline-and-indent))
+
+(use-package lsp-pyright
+  :preface
+  (defun my/pyright-start()
+    (interactive)
+    (require 'lsp-pyright)
+    (lsp-deferred))
+  :hook (python-mode . my/pyright-start))
+
+(use-package lsp-tailwindcss
+  :after (rjsx-mode web-mode)
+  :init
+  (setq lsp-tailwindcss-add-on-mode t))
+
+(use-package grip-mode
+  :commands (grip-mode))
+
+(use-package markdown-mode
+  :hook (markdown-mode . auto-fill-mode)
+  :config
+  (set-face-attribute 'markdown-code-face nil :inherit 'org-block))
+
+(use-package projectile
+  :hook (prog-mode . projectile-mode)
+  :config
+  (general-define-key
+   "C-c p" '(:keymap projectile-command-map :package projectile))
+  (general-define-key
+   :prefix "SPC"
+   :keymaps 'normal
+   "p" '(:keymap projectile-command-map :wk "Project")))
+
+;; Hacks
 (defun sp/improve-word-length ()
   "This way, when do a 'e' (evil-forward-word-end) it is better.
 Even playing with symbol, when inside a string, it becomes a word"

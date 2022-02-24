@@ -25,9 +25,9 @@ npm
 .config/zsh/.zcompdump*
 .config/zsh/.zhistory
 .config/zsh/plugins/*
-.config/emacs/auto-save-list
-.config/emacs/.local
-.config/emacs/*~
+.config/emacs*/auto-save-list/*
+.config/emacs*/.local
+.config/emacs*/*~
 .config/emacs*/elpa
 .config/emacs*/etc
 .config/emacs*/var
