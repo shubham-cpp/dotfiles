@@ -27,9 +27,24 @@
         ("elpa" . "https://elpa.gnu.org/packages/")
         ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 (package-initialize)
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (eval-buffer)
+    (package-refresh-contents)
+    (quelpa-self-upgrade)))
+
+(eval-and-compile
+  (require 'quelpa))
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+;; (setq use-package-ensure-function 'quelpa)
 
 (eval-and-compile
   (setq confirm-kill-processes nil
@@ -69,14 +84,18 @@
   :config
   (setq custom-file (concat user-emacs-directory "customs.el")))
 
-(use-package savehist
-  :ensure nil
-  :hook (vertico-mode . savehist-mode))
+(use-package gcmh
+  :config
+  (gcmh-mode 1))
 
 (use-package saveplace
   :ensure nil
   :hook (after-init . save-place-mode)
   :custom (save-place-limit 100))
+
+(use-package savehist
+  :ensure nil
+  :hook (save-place-mode . savehist-mode))
 
 (use-package flyspell
   :ensure nil
@@ -700,10 +719,19 @@
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   (setq org-html-checkbox-type 'html))
 
-(use-package org-bullets
-  :hook (org-mode . org-bullets-mode)
+;; (use-package org-bullets
+;;   :hook (org-mode . org-bullets-mode)
+;;   :custom
+;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+;; (quelpa '(org-modern :fetcher github :repo "minad/org-modern"))
+;; (add-hook 'org-mode-hook #'org-modern-mode)
+(use-package org-modern
+  :ensure nil
+  :quelpa (org-modern :fetcher github :repo "minad/org-modern")
+  :hook (org-mode . org-modern-mode)
   :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (org-modern-star ["◉" "○" "●" "○" "●" "○" "●"]))
 
 (use-package org-roam
   :init
@@ -939,13 +967,35 @@
 
 (use-package projectile
   :hook (prog-mode . projectile-mode)
+  :bind-keymap
+  ("C-c p" . projectile-command-map))
+
+(use-package neotree
+  :after general
+  :preface
+  :bind (("C-c n" . neotree-toggle)
+	 (:map neotree-mode-map
+	       ([f5] . (lambda ()
+			 (interactive)
+			 (neotree-refresh)
+			 (message "Refreshing neotree.... done")))))
+  :custom
+  (neo-theme 'icons)
+  (neo-autorefresh t)
+  (neo-show-hidden-files t)
+  (neo-smart-open t)
+  (neo-auto-indent-point t)
+  (neo-window-width 30)
+  :custom-face
+  (neo-dir-link-face  ((t (:inherit variable-pitch))))
+  (neo-header-face    ((t (:inherit variable-pitch))))
+  (neo-banner-face    ((t (:inherit variable-pitch))))
+  (neo-root-dir-face  ((t (:inherit variable-pitch))))
+  (neo-file-link-face ((t (:inherit variable-pitch))))
   :config
-  (general-define-key
-   "C-c p" '(:keymap projectile-command-map :package projectile))
-  (general-define-key
-   :prefix "SPC"
-   :keymaps 'normal
-   "p" '(:keymap projectile-command-map :wk "Project")))
+  (add-hook 'neotree-mode-hook (lambda ()
+                                 (hl-line-mode +1)
+                                 (setq-local line-spacing 1))))
 
 ;; Hacks
 (defun sp/improve-word-length ()
