@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
-fzf --reverse --preview 'bat --line-range :60 {}' \
+fd -t f | fzf --reverse --preview 'bat --line-range :60 {}' \
     | xargs -ro -I % open_editor %
