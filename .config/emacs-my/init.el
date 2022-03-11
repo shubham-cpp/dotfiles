@@ -61,8 +61,8 @@
 	frame-resize-pixelwise t
 	completion-styles '(partial-completion
 			    substring
-			    initials
-			    flex)
+			    initials)
+	;; flex)
 	completion-category-overrides '((file
 					 (styles
 					  partial-completion)))))
@@ -77,6 +77,14 @@
 (set-face-attribute 'fixed-pitch nil :font "JetBrainsMono Nerd Font" :height 105)
 ;; Set the variable pitch face
 (set-face-attribute 'variable-pitch nil :font "JetBrainsMono Nerd Font" :height 105 :weight 'regular)
+
+
+(use-package async
+  :defer t
+  :init
+  (dired-async-mode 1)
+  (async-bytecomp-package-mode 1)
+  :custom (async-bytecomp-allowed-packages '(all)))
 
 ;; Default packages
 (use-package cus-edit
@@ -363,16 +371,20 @@
     "ox"  '(org-export-dispatch t :which-key "export"))
   (sp/leader-keys
     "t" '(nil :which-key "toggles")
-    "tT" '(toggle-truncate-lines :which-key "truncate lines")
-    "tv" '(visual-line-mode :which-key "visual line mode")
-    "ta" '(mixed-pitch-mode :which-key "variable pitch mode")
-    "tc" '(visual-fill-column-mode :which-key "visual fill column mode")
-    "te" '(eshell-toggle :which-key "eshell")
-    "tv" '(vterm-other-window :which-key "vterm(other)")
-    "tt" '(load-theme :which-key "load theme")
-    "tR" '(read-only-mode :which-key "read only mode")
-    "tr" '(display-fill-column-indicator-mode :which-key "fill column indicator")
-    "tm" '(hide-mode-line-mode :which-key "hide modeline mode"))
+    "tT" '(toggle-truncate-lines		   :which-key "truncate lines")
+    "tv" '(visual-line-mode		   :which-key "visual   line	 mode")
+    "ta" '(mixed-pitch-mode		   :which-key "variable pitch	 mode")
+    "tc" '(visual-fill-column-mode		   :which-key "visual   fill	 column mode")
+    "te" '(eshell-toggle			   :which-key "eshell")
+    "tv" '(vterm-other-window		   :which-key "vterm(other)")
+    "tt" '(load-theme			   :which-key "load     theme")
+    "tR" '(read-only-mode			   :which-key "read     only	 mode")
+    "tm" '(hide-mode-line-mode		   :which-key "hide     modeline mode"))
+  (sp/leader-keys
+    "p" '(nil :which-key "Project")
+    "pf" '(project-files	  :wk "truncate lines")
+    "pd" '(project-dired	  :wk "visual line mode")
+    "ps" '(project-switch-project :wk "variable pitch mode"))
   (general-define-key
    :keymaps 'dired-mode-map
    :states 'normal
@@ -466,17 +478,6 @@
   ;; Manual preview key for `affe-grep'
   (consult-customize affe-grep :preview-key (kbd "M-.")))
 
-;; (use-package orderless
-;;   :after marginalia
-;;   :custom
-;;   (orderless-matching-styles '(orderless-initialism
-;;                 orderless-literal
-;;                 orderless-regexp))
-;;   (completion-styles '(orderless))
-;;   (completion-category-defaults nil)
-;;   (completion-category-overrides '((file (styles
-;;                    partial-completion)))))
-
 (use-package vertico
   :after which-key
   :init
@@ -510,7 +511,15 @@
               ("C-<backspace>" . sp/minibuffer-backward-kill)))
 
 (use-package consult
-  ;; :hook (completion-list-mode . consult-preview-at-point-mode)
+  :init
+  (setq register-preview-delay 0
+        register-preview-function #'consult-register-format)
+  (advice-add #'register-preview :override #'consult-register-window)
+  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
+  :hook (completion-list-mode . consult-preview-at-point-mode)
+
   :bind
   (("M-y" . consult-yank-pop)
    ("C-s" . consult-line)
@@ -654,14 +663,6 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
-
-(use-package async
-  :defer t
-  :init
-  (dired-async-mode 1)
-  (async-bytecomp-package-mode 1)
-  :custom (async-bytecomp-allowed-packages '(all)))
-
 
 (use-package no-littering)
 
@@ -964,11 +965,6 @@
   :hook (markdown-mode . auto-fill-mode)
   :config
   (set-face-attribute 'markdown-code-face nil :inherit 'org-block))
-
-(use-package projectile
-  :hook (prog-mode . projectile-mode)
-  :bind-keymap
-  ("C-c p" . projectile-command-map))
 
 (use-package neotree
   :after general
