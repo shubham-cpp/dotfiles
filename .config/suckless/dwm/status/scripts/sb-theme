@@ -1,0 +1,28 @@
+#!/bin/sh
+
+display() {
+	args=""
+	case $1 in
+		-n) args="-n"; shift ;;
+	esac
+
+	if [ -n "${2+x}" ]; then
+		color=$2
+	else
+		case "$(basename $0)" in
+			sb-mail) color=5 ;;
+			sb-music) color=6 ;;
+			sb-disk) color=2 ;;
+			sb-memory) color=7 ;;
+			sb-loadavg) color=3 ;;
+			sb-mic) color=1 ;;
+			sb-record) color=0 ;;
+			sb-volume) color=7 ;;
+			sb-battery) color=6 ;;
+			sb-date) color=4 ;;
+			sb-network) color=1 ;;
+			*) color=7 ;;
+		esac
+	fi
+    echo $args "^C$color^$1"
+}

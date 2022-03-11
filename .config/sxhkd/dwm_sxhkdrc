@@ -41,7 +41,7 @@ XF86AudioMute
 
 #Brightness up
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g) && kill -54 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g) && kill -57 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
     brightnessctl s {200,30}

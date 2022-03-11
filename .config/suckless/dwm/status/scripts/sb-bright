@@ -1,0 +1,19 @@
+#!/bin/sh
+
+. sb-theme
+
+light="$(brightnessctl g)"
+
+[ $? -ne 0 ] && exit $?
+
+if [ "$light" -gt 70 ]; then
+	icon=" "
+elif [ "$light" -gt 40 ]; then
+	icon=" "
+elif [ "$light" -gt 10 ]; then
+	icon=" "
+else
+	icon=" "
+fi
+
+display "$icon $light%"
