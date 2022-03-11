@@ -45,17 +45,17 @@ use({
 	"nvim-telescope/telescope.nvim",
 	config = get_config("telescope"),
 	requires = { { "nvim-lua/plenary.nvim" } },
-	event = "BufWinEnter",
-	-- keys = {
-	-- 	"<leader>fs",
-	-- 	"<leader>fz",
-	-- 	"<leader>fc",
-	-- 	"<leader>fH",
-	-- 	"<leader>fh",
-	-- 	"<leader>ff",
-	-- 	"<leader>fn",
-	-- 	"<leader>fd",
-	-- },
+	keys = {
+		"<leader>ff",
+		"<leader>fn",
+		"<leader>fd",
+		"<leader>fc",
+		"<leader>fh",
+		"<leader>fH",
+		"<leader>fs",
+		"<leader>fS",
+		"<leader>fz",
+	},
 })
 use({ "natecraddock/telescope-zf-native.nvim" })
 use({ "ibhagwan/fzf-lua", event = "BufWinEnter", config = get_config("fzf-lua") })
@@ -179,6 +179,26 @@ use({
 	event = "BufReadPre",
 	config = get_config("gitsigns"),
 })
+
+use({
+	"TimUntersberger/neogit",
+	cmd = "Neogit",
+	config = function()
+		require("neogit").setup({
+			integrations = {
+				diffview = true,
+			},
+		})
+	end,
+})
+
+use({
+	"sindrets/diffview.nvim",
+	after = "neogit",
+	config = function()
+		require("diffview").setup({})
+	end,
+})
 -- }}}
 -- Enhance experience {{{
 use({
@@ -212,19 +232,19 @@ use({
 use({ "folke/which-key.nvim", after = "indent-blankline.nvim", config = get_config("which-key") })
 -- }}}
 -- Note Taking {{{
-use({
-	"renerocksai/telekasten.nvim",
-	requires = {
-		{ "iamcco/markdown-preview.nvim", ft = { "md", "markdown" } },
-		{
-			"renerocksai/calendar-vim",
-			cmd = { "Calendar", "CalendarH", "CalendarT" },
-		},
-		{ "mzlogin/vim-markdown-toc", cmd = { "GenTocGFM", "GenTocGitLab", "GenTocMarked" } },
-	},
-	config = get_config("telekasten"),
-	keys = { "<leader>nn", "<leader>nf", "<leader>nd", "<leader>ns" },
-})
+-- use({
+-- 	"renerocksai/telekasten.nvim",
+-- 	requires = {
+-- 		{ "iamcco/markdown-preview.nvim", ft = { "md", "markdown" } },
+-- 		{
+-- 			"renerocksai/calendar-vim",
+-- 			cmd = { "Calendar", "CalendarH", "CalendarT" },
+-- 		},
+-- 		{ "mzlogin/vim-markdown-toc", cmd = { "GenTocGFM", "GenTocGitLab", "GenTocMarked" } },
+-- 	},
+-- 	config = get_config("telekasten"),
+-- 	keys = { "<leader>nn", "<leader>nf", "<leader>nd", "<leader>ns" },
+-- })
 -- }}}
 -- Additional FileTypes {{{
 -- use("kovetskiy/sxhkd-vim")
