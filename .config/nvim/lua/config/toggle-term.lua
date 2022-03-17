@@ -31,7 +31,7 @@ toggleterm.setup({
 	-- open_mapping = [[<F1>]],
 	open_mapping = [[<c-\>]],
 	shade_filetypes = {},
-	shade_terminals = true,
+	shade_terminals = false,
 	start_in_insert = true,
 	persist_size = true,
 	close_on_exit = true,
