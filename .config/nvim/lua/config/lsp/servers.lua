@@ -25,11 +25,11 @@ lsp_installer.on_server_ready(function(server)
 			"clangd",
 			"--background-index",
 			"--pch-storage=memory",
-			"--clang-tidy",
+			-- "--clang-tidy",
 			"--suggest-missing-includes",
 			"--cross-file-rename",
-			"--completion-style=detailed",
-			"--clang-tidy-checks=-*,llvm-*,clang-analyzer-*",
+			-- "--completion-style=detailed",
+			-- "--clang-tidy-checks=-*,llvm-*,clang-analyzer-*",
 		}
 		opts.init_options = {
 			clangdFileStatus = true,
@@ -203,5 +203,28 @@ configs.emmet_language_server = {
 -- end
 lspconfig.emmet_language_server.setup({
 	capabilities = cmp_capabilities,
+	flags = { debounce_text_changes = 150 },
+})
+
+local clangd_capabilities = capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+lspconfig.clangd.setup({
+	capabilities = clangd_capabilities,
+	cmd = {
+		"clangd",
+		"--background-index",
+		"--pch-storage=memory",
+		"--clang-tidy",
+		"--suggest-missing-includes",
+		"--cross-file-rename",
+		"--completion-style=detailed",
+		-- "--clang-tidy-checks=-*,llvm-*,clang-analyzer-*",
+	},
+	init_options = {
+		clangdFileStatus = true,
+		usePlaceholders = true,
+		completeUnimported = true,
+		semanticHighlighting = true,
+	},
 	flags = { debounce_text_changes = 150 },
 })
