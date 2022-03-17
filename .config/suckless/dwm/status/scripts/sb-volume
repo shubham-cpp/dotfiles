@@ -10,7 +10,7 @@ esac
 
 . sb-theme
 if [ $(pamixer --get-mute) = true ]; then
-	display "婢" "$color2"
+	display "^c#bf68d9^ 婢  ^c#bababa^" "$color2"
 	exit
 fi
 
@@ -27,4 +27,4 @@ else
 	icon="奄 "
 fi
 
-display "$icon $vol%"
+display "^c#bf68d9^ $icon ^c#bababa^ $vol%"

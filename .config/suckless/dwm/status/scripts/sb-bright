@@ -16,4 +16,4 @@ else
 	icon=" "
 fi
 
-display "$icon $light%"
+display "^c#8ebd6b^ $icon  ^c#bababa^ $light%"

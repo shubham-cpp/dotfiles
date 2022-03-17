@@ -6,8 +6,8 @@
 
 const Block blocks[] = {
     /*      Command      interval    signal*/
-    BLOCK("echo \"  $(expr 100 - $(vmstat 1 2|tail -1|awk '{print $15}')) %\"", 3, 19),
-    BLOCK("echo \"  $(free -mh --si | awk  {'print $3'} | head -n 2 | tail -1)\"", 3, 21),
+    BLOCK("echo \" ^c#e95678^  ^c#bababa^ $(expr 100 - $(vmstat 1 2|tail -1|awk '{print $15}')) %\"", 3, 19),
+    BLOCK("echo \"^c#e2b86b^   ^c#bababa^ $(free -mh --si | awk  {'print $3'} | head -n 2 | tail -1)\"", 3, 21),
 	BLOCK("sb-volume",     0,         22),
     BLOCK("sb-bright",     0,         23),
 	BLOCK("sb-battery",    5,         24),
