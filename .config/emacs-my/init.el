@@ -21,39 +21,36 @@
 (setq user-emacs-directory "~/.cache/emacs-my")
 (setq package-user-dir (expand-file-name (concat user-emacs-directory "/elpa")))
 
-(require 'package)
-(setq package-archives
-      '(("melpa" . "https://melpa.org/packages/")
-        ("elpa" . "https://elpa.gnu.org/packages/")
-        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
-(package-initialize)
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
-(unless (package-installed-p 'quelpa)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
-    (eval-buffer)
-    (package-refresh-contents)
-    (quelpa-self-upgrade)))
-
-(eval-and-compile
-  (require 'quelpa))
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
-;; (setq use-package-ensure-function 'quelpa)
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+;; Install use-package
+(straight-use-package 'use-package)
+;; Configure use-package to use straight.el by default
+(use-package straight
+  :custom (straight-use-package-by-default t))
 
 (eval-and-compile
   (setq confirm-kill-processes nil
 	create-lockfiles nil
+	inhibit-compacting-font-caches t
 	use-package-always-ensure t
 	use-package-expand-minimally t
 	read-file-name-completion-ignore-case t
 	read-buffer-completion-ignore-case t
 	completion-ignore-case t
+	idle-update-delay                 1.0
+	fast-but-imprecise-scrolling      1
 	global-auto-revert-non-file-buffers t
 	display-line-numbers-type 'relative
 	indent-tabs-mode nil
@@ -61,16 +58,26 @@
 	frame-resize-pixelwise t
 	completion-styles '(partial-completion
 			    substring
-			    initials)
-	;; flex)
+			    initials
+			    flex)
 	completion-category-overrides '((file
 					 (styles
 					  partial-completion)))))
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-auto-revert-mode +1)
 (global-display-line-numbers-mode t)
+(semantic-mode 1)
+(global-hl-line-mode 1)
 ;; (eval-when-compile (require 'use-package))
-
+(eval-and-compile
+  ;; Helpout better with debugging
+  (if init-file-debug
+      (setq use-package-verbose t
+            use-package-expand-minimally nil
+            use-package-compute-statistics t
+            debug-on-error t)
+    (setq use-package-verbose nil
+          use-package-expand-minimally t)))
 ;; Fonts
 (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font" :height 105)
 ;; Set the fixed pitch face
@@ -79,16 +86,16 @@
 (set-face-attribute 'variable-pitch nil :font "JetBrainsMono Nerd Font" :height 105 :weight 'regular)
 
 
-(use-package async
-  :defer t
-  :init
-  (dired-async-mode 1)
-  (async-bytecomp-package-mode 1)
-  :custom (async-bytecomp-allowed-packages '(all)))
+(use-package no-littering)
+
+(eval-and-compile
+  (setq auto-save-file-name-transforms
+	`((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
 
 ;; Default packages
 (use-package cus-edit
   :ensure nil
+  :straight (:type built-in)
   :config
   (setq custom-file (concat user-emacs-directory "customs.el")))
 
@@ -98,21 +105,25 @@
 
 (use-package saveplace
   :ensure nil
+  :straight (:type built-in)
   :hook (after-init . save-place-mode)
   :custom (save-place-limit 100))
 
 (use-package savehist
   :ensure nil
+  :straight (:type built-in)
   :hook (save-place-mode . savehist-mode))
 
 (use-package flyspell
   :ensure nil
+  :straight (:type built-in)
   :init
   (setq ispell-program-name "aspell")
   :hook ((markdown-mode org-mode) . flyspell-mode))
 
 (use-package recentf
   :ensure nil
+  :straight (:type built-in)
   :custom
   (recentf-save-file "~/.cache/recentf")
   (recentf-max-menu-items 25)
@@ -123,15 +134,18 @@
 
 (use-package uniquify
   :ensure nil
+  :straight (:type built-in)
   :custom
   (uniquify-buffer-name-style 'forward))
 
 (use-package mwheel
   :ensure nil
+  :straight (:type built-in)
   :config (setq mouse-wheel-scroll-amount '(2 ((shift) . 1))
 		mouse-wheel-progressive-speed nil))
 (use-package paren
   :ensure nil
+  :straight (:type built-in)
   :after evil-collection
   :custom
   (show-paren-delay 0.1)
@@ -142,10 +156,12 @@
 
 (use-package elec-pair
   :ensure nil
+  :straight (:type built-in)
   :hook ((prog-mode emacs-lisp-mode org-mode) . electric-pair-mode))
 
 ;; (use-package hideshow
 ;;   :ensure nil
+;; :straight (:type built-in)
 ;;   :hook ((prog-mode emacs-lisp-mode) . hs-minor-mode)
 ;;   :config
 ;;   (eval-and-compile
@@ -154,6 +170,7 @@
 ;; Dired
 (use-package dired
   :ensure nil
+  :straight (:type built-in)
   :commands (dired dired-jump)
   :init
   (setq trash-directory (expand-file-name (format "%s/.cache/trash-emacs" (getenv "HOME")))
@@ -171,18 +188,26 @@
 (use-package dired-git
   :hook (dired-mode . dired-git-mode))
 
+(use-package async
+  :defer t
+  :init
+  (dired-async-mode 1)
+  (async-bytecomp-package-mode 1)
+  :custom (async-bytecomp-allowed-packages '(all)))
+
 ;; Theming
 (use-package doom-themes
   :custom
   (doom-themes-org-fontify-special-tag t)
   (doom-gruvbox-dark-variant "hard")
+  (doom-themes-enable-bold t)
+  (doom-themes-enable-italic t)
   :custom-face
   (region                         ((t (:extend nil))))
   (font-lock-comment-face         ((t (:italic t))))
   (sml/modified                   ((t (:foreground "white" :bold t))))
   (hl-todo                        ((t (:inverse-video nil :italic t :bold t))))
   (highlight-symbol-face          ((t (:background "#355266" :distant-foreground "#bbbbbb"))))
-  ;;(show-paren-match               ((t (:foreground "#eeeeee" :background "#444444" :bold t))))
   (highlight                      ((t (:foreground "#4db2ff" :background nil :underline t)))) ; link hover
   (link                           ((t (:foreground "#3794ff"))))
   (evil-ex-substitute-replacement ((t (:strike-through nil))))
@@ -190,6 +215,8 @@
   (fringe                         ((t (:background nil))))
   :config
   (doom-themes-org-config)
+  (doom-themes-visual-bell-config)
+  (doom-themes-neotree-config)
   (load-theme 'doom-one t))
 
 (use-package all-the-icons)
@@ -210,9 +237,13 @@
   ((centaur-tabs-set-icons t)
    (centaur-tabs-gray-out-icons 'buffer)
    (centaur-tabs-set-modified-marker t)
+   (centaur-tabs-headline-match)
    (centaur-tabs-modified-marker "•"))
   :bind (("<C-next>" . centaur-tabs-forward)
-	 ("<C-prior>" . centaur-tabs-backward))
+	 ("<C-prior>" . centaur-tabs-backward)
+	 (:map evil-normal-state-map
+	       ("g t" . centaur-tabs-forward)
+	       ("g T" . centaur-tabs-backward)))
   :config
   (centaur-tabs-mode t))
 
@@ -223,9 +254,11 @@
 	evil-split-window-below t
 	evil-vsplit-window-below t
 	evil-want-keybinding nil
+	evil-respect-visual-line-mode t
 	evil-undo-system 'undo-fu
 	evil-want-Y-yank-to-eol t
 	evil-kill-on-visual-paste nil
+
 	evil-shift-width 2)
   :hook (after-init . evil-mode)
   :preface
@@ -242,7 +275,6 @@
     (evil-shift-right evil-visual-beginning evil-visual-end)
     (evil-normal-state)
     (evil-visual-restore))
-
   (defun my/evil-shift-left ()
     (interactive)
     (evil-shift-left evil-visual-beginning evil-visual-end)
@@ -603,6 +635,9 @@
   (company-tooltip-minimum-width 60)
   (company-tooltip-maximum-width 60)
   (company-tooltip-limit 12)
+  (company-tooltip-flip-when-above t)
+  (company-tooltip-idle-delay 0.2)
+  (company-async-wait  0.4)
   (company-minimum-prefix-length 1)
   (company-selection-wrap-around t)
   (company-tooltip-align-annotations t)
@@ -664,12 +699,6 @@
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
 
-(use-package no-littering)
-
-(eval-and-compile
-  (setq auto-save-file-name-transforms
-	`((".*" ,(no-littering-expand-var-file-name "auto-save/") t))))
-
 ;; Extra Highlights
 
 (use-package rainbow-delimiters
@@ -698,13 +727,17 @@
 
 ;; Org-mode
 (use-package org
+  :straight (:type built-in)
   :hook ((org-mode . visual-line-mode)
          (org-mode . auto-fill-mode)
          (org-mode . org-indent-mode)
          (org-mode . (lambda ()
                        (setq-local evil-auto-indent nil))))
   :custom
-  (org-link-descriptive nil)
+  (org-link-descriptive t)
+  (org-return-follows-link t)
+  (org-hide-emphasis-markers t)
+  (org-mouse-1-follows-link t)
   (org-startup-folded nil)
   (org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
   :config
@@ -720,16 +753,9 @@
   (add-to-list 'org-file-apps '("\\.pdf\\'" . emacs))
   (setq org-html-checkbox-type 'html))
 
-;; (use-package org-bullets
-;;   :hook (org-mode . org-bullets-mode)
-;;   :custom
-;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-;; (quelpa '(org-modern :fetcher github :repo "minad/org-modern"))
-;; (add-hook 'org-mode-hook #'org-modern-mode)
 (use-package org-modern
   :ensure nil
-  :quelpa (org-modern :fetcher github :repo "minad/org-modern")
+  :straight (:type git :host github :repo "minad/org-modern")
   :hook (org-mode . org-modern-mode)
   :custom
   (org-modern-star ["◉" "○" "●" "○" "●" "○" "●"]))
@@ -740,9 +766,9 @@
   :custom
   (org-roam-directory "~/Documents/Notes/Roam")
   (org-roam-completion-everywhere t)
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-	 ("C-c n f" . org-roam-node-find)
-	 ("C-c n i" . org-roam-node-insert)
+  :bind (("C-c o l" . org-roam-buffer-toggle)
+	 ("C-c o f" . org-roam-node-find)
+	 ("C-c o i" . org-roam-node-insert)
 	 :map org-mode-map
 	 ("C-M-i"    . completion-at-point))
   :commands (org-roam-buffer-toggle org-roam-node-insert org-roam-node-find)
