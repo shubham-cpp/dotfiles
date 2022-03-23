@@ -117,6 +117,7 @@ static Key keys[] = {
 	{ MODKEY,                   XK_Return,          spawn,          {.v = termcmd } },
 	{ MODKEY,                   XK_b,               togglebar,      {0} },
 
+	{ Mod1Mask,                 XK_Tab,             focusstack,     {.i = +1 } },
 	{ MODKEY,                   XK_j,               focusstack,     {.i = +1 } },
 	{ MODKEY,                   XK_k,               focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,         XK_j,               movestack,      {.i = +1 } },
