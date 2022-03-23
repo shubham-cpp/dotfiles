@@ -52,7 +52,7 @@ require("lualine").setup({
 		-- Options: palenight | ayu_dark | ayu_mirage | dracula
 		-- everforest | horizon | iceberg_dark | moonfly | nightfly
 		-- If themes: material-nvim = material-stealth | tokyonight = tokyonight
-		theme = "horizon",
+		-- theme = "horizon",
 		component_separators = "|",
 		section_separators = { left = "", right = "" },
 		disabled_filetypes = {},

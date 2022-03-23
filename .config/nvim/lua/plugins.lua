@@ -41,23 +41,23 @@ use({
 })
 -- }}}
 -- Fuzzy Finder {{{
-use({
-	"nvim-telescope/telescope.nvim",
-	config = get_config("telescope"),
-	requires = { { "nvim-lua/plenary.nvim" } },
-	keys = {
-		"<leader>ff",
-		"<leader>fn",
-		"<leader>fd",
-		"<leader>fc",
-		"<leader>fh",
-		"<leader>fH",
-		"<leader>fs",
-		"<leader>fS",
-		"<leader>fz",
-	},
-})
-use({ "natecraddock/telescope-zf-native.nvim" })
+-- use({
+-- 	"nvim-telescope/telescope.nvim",
+-- 	config = get_config("telescope"),
+-- 	requires = { { "nvim-lua/plenary.nvim" } },
+-- 	keys = {
+-- 		"<leader>ff",
+-- 		"<leader>fn",
+-- 		"<leader>fd",
+-- 		"<leader>fc",
+-- 		"<leader>fh",
+-- 		"<leader>fH",
+-- 		"<leader>fs",
+-- 		"<leader>fS",
+-- 		"<leader>fz",
+-- 	},
+-- })
+-- use({ "natecraddock/telescope-zf-native.nvim" })
 use({ "ibhagwan/fzf-lua", event = "BufWinEnter", config = get_config("fzf-lua") })
 -- }}}
 -- TreeSitter {{{
@@ -94,6 +94,30 @@ use({
 	end,
 })
 
+use({
+	"EdenEast/nightfox.nvim",
+	event = "VimEnter",
+	disable = true,
+	config = function()
+		require("nightfox").setup({
+			options = {
+				transparent = true,
+				styles = {
+					comments = "italic",
+					keywords = "italic",
+					functions = "none",
+					strings = "none",
+					variables = "none",
+				},
+				groups = {
+					QuickScopePrimary = { fg = "pallet.orange" },
+					QuickScopeSecondary = { fg = "pallet.cyan" },
+				},
+			},
+		})
+		vim.cmd("colorscheme duskfox")
+	end,
+})
 use({
 	"marko-cerovac/material.nvim",
 	event = "VimEnter",
@@ -204,18 +228,36 @@ use({
 use({
 	"lukas-reineke/indent-blankline.nvim",
 	after = "gitsigns.nvim",
-	-- event = "BufReadPre",
 	config = get_config("indents"),
 })
 use({
 	"akinsho/nvim-toggleterm.lua",
 	keys = { "<F1>", "<Space>tg", "<C-\\>" },
-	-- after = "Comment.nvim",
 	config = get_config("toggle-term"),
 })
 
 use({ "numToStr/Comment.nvim", config = get_config("comments"), after = "nvim-treesitter-textobjects" })
 use({ "windwp/nvim-autopairs", after = { "nvim-treesitter", "nvim-cmp" }, config = get_config("pairs") })
+
+use({
+	"iamcco/markdown-preview.nvim",
+	run = "cd app && yarn install",
+	ft = { "markdown" },
+	setup = function()
+		vim.g.mkdp_refresh_slow = 1
+	end,
+})
+use({
+	"mzlogin/vim-markdown-toc",
+	after = "markdown-preview.nvim",
+})
+use({
+	"danymat/neogen",
+	config = function()
+		require("neogen").setup({})
+	end,
+	cmd = { "Neogen" },
+})
 -- }}}
 -- Ide bloat {{{
 use({ "onsails/lspkind-nvim", event = "BufWinEnter" })
@@ -226,7 +268,7 @@ use({
 })
 use({
 	"Shatur/neovim-session-manager",
-	cmd = { "SaveSession", "LoadLastSession", "LoadCurrentDirSession" },
+	cmd = { "SessionManager" },
 	config = get_config("sessions"),
 })
 use({ "folke/which-key.nvim", after = "indent-blankline.nvim", config = get_config("which-key") })
