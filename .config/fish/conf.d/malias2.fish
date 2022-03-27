@@ -71,7 +71,7 @@ alias gclr="git clone --recurse-submodules"
 
 alias p="pnpm"
 
-if /bin/grep -iq void /etc/issue*
-    alias reboot="loginctl reboot"
-    alias poweroff="loginctl poweroff"
-end
+# if /bin/grep -iq void /etc/issue*
+#     alias reboot="loginctl reboot"
+#     alias poweroff="loginctl poweroff"
+# end

@@ -59,7 +59,7 @@ alias gcl='git clone'
 alias gch='git checkout'
 
 alias p="pnpm"
-if /bin/grep -iq void /etc/issue*; then
-    alias reboot="loginctl reboot"
-    alias poweroff="loginctl poweroff"
-fi
+# if /bin/grep -iq void /etc/issue*; then
+#     alias reboot="loginctl reboot"
+#     alias poweroff="loginctl poweroff"
+# fi
