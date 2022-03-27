@@ -7,6 +7,6 @@ accel=$(xinput list-props "$touchpad" | grep -i -m1 Accel | grep -oP "[0-9]{3}" 
 
 xinput set-prop "$touchpad" "$tapclick" 1
 # To set the Natural Scrolling
-xinput set-prop "$touchpad" "$natscroll" 1
+xinput set-prop "$touchpad" "$natscroll" 0
 # To setup the accel speed of the mouse
 xinput set-prop "$touchpad" "$accel" 0.35
