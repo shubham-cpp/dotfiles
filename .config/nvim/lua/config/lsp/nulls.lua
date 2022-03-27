@@ -1,5 +1,8 @@
 local null_ls = require("null-ls")
 local b = null_ls.builtins
+local format = b.formatting
+local lint = b.diagnostics
+
 local has_eslint_config = function(u)
 	return u.root_has_file(".eslintrc")
 		or u.root_has_file(".eslintrc.json")
@@ -18,14 +21,14 @@ local add_svelte = {
 }
 local sources = {
 	-- Html,css,json
-	b.formatting.prettierd,
+	format.prettierd,
 	-- [java|type]script(react)?
-	-- b.formatting.fixjson,
-	b.diagnostics.eslint_d.with({
+	-- format.fixjson,
+	lint.eslint_d.with({
 		condition = has_eslint_config,
 		filetypes = add_svelte,
 	}),
-	b.formatting.eslint_d.with({
+	format.eslint_d.with({
 		condition = has_eslint_config,
 	}),
 	b.code_actions.eslint_d.with({
@@ -33,37 +36,31 @@ local sources = {
 		filetypes = add_svelte,
 	}),
 	-- C/C++
-	b.formatting.clang_format,
-	b.diagnostics.cppcheck,
+	format.clang_format,
+	lint.cppcheck,
 	-- Lua
-	b.diagnostics.luacheck.with({
+	lint.luacheck.with({
 		extra_args = { "--globals", "vim", "describe" },
 	}),
-	b.formatting.stylua,
+	format.stylua,
 	-- Python
-	b.formatting.isort,
-	b.formatting.yapf,
-	b.diagnostics.flake8,
+	format.isort,
+	format.black.with({ extra_args = { "-l", "80" } }),
+	lint.flake8,
 	-- Bash,zsh
-	b.formatting.shfmt.with({ extra_args = { "-i", "2", "-ci" } }),
-	b.diagnostics.shellcheck,
+	format.shfmt.with({ extra_args = { "-i", "2", "-ci" } }),
+	lint.shellcheck,
 	-- Vim
-	b.diagnostics.vint,
+	lint.vint,
 	-- Yaml
-	b.diagnostics.yamllint,
+	lint.yamllint,
 	-- Misc
 	b.code_actions.gitsigns,
 	-- b.hover.dictionary,
 }
 null_ls.setup({
 	on_attach = function(_, bufnr)
-		vim.api.nvim_buf_set_keymap(
-			bufnr,
-			"n",
-			"<leader>=",
-			"<cmd>lua vim.lsp.buf.formatting()<cr>",
-			{ noremap = true }
-		)
+		vim.keymap.set("n", "<leader>=", vim.lsp.buf.formatting, { noremap = true, buffer = bufnr })
 		print("LSP attached (null-ls)")
 	end,
 	sources = sources,
