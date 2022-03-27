@@ -30,9 +30,9 @@ case "$DESKTOP_SESSION" in
   bspwm)
     basic
     ;;
-  awesome)
+  awesome|qtile)
     basic
-    sxhkd -c ~/.config/awesome/awesome_keys
+    # sxhkd -c ~/.config/awesome/awesome_keys
     ;;
   dwm)
     basic
