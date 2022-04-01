@@ -46,7 +46,9 @@ export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export GOPATH="$XDG_DATA_HOME"/golib
 export GOPATH="$GOPATH:$HOME/Documents/Programming/GoLang"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/npm/npmrc"
+export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
 export NVM_DIR="$XDG_DATA_HOME"/nvm
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 export ICEAUTHORITY="${XDG_CACHE_HOME:-$HOME/.cache}/ICEauthority"
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc

@@ -71,6 +71,7 @@ plugin $ZDOTDIR/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin
 
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 _evalcache luajit $HOME/Downloads/Programs/Cool-Ones/z.lua/z.lua --init zsh enhanced once fzf
 _evalcache starship init zsh

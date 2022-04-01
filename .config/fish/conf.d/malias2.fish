@@ -2,7 +2,7 @@ alias df="df -h"
 alias du="/bin/du -h"
 alias free="/bin/free -h"
 
-alias curl="/bin/curl -O -L -C -"
+# alias curl="/bin/curl -O -L -C -"
 alias grep="/bin/grep -Ei --color=auto"
 alias rg="rg -i"
 
@@ -45,7 +45,7 @@ alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel cli
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 
 alias tmux="TERM=xterm-256color /usr/bin/tmux"
-alias which="alias | /bin/which --tty-only --read-alias"
+# alias which="alias | /bin/which --tty-only --read-alias"
 # some helpful git aliases
 alias g="git"
 

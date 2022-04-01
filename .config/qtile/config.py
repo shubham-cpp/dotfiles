@@ -1,5 +1,6 @@
 # vim:fileencoding=utf-8:ft=python:foldmethod=marker
 # Import {{{
+import subprocess
 from os import getenv
 
 from libqtile import bar, hook, layout, widget
@@ -66,6 +67,30 @@ def smart_window_kill(qtile):
     qtile.current_window.kill()
     if win_count <= 1:
         qtile.current_screen.toggle_group()
+
+
+@lz.function
+def update_volume(qtile):
+    """Update the volume widget on keypress
+
+    Args:
+        qtile (libqtile.qtile): By default passed by lz.function
+    """
+    w = qtile.widgets_map["volume"]
+    w.tick()
+
+
+@lz.function
+def update_brightness(qtile):
+    """Update the brightnesswidget on keypress
+
+    Args:
+        qtile (libqtile.qtile): By default passed by lz.function
+    """
+    w = qtile.widgets_map["backlight"]
+    widgets = ",".join(qtile.widgets_map)
+    logger.warn("widget names = " + widgets)
+    w.tick()
 
 
 # }}}
@@ -235,7 +260,7 @@ keys = [
     Key("M-S-q", smart_window_kill(), desc="Kill focused window"),
     Key("M-C-r", lazy.reload_config(), desc="Reload the config"),
     Key("M-C-S-r", lazy.restart(), desc="Reload the config"),
-    Key("M-C-q", lazy.shutdown(), desc="Shutdown Qtile"),
+    Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
         "M-d",
         lazy.spawn("dmenu_run_history -i"),
@@ -258,6 +283,7 @@ keys = [
     Key(
         "<XF86AudioLowerVolume>",
         lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"),
+        # update_volume(),
         desc="Audio Lower",
     ),
     Key(
@@ -275,11 +301,13 @@ keys = [
     Key(
         "<XF86MonBrightnessUp>",
         lazy.spawn("brightnessctl set +10"),
+        update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86MonBrightnessDown>",
         lazy.spawn("brightnessctl set 10-"),
+        # update_brightness(),
         desc="Dec Brightness",
     ),
     # }}}
@@ -335,7 +363,7 @@ layouts = [
         **layout_theme,
     ),
     layout.Max(),
-    layout.Floating(**layout_theme),
+    layout.Floating(),
 ]
 # }}}
 
@@ -349,7 +377,14 @@ extension_defaults = widget_defaults.copy()
 
 
 def NerdIcon(icon=""):
-    return widget.TextBox(fmt=icon, fontsize=16, font="Hack Nerd Font")
+    return widget.TextBox(
+        fmt=icon,
+        fontsize=17,
+        font="Hack Nerd Font",
+        # background="#8ebd6b",
+        # foreground="#282c34",
+        padding=8,
+    )
 
 
 screens = [
@@ -361,22 +396,32 @@ screens = [
                 widget.TaskList(
                     txt_floating="🗖 ", txt_minimized="🗕 ", txt_maximized="🗖 "
                 ),
-                NerdIcon(" "),
+                NerdIcon("省"),
                 widget.CPU(format="{load_percent}%", update_interval=2),
                 NerdIcon(""),
                 widget.Memory(format="{MemUsed:.0f}{mm}", update_interval=2),
-                NerdIcon(" "),
+                NerdIcon(""),
                 widget.Clock(format="%a %d, %I:%M %p", update_interval=60),
-                NerdIcon("ﲍ  "),
+                NerdIcon(""),
                 widget.Backlight(
                     backlight_name="radeon_bl0",
                     change_command="brightnessctl s {0}",
                     update_interval=1.5,
                 ),
+                # widget.GenPollText(
+                #     name="backlight",
+                #     func=lambda: subprocess.run(
+                #         ["brightnessctl", "g"], stdout=subprocess.PIPE
+                #     )
+                #     .stdout.decode("utf-8")
+                #     .strip(),
+                # ),
                 NerdIcon(" "),
-                widget.Volume(
-                    update_interval=1.5,
+                widget.PulseVolume(
+                    update_interval=1.2,
                     volume_app="pavucontrol",
+                    cardid=53,
+                    get_volume_command="pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:]'",
                     step=5,
                 ),
                 widget.Net(format=" {up}  {down}"),

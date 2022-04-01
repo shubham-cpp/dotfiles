@@ -9,12 +9,12 @@ case $BLOCK_BUTTON in
 esac
 
 . sb-theme
-if [ $(pamixer --get-mute) = true ]; then
-	display "^c#bf68d9^ 婢  ^c#bababa^" "$color2"
+if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
+	display "^c#bf68d9^ 婢  ^c#bababa^ Muted" "$color2"
 	exit
 fi
 
-vol="$(pamixer --get-volume)"
+vol="$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:]')"
 [ $? -ne 0 ] && exit $?
 
 if [ "$vol" -gt 70 ]; then

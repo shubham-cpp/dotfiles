@@ -44,6 +44,9 @@ bindkey -M viins "^[[1;5C" forward-word
 zmodload zsh/terminfo
 bindkey -M viins -M viins '^[[A' history-substring-search-up
 bindkey -M viins -M viins '^[[B' history-substring-search-down
+# Up down in debian
+bindkey -M viins -M viins '^[OA' history-substring-search-up
+bindkey -M viins -M viins '^[OB' history-substring-search-down
 bindkey -M viins -M viins '^[k' autosuggest-accept
 bindkey -M viins -M viins '^[j' history-substring-search-up
 

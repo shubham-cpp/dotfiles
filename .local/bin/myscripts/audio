@@ -5,11 +5,13 @@ amount=${2:-10}
 case "$1" in
   inc)
     pactl set-sink-volume @DEFAULT_SINK@ +"$amount"% && polybar-msg hook mvol 1
-    notify-send "Volume" -t 2000 -i audio-speakers-symbolic -h int:value:"$(pamixer --get-volume-human)"
+    vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
+    notify-send "Volume" -t 2000 -i audio-speakers-symbolic -h int:value:"$vol"
     ;;
   dec)
     pactl set-sink-volume @DEFAULT_SINK@ -"$amount"% && polybar-msg hook mvol 1
-    notify-send "Volume" -t 2000 -i audio-speakers-symbolic -h int:value:"$(pamixer --get-volume-human)"
+    vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
+    notify-send "Volume" -t 2000 -i audio-speakers-symbolic -h int:value:"$vol"
     ;;
   toggle)
     pactl set-sink-mute @DEFAULT_SINK@ toggle

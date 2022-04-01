@@ -1,5 +1,5 @@
 alias du="/bin/du -h"
-alias curl="/bin/curl -O -L -C -"
+# alias curl="/bin/curl -O -L -C -"
 alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 

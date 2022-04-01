@@ -50,6 +50,8 @@ local sources = {
 	-- Bash,zsh
 	format.shfmt.with({ extra_args = { "-i", "2", "-ci" } }),
 	lint.shellcheck,
+	-- Haskell
+	format.fourmolu,
 	-- Vim
 	lint.vint,
 	-- Yaml

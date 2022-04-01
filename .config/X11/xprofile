@@ -17,8 +17,8 @@ xsetroot -cursor_name left_ptr
 basic() {
   # bash ~/.local/bin/myscripts/if_void &
   run lxpolkit
-  # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-  run picom --experimental-backends
+  run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
+  # run picom --experimental-backends
   # run dunst
   run xwallpaper --stretch ~/.config/wall.png
   # run kitty

@@ -185,8 +185,8 @@
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package dired-git
-  :hook (dired-mode . dired-git-mode))
+;; (use-package dired-git
+  ;; :hook (dired-mode . dired-git-mode))
 
 (use-package async
   :defer t
@@ -228,25 +228,6 @@
   (doom-modeline-enable-word-count t)
   (doom-modeline-buffer-encoding nil))
 
-;; Tabs
-(use-package centaur-tabs
-  :demand
-  :init
-  (tab-bar-mode -1)
-  :custom
-  ((centaur-tabs-set-icons t)
-   (centaur-tabs-gray-out-icons 'buffer)
-   (centaur-tabs-set-modified-marker t)
-   (centaur-tabs-headline-match)
-   (centaur-tabs-modified-marker "•"))
-  :bind (("<C-next>" . centaur-tabs-forward)
-	 ("<C-prior>" . centaur-tabs-backward)
-	 (:map evil-normal-state-map
-	       ("g t" . centaur-tabs-forward)
-	       ("g T" . centaur-tabs-backward)))
-  :config
-  (centaur-tabs-mode t))
-
 ;; Evil
 (use-package evil
   :init
@@ -283,17 +264,22 @@
   :config
   (with-eval-after-load 'evil-maps ; avoid conflict with company tooltip selection
     (define-key evil-insert-state-map (kbd "C-n") nil)
-    (define-key evil-insert-state-map (kbd "C-p") nil))
-  (evil-define-key 'visual global-map (kbd ">") #'my/evil-shift-right)
-  (evil-define-key 'visual global-map (kbd "<") #'my/evil-shift-left)
+    (define-key evil-insert-state-map (kbd "C-p") nil)
+  (evil-define-key 'visual global-map
+    (kbd ">") #'my/evil-shift-right
+    (kbd "<") #'my/evil-shift-left)
+  (evil-define-key 'normal centaur-tabs-mode-map
+    "gt"  'centaur-tabs-forward
+    "gT" 'centaur-tabs-backward)
   (define-key evil-insert-state-map (kbd "C-S-v") #'yank)
-  (define-key evil-normal-state-map (kbd ",w") #'save-buffer)
-  (define-key evil-normal-state-map (kbd "0") #'evil-first-non-blank)
+  (evil-define-key 'normal global-map
+    (kbd ",w") #'save-buffer
+    (kbd "0") #'evil-first-non-blank)
   (global-set-key (kbd "<escape>") #'my/escape-and-nohl)
-  (evil-ex-define-cmd "q" #'kill-this-buffer)
-  (evil-ex-define-cmd "wq" #'ian/save-and-kill-this-buffer)
   (evil-global-set-key 'motion "j" #'evil-next-visual-line)
   (evil-global-set-key 'motion "k" #'evil-previous-visual-line))
+  (evil-ex-define-cmd "q" #'kill-this-buffer)
+  (evil-ex-define-cmd "wq" #'ian/save-and-kill-this-buffer))
 
 (use-package evil-collection
   :after evil
@@ -495,6 +481,22 @@
 	 (:map evil-motion-state-map
                ("L" . evil-forward-arg)
                ("H" . evil-backward-arg))))
+
+;; Tabs
+(use-package centaur-tabs
+  :demand
+  :init
+  (tab-bar-mode -1)
+  :custom
+  ((centaur-tabs-set-icons t)
+   (centaur-tabs-gray-out-icons 'buffer)
+   (centaur-tabs-set-modified-marker t)
+   (centaur-tabs-headline-match)
+   (centaur-tabs-modified-marker "•"))
+  :bind (("<C-next>" . centaur-tabs-forward)
+	 ("<C-prior>" . centaur-tabs-backward))
+  :config
+  (centaur-tabs-mode t))
 
 ;; Selection Frameworks
 
