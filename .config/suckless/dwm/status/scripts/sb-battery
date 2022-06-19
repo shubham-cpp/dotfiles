@@ -12,8 +12,6 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-. sb-theme
-
 # Loop through all attached batteries and format the info
 for battery in /sys/class/power_supply/BAT?*; do
 	# If non-first battery, print a space separator.
@@ -40,7 +38,6 @@ for battery in /sys/class/power_supply/BAT?*; do
 		Discharging)
 			if [ "$capacity" -le 20 ]; then
 				status="$status"
-				color="$color2"
 			fi
 			;;
 		Charging) status="ﮣ $status" ;;
@@ -50,5 +47,5 @@ for battery in /sys/class/power_supply/BAT?*; do
 	esac
 
 	# Prints the info
-	display -n "$status  $capacity%" $color
+	printf "%s %s" "$status" "$capacity%"
 done && echo

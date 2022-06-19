@@ -1,10 +1,10 @@
 [global]
     monitor = 0
     follow = mouse
-    # geometry = "0x0-30+10"
+    geometry = "0x0-30+10"
     # 270x20-10+33
-    width = 300
-    height = 300
+    # width = 500
+    # height = 400
     origin = top-right
     offset = 10x50
     scale = 0
@@ -42,7 +42,8 @@
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
-    # frame_width = 0
+    frame_width = 1
+    frame_color = "#83a598"
 
     # Defines color of the frame around the notification window.
     # frame_color = "#fba922"
@@ -148,7 +149,7 @@
     max_icon_size = 64
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/hicolor/16x16/apps/:/usr/share/icons/hicolor/16x16/status/:/usr/share/icons/hicolor/16x16/device/:/home/shubham/.local/share/icons/We10X-special-dark/devices/symbolic/:/home/shubham/.local/share/icons/We10X-special-dark/status/symbolic/
+    icon_path = /usr/share/icons/hicolor/16x16/apps/:/usr/share/icons/hicolor/16x16/status/:/usr/share/icons/hicolor/16x16/device/:/home/shubham/.local/share/icons/Win10Sur-dark/status/symbolic/:/home/shubham/.local/share/icons/Win10Sur-blue-dark/devices/symbolic/
 
     ### History ###
 
@@ -232,9 +233,9 @@
     # where there are multiple screens with very different dpi values.
     per_monitor_dpi = false
 
-[frame]
-    width = 1
-    color = "#83a598"
+# [frame]
+#     width = 1
+#     color = "#83a598"
 
 # [shortcuts]
 #     close = ctrl+space
@@ -245,12 +246,12 @@
 [urgency_low]
     background = "#282828"
     foreground = "#ebdbb2"
-    timeout = 5
+    timeout = 3
 
 [urgency_normal]
     background = "#282828"
     foreground = "#ebdbb2"
-    timeout = 20
+    timeout = 3
 
 [urgency_critical]
     background = "#282828"

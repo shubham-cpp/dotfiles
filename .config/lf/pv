@@ -64,11 +64,11 @@ case "$1" in
     docx2txt "$1" -
     exit 0
     ;;
-  *.htm|*.html|*.xhtml)
-        if [ -f /usr/bin/highlight ]; then
-            highlight -O xterm256 --style dante "$1"
-		elif [ -f /usr/bin/bat ]; then
-			bat -f -P --style=plain --line-range :60 "$1"
+  *.htm|*.html|*.xhtml|*.css|*.scss|*.less|*.json)
+        # if [ -f /usr/bin/highlight ]; then
+        #     highlight -O xterm256 --style dante "$1"
+		if [ -f /bin/bat ]; then
+			bat  --style=plain --line-range :60 "$1"
 		else
 			cat "$1"
 		fi
@@ -86,10 +86,10 @@ esac
 
 case "$(file -Lb --mime-type -- "$1")" in
   text/*)
-        if [ -f /usr/bin/highlight ]; then
+		if [ -f /usr/bin/bat ]; then
+			bat --style=plain --line-range :60 "$1"
+        elif [ -f /usr/bin/highlight ]; then
             highlight -O xterm256 --style dante "$1"
-		elif [ -f /usr/bin/bat ]; then
-			bat -f -P --style=plain --line-range :60 "$1"
 		else
 			cat "$1"
 		fi
@@ -122,11 +122,11 @@ header_text="File Type Classification"
 header=""
 len="$(( (width - (${#header_text} + 2)) / 2 ))"
 if [ "$len" -gt 0 ]; then
-  for i in $(seq "$len"); do
+  for _ in $(seq "$len"); do
     header="-$header"
   done
   header="$header $header_text "
-  for i in $(seq "$len"); do
+  for _ in $(seq "$len"); do
     header="$header-"
   done
 else

@@ -1,24 +1,51 @@
-require("nvim-treesitter.configs").setup({
+-- local parser_configs = require('nvim-treesitter.parsers').get_parser_configs()
+
+-- parser_configs.norg_meta = {
+-- 	install_info = {
+-- 		url = 'https://github.com/nvim-neorg/tree-sitter-norg-meta',
+-- 		files = { 'src/parser.c' },
+-- 		branch = 'main',
+-- 	},
+-- }
+
+-- parser_configs.norg_table = {
+-- 	install_info = {
+-- 		url = 'https://github.com/nvim-neorg/tree-sitter-norg-table',
+-- 		files = { 'src/parser.c' },
+-- 		branch = 'main',
+-- 	},
+-- }
+
+require('nvim-treesitter.configs').setup({
 	ensure_installed = {
-		"json",
-		"json5",
-		"jsonc",
-		"html",
-		"css",
-		"javascript",
-		"typescript",
-		"tsx",
-		"lua",
-		"python",
-		"java",
-		"c",
-		"cpp",
-		"regex",
-		"bash",
-		"fish",
-		"vue",
+		-- 'norg',
+		-- 'norg_meta',
+		-- 'norg_table',
+		-- "org",
+		'json',
+		'json5',
+		'jsonc',
+		'html',
+		'css',
+		'javascript',
+		'typescript',
+		'tsx',
+		'lua',
+		'python',
+		'java',
+		'c',
+		'cpp',
+		'regex',
+		'bash',
+		'fish',
+		'vue',
 	},
-	highlight = { enable = true, use_languagetree = true },
+	highlight = {
+		enable = true,
+		use_languagetree = true,
+		disable = { 'org' }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
+		additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
+	},
 	autotag = { enable = true },
 	context_commentstring = {
 		enable = true,
@@ -31,39 +58,39 @@ require("nvim-treesitter.configs").setup({
 			lookahead = true,
 			keymaps = {
 				-- You can use the capture groups defined in textobjects.scm
-				["af"] = "@function.outer",
-				["if"] = "@function.inner",
-				["ac"] = "@class.outer",
-				["ic"] = "@class.inner",
+				['af'] = '@function.outer',
+				['if'] = '@function.inner',
+				['ac'] = '@class.outer',
+				['ic'] = '@class.inner',
 			},
 		},
 		swap = {
 			enable = true,
 			swap_next = {
-				["]z"] = "@parameter.inner",
+				[']z'] = '@parameter.inner',
 			},
 			swap_previous = {
-				["[z"] = "@parameter.inner",
+				['[z'] = '@parameter.inner',
 			},
 		},
 		move = {
 			enable = true,
 			set_jumps = true, -- whether to set jumps in the jumplist
 			goto_next_start = {
-				["]m"] = "@function.outer",
-				["]]"] = "@class.outer",
+				[']m'] = '@function.outer',
+				[']]'] = '@class.outer',
 			},
 			goto_next_end = {
-				["]M"] = "@function.outer",
-				["]["] = "@class.outer",
+				[']M'] = '@function.outer',
+				[']['] = '@class.outer',
 			},
 			goto_previous_start = {
-				["[m"] = "@function.outer",
-				["[["] = "@class.outer",
+				['[m'] = '@function.outer',
+				['[['] = '@class.outer',
 			},
 			goto_previous_end = {
-				["[M"] = "@function.outer",
-				["[]"] = "@class.outer",
+				['[M'] = '@function.outer',
+				['[]'] = '@class.outer',
 			},
 		},
 	},
@@ -73,22 +100,25 @@ require("nvim-treesitter.configs").setup({
 		updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
 		persist_queries = false, -- Whether the query persists across vim sessions
 		keybindings = {
-			toggle_query_editor = "o",
-			toggle_hl_groups = "i",
-			toggle_injected_languages = "t",
-			toggle_anonymous_nodes = "a",
-			toggle_language_display = "I",
-			focus_language = "f",
-			unfocus_language = "F",
-			update = "R",
-			goto_node = "<cr>",
-			show_help = "?",
+			toggle_query_editor = 'o',
+			toggle_hl_groups = 'i',
+			toggle_injected_languages = 't',
+			toggle_anonymous_nodes = 'a',
+			toggle_language_display = 'I',
+			focus_language = 'f',
+			unfocus_language = 'F',
+			update = 'R',
+			goto_node = '<cr>',
+			show_help = '?',
 		},
 	},
 	query_linter = {
 		enable = true,
 		use_virtual_text = true,
-		lint_events = { "BufWrite", "InsertLeave" },
+		lint_events = { 'BufWrite', 'InsertLeave' },
+	},
+	matchup = {
+		enable = true,
 	},
 })
 
@@ -97,13 +127,13 @@ local opt = vim.opt
 
 function _G.foldtext()
 	local indent_level = fn.indent(vim.v.foldstart)
-	local indent = fn["repeat"](" ", indent_level)
-	local first = fn.substitute(fn.getline(vim.v.foldstart), "\\v\\s*", "", "")
+	local indent = fn['repeat'](' ', indent_level)
+	local first = fn.substitute(fn.getline(vim.v.foldstart), '\\v\\s*', '', '')
 
-	return indent .. first .. "..." .. fn.getline(vim.v.foldend):gsub("^%s*", "")
+	return indent .. first .. '...' .. fn.getline(vim.v.foldend):gsub('^%s*', '')
 end
 
-opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldtext = "v:lua.foldtext()"
+opt.foldmethod = 'expr'
+opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.foldtext = 'v:lua.foldtext()'
 opt.foldlevelstart = 99

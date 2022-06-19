@@ -24,5 +24,6 @@ display() {
 			*) color=7 ;;
 		esac
 	fi
-    echo $args "^C$color^$1"
+    # echo $args "^C$color^$1"
+    echo $args
 }

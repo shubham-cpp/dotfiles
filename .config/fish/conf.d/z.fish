@@ -1,4 +1,4 @@
-set -x ZLUA_SCRIPT "/home/shubham/Downloads/Programs/Cool-Ones/z.lua/z.lua"
+set -x ZLUA_SCRIPT "$HOME/Downloads/Gits/z.lua/z.lua"
 set -x ZLUA_LUAEXE "/bin/luajit"
 function _zlua
 	set -l arg_mode ""

@@ -1,83 +1,83 @@
-*.txt 
-*.mom ✍
-*.me ✍
-di 
+*.txt=
+*.mom=✍
+*.me=✍
+di=
 ex=
-fi 
-ln 
-*.ms ✍
-*.png 🖼
-*.ico 🖼
-*.jpg 🖼
-*.jpeg 🖼
-*.gif 🖼
-*.svg 🗺
-*.xcf 🖌
-*.html 
-*.gpg 🔒
-*.pdf 
-*.md 
-*.djvu 📚
-*.epub 📚
-*.r 📊
-*.R 📊
-*.rmd 📊
-*.Rmd 📊
-*.mp3 🎵
-*.opus 🎵
-*.ogg 🎵
-*.m4a 🎵
-*.zip 📦
-*.rar 📦
-*.7z 📦
-*.tar.gz 📦
-*.z64 🎮
-*.v64 🎮
-*.n64 🎮
-*.1 ℹ
-*.nfo ℹ
-*.info ℹ
-*.bib 🎓
-*.ged 👪
-*.mp4 📽
-*.mkv 📽
-*.wav 📽
-*.tex 
-*.doc 
-*.docx 
-*.ppt 
-*.pptx 
-*.go 
-*.c 
-*.cpp 
-*.cs 
-*.js 
-*.ts ﯤ
-*.jsx 
-*.csh 
-*.css 
-*.php 
-*.jar 
-*.java 
-*.json 
-*.lua 
-*.o 
-*.out 
-*.py 
-*.pyc 
-*.pyd 
-*.pyo 
-*.rs 
-*.vim 
-*.vimfm 
-.vimrc 
-*.zsh 
-*.sql* 
-*.sqlite3 
-*.db 
-*.torrent 
-*.git 
-*.hs 
-*.ghcup 
-or 
-ex 
+fi=
+ln=
+*.ms=✍
+*.png=🖼
+*.ico=🖼
+*.jpg=🖼
+*.jpeg=🖼
+*.gif=🖼
+*.svg=🗺
+*.xcf=🖌
+*.html=
+*.gpg=🔒
+*.pdf=
+*.md=
+*.djvu=📚
+*.epub=📚
+*.r=📊
+*.R=📊
+*.rmd=📊
+*.Rmd=📊
+*.mp3=🎵
+*.opus=🎵
+*.ogg=🎵
+*.m4a=🎵
+*.zip=📦
+*.rar=📦
+*.7z=📦
+*.tar.gz=📦
+*.z64=🎮
+*.v64=🎮
+*.n64=🎮
+*.1=ℹ
+*.nfo=ℹ
+*.info=ℹ
+*.bib=🎓
+*.ged=👪
+*.mp4=📽
+*.mkv=📽
+*.wav=📽
+*.tex=
+*.doc=
+*.docx=
+*.ppt=
+*.pptx=
+*.go=
+*.c=
+*.cpp=
+*.cs=
+*.js=
+*.ts=ﯤ
+*.jsx=
+*.csh=
+*.css=
+*.php=
+*.jar=
+*.java=
+*.json=
+*.lua=
+*.o=
+*.out=
+*.py=
+*.pyc=
+*.pyd=
+*.pyo=
+*.rs=
+*.vim=
+*.vimfm=
+.vimrc=
+*.zsh=
+*.sql*=
+*.sqlite3=
+*.db=
+*.torrent=
+*.git=
+*.hs=
+*.ghcup=
+or=
+ex=

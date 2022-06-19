@@ -1,8 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
-. sb-theme
-
-light="$(brightnessctl g)"
+output="$(light)"
+light="${output/.*}"
 
 [ $? -ne 0 ] && exit $?
 
@@ -16,4 +15,4 @@ else
 	icon=" "
 fi
 
-display "^c#8ebd6b^ $icon  ^c#bababa^ $light%"
+echo " $icon  $light%"

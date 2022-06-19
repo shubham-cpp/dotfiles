@@ -8,14 +8,15 @@
 -- @copyright 2021 Pavel Makhov
 -------------------------------------------------
 
-local awful = require("awful")
-local wibox = require("wibox")
-local gears = require("gears")
-local watch = require("awful.widget.watch")
-local spawn = require("awful.spawn")
-local naughty = require("naughty")
+local awful = require('awful')
+local beautiful = require('beautiful')
+local wibox = require('wibox')
+local gears = require('gears')
+local watch = require('awful.widget.watch')
+local spawn = require('awful.spawn')
+local naughty = require('naughty')
 
-local ICON_DIR = gears.filesystem.get_configuration_dir() .. "widgets/brightness/"
+local ICON_DIR = gears.filesystem.get_configuration_dir() .. 'widgets/brightness/'
 local get_brightness_cmd
 local set_brightness_cmd
 local inc_brightness_cmd
@@ -26,7 +27,7 @@ local brightness_widget = {}
 local function show_warning(message)
 	naughty.notify({
 		preset = naughty.config.presets.critical,
-		title = "Brightness Widget",
+		title = 'Brightness Widget',
 		text = message,
 	})
 end
@@ -34,32 +35,32 @@ end
 local function worker(user_args)
 	local args = user_args or {}
 
-	local type = args.type or "arc" -- arc or icon_and_text
-	local path_to_icon = args.path_to_icon or ICON_DIR .. "brightness.svg"
-	local font = args.font or "Play 9"
+	local type = args.type or 'arc' -- arc or icon_and_text
+	local path_to_icon = args.path_to_icon or ICON_DIR .. 'brightness.svg'
+	local font = args.font or beautiful.font or 'Ubuntu Medium 11'
 	local timeout = args.timeout or 100
 
-	local program = args.program or "brightnessctl"
+	local program = args.program or 'brightnessctl'
 	local step = args.step or 10
 	local base = args.base or 20
 	local current_level = 0 -- current brightness value
 	local tooltip = args.tooltip or false
-	if program == "brightnessctl" then
-		get_brightness_cmd = "brightnessctl g"
-		set_brightness_cmd = "brightnessctl s " -- <level>
-		inc_brightness_cmd = "brightnessctl s +" .. step
-		dec_brightness_cmd = "brightnessctl s " .. step .. "-"
-	elseif program == "xbacklight" then
-		get_brightness_cmd = "xbacklight -get"
-		set_brightness_cmd = "xbacklight -set " -- <level>
-		inc_brightness_cmd = "xbacklight -inc " .. step
-		dec_brightness_cmd = "xbacklight -dec " .. step
+	if program == 'brightnessctl' then
+		get_brightness_cmd = 'brightnessctl g'
+		set_brightness_cmd = 'brightnessctl s ' -- <level>
+		inc_brightness_cmd = 'brightnessctl s +' .. step
+		dec_brightness_cmd = 'brightnessctl s ' .. step .. '-'
+	elseif program == 'xbacklight' then
+		get_brightness_cmd = 'xbacklight'
+		set_brightness_cmd = 'xbacklight -set ' -- <level>
+		inc_brightness_cmd = 'xbacklight -inc ' .. step
+		dec_brightness_cmd = 'xbacklight -dec ' .. step
 	else
-		show_warning(program .. " command is not supported by the widget")
+		show_warning(program .. ' command is not supported by the widget')
 		return
 	end
 
-	if type == "icon_and_text" then
+	if type == 'icon_and_text' then
 		brightness_widget.widget = wibox.widget({
 			{
 				{
@@ -67,21 +68,21 @@ local function worker(user_args)
 					resize = false,
 					widget = wibox.widget.imagebox,
 				},
-				valigh = "center",
+				valigh = 'center',
 				layout = wibox.container.place,
 			},
 			{
-				id = "txt",
+				id = 'txt',
 				font = font,
 				widget = wibox.widget.textbox,
 			},
 			spacing = 4,
 			layout = wibox.layout.fixed.horizontal,
 			set_value = function(self, level)
-				self:get_children_by_id("txt")[1]:set_text(level .. "%")
+				self:get_children_by_id('txt')[1]:set_text(level .. '%')
 			end,
 		})
-	elseif type == "arc" then
+	elseif type == 'arc' then
 		brightness_widget.widget = wibox.widget({
 			{
 				{
@@ -89,7 +90,7 @@ local function worker(user_args)
 					resize = true,
 					widget = wibox.widget.imagebox,
 				},
-				valigh = "center",
+				valigh = 'center',
 				layout = wibox.container.place,
 			},
 			max_value = 100,
@@ -104,12 +105,12 @@ local function worker(user_args)
 			end,
 		})
 	else
-		show_warning(type .. " type is not supported by the widget")
+		show_warning(type .. ' type is not supported by the widget')
 		return
 	end
 
 	local update_widget = function(widget, stdout, _, _, _)
-		local brightness_level = tonumber(string.format("%.0f", stdout))
+		local brightness_level = tonumber(string.format('%.0f', stdout))
 		current_level = brightness_level
 		widget:set_value(brightness_level)
 	end
@@ -174,7 +175,7 @@ local function worker(user_args)
 		awful.tooltip({
 			objects = { brightness_widget.widget },
 			timer_function = function()
-				return current_level .. " %"
+				return current_level .. ' %'
 			end,
 		})
 	end

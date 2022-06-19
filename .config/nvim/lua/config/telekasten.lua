@@ -1,6 +1,6 @@
-local home = vim.fn.expand("~/Documents/Notes/telekasten.nvim")
-local map = require("helper").map
-local telekasten = require("telekasten")
+local home = vim.fn.expand('~/Documents/Notes/telekasten.nvim')
+local map = require('helper').map
+local telekasten = require('telekasten')
 
 telekasten.setup({
 	home = home,
@@ -13,17 +13,17 @@ telekasten.setup({
 	auto_set_filetype = true,
 
 	-- dir names for special notes (absolute path or subdir name)
-	dailies = home .. "/Notes/" .. "daily",
-	weeklies = home .. "/Notes/" .. "weekly",
-	templates = home .. "/" .. "templates",
+	dailies = home .. '/Notes/' .. 'daily',
+	weeklies = home .. '/Notes/' .. 'weekly',
+	templates = home .. '/' .. 'templates',
 
 	-- image (sub)dir for pasting
 	-- dir name (absolute path or subdir name)
 	-- or nil if pasted images shouldn't go into a special subdir
-	image_subdir = "img",
+	image_subdir = 'img',
 
 	-- markdown file extension
-	extension = ".md",
+	extension = '.md',
 
 	-- following a link to a non-existing note will create it
 	follow_creates_nonexisting = true,
@@ -32,20 +32,20 @@ telekasten.setup({
 
 	-- template for new notes (new_note, follow_link)
 	-- set to `nil` or do not specify if you do not want a template
-	template_new_note = home .. "/" .. "templates/new_note.md",
+	template_new_note = home .. '/' .. 'templates/new_note.md',
 
 	-- template for newly created daily notes (goto_today)
 	-- set to `nil` or do not specify if you do not want a template
-	template_new_daily = home .. "/" .. "templates/daily.md",
+	template_new_daily = home .. '/' .. 'templates/daily.md',
 
 	-- template for newly created weekly notes (goto_thisweek)
 	-- set to `nil` or do not specify if you do not want a template
-	template_new_weekly = home .. "/" .. "templates/weekly.md",
+	template_new_weekly = home .. '/' .. 'templates/weekly.md',
 
 	-- image link style
 	-- wiki:     ![[image name]]
 	-- markdown: ![](image_subdir/xxxxx.png)
-	image_link_style = "markdown",
+	image_link_style = 'markdown',
 
 	-- integrate with calendar-vim
 	plug_into_calendar = true,
@@ -55,7 +55,7 @@ telekasten.setup({
 		-- use monday as first day of week: 1 .. true, 0 .. false
 		calendar_monday = 1,
 		-- calendar mark: where to put mark for marked days: 'left', 'right', 'left-fit'
-		calendar_mark = "left-fit",
+		calendar_mark = 'left-fit',
 	},
 
 	-- telescope actions behavior
@@ -63,14 +63,14 @@ telekasten.setup({
 	insert_after_inserting = true,
 
 	-- tag notation: '#tag', ':tag:', 'yaml-bare'
-	tag_notation = "#tag",
+	tag_notation = '#tag',
 
 	-- command palette theme: dropdown (window) or ivy (bottom panel)
-	command_palette_theme = "ivy",
+	command_palette_theme = 'ivy',
 
 	-- tag list theme:
 	-- get_cursor: small tag list at cursor; ivy and dropdown like above
-	show_tags_theme = "ivy",
+	show_tags_theme = 'ivy',
 
 	-- when linking to a note in subdir/, create a [[subdir/title]] link
 	-- instead of a [[title only]] link
@@ -82,7 +82,7 @@ telekasten.setup({
 	-- - prefer_new_note: use `new_note` template
 	-- - smart: if day or week is detected in title, use daily / weekly templates (default)
 	-- - always_ask: always ask before creating a note
-	template_handling = "smart",
+	template_handling = 'smart',
 
 	-- path handling:
 	--   this applies to:
@@ -105,28 +105,28 @@ telekasten.setup({
 	--     - same_as_current: put all new notes in the dir of the current note if
 	--                        present or else in home
 	--                        except for notes/with/subdirs/in/title.
-	new_note_location = "smart",
+	new_note_location = 'smart',
 
 	-- should all links be updated when a file is renamed
 	rename_update_links = true,
 })
 
-map("n", "<leader>na", telekasten.show_tags)
-map("n", "<leader>nc", telekasten.show_calendar)
-map("n", "<leader>nd", telekasten.find_daily_notes)
-map("n", "<leader>nf", telekasten.find_notes)
-map("n", "<leader>ni", function()
+map('n', '<leader>na', telekasten.show_tags)
+map('n', '<leader>nc', telekasten.show_calendar)
+map('n', '<leader>nd', telekasten.find_daily_notes)
+map('n', '<leader>nf', telekasten.find_notes)
+map('n', '<leader>ni', function()
 	telekasten.insert_link({ i = true })
 end)
-map("n", "<leader>nI", function()
+map('n', '<leader>nI', function()
 	telekasten.insert_img_link({ i = true })
 end)
 
-map("n", "<leader>nn", telekasten.new_note)
-map("n", "<leader>nN", telekasten.new_templated_note)
-map("n", "<leader>np", telekasten.panel)
-map("n", "<leader>nr", telekasten.rename_note)
-map("n", "<leader>ns", telekasten.search_notes)
-map("n", "<leader>nt", telekasten.toggle_todo)
-map("n", "<leader>ny", telekasten.yank_notelink)
-map("n", "<leader>nz", telekasten.follow_link)
+map('n', '<leader>nn', telekasten.new_note)
+map('n', '<leader>nN', telekasten.new_templated_note)
+map('n', '<leader>np', telekasten.panel)
+map('n', '<leader>nr', telekasten.rename_note)
+map('n', '<leader>ns', telekasten.search_notes)
+map('n', '<leader>nt', telekasten.toggle_todo)
+map('n', '<leader>ny', telekasten.yank_notelink)
+map('n', '<leader>nz', telekasten.follow_link)

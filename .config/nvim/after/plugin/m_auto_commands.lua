@@ -1,0 +1,312 @@
+local map = function(options)
+	options.opts = { buffer = true, silent = true, noremap = true }
+	options.mode = options.mode or 'n'
+	vim.keymap.set(options.mode, options.lhs, options.rhs, options.opts)
+end
+--- Highlight_Yank {{{
+local highlight_yank = vim.api.nvim_create_augroup('Highlight_Yank', { clear = true })
+
+local highlight_yank_commands = {
+	TextYankPost = {
+		callback = function()
+			vim.highlight.on_yank()
+		end,
+		desc = 'Show highlight when copying,deleting',
+	},
+	BufReadPost = {
+		command = [[ if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif ]],
+		desc = 'Continue where left off',
+	},
+	BufWritePre = {
+		command = [[ %s/\n\+\%$//e ]],
+		desc = 'Cleanup empty new lines',
+	},
+	TermOpen = {
+		command = 'startinsert',
+		pattern = 'term://*',
+		desc = 'Start with insert mode in terminal',
+	},
+}
+
+for event, opts in pairs(highlight_yank_commands) do
+	if opts.callback == nil and opts.command == nil then
+		print("You didn't specify and command or callback for autocommand")
+		return 1
+	end
+	opts.group = highlight_yank
+	opts.pattern = opts.pattern or '*'
+	vim.api.nvim_create_autocmd(event, opts)
+end
+
+--- }}}
+--- File_Reloads {{{
+local File_Reloads = vim.api.nvim_create_augroup('File_Reloads', { clear = true })
+
+local file_reloads_commands = {
+	{
+		event = 'FileType',
+		opts = {
+			callback = function()
+				vim.opt.foldmethod = 'marker'
+				vim.keymap.set('n', '<F5>', '<cmd>so %<cr>', { noremap = true, buffer = true })
+			end,
+			pattern = { 'vim', 'lua' },
+			desc = 'Setup foldmethod and use F5 to source current buffer',
+		},
+	},
+	{
+		event = 'BufWritePost',
+		opts = {
+			command = '!xrdb %',
+			pattern = { 'Xresources', 'Xdefaults' },
+			desc = 'Run xrdb after writing to Xresources',
+		},
+	},
+	{
+		event = { 'BufEnter', 'FocusGained' },
+		opts = { command = 'checktime', desc = 'Check for changes to current file from other programs' },
+	},
+	{
+		event = 'BufEnter',
+		opts = {
+			command = 'setlocal ft=fish',
+			pattern = '*.fish',
+			desc = 'Properly set filetype to fish',
+		},
+	},
+	{
+		event = 'BufEnter',
+		opts = {
+			command = 'setlocal ft=vim',
+			pattern = 'vifmrc',
+			desc = 'Properly set filetype to vim',
+		},
+	},
+	{
+		event = 'BufWritePost',
+		opts = {
+			command = "call system('pkill -USR1 -x sxhkd && notify-send -t 1000 BSPWM SXHKD Restarted')",
+			pattern = 'sxhkdrc',
+			desc = 'Restart sxhkd after saving sxhkdrc',
+		},
+	},
+	{
+		event = 'BufEnter',
+		opts = {
+			command = 'setlocal ft=sh',
+			pattern = '*profile',
+			desc = 'Properly set filetype to bash/sh for zprofile,profile,xprofile,etc',
+		},
+	},
+
+	{
+		event = 'BufEnter',
+		opts = {
+			command = 'setlocal ft=sxhkdrc',
+			pattern = { 'dwm_sxhkdrc', 'awesome_keys' },
+			desc = 'Properly set filetype dwm_sxhkdrc',
+		},
+	},
+
+	{
+		event = 'BufWritePre',
+		opts = {
+			command = [[ %s/\s\+$//e ]],
+			desc = 'Clean whitespaces',
+		},
+	},
+
+	{
+		event = 'FileType',
+		opts = {
+			command = 'setlocal sw=2 ts=2',
+			pattern = { 'css', 'javascript', 'html', 'json' },
+			desc = 'Clean whitespaces',
+		},
+	},
+	{
+		event = 'BufWritePre',
+		opts = {
+			command = [[ let &bex = '@' . strftime("%F.%H:%M") ]],
+			desc = 'Meaningful backup name, ex: filename@2015-04-05.14:59',
+		},
+	},
+	{
+		event = 'BufWritePost',
+		opts = {
+			command = 'source <afile> | PackerCompile',
+			desc = 'Auto Compile plugins file',
+			pattern = { 'packer-plugins.lua', 'plugins.lua' },
+		},
+	},
+}
+
+for _, cmds in ipairs(file_reloads_commands) do
+	if cmds.opts.callback == nil and cmds.opts.command == nil then
+		print("You didn't specify and command or callback for autocommand")
+		return 1
+	end
+	cmds.opts.pattern = cmds.opts.pattern or '*'
+	cmds.opts.group = File_Reloads
+	vim.api.nvim_create_autocmd(cmds.event, cmds.opts)
+end
+
+--- }}}
+--- LspFormattings {{{
+local LspFormattings = vim.api.nvim_create_augroup('LspFormattings', { clear = true })
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+	command = 'lua vim.lsp.buf.format({async=false, tabSize = 2, trimFinalNewlines = true, trimTrailingWhitespace = true })',
+	pattern = {
+		'*.js',
+		'*.ts',
+		'*.tsx',
+		'*.jsx',
+		'*.html',
+		'*.css',
+		'*.scss',
+		'*.json',
+		'*.yaml',
+		'*.lua',
+		'*.go',
+		'*.py',
+		'*.hs',
+		'*.md',
+	},
+	desc = 'Auto format buffer before saving',
+	group = LspFormattings,
+})
+--- }}}
+--- Comments {{{
+local Comments = vim.api.nvim_create_augroup('Comments', { clear = true })
+
+local comments_commands = {
+	{
+		event = 'FileType',
+		opts = {
+			command = [[ setlocal commentstring=##\ %s ]],
+			pattern = { 'apache', 'sxhkdrc', 'toml', 'fish', 'template', 'mbsyncrc' },
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = [[ setlocal commentstring=;;\ %s ]],
+			pattern = { 'lisp' },
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = [[ setlocal commentstring=<!--%s--> ]],
+			pattern = { 'htmldjango' },
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = [[ setlocal commentstring=!\ %s ]],
+			pattern = { 'xdefaults' },
+		},
+	},
+	{
+		event = 'BufEnter',
+		opts = {
+			command = [[ setlocal ft=lisp | setlocal commentstring=;;\ %s ]],
+			pattern = { '*.kbd' },
+		},
+	},
+	{
+		event = 'BufEnter',
+		opts = {
+			callback = function()
+				vim.opt.commentstring = '" %s'
+			end,
+			pattern = { '*.vifm' },
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = 'set formatoptions-=c formatoptions-=r formatoptions-=o',
+			desc = 'Pressing O/o inside comment wont open another comment',
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = 'setlocal comments-=:// comments+=f://',
+			pattern = { 'c', 'cpp' },
+		},
+	},
+}
+
+for _, cmds in ipairs(comments_commands) do
+	if cmds.opts.callback == nil and cmds.opts.command == nil then
+		print("You didn't specify and command or callback for autocommand")
+		return 1
+	end
+	cmds.opts.pattern = cmds.opts.pattern or '*'
+	cmds.opts.group = Comments
+	vim.api.nvim_create_autocmd(cmds.event, cmds.opts)
+end
+
+--- }}}
+---  Dynamic_Smartcase {{{
+local Dynamic_Smartcase = vim.api.nvim_create_augroup('Dynamic_Smartcase', { clear = true })
+
+local dynamic_smartcase_commands = {
+	{
+		event = 'CmdLineEnter',
+		opts = {
+			command = 'set nosmartcase',
+		},
+	},
+	{
+		event = 'CmdLineLeave',
+		opts = {
+			command = 'set smartcase',
+		},
+	},
+}
+
+for _, cmds in ipairs(dynamic_smartcase_commands) do
+	if cmds.opts.callback == nil and cmds.opts.command == nil then
+		print("You didn't specify and command or callback for autocommand")
+		return 1
+	end
+	cmds.opts.pattern = cmds.opts.pattern or '*'
+	cmds.opts.group = Dynamic_Smartcase
+	vim.api.nvim_create_autocmd(cmds.event, cmds.opts)
+end
+
+--- }}}
+---  KeyBindings {{{
+local KeyBindings = vim.api.nvim_create_augroup('KeyBindings', { clear = true })
+
+local key_bindings_commands = {
+	{
+		event = 'FileType',
+		opts = {
+			pattern = { 'markdown', 'gitcommit' },
+			callback = function()
+				vim.opt_local.spell = true
+				map({ lhs = '<leader>mp', rhs = ':MarkdownPreview<cr>' })
+				map({ lhs = '<leader>mtt', rhs = ':GenTocMarked<cr>' })
+				map({ lhs = '<leader>mtg', rhs = ':GenTocGitLab<cr>' })
+			end,
+		},
+	},
+}
+
+for _, cmds in ipairs(key_bindings_commands) do
+	if cmds.opts.callback == nil and cmds.opts.command == nil then
+		print("You didn't specify and command or callback for autocommand")
+		return 1
+	end
+	cmds.opts.pattern = cmds.opts.pattern or '*'
+	cmds.opts.group = KeyBindings
+	vim.api.nvim_create_autocmd(cmds.event, cmds.opts)
+end
+
+--- }}}

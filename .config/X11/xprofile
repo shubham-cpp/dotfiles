@@ -5,34 +5,33 @@ run() {
   fi
 }
 
-bash ~/.local/bin/myscripts/default_mouse_settings &
-
 setsid -f kmonad ~/.config/kmonad/mkmonad.kbd
-# setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
-# xcape -e 'Control_L=Escape'
-numlockx on
-xset -b
-xsetroot -cursor_name left_ptr
+if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+  bash ~/.local/bin/myscripts/default_mouse_settings &
+  # setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
+  # xcape -e 'Control_L=Escape'
+  # numlockx on
+  xset -b
+  xsetroot -cursor_name left_ptr
+fi
 
 basic() {
   # bash ~/.local/bin/myscripts/if_void &
   run lxpolkit
-  run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-  # run picom --experimental-backends
+  # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
   # run dunst
-  run xwallpaper --stretch ~/.config/wall.png
+  if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+    run picom --experimental-backends
+    run xwallpaper --stretch ~/.config/wall.png
+  fi
   # run kitty
   run alacritty -e "tmux"
   # run udiskie -q -t --no-terminal
 }
 
 case "$DESKTOP_SESSION" in
-  bspwm)
+  bspwm | awesome | qtile)
     basic
-    ;;
-  awesome|qtile)
-    basic
-    # sxhkd -c ~/.config/awesome/awesome_keys
     ;;
   dwm)
     basic
@@ -43,4 +42,4 @@ esac
 
 run redshift
 run greenclip daemon
-# run imwheel
+run flameshot

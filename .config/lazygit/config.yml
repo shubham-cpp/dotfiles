@@ -1,0 +1,12 @@
+gui:
+  scrollHeight: 2
+  scrollPastBottom: true
+  mouseEvents: true
+git:
+  paging:
+    colorArg: always
+    # useConfig: true
+    pager: delta --dark --paging=never
+  os:
+    openCommand: 'open {{filename}}'
+    openLinkCommand: 'open {{link}}'

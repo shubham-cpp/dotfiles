@@ -8,9 +8,8 @@ case $BLOCK_BUTTON in
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-. sb-theme
 if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
-	display "^c#bf68d9^ 婢  ^c#bababa^ Muted" "$color2"
+	echo "婢 Muted"
 	exit
 fi
 
@@ -27,4 +26,4 @@ else
 	icon="奄 "
 fi
 
-display "^c#bf68d9^ $icon ^c#bababa^ $vol%"
+echo "$icon $vol%"

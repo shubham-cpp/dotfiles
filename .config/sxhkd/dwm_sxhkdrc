@@ -13,7 +13,7 @@ super +{_,shift + } e
     {thunar || pcmanfm || nemo ,alacritty -e vifmrun}
 
 super +{_,shift +} w
-    {  $BROWSER || firefox, chromium || brave || flatpak run com.github.Eloston.UngoogledChromium}
+    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || chromium || brave || flatpak run com.github.Eloston.UngoogledChromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
@@ -26,11 +26,11 @@ super + alt + {c,g}
 control + alt + {p,c,v,e}
     {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
 
-super + control + s
-    logout_prompt
+super + control + {s,l}
+    {logout_prompt,betterlockscreen -l}
 
-{_,shift + }@Print
-    take_ss {full,focus} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
+{_,shift +, alt + }@Print
+    take_ss {clip,focus,full} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
 
 #Raises volume
 XF86Audio{Raise,Lower}Volume
@@ -41,7 +41,7 @@ XF86AudioMute
 
 #Brightness up
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g) && kill -57 $(pidof dwmblocks)
+    xbacklight -{inc,dec} 10 && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(light) && kill -57 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
-    brightnessctl s {200,30}
+    xbacklight -set {200,30}

@@ -15,9 +15,9 @@ static const int showsystray        = 1;     /* 0 means no systray */
 static const int showbar            = 1;     /* 0 means no bar */
 static const int topbar             = 1;     /* 0 means bottom bar */
 static const char *fonts[]          = {
-    "Ubuntu:size=10",
-    "Hack Nerd Font:size=12",
-    "JoyPixels:size=12"
+    "Ubuntu:size=11",
+    "FuraCode Nerd Font:size=14",
+    "JoyPixels:size=14"
 };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]		= "#222222";
@@ -50,9 +50,9 @@ static const Rule rules[] = {
 	{ "Chromium-browser",  NULL,	  NULL,		  2,		  1,			0,			-1 },
 	{ "waterfox-current",  NULL,	  NULL,		  2,		  1,			0,			-1 },
 
-	{ "Steam",			   NULL,	  NULL,		  4,		  0,			1,			-1 },
-	{ "Lutris",			   NULL,	  NULL,		  4,		  0,			1,			-1 },
-	{ "Timeshift-gtk",	   NULL,	  NULL,		  4,		  1,			1,			-1 },
+	{ "Steam",			   NULL,	  NULL,		  5,		  0,			1,			-1 },
+	{ "Lutris",			   NULL,	  NULL,		  5,		  0,			1,			-1 },
+	{ "Timeshift-gtk",	   NULL,	  NULL,		  5,		  1,			1,			-1 },
 
 	{ "Evolution",		   NULL,	  NULL,		  5,		  1,			0,			-1 },
 	{ "mpv",			   NULL,	  NULL,		  5,		  1,			0,			-1 },
@@ -152,10 +152,10 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,         XK_q,               killclient,     {0} },
 
 	{ MODKEY,                   XK_t,               setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                   XK_s,               setlayout,      {.v = &layouts[1]} },
+	// { MODKEY,                   XK_s,               setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                   XK_m,               setlayout,      {.v = &layouts[2]} },
 	// { MODKEY,                   XK_space,  setlayout,      {0} },
-	{ MODKEY,                   XK_space,           togglefloating, {0} },
+	{ MODKEY,                   XK_s,               togglefloating, {0} },
 	{ MODKEY,                   XK_f,               togglefullscr,  {0} },
 	{ MODKEY,                   XK_0,               view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,         XK_0,               tag,            {.ui = ~0 } },

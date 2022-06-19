@@ -11,6 +11,7 @@ $git_branch\
 $git_commit\
 $git_status\
 $python\
+$nodejs\
 $cmd_duration\
 $line_break\
 $time\

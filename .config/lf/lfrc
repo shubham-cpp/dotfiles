@@ -1,7 +1,7 @@
 # Basic Settings
 
-set previewer ~/.config/lf/pv
-set cleaner ~/.config/lf/cls
+set previewer ~/.config/lf/preview
+set cleaner ~/.config/lf/cleaner
 
 set shell bash
 set shellopts '-eu'

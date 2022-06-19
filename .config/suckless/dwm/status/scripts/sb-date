@@ -1,4 +1,8 @@
 #!/bin/sh
 
-. sb-theme
-display " $(date '+%I:%M %p')"
+case $BLOCK_BUTTON in
+	1) notify-send 'Hello' 'World';;
+	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+echo "  $(date '+%I:%M %p')"

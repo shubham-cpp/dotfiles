@@ -1,9 +1,14 @@
 local M = {}
 local cmd = vim.cmd
-local map = require("helper").bmap
+function map(mode, lhs, rhs, opts)
+	opts.buffer = opts.buffer == nil and true or opts.buffer
+	opts.noremap = opts.noremap == nil and true or opts.noremap
+	opts.silent = opts.silent == nil and true or opts.silent
+	vim.keymap.set(mode, lhs, rhs, opts)
+end
 
-function M.on_attach(client)
-	cmd([[ command! -bar LspFormat :lua vim.lsp.buf.formatting()<cr> ]])
+function M.on_attach(client, bufnr)
+	cmd([[ command! -bar LspFormat :lua vim.lsp.buf.format({async=false})<cr> ]])
 	cmd([[ command! -bar LspDiagnostics :lua vim.lsp.diagnostic.show_line_diagnostics()<CR> ]])
 	cmd([[ command! -bar LspDefination :lua vim.lsp.buf.definition()<CR> ]])
 	cmd([[ command! -bar LspDeclarations :lua vim.lsp.buf.declaration()<CR> ]])
@@ -13,50 +18,44 @@ function M.on_attach(client)
 	cmd([[ command! -bar LspCodeAction :lua vim.lsp.buf.code_action()<CR> ]])
 	cmd([[ command! -bar LspHover :lua vim.lsp.buf.hover()<CR> ]])
 
-	map("n", "gd", ":LspDefination<CR>")
-	map("n", "gD", ":LspDeclaration<CR>")
-	map("n", "K", vim.lsp.buf.hover)
-	map("i", "<C-s>", vim.lsp.buf.signature_help)
-	map("i", "<C-]>", vim.lsp.buf.signature_help)
-	map("n", "gi", vim.lsp.buf.implementation)
-	-- map('n', 'gr', ':LspReferences<CR>')
-	map("n", "gr", "<cmd>FzfLua lsp_references<CR>")
-	map("n", "gt", vim.lsp.buf.type_definition)
-	map("n", "gw", vim.lsp.buf.document_symbol)
-	map("n", "gW", vim.lsp.buf.workspace_symbol)
-	map("n", "gac", ":LspCodeAction<CR>")
+	map('n', 'gd', ':LspDefination<CR>', { buffer = bufnr })
+	map('n', 'gD', ':LspDeclaration<CR>', { buffer = bufnr })
+	map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+	map('i', '<C-s>', 'vim.lsp.buf.signature_help', { buffer = bufnr })
+	map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr })
+	-- map('n', 'gr', ':LspReferences<CR>',{buffer=bufnr})
+	map('n', 'gr', '<cmd>FzfLua lsp_references<CR>', { buffer = bufnr })
+	map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr })
+	map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr })
+	map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr })
+	map('n', 'gac', ':LspCodeAction<CR>', { buffer = bufnr })
 
-	-- map("n", "<leader>ci", vim.lsp.buf.incoming_calls)
-	-- map("n", "<leader>co", vim.lsp.buf.outgoing_calls)
-	-- map("n", "<leader>ca", ":LspCodeAction<CR>")
-	-- map("n", "<leader>ca", "<cmd>FzfLua lsp_code_actions<CR>")
+	-- map('n', '<leader>ci', vim.lsp.buf.incoming_calls, { buffer = bufnr })
+	-- map('n', '<leader>co', vim.lsp.buf.outgoing_calls, { buffer = bufnr })
+	-- map('n', '<leader>ca', '<cmd>FzfLua lsp_code_actions<CR>', { buffer = bufnr })
 
-	map("n", "<F2>", ":LspRename<CR>")
-	map("n", "gQ", vim.lsp.diagnostic.set_loclist)
+	map('n', '<F2>', ':LspRename<CR>', { buffer = bufnr })
+	-- map('n', '<leader>cq', vim.lsp.diagnostic.set_loclist, { buffer = bufnr })
 
-	map("n", "<Space>=", vim.lsp.buf.formatting)
-	if client.resolved_capabilities.document_range_formatting then
-		map("v", "<Space>=", vim.lsp.buf.range_formatting)
+	map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr })
+	if client.server_capabilities.documentRangeFormattingProvider then
+		map('v', '<Space>=', vim.lsp.buf.range_formatting, { buffer = bufnr })
 	end
 	-- For some reason prettier doesn't support svelte by default
-	if client.name ~= "svelte" then
-		client.resolved_capabilities.document_formatting = false
+	if client.name ~= 'svelte' then
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
+	end
+	if client.name == 'clangd' then
+		client.offset_encoding = 'utf-8'
+		client.offset_encodings = 'utf-8'
 	end
 
-	map("n", "J", function()
-		vim.diagnostic.open_float(0, { scope = "line" })
-	end)
-	map("n", "ge", function()
-		vim.diagnostic.open_float(0, { scope = "line" })
-	end)
-	map("n", "[g", function()
-		vim.diagnostic.goto_prev({ float = { border = "single" } })
-	end)
-	map("n", "]g", function()
-		vim.diagnostic.goto_next({ float = { border = "single" } })
-	end)
-
-	if client.resolved_capabilities.document_highlight then
+	map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr })
+	-- map("n", "ge", vim.diagnostic.open_float, { buffer = bufnr })
+	map('n', '[g', vim.diagnostic.goto_prev, { buffer = bufnr })
+	map('n', ']g', vim.diagnostic.goto_next, { buffer = bufnr })
+	if client.server_capabilities.documentHighlightProvider then
 		vim.api.nvim_exec(
 			[[
 		hi LspReferenceWrite cterm=bold ctermfg=red gui=bold guisp= guifg= guibg=#565575
@@ -75,7 +74,7 @@ function M.on_attach(client)
 			false
 		)
 	end
-	print(string.format("LSP attached (%s)", client.name))
+	print(string.format('LSP attached (%s)', client.name))
 end
 
 return M

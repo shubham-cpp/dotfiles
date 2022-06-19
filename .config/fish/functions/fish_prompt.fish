@@ -36,7 +36,7 @@ end
 
 # Top
 # $normal at $yellow$__fish_prompt_hostname
-echo -n $cyan$USER$normal in $bred(prompt_pwd)$normal
+echo -n $bred(prompt_pwd -D 2)$normal
 __fish_git_prompt
 
 echo

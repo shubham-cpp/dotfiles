@@ -1,4 +1,4 @@
-set fish_greeting                      # Supresses fish's intro message
+set fish_greeting                      # Suppresses fish's intro message
 fish_add_path -aP $HOME/.local/bin $HOME/.local/bin/myscripts
 fish_add_path -aP $HOME/.local/share/npm/bin $HOME/.local/share/golib/bin $HOME/.local/share/luarocks/bin
 fish_add_path -aP $HOME/.config/emacs/bin
@@ -9,9 +9,10 @@ set -x EDITOR "nvim"
 # pyenv init - | source
 # zoxide init fish --cmd j | source
 
-set fish_cursor_default block
-set fish_cursor_insert line
-set fish_cursor_visual underscore
+set -g fish_cursor_default block
+set -g fish_cursor_insert line
+set -g fish_cursor_visual underscore
+set fish_prompt_pwd_full_dirs 2
 
 set -U SXHKD_SHELL /usr/bin/sh
 # starship init fish | source
