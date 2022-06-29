@@ -237,9 +237,6 @@
 .venv
 
 .vscode-test
-.vscode/*
-
-ENV/*
 
 TSWLatexianTemp*
 
@@ -261,7 +258,6 @@ db.sqlite3-journal
 downloads/*
 
 env.bak/*
-env/*
 gen/*
 
 jspm_packages/*

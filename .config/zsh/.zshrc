@@ -24,10 +24,11 @@ zstyle ':autocomplete:*' add-space \
 # Speed up completions
 # zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache true
-zstyle ':completion:*' cache-path '~/.cache/zsh_cache'
-# zstyle ':completion:*' _expand_alias
-zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate
+zstyle ':completion:*' cache-path '${XDG_CACHE_HOME:-$HOME/.cache}/zsh_cache'
+zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate _prefix
 zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*' group-name ''
+zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'    # Ignore completion functions for commands you don't have:
 ## complete as much as you can ..
 # zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
 HISTFILE=$ZDOTDIR/.zhistory
@@ -37,47 +38,74 @@ HISTDUP=erase
 
 WORDCHARS=${WORDCHARS//\/[&.;]}
 
-# Colored Man Pages
-# export LESS_TERMCAP_mb=$'\e[1;32m'
-# export LESS_TERMCAP_md=$'\e[1;32m'
-# export LESS_TERMCAP_me=$'\e[0m'
-# export LESS_TERMCAP_se=$'\e[0m'
-# export LESS_TERMCAP_so=$'\e[01;33m'
-# export LESS_TERMCAP_ue=$'\e[0m'
-# export LESS_TERMCAP_us=$'\e[1;4;31m'
-
-# Theming section
 autoload -Uz compinit colors zcalc edit-command-line
 autoload -Uz bashcompinit && bashcompinit
 zmodload -i zsh/complist
 
-compinit -d ~/.cache/zcompdump
+compinit -d "${XDG_CACHE_HOME:-$HOME/.cache}"/zcompdump
 colors
 
-plugin(){
-    # timer=$(($(date +%s%N)/1000000))
-    source "$1"
-    # now=$(($(date +%s%N)/1000000))
-    # elapsed=$(($now-$timer))
-    # printf "%s s: %s\n" $elapsed $1
-}
-## Plugins section: Enable fish style features
-# Apply different settigns for different terminals
-plugin $ZDOTDIR/plugins/lazy_eval.zsh
-plugin $ZDOTDIR/plugins/zsh-autosuggestions.zsh
-plugin $ZDOTDIR/plugins/zsh-completions.plugin.zsh
-plugin $ZDOTDIR/plugins/zsh-history-substring-search.zsh
-plugin $ZDOTDIR/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+# Download Znap, if it's not there yet.
+[[ -f ${MZNAP_PATH:-$HOME/.cache/zsh-znap}/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ${MZNAP_PATH:-$HOME/.cache/zsh-znap}
 
+source ${MZNAP_PATH:-$HOME/.cache/zsh-znap}/znap.zsh  # Start Znap
+
+# `znap prompt` makes your prompt visible in just 15-40ms!
+# The same goes for any other kind of custom prompt:
+znap eval starship 'starship init zsh --print-full-init'
+znap prompt
+
+# `znap source` automatically downloads and starts your plugins.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+znap source zsh-users/zsh-autosuggestions
+znap source zsh-users/zsh-history-substring-search
+znap source zdharma-continuum/fast-syntax-highlighting
+znap source zsh-users/zsh-completions zsh-completions.plugin.zsh
+znap source jeffreytse/zsh-vi-mode
 
-_evalcache luajit $HOME/Downloads/Programs/Cool-Ones/z.lua/z.lua --init zsh enhanced once fzf
-_evalcache starship init zsh
-# _evalcache zoxide init zsh --cmd j
-plugin $ZDOTDIR/alias.zsh
-plugin $ZDOTDIR/mfunctions.zsh
-plugin $ZDOTDIR/bindings.zsh
-# _evalcache pyenv init --path
-# _evalcache pyenv init -
+# `znap function` lets you lazy-load features you don't always need.
+znap function _pip_completion pip    'eval "$(pip completion --zsh)"'
+# znap function _pipenv         pipenv 'eval "$(pipenv --completion)"'
+znap function _nvm            nvm    'source "${NVM_DIR:-$HOME/.config/nvm}"/nvm.sh'
+
+compctl -K    _pip_completion pip
+# compdef       _pipenv         pipenv
+compdef       _nvm            nvm
+
+znap eval zlua 'luajit "$HOME"/Downloads/Gits/z.lua/z.lua --init zsh enhanced once fzf'
+
+source "$ZDOTDIR"/alias.zsh
+source "$ZDOTDIR"/mfunctions.zsh
+
+complete -C npm pnpm
+complete -C npm yarn
+
+# bindings
+
+zle -N edit-command-line
+bindkey -M viins "^X^E" edit-command-line
+bindkey -M viins "^y" yank
+# Alt+u to undo
+bindkey -M viins '^[u' undo
+
+bindkey -M viins '^H' backward-delete-word
+bindkey -M viins "^w" backward-kill-word
+bindkey -M viins "\e\[3\;5~" kill-word
+bindkey -M viins "^[[1;5D" backward-word
+bindkey -M viins "^[[1;5C" forward-word
+
+bindkey -M viins '^p' history-beginning-search-backward
+bindkey -M viins '^n' history-beginning-search-forward
+# bind UP and DOWN arrow keys to history substring search
+zmodload zsh/terminfo
+bindkey -M viins -M viins '^[[A' history-substring-search-up
+bindkey -M viins -M viins '^[[B' history-substring-search-down
+# Up down in debian
+bindkey -M viins -M viins '^[OA' history-substring-search-up
+bindkey -M viins -M viins '^[OB' history-substring-search-down
+bindkey -M viins -M viins '^[k' autosuggest-accept
+bindkey -M viins -M viins '^[j' history-substring-search-up

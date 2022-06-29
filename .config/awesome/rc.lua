@@ -567,7 +567,7 @@ globalkeys = gears.table.join(
 		awful.spawn(browser)
 	end, { description = 'open a ' .. browser, group = 'launcher' }),
 	awful.key({ modkey, 'Shift' }, 'w', function()
-		awful.spawn('firefox')
+		awful.spawn(browser ~= 'firefox' and 'firefox' or 'brave')
 	end, { description = 'open a firefox', group = 'launcher' }),
 	awful.key({ modkey }, 'e', function()
 		awful.spawn('thunar')
@@ -586,24 +586,15 @@ globalkeys = gears.table.join(
 		awful.spawn('dmenu_run_history -i')
 	end, { description = 'Launch Dmenu', group = 'launcher' }),
 
-	awful.key({}, 'Print', function()
+	awful.key({ 'altkey' }, 'Print', function()
 		awful.spawn.with_shell('flameshot gui')
-		-- naughty.notify({
-		-- 	preset = naughty.config.presets.normal,
-		-- 	title = 'Screenshot',
-		-- 	timeout = 2,
-		-- 	text = 'Taken Successfully(FULL)',
-		-- })
-	end, { description = 'Capture Screenshot(Fullscreen)', group = 'launcher' }),
-	-- awful.key({ "Shift" }, "Print", function()
-	-- 	awful.spawn.with_shell("take_ss focus")
-	-- 	naughty.notify({
-	-- 		preset = naughty.config.presets.normal,
-	-- 		title = "Screenshot",
-	-- 		timeout = 2,
-	-- 		text = "Taken Successfully(Focused Window)",
-	-- 	})
-	-- end, { description = "Capture Screenshot(Focused Window)", group = "launcher" }),
+	end, { description = 'Capture Screenshot(Fullscreen - flameshot)', group = 'launcher' }),
+	awful.key({}, 'Print', function()
+		awful.spawn.with_shell('take_ss clip')
+	end, { description = 'Capture Screenshot(Fullscreen - Maim)', group = 'launcher' }),
+	awful.key({ 'Shift' }, 'Print', function()
+		awful.spawn.with_shell('take_ss focus')
+	end, { description = 'Capture Screenshot(focus)', group = 'launcher' }),
 
 	awful.key({ modkey }, 'v', function()
 		awful.spawn('virt-manager')

@@ -31,7 +31,7 @@ SETUVAR fish_color_search_match:ffff00
 SETUVAR fish_color_selection:c0c0c0
 SETUVAR fish_color_status:red
 SETUVAR fish_color_user:00ff00
-SETUVAR fish_color_valid_path:\x2d\x2dunderline
+SETUVAR fish_color_valid_path:normal
 SETUVAR fish_greeting:\x1d
 SETUVAR fish_key_bindings:fish_hybrid_key_bindings
 SETUVAR fish_pager_color_completion:normal
