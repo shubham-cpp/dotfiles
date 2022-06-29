@@ -67,7 +67,7 @@ local sources = {
 	-- Markdown
 	-- lint.vale,
 	-- lint.write_good,
-	-- format.markdownlint,
+	format.markdownlint,
 	-- Haskell
 	format.fourmolu,
 	-- Vim

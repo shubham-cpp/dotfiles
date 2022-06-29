@@ -1,9 +1,5 @@
 local tree_cb = require('nvim-tree.config').nvim_tree_callback
 
-local g = vim.g
-g.nvim_tree_add_trailing = 1
-g.nvim_tree_special_files = { ['README.md'] = 1, Makefile = 1, MAKEFILE = 1 }
-
 local list = {
 	{ key = { 'e', 'l' }, cb = tree_cb('edit') },
 	{ key = '<M-CR>', cb = tree_cb('tabnew') },
@@ -18,6 +14,7 @@ require('nvim-tree').setup({
 		enable = true,
 		show_on_dirs = true,
 	},
+	renderer = { add_trailing = true, special_files = { ['README.md'] = 1, Makefile = 1, MAKEFILE = 1 } },
 	update_cwd = true,
 	filters = {
 		dotfiles = true,

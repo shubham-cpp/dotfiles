@@ -150,6 +150,8 @@ wk.register({
 }, { prefix = ',' })
 
 wk.register({
+	[']q'] = { '<cmd>cn<cr>', 'Quickfix Next ' },
+	['[q'] = { '<cmd>cn<cr>', 'Quickfix Prev ' },
 	[']z'] = 'TreeSitter swap next',
 	['[z'] = 'TreeSitter swap prev',
 	[']]'] = 'Next class start',

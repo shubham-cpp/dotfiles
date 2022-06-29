@@ -30,7 +30,7 @@ toggleterm.setup({
 	size = 20,
 	-- open_mapping = [[<F1>]],
 	open_mapping = [[<c-\>]],
-    shell = 'fish',
+	-- shell = 'fish',
 	shade_filetypes = {},
 	shade_terminals = true,
 	start_in_insert = true,

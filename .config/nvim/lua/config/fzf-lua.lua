@@ -3,9 +3,15 @@ local actions = require('fzf-lua.actions')
 local map = require('helper').map
 local bmap = require('helper').bmap
 
+local dotfiles = io.popen("readlink -f ~/.config/awesome/ | cut -d'.' -f1")
 map('n', '<C-p>', '<cmd>FzfLua files<cr>')
 map('n', ',c', '<cmd>FzfLua files cwd=~/.config/nvim<cr>')
-map('n', ',d', '<cmd>FzfLua files cwd=~/Documents/dotfiles<cr>')
+if dotfiles then
+	map('n', ',d', '<cmd>FzfLua files cwd=' .. dotfiles:read() .. '<cr>')
+	dotfiles:close()
+else
+	map('n', ',d', '<cmd>FzfLua files cwd=~/Documents/dotfiles<cr>')
+end
 map('n', ',z', '<cmd>FzfLua spell_suggest<cr>')
 map('n', ',g', '<cmd>FzfLua git_status<cr>')
 map('n', '??', '<cmd>FzfLua grep_visual<cr>')
