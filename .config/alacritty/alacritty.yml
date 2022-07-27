@@ -174,7 +174,7 @@ live_config_reload: true
 
 Default:
 shell:
- program: /bin/fish
+  #program: /bin/fish
 # args:
 #   - --login
 mouse:

@@ -10,7 +10,7 @@ OBJ = $(SRC:.c=.o)
 all: options st
 
 options:
-	cp -v config.def.h config.h
+	# cp -v config.def.h config.h
 	@echo st build options:
 	@echo "CFLAGS  = $(STCFLAGS)"
 	@echo "LDFLAGS = $(STLDFLAGS)"

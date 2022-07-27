@@ -24,6 +24,7 @@ require('awful.hotkeys_popup.keys')
 local brightness_widget = require('widgets.brightness')
 local calendar_widget = require('widgets.calendar')
 local volume = require('widgets.vol')
+local battery_widget = require('widgets.battery')
 --}}}
 
 -- {{{ Error handling
@@ -264,7 +265,15 @@ awful.screen.connect_for_each_screen(function(s)
 		{ -- Right widgets
 			layout = wibox.layout.fixed.horizontal,
 			-- spr,
-			awful.widget.watch('bash -c "dwm_bat"', 10),
+			-- awful.widget.watch('bash -c "dwm_bat"', 10),
+			battery_widget({
+				display_notification = true,
+				show_current_level = true,
+				font = beautiful.font,
+				warning_msg_position = 'top_right',
+				-- path_to_icons = '/usr/share/icons/Qogir/symbolic/status/',
+				-- path_to_icons = gfs.get_xdg_data_home() .. 'icons/Fluent-grey-dark/symbolic/status/',
+			}),
 			spr,
 			wibox.widget.textbox(' '),
 			awful.widget.watch('bash -c "printf %d%% $(expr 100 - $(vmstat 1 2 | tail -1 | awk \'{print $15}\'))"', 3),
@@ -273,7 +282,6 @@ awful.screen.connect_for_each_screen(function(s)
 			awful.widget.watch('sh -c "free -h | awk \'/^Mem/ {print $3}\'"', 5),
 			spr,
 			volume(),
-			-- volume:new({}),
 			spr,
 			brightness_widget({
 				type = 'icon_and_text',
@@ -283,9 +291,9 @@ awful.screen.connect_for_each_screen(function(s)
 				timeout = 120,
 			}),
 			spr,
-			mytextclock,
+			awful.widget.watch('bash -c "curl wttr.in/411043\\?format=2"', 3600),
 			spr,
-			awful.widget.watch('bash -c "curl wttr.in/411043\\?format=3 | sed \'s#411043#Pune#\'"', 3600),
+			mytextclock,
 			spr,
 			s.mylayoutbox,
 			spr,
@@ -547,12 +555,12 @@ globalkeys = gears.table.join(
 
 	-- On the fly useless gaps change {{{
 
-	awful.key({ modkey, 'Shift' }, '=', function()
-		lain.util.useless_gaps_resize(1)
-	end, { description = 'increment useless gaps', group = 'tag' }),
-	awful.key({ modkey }, '-', function()
-		lain.util.useless_gaps_resize(-1)
-	end, { description = 'decrement useless gaps', group = 'tag' }),
+	-- awful.key({ modkey, 'Shift' }, '=', function()
+	-- 	awful.tag.setmwfact(0.85)
+	-- end, { description = 'increment useless gaps', group = 'tag' }),
+	-- awful.key({ modkey }, '-', function()
+	-- 	awful.tag.setmwfact(0.50)
+	-- end, { description = 'decrement useless gaps', group = 'tag' }),
 	--- }}}
 
 	-- Standard program     {{{
@@ -1014,9 +1022,9 @@ client.connect_signal('request::titlebars', function(c)
 		},
 		{ -- Right
 			awful.titlebar.widget.floatingbutton(c),
-			awful.titlebar.widget.maximizedbutton(c),
 			awful.titlebar.widget.stickybutton(c),
 			awful.titlebar.widget.ontopbutton(c),
+			awful.titlebar.widget.maximizedbutton(c),
 			awful.titlebar.widget.closebutton(c),
 			layout = wibox.layout.fixed.horizontal(),
 		},

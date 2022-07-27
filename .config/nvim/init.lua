@@ -1,4 +1,4 @@
 local ok, impatient = pcall(require, 'impatient')
-require('options')
-require('plugins')
-require('keymaps')
+require('sp.options')
+require('sp.plugins')
+require('sp.keymaps')

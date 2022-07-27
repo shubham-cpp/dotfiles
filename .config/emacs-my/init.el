@@ -741,6 +741,8 @@
   (org-hide-emphasis-markers t)
   (org-mouse-1-follows-link t)
   (org-startup-folded nil)
+  (org-startup-with-inline-images t)
+  (org-image-actual-width '(0.6))
   (org-todo-keywords '((sequence "TODO" "DOING" "DONE")))
   :config
   (require 'org-tempo)

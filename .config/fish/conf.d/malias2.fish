@@ -80,7 +80,7 @@ alias gcl="git clone"
 alias gclr="git clone --recurse-submodules"
 
 alias p="pnpm"
-
+alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 # if /bin/grep -iq void /etc/issue*
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"

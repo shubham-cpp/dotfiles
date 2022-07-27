@@ -41,7 +41,7 @@ local mappings = {
 	['-'] = { '<cmd>vertical resize -4<CR>', 'Decrease win size' },
 	['='] = 'Format Code',
 	['/'] = { '<CMD>lua require("Comment.api").call("toggle_current_linewise_op")<CR>g@$', 'Toggle Comment' },
-	['v'] = { 'v$h', 'Select till end' },
+	['v'] = { 'v$', 'Select till end' },
 
 	c = {
 		name = 'Change',
@@ -78,10 +78,11 @@ local mappings = {
 		},
 		l = {
 			name = 'Log',
-			a = { '<cmd>FzfLua git_commits<cr>', 'All commits' },
-			c = { '<cmd>FzfLua git_bcommits<cr>', 'Buffer commits' },
+			a = 'All commits',
+			c = 'Buffer commits',
 		},
-		s = { '<cmd>FzfLua git_status<CR>', 'status' },
+		s = 'status',
+		b = 'branches',
 	},
 
 	f = {

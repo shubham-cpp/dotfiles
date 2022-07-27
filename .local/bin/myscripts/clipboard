@@ -4,4 +4,4 @@
 ## and then use rofi to select from clipboard history
 ###############################
 # greenclip print | dmenu -i -l 20 | xclip -i -r -sel clip
-rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -config ~/.config/rofi/colors-rofi-dark.rasi -no-sort
+rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' -no-sort

@@ -53,7 +53,7 @@ XF86Audio{Raise,Lower}Volume
 XF86AudioMute
     audio toggle
 
-# Know Specfic bspwm settings
+# Know Specific bspwm settings
 
 # quit/restart bspwm
 super + ctrl + {x,r}

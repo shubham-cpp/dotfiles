@@ -6,8 +6,8 @@ local xresources = require('beautiful.xresources')
 local dpi = xresources.apply_dpi
 
 -- local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
--- local icon_dir = gfs.get_xdg_data_home() .. 'icons/Luna-Dark/symbolic/actions'
-local icon_dir = '/usr/share/icons/Qogir-dark/24/actions'
+local icon_dir = gfs.get_xdg_data_home() .. 'icons/breeze-extended-eleven-dark/actions/24'
+-- local icon_dir = '/usr/share/icons/Surfn-Breeze-Dark/32x32/actions'
 if not gfs.dir_readable(icon_dir) then
 	require('naughty').notify({
 		preset = require('naughty').config.presets.critical,
@@ -17,6 +17,8 @@ if not gfs.dir_readable(icon_dir) then
 	})
 end
 
+local theme_assets = require('beautiful.theme_assets')
+local themes_path = gfs.get_themes_dir()
 local theme = {}
 -- theme.dir                                       = homedir .. "/.config/awesome/themes/powerarrow-dark"
 -- theme.wallpaper                                 = theme.dir .. "/wall.png"
@@ -35,23 +37,31 @@ theme.tasklist_bg_focus = '#1A1A1A'
 theme.titlebar_bg_focus = theme.bg_focus
 theme.titlebar_bg_normal = theme.bg_normal
 theme.titlebar_fg_focus = theme.fg_focus
-theme.menu_height = dpi(16)
--- theme.menu_width =  dpi(140)
+theme.menu_height = dpi(15)
+theme.menu_width = dpi(100)
+
+-- theme.awesome_icon = theme_assets.awesome_icon(theme.menu_height, theme.bg_focus, theme.fg_focus)
 -- theme.menu_submenu_icon = theme.dir .. "/icons/submenu.png"
--- theme.taglist_squares_sel = theme.dir .. "/icons/square_sel.png"
--- theme.taglist_squares_unsel = theme.dir .. "/icons/square_unsel.png"
--- theme.layout_tile = theme.dir .. "/icons/tile.png"
--- theme.layout_tileleft = theme.dir .. "/icons/tileleft.png"
--- theme.layout_tilebottom = theme.dir .. "/icons/tilebottom.png"
--- theme.layout_tiletop = theme.dir .. "/icons/tiletop.png"
--- theme.layout_fairv = theme.dir .. "/icons/fairv.png"
--- theme.layout_fairh = theme.dir .. "/icons/fairh.png"
--- theme.layout_spiral = theme.dir .. "/icons/spiral.png"
--- theme.layout_dwindle = theme.dir .. "/icons/dwindle.png"
--- theme.layout_max = theme.dir .. "/icons/max.png"
--- theme.layout_fullscreen = theme.dir .. "/icons/fullscreen.png"
--- theme.layout_magnifier = theme.dir .. "/icons/magnifier.png"
--- theme.layout_floating = theme.dir .. "/icons/floating.png"
+
+-- local taglist_square_size = dpi(4)
+-- theme.taglist_squares_sel = theme_assets.taglist_squares_sel(taglist_square_size, theme.fg_normal)
+-- theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(taglist_square_size, theme.fg_normal)
+theme.layout_fairh = themes_path .. 'default/layouts/fairhw.png'
+theme.layout_fairv = themes_path .. 'default/layouts/fairvw.png'
+theme.layout_floating = themes_path .. 'default/layouts/floatingw.png'
+theme.layout_magnifier = themes_path .. 'default/layouts/magnifierw.png'
+theme.layout_max = themes_path .. 'default/layouts/maxw.png'
+theme.layout_fullscreen = themes_path .. 'default/layouts/fullscreenw.png'
+theme.layout_tilebottom = themes_path .. 'default/layouts/tilebottomw.png'
+theme.layout_tileleft = themes_path .. 'default/layouts/tileleftw.png'
+theme.layout_tile = themes_path .. 'default/layouts/tilew.png'
+theme.layout_tiletop = themes_path .. 'default/layouts/tiletopw.png'
+theme.layout_spiral = themes_path .. 'default/layouts/spiralw.png'
+theme.layout_dwindle = themes_path .. 'default/layouts/dwindlew.png'
+theme.layout_cornernw = themes_path .. 'default/layouts/cornernww.png'
+theme.layout_cornerne = themes_path .. 'default/layouts/cornernew.png'
+theme.layout_cornersw = themes_path .. 'default/layouts/cornersww.png'
+theme.layout_cornerse = themes_path .. 'default/layouts/cornersew.png'
 -- theme.widget_ac = theme.dir .. "/icons/ac.png"
 -- theme.widget_battery = theme.dir .. "/icons/battery.png"
 -- theme.widget_battery_low = theme.dir .. "/icons/battery_low.png"
@@ -106,5 +116,7 @@ theme.notification_max_height = dpi(160)
 theme.notification_icon_size = dpi(48)
 theme.notification_border_width = dpi(3)
 theme.notification_border_color = '#89b4fa'
+
+theme.icon_theme = nil
 
 return theme

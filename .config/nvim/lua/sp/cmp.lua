@@ -1,28 +1,18 @@
-local cmp = require('cmp')
+local ok, cmp = pcall(require, 'cmp')
+if not ok then
+	return
+end
 local compare = require('cmp.config.compare')
 local sources = require('cmp.config.sources')
 local window = require('cmp.config.window')
-local lspkind = require('lspkind')
-local g = vim.g
-local o = vim.opt
-
-o.completeopt = 'menu,menuone,noselect'
-g.vsnip_snippet_dir = vim.fn.stdpath('config') .. '/vsnip'
-g.vsnip_filetypes = {
+vim.opt.completeopt = 'menu,menuone,noselect'
+vim.g.vsnip_snippet_dir = vim.fn.stdpath('config') .. '/vsnip'
+vim.g.vsnip_filetypes = {
 	javascriptreact = { 'javascript', 'html' },
 	typescriptreact = { 'typescript', 'html' },
 	svelte = { 'javascript' },
 	vue = { 'html' },
 }
-local source_mapping = {
-	buffer = '[Buffer]',
-	nvim_lsp = '[LSP]',
-	nvim_lua = '[Lua]',
-	cmp_tabnine = '[TN]',
-	path = '[Path]',
-	vsnip = '[Vsnip]',
-}
-
 local has_words_before = function()
 	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
@@ -32,16 +22,48 @@ local feedkey = function(key, mode)
 	vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
+local source_mapping = {
+	buffer = '[Buffer]',
+	nvim_lsp = '[LSP]',
+	nvim_lua = '[Lua]',
+	cmp_tabnine = '[TN]',
+	path = '[Path]',
+	vsnip = '[Vsnip]',
+}
+local kind_icons = {
+	Text = '',
+	Method = '',
+	Function = '',
+	Constructor = '',
+	Field = '',
+	Variable = '',
+	Class = 'ﴯ',
+	Interface = '',
+	Module = '',
+	Property = 'ﰠ',
+	Unit = '',
+	Value = '',
+	Enum = '',
+	Keyword = '',
+	Snippet = '',
+	Color = '',
+	File = '',
+	Reference = '',
+	Folder = '',
+	EnumMember = '',
+	Constant = '',
+	Struct = '',
+	Event = '',
+	Operator = '',
+	TypeParameter = '',
+	cmp_tabnine = ' ',
+}
 cmp.setup({
 	snippet = {
 		expand = function(args)
 			vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
 		end,
 	},
-	-- window = {
-	--  completion    = window.bordered(),
-	--  documentation = window.bordered(),
-	-- },
 	mapping = cmp.mapping.preset.insert({
 		['<C-x><C-s>'] = cmp.mapping.complete({
 			config = { sources = { { name = 'vsnip' } } },
@@ -66,7 +88,6 @@ cmp.setup({
 				cmp.complete()
 			end
 		end, { 'i', 'c' }),
-		-- ['<C-e>'] = cmp.mapping.abort(),
 		['<C-e>'] = cmp.mapping({
 			i = cmp.mapping.abort(),
 			c = cmp.mapping.close(),
@@ -100,11 +121,8 @@ cmp.setup({
 		{ name = 'nvim_lsp_signature_help' },
 		{ name = 'nvim_lua' },
 		{ name = 'vsnip' },
-		{ name = 'cmp_tabnine' },
-		{ name = 'copilot' },
 		{ name = 'path' },
-		-- { name = "org" },
-		{ name = 'neorg' },
+		{ name = 'cmp_tabnine' },
 		{
 			name = 'buffer',
 			option = {
@@ -114,28 +132,14 @@ cmp.setup({
 				end,
 			},
 		},
-		{ name = 'spell', option = { keyword_length = 4 } },
+		-- { name = 'spell', option = { keyword_length = 4 } },
 	}),
 	formatting = {
-		-- format = lspkind.cmp_format({
-		-- 	with_text = true, -- do not show text alongside icons
-		-- 	maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-		-- }),
 		format = function(entry, vim_item)
-			vim_item.kind = lspkind.presets.default[vim_item.kind]
-			local menu = source_mapping[entry.source.name]
-			if entry.source.name == 'cmp_tabnine' then
-				if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-					menu = entry.completion_item.data.detail .. ' ' .. menu
-				end
-				vim_item.kind = ' '
-			elseif entry.source == 'copilot' then
-				if entry.completion_item.data ~= nil and entry.completion_item.data.detail ~= nil then
-					menu = entry.completion_item.data.detail .. ' ' .. menu
-				end
-				vim_item.kind = ' '
-			end
-			vim_item.menu = menu
+			-- Kind icons
+			vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+			-- Source
+			vim_item.menu = source_mapping[entry.source.name]
 			return vim_item
 		end,
 	},

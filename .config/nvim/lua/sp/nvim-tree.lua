@@ -6,6 +6,8 @@ local list = {
 	{ key = 'h', cb = tree_cb('code_node') },
 	{ key = '.', cb = tree_cb('toggle_dotfiles') },
 	{ key = '?', cb = tree_cb('toggle_help') },
+	{ key = 'd', cb = tree_cb('trash') },
+	{ key = 'D', cb = tree_cb('remove') },
 }
 require('nvim-tree').setup({
 	-- auto_close = true,
@@ -14,7 +16,7 @@ require('nvim-tree').setup({
 		enable = true,
 		show_on_dirs = true,
 	},
-	renderer = { add_trailing = true, special_files = { ['README.md'] = 1, Makefile = 1, MAKEFILE = 1 } },
+	renderer = { add_trailing = true },
 	update_cwd = true,
 	filters = {
 		dotfiles = true,
@@ -29,9 +31,13 @@ require('nvim-tree').setup({
 			'.pki',
 		},
 	},
-	view = { mappings = { list = list }, relativenumber = true },
+	view = { mappings = { list = list }, relativenumber = true, width = '35%' },
 	trash = {
 		cmd = 'trash',
 		require_confirm = false,
+	},
+	system_open = {
+		cmd = 'xdg-open',
+		args = {},
 	},
 })

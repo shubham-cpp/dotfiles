@@ -18,15 +18,15 @@ fi
 basic() {
   # bash ~/.local/bin/myscripts/if_void &
   run lxpolkit
-  # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
   # run dunst
   if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+      # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
     run picom --experimental-backends
     run xwallpaper --stretch ~/.config/wall.png
   fi
-  # run kitty
-  run alacritty -e "tmux"
-  # run udiskie -q -t --no-terminal
+  run kitty
+  # run alacritty -e "tmux"
+  run udiskie -q -t --no-terminal
 }
 
 case "$DESKTOP_SESSION" in

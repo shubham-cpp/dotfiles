@@ -32,6 +32,10 @@ browser = getenv("BROWSER", "firefox")
 
 
 # Custom Lazy Functions {{{
+# @hook.subscribe.client_urgent_hint_changed
+# def go_to(window):
+#     logger.debug("Run urgent")
+#     qtile.next_urgent()
 
 
 @lz.function
@@ -474,7 +478,7 @@ def getIcon(name: str) -> str:
         return calIcon(
             int(
                 float(
-                    subprocess.run(["xbacklight"], stdout=subprocess.PIPE)
+                    subprocess.run(["light"], stdout=subprocess.PIPE)
                     .stdout.decode("utf-8")
                     .strip()
                 )
@@ -531,6 +535,7 @@ screens = [
                     margin=0,
                     borderwidth=3,
                     urgent_alert_method="text",
+                    urgent_text="#834a61",
                 ),
                 NerdIcon("", bg=colors[3]),
                 widget.Clock(
