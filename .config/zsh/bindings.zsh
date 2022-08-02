@@ -14,8 +14,8 @@ bindkey -M viins '^[[F' end-of-line                                     # End ke
 if [[ "${terminfo[kend]}" != "" ]]; then
     bindkey -M viins "${terminfo[kend]}" end-of-line                       # [End] - Go to end of line
 fi
-bindkey -M viins '^p' history-beginning-search-backward
-bindkey -M viins '^n' history-beginning-search-forward
+bindkey -M viins '^p' history-substring-search-up
+bindkey -M viins '^n' history-substring-search-down
 
 zle -N edit-command-line
 bindkey -M viins "^X^E" edit-command-line
