@@ -285,13 +285,13 @@ awful.screen.connect_for_each_screen(function(s)
 			spr,
 			brightness_widget({
 				type = 'icon_and_text',
-				program = 'xbacklight',
+				program = 'brightnessctl',
 				font = beautiful.font,
 				tooltip = true,
 				timeout = 120,
 			}),
-			spr,
-			awful.widget.watch('bash -c "curl wttr.in/411043\\?format=2"', 3600),
+			-- spr,
+			-- awful.widget.watch('bash -c "curl wttr.in/411043\\?format=1"', 3600),
 			spr,
 			mytextclock,
 			spr,
@@ -575,14 +575,23 @@ globalkeys = gears.table.join(
 		awful.spawn(browser)
 	end, { description = 'open a ' .. browser, group = 'launcher' }),
 	awful.key({ modkey, 'Shift' }, 'w', function()
-		awful.spawn(browser ~= 'firefox' and 'firefox' or 'brave')
+		local cmd = browser ~= 'firefox' and 'firefox' or 'brave || chromium'
+		awful.spawn.easy_async_with_shell(cmd, function(_, err)
+			if err ~= '' or err ~= nil then
+				naughty.notify({
+					preset = naughty.config.presets.critical,
+					title = 'Browser Not Found',
+					text = 'Brave or Chromium is not installed in the system ' + err,
+				})
+			end
+		end)
 	end, { description = 'open a firefox', group = 'launcher' }),
 	awful.key({ modkey }, 'e', function()
 		awful.spawn('thunar')
 	end, { description = 'open a file manager', group = 'launcher' }),
 	awful.key({ modkey, 'Shift' }, 'e', function()
-		awful.spawn('alacritty -e ranger')
-	end, { description = 'open a ranger', group = 'launcher' }),
+		awful.spawn('alacritty -e vif')
+	end, { description = 'open a vif', group = 'launcher' }),
 	--- }}}
 
 	-- User programs {{{
@@ -608,11 +617,27 @@ globalkeys = gears.table.join(
 		awful.spawn('virt-manager')
 	end, { description = 'Launch VirtualBox', group = 'launcher' }),
 	awful.key({ modkey }, 'g', function()
-		awful.spawn('qalculate-gtk')
+		local cmd = 'qalculate-gtk ||gnome-calculator || galculator'
+		awful.spawn.easy_async_with_shell(cmd, function(_, err)
+			if err ~= '' or err ~= nil then
+				naughty.notify({
+					preset = naughty.config.presets.critical,
+					title = 'Calculator Not Found',
+					text = 'Qalculate-gtk, Gnome-calculator or Galculator is not installed in the system ' + err,
+				})
+			end
+		end)
 	end, { description = 'Launch Calculator', group = 'launcher' }),
 	--- }}}
 
 	-- Custom Scripts {{{
+
+	awful.key({ modkey, 'Control' }, 'Left', function()
+		resize_window('left')
+	end, { description = 'Resize left', group = 'client' }),
+	awful.key({ modkey, 'Control' }, 'Right', function()
+		resize_window('right')
+	end, { description = 'Resize Right', group = 'client' }),
 
 	awful.key({ modkey, 'Control' }, 's', function()
 		awful.spawn.with_shell('logout_prompt')
@@ -656,9 +681,8 @@ globalkeys = gears.table.join(
 
 	--- }}}
 
+	-- Standard program {{{
 	awful.key({ modkey }, 'F1', hotkeys_popup.show_help, { description = 'show help', group = 'awesome' }),
-
-	-- Standard program
 
 	awful.key({ modkey, 'Control' }, 'r', awesome.restart, { description = 'reload awesome', group = 'awesome' }),
 	awful.key({ modkey, 'Control' }, 'x', awesome.quit, { description = 'quit awesome', group = 'awesome' }),
@@ -692,6 +716,7 @@ globalkeys = gears.table.join(
 			history_path = awful.util.get_cache_dir() .. '/history_eval',
 		})
 	end, { description = 'lua execute prompt', group = 'awesome' }),
+	-- }}}
 
 	-- Brightness   {{{
 
@@ -759,6 +784,9 @@ clientkeys = gears.table.join(
 	end, { description = 'close', group = 'client' }),
 	awful.key({ modkey }, 's', awful.client.floating.toggle, { description = 'toggle floating', group = 'client' }),
 	awful.key({ modkey }, 't', function(c)
+		-- c.fullscreen = false
+		-- c.sticky = false
+		-- c.floating = false
 		awful.layout.set(awful.layout.suit.tile)
 	end, { description = 'toggle keep on top', group = 'client' }),
 	awful.key({ modkey }, 'n', function(c)

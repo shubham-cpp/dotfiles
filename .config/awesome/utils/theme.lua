@@ -6,7 +6,7 @@ local xresources = require('beautiful.xresources')
 local dpi = xresources.apply_dpi
 
 -- local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
-local icon_dir = gfs.get_xdg_data_home() .. 'icons/breeze-extended-eleven-dark/actions/24'
+local icon_dir = gfs.get_xdg_data_home() .. 'icons/Papirus-Dark/symbolic/actions'
 -- local icon_dir = '/usr/share/icons/Surfn-Breeze-Dark/32x32/actions'
 if not gfs.dir_readable(icon_dir) then
 	require('naughty').notify({
@@ -22,7 +22,7 @@ local themes_path = gfs.get_themes_dir()
 local theme = {}
 -- theme.dir                                       = homedir .. "/.config/awesome/themes/powerarrow-dark"
 -- theme.wallpaper                                 = theme.dir .. "/wall.png"
-theme.font = 'FuraCode Nerd Font Medium 11'
+theme.font = 'FuraCode Nerd Font Medium 9'
 theme.fg_normal = '#DDDDFF'
 theme.fg_focus = '#EA6F81'
 theme.fg_urgent = '#CC9393'
@@ -84,8 +84,8 @@ theme.tasklist_disable_icon = true
 theme.useless_gap = dpi(2)
 theme.gap_single_client = false
 
-theme.titlebar_close_button_focus = icon_dir .. '/window-close.svg'
-theme.titlebar_close_button_normal = icon_dir .. '/window-close.svg'
+theme.titlebar_close_button_focus = icon_dir .. '/window-close-symbolic.svg'
+theme.titlebar_close_button_normal = icon_dir .. '/window-close-symbolic.svg'
 
 theme.titlebar_ontop_button_focus_active = icon_dir .. '/window-keep-above.svg'
 theme.titlebar_ontop_button_focus_inactive = icon_dir .. '/window-keep-above.svg'
@@ -102,10 +102,10 @@ theme.titlebar_sticky_button_normal_inactive = icon_dir .. '/window-unpin.svg'
 -- theme.titlebar_floating_button_focus_inactive = theme.dir .. "/icons/titlebar/floating_focus_inactive.png"
 -- theme.titlebar_floating_button_normal_inactive = theme.dir .. "/icons/titlebar/floating_normal_inactive.png"
 
-theme.titlebar_maximized_button_focus_active = icon_dir .. '/window-minimize.svg'
-theme.titlebar_maximized_button_normal_active = icon_dir .. '/window-minimize.svg'
-theme.titlebar_maximized_button_focus_inactive = icon_dir .. '/window-maximize.svg'
-theme.titlebar_maximized_button_normal_inactive = icon_dir .. '/window-maximize.svg'
+theme.titlebar_maximized_button_focus_active = icon_dir .. '/window-minimize-symbolic.svg'
+theme.titlebar_maximized_button_normal_active = icon_dir .. '/window-minimize-symbolic.svg'
+theme.titlebar_maximized_button_focus_inactive = icon_dir .. '/window-maximize-symbolic.svg'
+theme.titlebar_maximized_button_normal_inactive = icon_dir .. '/window-maximize-symbolic.svg'
 
 -- theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/maximized_focus_active.png"
 -- theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
