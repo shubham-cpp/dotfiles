@@ -3,12 +3,17 @@
 import subprocess
 from os import getenv
 from os.path import isfile
+from typing import Dict, List, Union
 
-from libqtile import bar, hook, layout, qtile, widget
+from libqtile import bar, hook, qtile, widget
 from libqtile.command import lazy as lz
 from libqtile.config import Click, Drag
 from libqtile.config import EzKey as Key
 from libqtile.config import Group, Match, Screen
+from libqtile.layout.base import Layout
+from libqtile.layout.floating import Floating
+from libqtile.layout.max import Max
+from libqtile.layout.xmonad import MonadTall
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 
@@ -189,7 +194,9 @@ keys = [
     Key("M-S-j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key("M-S-k", lazy.layout.shuffle_up(), desc="Move window up"),
     Key(
-        "M-S-<Left>", lazy.layout.shuffle_left(), desc="Move window to the left"
+        "M-S-<Left>",
+        lazy.layout.shuffle_left(),
+        desc="Move window to the left",
     ),
     Key(
         "M-S-<Right>",
@@ -332,13 +339,13 @@ keys = [
     # Brightness {{{
     Key(
         "<XF86MonBrightnessUp>",
-        lazy.spawn("xbacklight -inc 10"),
+        lazy.spawn("brightnessctl s 10+"),
         update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86MonBrightnessDown>",
-        lazy.spawn("xbacklight -dec 10"),
+        lazy.spawn("brightnessctl s 10-"),
         update_brightness(),
         desc="Dec Brightness",
     ),
@@ -349,9 +356,7 @@ keys = [
     Key("C-A-c", lazy.spawn("xcolor -s"), desc="Launch Color Picker"),
     Key("C-A-p", lazy.spawn("get-class-name"), desc="Copy WM_CLASS name"),
     Key("<Print>", lazy.spawn("take_ss full"), desc="Take screenshot(FULL)"),
-    Key(
-        "S-<Print>", lazy.spawn("take_ss focus"), desc="Take screenshot(FOCUS)"
-    ),
+    Key("S-<Print>", lazy.spawn("take_ss focus"), desc="Take screenshot(FOCUS)"),
     Key("M-A-c", lazy.spawn("open-rcs"), desc="Open a config file"),
     Key("M-A-g", lazy.spawn("open-games"), desc="Launch game menu"),
     Key("M-C-s", lazy.spawn("logout_prompt"), desc="Launch logout Prompt"),
@@ -380,30 +385,30 @@ for i in groups:
 # }}}
 
 # Layout {{{
-layout_theme = {
+layout_theme: Dict[str, Union[str, int]] = {
     "border_width": 3,
     "margin": 4,
     "border_focus": "#bd93f9",
     "border_normal": "#1D2330",
 }
-layouts = [
-    layout.MonadTall(
+layouts: List[Layout] = [
+    MonadTall(
         change_size=10,
         single_border_width=0,
         single_margin=0,
         new_client_position="top",
         **layout_theme,
     ),
-    layout.Max(),
-    layout.Floating(),
+    Max(),
+    Floating(),
 ]
 # }}}
 
 # Bar {{{
-widget_defaults = dict(
+widget_defaults: Dict[str, Union[str, int]] = dict(
     font="Ubuntu Medium",
-    fontsize=16,
-    padding=3,
+    fontsize=12,
+    padding=2,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -425,12 +430,12 @@ colors = [
 def NerdIcon(icon="", fg=colors[0], bg=colors[1]):
     return widget.TextBox(
         fmt=icon,
-        fontsize=20,
+        fontsize=18,
         font="FuraCode Nerd Font",
         background=bg,
         foreground=fg,
-        margin=5,
-        padding_x=10,
+        margin=3,
+        padding_x=8,
     )
 
 
@@ -450,7 +455,7 @@ def calIcon(level: int, icons: list[str]) -> str:
 def getIcon(name: str) -> str:
 
     if name == "battery":
-        with open("/sys/class/power_supply/BAT0/capacity", "r") as bat_file:
+        with open("/sys/class/power_supply/BAT1/capacity", "r") as bat_file:
             bat_level = int(bat_file.read().strip())
             return calIcon(
                 bat_level,
@@ -478,7 +483,7 @@ def getIcon(name: str) -> str:
         return calIcon(
             int(
                 float(
-                    subprocess.run(["light"], stdout=subprocess.PIPE)
+                    subprocess.run(["brightnessctl", "g"], stdout=subprocess.PIPE)
                     .stdout.decode("utf-8")
                     .strip()
                 )
@@ -490,7 +495,8 @@ def getIcon(name: str) -> str:
         return "Unknown"
 
 
-def ArrowSep(icon=""):
+def ArrowSep():
+    # icon=""
     # return widget.TextBox(
     #     text=icon,
     #     font="FuraCode Nerd Font",
@@ -503,17 +509,8 @@ screens = [
     Screen(
         top=bar.Bar(
             [
-                # widget.TextBox(
-                #     fmt="",
-                #     fontsize=16,
-                #     font="Iosevka Nerd Font",
-                #     padding=8,
-                #     mouse_callbacks={
-                #         "Button1": lambda: qtile.cmd_spawn("rofi -show drun")
-                #     },
-                # ),
                 widget.GroupBox(
-                    fontsize=18,
+                    fontsize=14,
                     margin_y=3,
                     margin_x=2,
                     padding_y=5,
@@ -565,21 +562,21 @@ screens = [
                     name="brightness_icon",
                     func=lambda: getIcon("brightness"),
                     font="FuraCode Nerd Font",
-                    fontsize=22,
+                    fontsize=18,
                     foreground=colors[0],
                     background=colors[10],
                     update_interval=60,
-                    padding=5,
+                    padding=3,
                 ),
                 widget.GenPollText(
                     name="brightness",
                     func=lambda: subprocess.run(
-                        ["xbacklight"],
+                        ["brightnessctl", "g"],
                         stdout=subprocess.PIPE,
                     )
                     .stdout.decode("utf-8")
                     .strip()[:2],
-                    padding=5,
+                    padding=3,
                     foreground=colors[0],
                     background="#eeeeee",
                 ),
@@ -588,11 +585,11 @@ screens = [
                     name="volume_icon",
                     func=lambda: getIcon("volume"),
                     font="FuraCode Nerd Font",
-                    fontsize=22,
+                    fontsize=18,
                     foreground=colors[0],
                     background=colors[5],
                     update_interval=60,
-                    padding=5,
+                    padding=3,
                 ),
                 widget.GenPollText(
                     name="volume",
@@ -602,7 +599,7 @@ screens = [
                     )
                     .stdout.decode("utf-8")
                     .strip(),
-                    padding=5,
+                    padding=3,
                     foreground=colors[0],
                     background="#eeeeee",
                     update_interval=10,
@@ -616,10 +613,10 @@ screens = [
                     foreground=colors[6],
                     background="#86EFAC",
                     update_interval=60,
-                    padding=5,
+                    padding=3,
                 ),
                 widget.Battery(
-                    battery="BAT0",
+                    battery="BAT1",
                     unknown_char="",
                     discharge_char="",
                     empty_char="",
@@ -629,8 +626,8 @@ screens = [
                     low_foreground=colors[5],
                     notify_below=15,
                     # font="Iosevka Nerd Font",
-                    fontsize=18,
-                    padding=5,
+                    fontsize=14,
+                    padding=3,
                     foreground=colors[0],
                     background="#eeeeee",
                 ),
@@ -642,7 +639,7 @@ screens = [
                 widget.CurrentLayoutIcon(scale=0.7),
                 widget.Systray(),
             ],
-            26,
+            24,
             background="#1a1826",
             opacity=0.6,
         ),
@@ -651,7 +648,7 @@ screens = [
 # }}}
 
 # Drag floating layouts. {{{
-mouse = [
+mouse: List[Union[Drag, Click]] = [
     Drag(
         [mod],
         "Button1",
@@ -681,12 +678,12 @@ wl_input_rules = None
 wmname = "LG3D"
 
 # Assign app layout/group {{{
-floating_layout = layout.Floating(
+floating_layout = Floating(
     border_focus=colors[2],
     border_normal=colors[6],
     border_width=3,
     float_rules=[
-        *layout.Floating.default_float_rules,
+        *Floating.default_float_rules,
         Match(wm_class="confirmreset"),  # gitk
         Match(wm_class="makebranch"),  # gitk
         Match(wm_class="maketag"),  # gitk
@@ -711,7 +708,7 @@ floating_layout = layout.Floating(
 
 @hook.subscribe.client_new
 def assign_app_group(client):
-    wm_class = client.window.get_wm_class()[0]
+    wm_class: str = client.window.get_wm_class()[0]
     if wm_class in [
         "Navigator",
         "firefox",
@@ -720,8 +717,11 @@ def assign_app_group(client):
         "qutebrowser",
         "LibreWolf",
         "Chromium",
+        "chromium",
         "Chromium-browser",
         "chromium-browser",
+        "brave-browser",
+        "Brave-browser",
         "vieb",
     ]:
         client.togroup(groups[1].name, switch_group=True)
