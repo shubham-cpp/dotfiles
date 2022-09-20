@@ -10,7 +10,7 @@ if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
   bash ~/.local/bin/myscripts/default_mouse_settings &
   # setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
   # xcape -e 'Control_L=Escape'
-  # numlockx on
+  numlockx on
   xset -b
   xsetroot -cursor_name left_ptr
 fi
