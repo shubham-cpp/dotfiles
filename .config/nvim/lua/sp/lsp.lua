@@ -276,17 +276,17 @@ lspconfig.tailwindcss.setup({ -- {{{
 	capabilities = cmp_capabilities,
 	on_attach = on_attach,
 	flags = { debounce_text_changes = 150 },
-	-- filetypes = {
-	--     'typescriptreact',
-	--     'javascriptreact',
-	--     'javascript.jsx',
-	--     'typescript.tsx',
-	--     'html',
-	--     'css',
-	--     'sass',
-	--     'scss',
-	--     'less',
-	-- },
+	filetypes = {
+		'typescriptreact',
+		'javascriptreact',
+		'javascript.jsx',
+		'typescript.tsx',
+		'html',
+		-- 'css',
+		-- 'sass',
+		-- 'scss',
+		-- 'less',
+	},
 	root_dir = util.root_pattern(
 		'tailwind.config.js',
 		'tailwind.config.cjs',
@@ -309,7 +309,7 @@ local ts_utils = require('nvim-lsp-ts-utils')
 ---@param lhs string keys to map
 ---@param rhs string command to execute with mapping
 local bnoremap = function(bufnr, lhs, rhs)
-	vim.api.nvim_buf_set_keymap(bufnr, 'n', lhs, rhs, { noremap = true, silent = true })
+	vim.keymap.set('n', lhs, rhs, { noremap = true, silent = true, buffer = bufnr })
 end
 lspconfig.tsserver.setup({
 	capabilities = cmp_capabilities,

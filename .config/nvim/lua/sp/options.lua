@@ -68,6 +68,8 @@ g.session_directory = string.format('%s/session', vim.fn.stdpath('data'))
 g.session_autoload = 'no'
 g.session_autosave = 'no'
 g.session_command_aliases = 1
+o.encoding = 'utf-8'
+o.fileencoding = 'utf-8'
 if vim.fn.executable('rg') == 1 then
 	o.grepprg = 'rg --vimgrep --smart-case --hidden --follow'
 end

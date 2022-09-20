@@ -1,4 +1,4 @@
-local map = require('helper').map
+local map = require('sp.helper').map
 
 map('n', ',w', ':w!<cr>')
 map('n', ',W', ':noautocmd w!<cr>')
@@ -58,6 +58,8 @@ map('n', '<C-e>', ':NvimTreeToggle<cr>')
 map('n', '<C-n>', ':NvimTreeFindFileToggle<cr>')
 map('n', '<F7>', ':ColorizerToggle<cr>')
 map('n', '<leader>gg', ':Neogit<cr>')
+-- Copy and Comment
+map('n', '<A-/>', '"ayy"apk<Plug>(comment_toggle_linewise_current)j')
 
 map('o', 'ie', ':exec "normal! ggVG"<cr>', { noremap = true, silent = true })
 map('o', 'iv', ':exec "normal! HVL"<cr>', { noremap = true, silent = true })

@@ -3,12 +3,19 @@ require('nvim-treesitter.configs').setup({
 		'json',
 		'json5',
 		'jsonc',
+		'jsdoc',
+		'yaml',
+		'toml',
 		'html',
 		'css',
+		'scss',
 		'javascript',
 		'typescript',
 		'tsx',
+		'vue',
+		'svelte',
 		'lua',
+		'vim',
 		'python',
 		'java',
 		'c',
@@ -16,13 +23,16 @@ require('nvim-treesitter.configs').setup({
 		'regex',
 		'bash',
 		'fish',
-		'vue',
+		'markdown',
+		'markdown_inline',
+		'comment',
+		'dockerfile',
 	},
 	highlight = {
 		enable = true,
 		use_languagetree = true,
-		disable = { 'org' }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
-		additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
+		-- disable = { 'org' }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
+		-- additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
 	},
 	autotag = { enable = true },
 	context_commentstring = {

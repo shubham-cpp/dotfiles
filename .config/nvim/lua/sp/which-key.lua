@@ -40,7 +40,7 @@ local mappings = {
 	['+'] = { '<cmd>vertical resize +4<CR>', 'Increase win size' },
 	['-'] = { '<cmd>vertical resize -4<CR>', 'Decrease win size' },
 	['='] = 'Format Code',
-	['/'] = { '<CMD>lua require("Comment.api").call("toggle_current_linewise_op")<CR>g@$', 'Toggle Comment' },
+	['/'] = { '<Plug>(comment_toggle_linewise_current)', 'Toggle Comment' },
 	['v'] = { 'v$', 'Select till end' },
 
 	c = {

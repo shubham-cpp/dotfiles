@@ -1,4 +1,5 @@
 return require('packer').startup(function(use)
+	local helper = require('helper')
 	use('wbthomason/packer.nvim')
 	use('lewis6991/impatient.nvim')
 	use('nathom/filetype.nvim')
@@ -20,6 +21,7 @@ return require('packer').startup(function(use)
 	use({ 'tzachar/cmp-tabnine', run = './install.sh', after = 'cmp-cmdline' })
 	use({
 		'f3fora/cmp-spell',
+		-- after = 'cmp-cmdline',
 		after = 'cmp-tabnine',
 		config = function()
 			require('sp.cmp')
@@ -325,6 +327,44 @@ autocmd User targets#mappings#user call targets#mappings#extend({
 		after = 'which-key.nvim',
 		config = function()
 			require('sp.folds')
+		end,
+	})
+	use({
+		'monaqa/dial.nvim',
+		after = 'pretty-fold.nvim',
+		-- keys = { '<C-a>', '<C-x>', 'g<C-a>', 'g<C-x>' },
+		config = function()
+			local map = function(mode, lhs, rhs)
+				require('sp.helper').map(mode, lhs, rhs, { noremap = false, silent = false })
+			end
+			local augend = require('dial.augend')
+			require('dial.config').augends:register_group({
+				default = {
+					augend.integer.alias.decimal,
+					augend.constant.alias.bool,
+					augend.integer.alias.hex,
+					augend.date.alias['%Y/%m/%d'],
+				},
+				typescript = {
+					augend.integer.alias.decimal,
+					augend.integer.alias.hex,
+					augend.constant.new({ elements = { 'let', 'const' } }),
+				},
+				visual = {
+					augend.integer.alias.decimal,
+					augend.integer.alias.hex,
+					augend.integer.alias.hex,
+					augend.date.alias['%Y/%m/%d'],
+					augend.constant.alias.alpha,
+					augend.constant.alias.Alpha,
+				},
+			})
+			map('n', '<C-a>', '<Plug>(dial-increment)')
+			map('n', '<C-x>', '<Plug>(dial-decrement)')
+			map('v', '<C-a>', '<Plug>(dial-increment)')
+			map('v', '<C-x>', '<Plug>(dial-decrement)')
+			map('v', 'g<C-a>', 'g<Plug>(dial-increment)')
+			map('v', 'g<C-x>', 'g<Plug>(dial-decrement)')
 		end,
 	})
 	-- }}}
