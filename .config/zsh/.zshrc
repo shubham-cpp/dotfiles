@@ -77,7 +77,7 @@ compctl -K    _pip_completion pip
 # compdef       _pipenv         pipenv
 compdef       _nvm            nvm
 
-znap eval zlua 'luajit $HOME/Downloads/Gits/z.lua/z.lua --init zsh enhanced once fzf'
+znap eval zlua 'luajit $HOME/Downloads/GitClones/z.lua/z.lua --init zsh enhanced once fzf'
 # source ~/Downloads/Gits/z.lua/z.lua.plugin.zsh
 
 source "$ZDOTDIR"/alias.zsh
