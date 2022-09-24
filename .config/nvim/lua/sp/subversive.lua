@@ -1,5 +1,5 @@
 local function map(mode, lhs, rhs)
-	vim.api.nvim_set_keymap(mode, lhs, rhs, {})
+  vim.api.nvim_set_keymap(mode, lhs, rhs, {})
 end
 
 map('n', 'x', '<plug>(SubversiveSubstitute)')

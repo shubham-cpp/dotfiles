@@ -34,3 +34,6 @@ npm
 .ccls-cache/
 
 .config/vifm/vifminfo.json_66761
+
+.config/qtile/__pycache__
+.config/suckless/my-st/tmux-client-29128.log

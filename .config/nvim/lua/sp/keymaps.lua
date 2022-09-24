@@ -26,8 +26,6 @@ map('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent
 -- map("", "<leader>ss", ":setlocal spell!<cr>")
 -- map("", "<leader>sa", "zg")
 map('n', '<leader>yp', '"ayy"ap')
-map('x', '<leader>/', '<esc><cmd>lua require("Comment.api").toggle_linewise_op(vim.fn.visualmode())<cr>')
-map('x', '<A-/>', '"ayy"apk<cmd>lua require("Comment.api").toggle_linewise_op(vim.fn.visualmode())<cr>')
 
 -- Pasting in visual mode doesn't copy
 map('x', 'p', [[ 'pgv"'.v:register.'y' ]], { noremap = true, expr = true })
@@ -58,6 +56,8 @@ map('n', '<C-e>', ':NvimTreeToggle<cr>')
 map('n', '<C-n>', ':NvimTreeFindFileToggle<cr>')
 map('n', '<F7>', ':ColorizerToggle<cr>')
 map('n', '<leader>gg', ':Neogit<cr>')
+
+map('x', '<leader>/', '<Plug>(comment_toggle_linewise_visual)')
 -- Copy and Comment
 map('n', '<A-/>', '"ayy"apk<Plug>(comment_toggle_linewise_current)j')
 

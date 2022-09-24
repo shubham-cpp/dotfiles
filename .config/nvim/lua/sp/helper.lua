@@ -7,8 +7,8 @@ local M = {}
 ---@param opts ?table contains options like noremap,silent
 ---@see nvim_set_keymap
 function M.map(mode, lhs, rhs, opts)
-	local opts = opts == nil and { silent = true, noremap = true } or opts
-	vim.keymap.set(mode, lhs, rhs, opts)
+  local opts = opts == nil and { silent = true, noremap = true } or opts
+  vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 ---An alias to nvim_buf_set_keymap
@@ -19,15 +19,15 @@ end
 ---@param bufnr ?number buffer id
 ---@see nvim_buf_set_keymap
 function M.bmap(mode, lhs, rhs, opts, bufnr)
-	local opts = opts == nil and { silent = true, noremap = true } or opts
-	opts.buffer = bufnr or true
-	vim.keymap.set(mode, lhs, rhs, opts)
+  local opts = opts == nil and { silent = true, noremap = true } or opts
+  opts.buffer = bufnr or true
+  vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 ---Wrapper function to print lua table
 ---@param value table Table to print
 function _G.p(value)
-	print(vim.inspect(value))
+  print(vim.inspect(value))
 end
 
 return M

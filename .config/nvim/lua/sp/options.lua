@@ -26,12 +26,12 @@ o.iskeyword:append('-')
 o.wildignorecase = true
 o.wildmode = 'longest,list,full'
 o.wildignore:prepend({
-	'*.out,*.o,*.pyc,*~,*.class,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*/venv/*,*/__pycache__/*,*.jpg,*.png,*.svg,*.jpeg,*.jpg',
-	'*.mp4',
-	'**/node_modules/*',
-	'**/build/*',
-	'**/coverage/*',
-	'*.mkv',
+  '*.out,*.o,*.pyc,*~,*.class,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*/venv/*,*/__pycache__/*,*.jpg,*.png,*.svg,*.jpeg,*.jpg',
+  '*.mp4',
+  '**/node_modules/*',
+  '**/build/*',
+  '**/coverage/*',
+  '*.mkv',
 })
 o.ignorecase = true
 o.smartcase = true
@@ -71,7 +71,7 @@ g.session_command_aliases = 1
 o.encoding = 'utf-8'
 o.fileencoding = 'utf-8'
 if vim.fn.executable('rg') == 1 then
-	o.grepprg = 'rg --vimgrep --smart-case --hidden --follow'
+  o.grepprg = 'rg --vimgrep --smart-case --hidden --follow'
 end
 
 cmd([[ command! Q :q! ]])
@@ -84,28 +84,28 @@ g.python3_host_skip_check = 1
 g.python3_host_prog = '/usr/bin/python'
 
 local disabled_built_ins = {
-	'netrw',
-	'netrwPlugin',
-	'netrwSettings',
-	'netrwFileHandlers',
-	'gzip',
-	'zip',
-	'zipPlugin',
-	'tar',
-	'tarPlugin',
-	'getscript',
-	'getscriptPlugin',
-	'vimball',
-	'vimballPlugin',
-	'2html_plugin',
-	'logipat',
-	'rrhelper',
-	'spellfile_plugin',
-	'matchit',
+  'netrw',
+  'netrwPlugin',
+  'netrwSettings',
+  'netrwFileHandlers',
+  'gzip',
+  'zip',
+  'zipPlugin',
+  'tar',
+  'tarPlugin',
+  'getscript',
+  'getscriptPlugin',
+  'vimball',
+  'vimballPlugin',
+  '2html_plugin',
+  'logipat',
+  'rrhelper',
+  'spellfile_plugin',
+  'matchit',
 }
 
 for _, plugin in pairs(disabled_built_ins) do
-	vim.g['loaded_' .. plugin] = 1
+  vim.g['loaded_' .. plugin] = 1
 end
 
 -- }}}

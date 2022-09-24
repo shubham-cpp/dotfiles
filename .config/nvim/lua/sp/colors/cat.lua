@@ -1,26 +1,26 @@
 require('catppuccin').setup({
-    -- transparent_background = true,
-    styles = {
-        comments = 'italic',
-        functions = 'italic',
-        keywords = 'italic',
-        strings = 'NONE',
-        variables = 'NONE',
+  -- transparent_background = true,
+  styles = {
+    comments = 'italic',
+    functions = 'italic',
+    keywords = 'italic',
+    strings = 'NONE',
+    variables = 'NONE',
+  },
+  integrations = {
+    nvimtree = {
+      enabled = true,
+      show_root = true,
+      transparent_panel = true,
     },
-    integrations = {
-        nvimtree = {
-            enabled = true,
-            show_root = true,
-            transparent_panel = true,
-        },
-        which_key = true,
-        indent_blankline = {
-            enabled = true,
-            colored_indent_levels = true,
-        },
-        neogit = true,
-        hop = true,
+    which_key = true,
+    indent_blankline = {
+      enabled = true,
+      colored_indent_levels = true,
     },
+    neogit = true,
+    hop = true,
+  },
 })
 -- local colors = require('catppuccin.api.colors').get_colors()
 -- local cat = require('catppuccin')
