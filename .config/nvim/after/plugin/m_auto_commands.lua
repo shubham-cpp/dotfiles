@@ -31,7 +31,7 @@ local highlight_yank_commands = {
 
 for event, opts in pairs(highlight_yank_commands) do
   if opts.callback == nil and opts.command == nil then
-    print("You didn't specify and command or callback for autocommand")
+    print "You didn't specify and command or callback for autocommand"
     return 1
   end
   opts.group = highlight_yank
@@ -166,7 +166,7 @@ local file_reloads_commands = {
 
 for _, cmds in ipairs(file_reloads_commands) do
   if cmds.opts.callback == nil and cmds.opts.command == nil then
-    print("You didn't specify and command or callback for autocommand")
+    print "You didn't specify and command or callback for autocommand"
     return 1
   end
   cmds.opts.pattern = cmds.opts.pattern or '*'
@@ -267,7 +267,7 @@ local comments_commands = {
 
 for _, cmds in ipairs(comments_commands) do
   if cmds.opts.callback == nil and cmds.opts.command == nil then
-    print("You didn't specify and command or callback for autocommand")
+    print "You didn't specify and command or callback for autocommand"
     return 1
   end
   cmds.opts.pattern = cmds.opts.pattern or '*'
@@ -296,7 +296,7 @@ local dynamic_smartcase_commands = {
 
 for _, cmds in ipairs(dynamic_smartcase_commands) do
   if cmds.opts.callback == nil and cmds.opts.command == nil then
-    print("You didn't specify and command or callback for autocommand")
+    print "You didn't specify and command or callback for autocommand"
     return 1
   end
   cmds.opts.pattern = cmds.opts.pattern or '*'
@@ -325,7 +325,7 @@ local key_bindings_commands = {
 
 for _, cmds in ipairs(key_bindings_commands) do
   if cmds.opts.callback == nil and cmds.opts.command == nil then
-    print("You didn't specify and command or callback for autocommand")
+    print "You didn't specify and command or callback for autocommand"
     return 1
   end
   cmds.opts.pattern = cmds.opts.pattern or '*'
@@ -359,7 +359,7 @@ for _, aucmd in ipairs(ft_key_binds_commands) do
 end
 --- }}}
 
-vim.cmd([[
+vim.cmd [[
 " Some commands from vimfandom {{{
 " Search for selected text, forwards or backwards.
 vnoremap <silent> * :<C-U>
@@ -373,4 +373,4 @@ vnoremap <silent> # :<C-U>
             \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
             \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 "}}}
-]])
+]]

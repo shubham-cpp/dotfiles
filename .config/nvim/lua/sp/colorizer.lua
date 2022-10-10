@@ -1,21 +1,19 @@
-local colorizer = require('colorizer')
-colorizer.setup({
-  'html',
-  'css',
-  'scss',
-  'lua',
-  'javascript',
-  'typescript',
-  'javascriptreact',
-  'typescriptreact',
-  'xdefaults',
-}, {
-  RGB = true,
-  RRGGBB = true,
-  names = true,
-  RRGGBBAA = true,
-  rgb_fn = true,
-  hsl_fn = true,
-  css = true,
-  css_fn = true,
+require('colorizer').setup({
+  filetypes = { '*' },
+  user_default_options = {
+    -- RRGGBBAA = true,
+    rgb_fn = true,
+    hsl_fn = true,
+    -- css = true,
+    -- css_fn = true,
+    tailwind = true,
+    virtualtext = '■',
+    -- Available modes for `mode`: foreground, background,  virtualtext
+    mode = 'background',
+  },
+  buftypes = {
+    -- exclude prompt and popup buftypes from highlight
+    '!prompt',
+    '!popup',
+  },
 })

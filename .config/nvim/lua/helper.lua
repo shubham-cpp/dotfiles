@@ -32,9 +32,9 @@ end
 
 function NewName()
   local position_params = vim.lsp.util.make_position_params()
-  vim.ui.input({ prompt = 'Enter new name', default = vim.fn.expand('<cword>') }, function(newName)
+  vim.ui.input({ prompt = 'Enter new name', default = vim.fn.expand '<cword>' }, function(newName)
     if newName == '' or not newName then
-      print('Please provide a new name')
+      print 'Please provide a new name'
       return
     end
     position_params.newName = newName
@@ -47,7 +47,7 @@ function NewName()
       })
       -- TODO: Handle err properly
       if method.changes == nil then
-        print('Error while renaming')
+        print 'Error while renaming'
         p({ err = err })
         return
       end

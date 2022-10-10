@@ -3,13 +3,13 @@ local conditions = {
     if vim.opt.filetype._value == 'toggleterm' then
       return false
     end
-    return vim.fn.empty(vim.fn.expand('%:t')) ~= 1
+    return vim.fn.empty(vim.fn.expand '%:t') ~= 1
   end,
   hide_in_width = function()
     return vim.fn.winwidth(0) > 80
   end,
   check_git_workspace = function()
-    local filepath = vim.fn.expand('%:p:h')
+    local filepath = vim.fn.expand '%:p:h'
     local gitdir = vim.fn.finddir('.git', filepath .. ';')
     return gitdir and #gitdir > 0 and #gitdir < #filepath
   end,
@@ -48,7 +48,7 @@ require('lualine').setup({
     -- everforest | horizon | iceberg_dark | moonfly | nightfly
     -- modus-vivendi | nord
     -- If themes: material-nvim = material-stealth | tokyonight = tokyonight
-    -- theme = 'modus-vivendi',
+    theme = 'horizon',
     component_separators = '|',
     section_separators = { left = '', right = '' },
     disabled_filetypes = {},
@@ -153,7 +153,7 @@ require('lualine').setup({
         separator = { right = '' },
         left_padding = 2,
         on_click = function()
-          os.execute('xdg-open ' .. vim.fn.expand('%:h'))
+          os.execute('xdg-open ' .. vim.fn.expand '%:h')
         end,
       },
       {

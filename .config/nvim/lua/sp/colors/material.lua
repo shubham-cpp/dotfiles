@@ -1,7 +1,7 @@
 -- Options: deep ocean | darker | palenight | oceanic
 vim.g.material_style = 'deep ocean'
 vim.g.material_disable_background = true
-local colors = require('material.colors')
+local colors = require 'material.colors'
 
 require('material').setup({
   custom_highlights = {
@@ -26,4 +26,4 @@ require('material').setup({
   },
   lualine_style = 'stealth',
 })
-vim.cmd('colorscheme material')
+vim.cmd 'colorscheme material'

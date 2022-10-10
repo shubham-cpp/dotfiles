@@ -1,10 +1,12 @@
-local npairs = require('nvim-autopairs')
-local Rule = require('nvim-autopairs.rule')
+local npairs = require 'nvim-autopairs'
+local Rule = require 'nvim-autopairs.rule'
 
 -- Fix enter issue {{{
-local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-local cmp = require('cmp')
-cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
+local ok_cmp, cmp = pcall(require, 'cmp')
+if ok_cmp then
+  local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+  cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done({ map_char = { tex = '' } }))
+end
 --}}}
 
 npairs.setup({
@@ -22,25 +24,25 @@ npairs.add_rules({
       return false
     end)
     :with_move(function(opts)
-      return opts.prev_char:match('.%)') ~= nil
+      return opts.prev_char:match '.%)' ~= nil
     end)
-    :use_key(')'),
+    :use_key ')',
   Rule('{ ', ' }')
     :with_pair(function()
       return false
     end)
     :with_move(function(opts)
-      return opts.prev_char:match('.%}') ~= nil
+      return opts.prev_char:match '.%}' ~= nil
     end)
-    :use_key('}'),
+    :use_key '}',
   Rule('[ ', ' ]')
     :with_pair(function()
       return false
     end)
     :with_move(function(opts)
-      return opts.prev_char:match('.%]') ~= nil
+      return opts.prev_char:match '.%]' ~= nil
     end)
-    :use_key(']'),
+    :use_key ']',
 })
 --}}}
 -- Arrow Function {{{

@@ -1,11 +1,11 @@
 local M = {}
-local map = require('helper').map
-local telescope = require('telescope')
-local previewers = require('telescope.previewers')
-local themes = require('telescope.themes')
-local builtin = require('telescope.builtin')
-local actions = require('telescope.actions')
-local action_layout = require('telescope.actions.layout')
+local map = require('sp.helper').map
+local telescope = require 'telescope'
+local previewers = require 'telescope.previewers'
+local themes = require 'telescope.themes'
+local builtin = require 'telescope.builtin'
+local actions = require 'telescope.actions'
+local action_layout = require 'telescope.actions.layout'
 
 local center_list = themes.get_dropdown({
   winblend = 10,
@@ -17,13 +17,13 @@ function M.fd_nvim()
   local opts = themes.get_dropdown({})
   opts.previewer = false
   opts.prompt_prefix = '  '
-  opts.cwd = vim.fn.stdpath('config')
+  opts.cwd = vim.fn.stdpath 'config'
   builtin.fd(opts)
 end
 
 function M.fd_dotfiles()
   local opts = themes.get_dropdown({})
-  local dotfiles = io.popen("readlink -f ~/.config/awesome/ | cut -d'.' -f1")
+  local dotfiles = io.popen "readlink -f ~/.config/awesome/ | cut -d'.' -f1"
   opts.previewer = false
   opts.hidden = true
   opts.prompt_prefix = '  '
@@ -31,11 +31,13 @@ function M.fd_dotfiles()
     opts.cwd = dotfiles:read()
     dotfiles:close()
   else
-    opts.cwd = os.getenv('HOME') .. '/Documents/dotfiles'
+    opts.cwd = os.getenv 'HOME' .. '/Documents/dotfiles'
   end
   builtin.find_files(opts)
 end
 
+--- Custom find file picked up from telescope docs
+---@param hidden boolean Determine whether to show hidden files or not
 function M.find_files(hidden)
   local dropdown_theme = themes.get_dropdown({
     borderchars = {
@@ -113,33 +115,35 @@ telescope.setup({
     },
   },
 })
-telescope.load_extension('zf-native')
-vim.cmd([[ command! -bang Nvim :lua require'config.telescope'.fd_nvim()<CR> ]])
-vim.cmd([[ command! -bang DotFiles :lua require'config.telescope'.fd_dotfiles()<CR> ]])
-vim.cmd([[ command! -bang MGrep :lua require'config.telescope'.grep_current()<CR> ]])
+telescope.load_extension 'zf-native'
+vim.cmd [[ command! -bang Nvim :lua require'sp.telescope'.fd_nvim()<CR> ]]
+vim.cmd [[ command! -bang DotFiles :lua require'sp.telescope'.fd_dotfiles()<CR> ]]
+vim.cmd [[ command! -bang MGrep :lua require'sp.telescope'.grep_current()<CR> ]]
 
 local ok, _ = pcall(require, 'fzf-lua')
 if not ok then
-  map('n', '<C-p>', "<cmd>lua require('config.telescope').find_files()<cr>")
-  map('n', ',c', "<cmd>lua require('config.telescope').fd_nvim()<cr>")
-  map('n', ',d', "<cmd>lua require('config.telescope').fd_dotfiles()<cr>")
-  map('n', '\\\\', "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-  map('n', '<leader>gla', "<cmd>lua require('telescope.builtin').git_commits()<cr>")
-  map('n', '<leader>glc', "<cmd>lua require('telescope.builtin').git_bcommits()<cr>")
-  map('n', '<leader>gs', "<cmd>lua require('telescope.builtin').git_status()<cr>")
-  map('n', '<leader>gb', "<cmd>lua require('telescope.builtin').git_branches()<cr>")
+  map('n', '<C-p>', M.find_files)
+  map('n', ',c', M.fd_nvim)
+  map('n', ',d', M.fd_dotfiles)
+  map('n', '\\\\', builtin.live_grep)
+  map('n', '<leader>gla', builtin.git_commits)
+  map('n', '<leader>glc', builtin.git_bcommits)
+  map('n', '<leader>gs', builtin.git_status)
+  map('n', '<leader>gb', builtin.git_branches)
 end
 
-map('n', '<leader>ff', "<cmd>lua require('config.telescope').find_files(true)<cr>")
-map('n', '<leader>fn', "<cmd>lua require('config.telescope').fd_nvim()<cr>")
-map('n', '<leader>fd', "<cmd>lua require('config.telescope').fd_dotfiles()<cr>")
-map('n', '<leader>fs', "<cmd>lua require('config.telescope').grep_current()<cr>")
-map('n', '<leader>fS', "<cmd>lua require('telescope.builtin').live_grep()<cr>")
-map('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>")
-map('n', '<leader>fH', "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
-map('n', '<leader>fc', "<cmd>lua require('telescope.builtin').colorscheme()<cr>")
-map('n', '<leader>fz', "<cmd>lua require('telescope.builtin').spell_suggest()<cr>")
-map('n', '<leader>fg', "<cmd>lua require('telescope.builtin').git_status()<cr>")
-map('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>")
+map('n', '<leader>ff', function()
+  M.find_files(true)
+end)
+map('n', '<leader>fn', M.fd_nvim)
+map('n', '<leader>fd', M.fd_dotfiles)
+map('n', '<leader>fs', M.grep_current)
+map('n', '<leader>fS', builtin.live_grep)
+map('n', '<leader>fh', builtin.help_tags)
+map('n', '<leader>fH', builtin.oldfiles)
+map('n', '<leader>fc', builtin.colorscheme)
+map('n', '<leader>fz', builtin.spell_suggest)
+map('n', '<leader>fg', builtin.git_status)
+map('n', '<leader>fb', builtin.buffers)
 
 return M

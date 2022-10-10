@@ -1,6 +1,6 @@
 local Terminal = require('toggleterm.terminal').Terminal
-local toggleterm = require('toggleterm')
-local map = require('helper').map
+local toggleterm = require 'toggleterm'
+local map = require('sp.helper').map
 local bmap = require('helper').bmap
 
 function _G.set_terminal_keymaps()
@@ -32,7 +32,7 @@ function Lazygit_toggle()
 end
 
 local ranger = Terminal:new({
-  cmd = 'ranger',
+  cmd = 'vifmrun',
   -- dir = 'git_dir',
   direction = 'float',
   float_opts = {
@@ -68,17 +68,17 @@ toggleterm.setup({
     },
   },
 })
-vim.cmd([[
+vim.cmd [[
     augroup ToggleTerm
         autocmd!
         au FileType toggleterm set nonu
         au TermOpen term://*toggleterm#* lua set_terminal_keymaps()
     augroup END
-]])
-vim.cmd([[ command! -count=1 Vifm  lua require'toggleterm'.exec("vifm",<count>, 12) ]])
+]]
+vim.cmd [[ command! -count=1 Vifm  lua require'toggleterm'.exec("vifm",<count>, 12) ]]
 map('n', '<Space>tg', function()
   lazygit:toggle()
 end)
-map('n', '<Space>tf', function()
+map('n', '<Space>tF', function()
   ranger:toggle()
 end)

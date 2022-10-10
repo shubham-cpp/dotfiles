@@ -99,34 +99,13 @@ local mappings = {
     H = 'Recent Files',
   },
   s = {
-    name = 'Session/Switch',
+    name = 'Session',
     s = { '<cmd>SessionManager save_current_session<cr>', 'Save' },
     l = { '<cmd>SessionManager load_session<cr>', 'Load' },
     L = { '<cmd>SessionManager load_last_session<cr>', 'Load Last' },
     c = { '<cmd>SessionManager load_current_dir_session<cr>', 'Load Current dir ' },
     d = { '<cmd>SessionManager delete_session<cr>', 'Delete' },
-    t = { ':Switch<cr>', 'Switch(Toggle true/false)' },
-    T = { ':SwitchReverse<cr>', 'Switch Reverse(Toggle true/false)' },
   },
-  -- n = {
-  -- 	name = "Notes",
-  -- 	a = "Show Tags",
-  -- 	c = "Show Calendar",
-  -- 	C = { "CalendarT", "Show Calendar(plugin)" },
-  -- 	d = "Find Daily",
-  -- 	f = "Find",
-  -- 	i = "Insert Link",
-  -- 	I = "Insert Link(Img)",
-  -- 	n = "Create New",
-  -- 	N = "Create Template",
-  -- 	p = "Show Panel",
-  -- 	r = "Rename",
-  -- 	s = "Search",
-  -- 	t = "Toggle Todo",
-  -- 	T = { ":GenTocMarked<cr>", "Generate TOC" },
-  -- 	y = "Yank Note Link",
-  -- 	z = "Follow Link",
-  -- },
   z = {
     name = 'Spelling',
     z = { '<cmd>setlocal spell!<cr>', 'Toggle Spelling' },
@@ -134,17 +113,20 @@ local mappings = {
     ['='] = { "<cmd>lua require'telescope.builtin'.spell_suggest{}<CR>", 'First correction' },
   },
   t = {
-    name = 'Terminal',
-    m = { 'toggle' },
-    t = { 'tableize' },
+    name = 'Toggles',
+    c = { '<cmd>ColorizerToggle<cr>', 'Colors' },
+    f = { '<cmd>NvimTreeFindFileToggle<cr>', 'File Tree' },
+    F = 'Vifm File manager',
+    g = 'Lazgit',
   },
 }
 
-local wk = require('which-key')
+local wk = require 'which-key'
 wk.register(mappings, { prefix = '<leader>' })
 wk.register({
   s = { [[ :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]], 'Replace word' },
   w = { ':w!<cr>', 'save file' },
+  W = { ':noautocmd w!<cr>', 'save without autocmd' },
   c = 'Neovim config',
   d = 'Dotfiles',
   z = 'Spell suggest',
@@ -168,6 +150,6 @@ wk.register({
     e = 'Line Diagnostics',
     t = 'Goto type definition',
     d = 'Goto definition',
-    -- a = {  c = "Code action" },
+    a = { c = 'Code action' },
   },
 })

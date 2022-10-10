@@ -1,23 +1,21 @@
-local gears = require('gears')
+local xresources = require 'beautiful.xresources'
+local gears = require 'gears'
+
 local gfs = gears.filesystem
--- local awful = require("awful")
--- local wibox = require("wibox")
-local xresources = require('beautiful.xresources')
 local dpi = xresources.apply_dpi
 
 -- local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 local icon_dir = gfs.get_xdg_data_home() .. 'icons/Papirus-Dark/symbolic/actions'
--- local icon_dir = '/usr/share/icons/Surfn-Breeze-Dark/32x32/actions'
 if not gfs.dir_readable(icon_dir) then
-	require('naughty').notify({
-		preset = require('naughty').config.presets.critical,
-		title = 'Current Layout',
-		timeout = 2,
-		text = 'icon_dir ' .. icon_dir .. ' does not exist',
-	})
+  require('naughty').notify({
+    preset = require('naughty').config.presets.critical,
+    title = 'Current Layout',
+    timeout = 2,
+    text = 'icon_dir ' .. icon_dir .. ' does not exist',
+  })
 end
 
-local theme_assets = require('beautiful.theme_assets')
+local theme_assets = require 'beautiful.theme_assets'
 local themes_path = gfs.get_themes_dir()
 local theme = {}
 -- theme.dir                                       = homedir .. "/.config/awesome/themes/powerarrow-dark"
@@ -92,10 +90,10 @@ theme.titlebar_ontop_button_focus_inactive = icon_dir .. '/window-keep-above.svg
 theme.titlebar_ontop_button_normal_active = icon_dir .. '/window-keep-below.svg'
 theme.titlebar_ontop_button_normal_inactive = icon_dir .. '/window-keep-below.svg'
 
-theme.titlebar_sticky_button_focus_active = icon_dir .. '/window-pin.svg'
-theme.titlebar_sticky_button_focus_inactive = icon_dir .. '/window-pin.svg'
-theme.titlebar_sticky_button_normal_active = icon_dir .. '/window-unpin.svg'
-theme.titlebar_sticky_button_normal_inactive = icon_dir .. '/window-unpin.svg'
+theme.titlebar_sticky_button_focus_active = icon_dir .. '/view-pin-symbolic.svg'
+theme.titlebar_sticky_button_focus_inactive = icon_dir .. '/view-pin-symbolic.svg'
+theme.titlebar_sticky_button_normal_active = icon_dir .. '/pane-hide-symbolic.svg'
+theme.titlebar_sticky_button_normal_inactive = icon_dir .. '/pane-hide-symbolic.svg'
 
 -- theme.titlebar_floating_button_focus_active = theme.dir .. "/icons/titlebar/floating_focus_active.png"
 -- theme.titlebar_floating_button_normal_active = theme.dir .. "/icons/titlebar/floating_normal_active.png"

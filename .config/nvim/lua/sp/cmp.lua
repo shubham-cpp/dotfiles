@@ -2,20 +2,20 @@ local ok, cmp = pcall(require, 'cmp')
 if not ok then
   return
 end
-local compare = require('cmp.config.compare')
-local sources = require('cmp.config.sources')
-local window = require('cmp.config.window')
+local compare = require 'cmp.config.compare'
+local sources = require 'cmp.config.sources'
+local window = require 'cmp.config.window'
 vim.opt.completeopt = 'menu,menuone,noselect'
-vim.g.vsnip_snippet_dir = vim.fn.stdpath('config') .. '/vsnip'
+vim.g.vsnip_snippet_dir = vim.fn.stdpath 'config' .. '/vsnip'
 vim.g.vsnip_filetypes = {
-  javascriptreact = { 'javascript', 'html' },
-  typescriptreact = { 'typescript', 'html' },
+  javascriptreact = { 'javascript' }, --, 'html' },
+  typescriptreact = { 'typescript' }, --, 'html' },
   svelte = { 'javascript' },
   vue = { 'html' },
 }
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match('%s') == nil
+  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
 end
 
 local feedkey = function(key, mode)
@@ -68,6 +68,13 @@ cmp.setup({
       vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
     end,
   },
+  window = {
+    completion = {
+      winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,Search:None',
+      col_offset = -3,
+      side_padding = 0,
+    },
+  },
   mapping = cmp.mapping.preset.insert({
     ['<C-x><C-s>'] = cmp.mapping.complete({
       config = { sources = { { name = 'vsnip' } } },
@@ -83,7 +90,7 @@ cmp.setup({
         if cmp.visible() then
           cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
         else
-          vim.api.nvim_feedkeys(t('<Down>'), 'n', true)
+          vim.api.nvim_feedkeys(t '<Down>', 'n', true)
         end
       end,
       i = function(fallback)
@@ -99,7 +106,7 @@ cmp.setup({
         if cmp.visible() then
           cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
         else
-          vim.api.nvim_feedkeys(t('<Up>'), 'n', true)
+          vim.api.nvim_feedkeys(t '<Up>', 'n', true)
         end
       end,
       i = function(fallback)
@@ -112,14 +119,8 @@ cmp.setup({
     }),
     ['<C-e>'] = cmp.mapping({ i = cmp.mapping.close(), c = cmp.mapping.close() }),
     ['<CR>'] = cmp.mapping({
-      i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-      c = function(fallback)
-        if cmp.visible() then
-          cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-        else
-          fallback()
-        end
-      end,
+      i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+      c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
     }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -146,7 +147,6 @@ cmp.setup({
     { name = 'nvim_lua' },
     { name = 'vsnip' },
     { name = 'path' },
-    { name = 'cmp_tabnine' },
     {
       name = 'buffer',
       option = {
@@ -156,16 +156,26 @@ cmp.setup({
         end,
       },
     },
-    -- { name = 'spell', option = { keyword_length = 4 } },
+    { name = 'cmp_tabnine' },
   }),
   formatting = {
+    fields = { 'kind', 'abbr', 'menu' },
     format = function(entry, vim_item)
+      local kind = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
+      local strings = vim.split(kind.kind, '%s', { trimempty = true })
+      kind.kind = ' ' .. strings[1] .. ' '
+      kind.menu = '    (' .. strings[2] .. ')'
+
+      return kind
+    end,
+    -- Without lspking
+    --[[ format = function(entry, vim_item)
       -- Kind icons
       vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
       -- Source
       vim_item.menu = source_mapping[entry.source.name]
       return vim_item
-    end,
+    end, ]]
   },
   -- sorting = {
   -- 	priority_weight = 2,

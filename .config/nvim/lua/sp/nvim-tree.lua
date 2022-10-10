@@ -1,13 +1,13 @@
 local tree_cb = require('nvim-tree.config').nvim_tree_callback
 
 local list = {
-  { key = { 'e', 'l' }, cb = tree_cb('edit') },
-  { key = '<M-CR>', cb = tree_cb('tabnew') },
-  { key = 'h', cb = tree_cb('code_node') },
-  { key = '.', cb = tree_cb('toggle_dotfiles') },
-  { key = '?', cb = tree_cb('toggle_help') },
-  { key = 'd', cb = tree_cb('trash') },
-  { key = 'D', cb = tree_cb('remove') },
+  { key = { 'e', 'l' }, cb = tree_cb 'edit' },
+  { key = '<M-CR>', cb = tree_cb 'tabnew' },
+  { key = 'h', cb = tree_cb 'code_node' },
+  { key = '.', cb = tree_cb 'toggle_dotfiles' },
+  { key = '?', cb = tree_cb 'toggle_help' },
+  { key = 'd', cb = tree_cb 'trash' },
+  { key = 'D', cb = tree_cb 'remove' },
 }
 require('nvim-tree').setup({
   -- auto_close = true,

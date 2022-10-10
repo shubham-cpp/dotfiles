@@ -24,7 +24,7 @@ zstyle ':autocomplete:*' add-space \
 # Speed up completions
 # zstyle ':completion:*' accept-exact '*(N)'
 zstyle ':completion:*' use-cache true
-zstyle ':completion:*' cache-path '${XDG_CACHE_HOME:-$HOME/.cache}/zsh_cache'
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh_cache"
 zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate _prefix
 zstyle ':completion:*' squeeze-slashes true
 zstyle ':completion:*' group-name ''

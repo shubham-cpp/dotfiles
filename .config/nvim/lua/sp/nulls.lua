@@ -1,15 +1,15 @@
-local null_ls = require('null-ls')
+local null_ls = require 'null-ls'
 local b = null_ls.builtins
 local format = b.formatting
 local lint = b.diagnostics
 local code_actions = b.code_actions
 local has_eslint_config = function(u)
-  return u.root_has_file('.eslintrc')
-    or u.root_has_file('.eslintrc.json')
-    or u.root_has_file('.eslintrc.js')
-    or u.root_has_file('.eslintrc.cjs')
-    or u.root_has_file('.eslintrc.yaml')
-    or u.root_has_file('.eslintrc.yml')
+  return u.root_has_file '.eslintrc'
+    or u.root_has_file '.eslintrc.json'
+    or u.root_has_file '.eslintrc.js'
+    or u.root_has_file '.eslintrc.cjs'
+    or u.root_has_file '.eslintrc.yaml'
+    or u.root_has_file '.eslintrc.yml'
 end
 local add_svelte = {
   'javascript',
@@ -53,7 +53,12 @@ local sources = {
   lint.luacheck.with({
     extra_args = { '--globals', 'vim', 'describe' },
   }),
-  -- lint.selene,
+  -- lint.selene.with({
+  --   cwd = function(_params)
+  --     return vim.fs.dirname(vim.fs.find({ 'selene.toml' }, { upward = true, path = vim.api.nvim_buf_get_name(0) })[1])
+  --       or vim.fn.expand '~/.config/selene/' -- fallback value
+  --   end,
+  -- }),
   format.stylua.with({
     extra_args = {
       '--indent-type',
@@ -64,6 +69,8 @@ local sources = {
       'AutoPreferSingle',
       '--line-endings',
       'Unix',
+      '--call-parentheses',
+      'NoSingleString',
     },
   }),
   -- Python
@@ -93,7 +100,7 @@ null_ls.setup({
     vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr })
     vim.keymap.set('n', ']g', vim.diagnostic.goto_next, { buffer = bufnr })
     vim.keymap.set('n', '[g', vim.diagnostic.goto_prev, { buffer = bufnr })
-    print('LSP attached (null-ls)')
+    print 'LSP attached (null-ls)'
   end,
   sources = sources,
   diagnostics_format = '[#{c}] #{m} (#{s})',

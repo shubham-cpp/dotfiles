@@ -7,6 +7,7 @@
 	defaultBranch = main
 [alias]
 	logline = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	ll = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
 [diff]
     tool = nvimdiff

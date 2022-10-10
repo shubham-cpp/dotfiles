@@ -30,5 +30,6 @@ nnoremap glf :cd ~/.local/share/fonts<cr>
 nnoremap gli :cd ~/.local/share/icons<cr>
 nnoremap glt :cd ~/.local/share/Trash/files<cr>
 
-nnoremap gm :cd /run/media/shubham<cr>
+nnoremap gm :cd ~/Public/home-hdd/shubham<cr>
+nnoremap gM :cd /run/media/shubham<cr>
 nnoremap g2 :cd "/home/shubham/.local/share/Steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"<cr>

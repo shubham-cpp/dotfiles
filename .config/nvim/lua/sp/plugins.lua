@@ -1,86 +1,87 @@
 return require('packer').startup(function(use)
-  local helper = require('helper')
-  use('wbthomason/packer.nvim')
-  use('lewis6991/impatient.nvim')
-  use('nathom/filetype.nvim')
+  use 'wbthomason/packer.nvim'
+  use 'lewis6991/impatient.nvim'
+  use 'nathom/filetype.nvim'
 
   -- Nvim cmp {{{
   use({
     'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-  })
-  use({ 'hrsh7th/cmp-nvim-lua', after = 'nvim-cmp' })
-  use({ 'hrsh7th/cmp-nvim-lsp', after = 'cmp-nvim-lua' })
-  use({ 'hrsh7th/cmp-nvim-lsp-signature-help', after = 'cmp-nvim-lsp' })
-  use({ 'hrsh7th/cmp-buffer', after = 'cmp-nvim-lsp-signature-help' })
-  use({ 'hrsh7th/vim-vsnip', after = 'cmp-buffer' })
-  use({ 'hrsh7th/cmp-vsnip', after = 'vim-vsnip' })
-  use({ 'rafamadriz/friendly-snippets', after = 'cmp-vsnip' })
-  use({ 'hrsh7th/cmp-path', after = 'friendly-snippets' })
-  use({ 'hrsh7th/cmp-cmdline', after = 'cmp-path' })
-  use({ 'tzachar/cmp-tabnine', run = './install.sh', after = 'cmp-cmdline' })
-  use({
-    'f3fora/cmp-spell',
-    -- after = 'cmp-cmdline',
-    after = 'cmp-tabnine',
+    requires = {
+      'hrsh7th/cmp-nvim-lua',
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-nvim-lsp-signature-help',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/vim-vsnip',
+      'hrsh7th/cmp-vsnip',
+      'rafamadriz/friendly-snippets',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
+      { 'tzachar/cmp-tabnine', run = './install.sh' },
+      'onsails/lspkind.nvim',
+    },
     config = function()
-      require('sp.cmp')
+      require 'sp.cmp'
     end,
   })
   -- }}}
 
   -- LSP {{{
+
+  use({ 'nvim-lua/plenary.nvim' })
   use({
     'jose-elias-alvarez/null-ls.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
-    after = 'cmp-spell',
     config = function()
-      require('sp.nulls')
+      require 'sp.nulls'
     end,
   })
-  use({ 'williamboman/nvim-lsp-installer', after = 'null-ls.nvim' })
-  use({ 'b0o/schemastore.nvim', after = 'nvim-lsp-installer' })
+  -- use({
+  --   'neoclide/coc.nvim',
+  --   branch = 'release',
+  --   requires = {
+  --     { 'honza/vim-snippets' },
+  --     { 'SirVer/ultisnips' },
+  --     {
+  --       'L3MON4D3/LuaSnip',
+  --       tag = 'v1.*',
+  --       config = function()
+  --         require('luasnip.loaders.from_vscode').lazy_load()
+  --         require('luasnip.loaders.from_snipmate').lazy_load()
+  --       end,
+  --     },
+  --     { 'rafamadriz/friendly-snippets' },
+  --   },
+  -- })
+  use({ 'williamboman/nvim-lsp-installer' })
+  use({ 'b0o/schemastore.nvim' })
   use({
     'neovim/nvim-lspconfig',
-    after = 'schemastore.nvim',
     config = function()
-      require('sp.lsp')
+      require 'sp.lsp'
     end,
   })
 
   use({
     'j-hui/fidget.nvim',
     config = function()
-      require('sp.fidget')
+      require 'sp.fidget'
     end,
-    after = 'nvim-lspconfig',
   })
   -- }}}
 
   -- Fuzzy Finders {{{
 
+  use 'kyazdani42/nvim-web-devicons'
   use({
     'nvim-telescope/telescope.nvim',
     config = function()
-      require('sp.telescope')
+      require 'sp.telescope'
     end,
-    keys = {
-      '<leader>ff',
-      '<leader>fn',
-      '<leader>fd',
-      '<leader>fc',
-      '<leader>fh',
-      '<leader>fH',
-      '<leader>fs',
-      '<leader>fS',
-      '<leader>fz',
-    },
-    requires = { { 'natecraddock/telescope-zf-native.nvim' }, { 'nvim-lua/plenary.nvim' } },
+    requires = { 'natecraddock/telescope-zf-native.nvim' },
   })
   use({
     'ibhagwan/fzf-lua',
     config = function()
-      require('sp.fzf-lua')
+      require 'sp.fzf-lua'
     end,
   })
   -- }}}
@@ -88,87 +89,68 @@ return require('packer').startup(function(use)
   -- TreeSitter {{{
   use({
     'nvim-treesitter/nvim-treesitter',
-    event = 'BufWinEnter',
     run = ':TSUpdate',
     config = function()
-      require('sp.tree')
+      require 'sp.tree'
     end,
   })
-  use({ 'jose-elias-alvarez/nvim-lsp-ts-utils', after = 'nvim-treesitter' })
-  use({ 'JoosepAlviste/nvim-ts-context-commentstring', after = 'nvim-lsp-ts-utils' })
-  use({ 'windwp/nvim-ts-autotag', after = 'nvim-ts-context-commentstring' })
-  use({ 'nvim-treesitter/nvim-treesitter-textobjects', after = 'nvim-ts-autotag' })
-  use({ 'nvim-treesitter/playground', cmd = 'TSPlaygroundToggle' })
-  -- use({ 'andymass/vim-matchup', after = 'nvim-treesitter-textobjects' })
+  use({ 'jose-elias-alvarez/nvim-lsp-ts-utils' })
+  use({ 'JoosepAlviste/nvim-ts-context-commentstring' })
+  use({ 'windwp/nvim-ts-autotag' })
+  use({ 'nvim-treesitter/nvim-treesitter-textobjects' })
+  use({ 'nvim-treesitter/playground' })
+  use({ 'andymass/vim-matchup' })
   -- }}}
 
   -- Theming {{{
   use({
     'ellisonleao/gruvbox.nvim',
-    disable = false,
-    event = 'VimEnter',
+    disable = true,
     config = function()
-      require('sp.colors.gruvbox')
+      require 'sp.colors.gruvbox'
     end,
   })
   use({
     'navarasu/onedark.nvim',
-    event = 'VimEnter',
-    disable = true,
+    disable = false,
     config = function()
-      require('sp.colors.onedark')
+      require 'sp.colors.onedark'
     end,
   })
   use({
     'catppuccin/nvim',
     as = 'catppuccin',
-    event = 'VimEnter',
     disable = true,
     config = function()
-      require('sp.colors.cat')
+      require 'sp.colors.cat'
     end,
   })
   use({
-    'marko-cerovac/material.nvim',
-    event = 'VimEnter',
+    'folke/tokyonight.nvim',
     disable = true,
     config = function()
-      require('sp.colors.material')
+      require 'sp.colors.tokyo'
     end,
   })
   use({
     'nvim-lualine/lualine.nvim',
-    event = 'VimEnter',
     config = function()
-      require('sp.lualine')
+      require 'sp.lualine'
     end,
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    -- requires = { 'kyazdani42/nvim-web-devicons', opt = true },
   })
   -- }}}
 
   -- Motion {{{
-  use({ 'tpope/vim-surround', after = 'git-conflict.nvim' })
   use({
-    'wellle/targets.vim',
-    after = 'vim-repeat',
+    'kylechui/nvim-surround',
     config = function()
-      vim.cmd([[
-            augroup MyTargets
-            au!
-autocmd User targets#mappings#user call targets#mappings#extend({
-    \ 'b': {'pair': [{'o':'(', 'c':')'}, {'o':'[', 'c':']'}, {'o':'{', 'c':'}'},{'o':'<', 'c':'>'}]},
-    \ 's': { 'separator': [{'d':','}, {'d':'.'}, {'d':';'}, {'d':':'}, {'d':'+'}, {'d':'-'},
-    \                      {'d':'='}, {'d':'~'}, {'d':'_'}, {'d':'*'}, {'d':'#'}, {'d':'/'},
-    \                      {'d':'\'}, {'d':'|'}, {'d':'&'}, {'d':'$'}] },
-    \ })
-    augroup END
-]])
+      require('nvim-surround').setup({})
     end,
   })
 
   use({
     'unblevable/quick-scope',
-    keys = { 'f', 'F', 't', 'T' },
     setup = function()
       vim.g.qs_highlight_on_keys = { 'f', 'F', 't', 'T' }
       vim.g.qs_buftype_blacklist = {
@@ -179,8 +161,6 @@ autocmd User targets#mappings#user call targets#mappings#extend({
         'NvimTree',
       }
       vim.g.qs_lazy_highlight = 1
-      -- vim.cmd([[ highlight! QuickScopePrimary guifg=orange gui=underline ctermfg=155 cterm=underline ]])
-      -- vim.cmd([[ highlight! QuickScopeSecondary guifg=yellow gui=underline ctermfg=81 cterm=underline ]])
     end,
   })
 
@@ -195,31 +175,25 @@ autocmd User targets#mappings#user call targets#mappings#extend({
 
   -- Misc {{{
   use({
-    'norcalli/nvim-colorizer.lua',
-    ft = { 'lua', 'vim', 'css', 'html', 'javascriptreact', 'typescriptreact', 'scss', 'less', 'json' },
+    'NvChad/nvim-colorizer.lua',
     config = function()
-      require('sp.colorizer')
+      require 'sp.colorizer'
     end,
   })
   use({ 'tweekmonster/startuptime.vim', cmd = 'StartupTime' })
   use({
     'svermeulen/vim-subversive',
-    after = 'vim-surround',
     config = function()
-      require('sp.subversive')
+      require 'sp.subversive'
     end,
   })
-  use({ 'tpope/vim-repeat', after = 'vim-subversive' })
-  use({ 'AndrewRadev/switch.vim', cmd = { 'Switch', 'SwitchReverse' } })
+  use 'tpope/vim-repeat'
 
   -- }}}
 
   -- Git {{{
   use({
     'lewis6991/gitsigns.nvim',
-    event = 'BufReadPost',
-    -- after = 'neovim-session-manager',
-    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('gitsigns').setup()
     end,
@@ -246,8 +220,6 @@ autocmd User targets#mappings#user call targets#mappings#extend({
   })
   use({
     'akinsho/git-conflict.nvim',
-    after = 'gitsigns.nvim',
-    -- event = 'BufWinEnter',
     config = function()
       require('git-conflict').setup()
     end,
@@ -257,33 +229,27 @@ autocmd User targets#mappings#user call targets#mappings#extend({
   -- Enhance experience {{{
   use({
     'lukas-reineke/indent-blankline.nvim',
-    -- after = 'git-conflict.nvim',
-    after = 'gruvbox.nvim',
-    -- event = 'VimEnter',
     config = function()
-      require('sp.indents')
+      require 'sp.indents'
     end,
   })
   use({
     'akinsho/nvim-toggleterm.lua',
-    keys = { '<F1>', '<C-\\>', '<leader>tg', '<leader>tf' },
     config = function()
-      require('sp.toggle-term')
+      require 'sp.toggle-term'
     end,
   })
 
   use({
     'numToStr/Comment.nvim',
     config = function()
-      require('sp.comments')
+      require 'sp.comments'
     end,
-    after = 'nvim-treesitter-textobjects',
   })
   use({
     'windwp/nvim-autopairs',
-    after = { 'nvim-treesitter', 'cmp-spell' },
     config = function()
-      require('sp.pairs')
+      require 'sp.pairs'
     end,
   })
   use({
@@ -294,22 +260,19 @@ autocmd User targets#mappings#user call targets#mappings#extend({
       vim.g.mkdp_refresh_slow = 1
     end,
     requires = {
-      {
-        'mzlogin/vim-markdown-toc',
-        after = 'markdown-preview.nvim',
-      },
+      'mzlogin/vim-markdown-toc',
+      ft = { 'markdown' },
     },
   })
   use({
     'danymat/neogen',
     config = function()
-      require('neogen').setup({})
+      require('neogen').setup()
     end,
     cmd = { 'Neogen' },
   })
   use({
     'mg979/vim-visual-multi',
-    after = 'pretty-fold.nvim',
     setup = function()
       vim.g.VM_maps = {}
       vim.g.VM_mouse_mappings = 1
@@ -324,20 +287,17 @@ autocmd User targets#mappings#user call targets#mappings#extend({
   })
   use({
     'anuvyklack/pretty-fold.nvim',
-    after = 'which-key.nvim',
     config = function()
-      require('sp.folds')
+      require 'sp.folds'
     end,
   })
   use({
     'monaqa/dial.nvim',
-    after = 'pretty-fold.nvim',
-    -- keys = { '<C-a>', '<C-x>', 'g<C-a>', 'g<C-x>' },
     config = function()
       local map = function(mode, lhs, rhs)
         require('sp.helper').map(mode, lhs, rhs, { noremap = false, silent = false })
       end
-      local augend = require('dial.augend')
+      local augend = require 'dial.augend'
       require('dial.config').augends:register_group({
         default = {
           augend.integer.alias.decimal,
@@ -374,12 +334,11 @@ autocmd User targets#mappings#user call targets#mappings#extend({
     'kyazdani42/nvim-tree.lua',
     cmd = { 'NvimTreeToggle', 'NvimTreeFindFileToggle' },
     config = function()
-      require('sp.nvim-tree')
+      require 'sp.nvim-tree'
     end,
   })
   use({
     'stevearc/dressing.nvim',
-    after = 'lualine.nvim',
     config = function()
       require('dressing').setup({
         select = {
@@ -390,8 +349,6 @@ autocmd User targets#mappings#user call targets#mappings#extend({
   })
   use({
     'Shatur/neovim-session-manager',
-    after = 'dressing.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
     config = function()
       require('session_manager').setup({
         -- Define what to do when Neovim is started without arguments.
@@ -402,14 +359,9 @@ autocmd User targets#mappings#user call targets#mappings#extend({
   })
   use({
     'folke/which-key.nvim',
-    after = 'indent-blankline.nvim',
     config = function()
-      require('sp.which-key')
+      require 'sp.which-key'
     end,
   })
-  -- }}}
-
-  -- Additional FTs {{{
-  use('baskerville/vim-sxhkdrc')
   -- }}}
 end)

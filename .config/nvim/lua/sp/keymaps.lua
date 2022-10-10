@@ -1,7 +1,5 @@
 local map = require('sp.helper').map
 
-map('n', ',w', ':w!<cr>')
-map('n', ',W', ':noautocmd w!<cr>')
 map('', '0', '^', { noremap = false, silent = true })
 map('n', '<Esc>', ':nohl<cr>')
 map('n', '*', '*zz')
@@ -23,8 +21,6 @@ map('n', '<C-l>', '<C-W>l')
 
 map('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
 map('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
--- map("", "<leader>ss", ":setlocal spell!<cr>")
--- map("", "<leader>sa", "zg")
 map('n', '<leader>yp', '"ayy"ap')
 
 -- Pasting in visual mode doesn't copy
@@ -33,8 +29,7 @@ map('x', 'p', [[ 'pgv"'.v:register.'y' ]], { noremap = true, expr = true })
 map('c', '<C-a>', '<Home>', { silent = false })
 map('c', '<C-e>', '<End>', { silent = false })
 
-vim.cmd([[ nnoremap <silent> ,s :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]])
--- map("n", ",s", [[ :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]])
+vim.cmd [[ nnoremap <silent> ,s :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]]
 map('x', ',s', '"sy:let @/=@s<CR>cgn')
 
 map('v', 'J', ":m '>+1<CR>gv=gv")

@@ -1,6 +1,10 @@
+local lspconfig = require 'lspconfig'
+local util = lspconfig.util
 local cmd = vim.cmd
+
 local ok_fzf, fzf = pcall(require, 'fzf-lua')
-vim.diagnostic.config({
+
+vim.diagnostic.config({ --- {{{
   underline = true,
   update_in_insert = false,
   virtual_text = {
@@ -17,8 +21,10 @@ vim.fn.sign_define('DiagnosticSignError', { text = ' ', texthl = 'DiagnosticS
 vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
 vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
 vim.fn.sign_define('DiagnosticSignHint', { text = ' ', texthl = 'DiagnosticSignHint' })
+--}}}
+
 require('nvim-lsp-installer').setup({
-  automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+  automatic_installation = false,
   ui = {
     icons = {
       server_installed = '✓',
@@ -28,23 +34,23 @@ require('nvim-lsp-installer').setup({
   },
 })
 
-function map(mode, lhs, rhs, opts)
+function map(mode, lhs, rhs, opts) -- {{{
   opts.buffer = opts.buffer == nil and true or opts.buffer
   opts.noremap = opts.noremap == nil and true or opts.noremap
   opts.silent = opts.silent == nil and true or opts.silent
   vim.keymap.set(mode, lhs, rhs, opts)
-end
+end --- }}}
 
-function on_attach(client, bufnr)
-  cmd([[ command! -bar LspFormat :lua vim.lsp.buf.format({async=false})<cr> ]])
-  cmd([[ command! -bar LspDiagnostics :lua vim.lsp.diagnostic.show_line_diagnostics()<CR> ]])
-  cmd([[ command! -bar LspDefination :lua vim.lsp.buf.definition()<CR> ]])
-  cmd([[ command! -bar LspDeclarations :lua vim.lsp.buf.declaration()<CR> ]])
-  cmd([[ command! -bar LspImplementaions :lua vim.lsp.buf.implementation()<CR> ]])
-  cmd([[ command! -bar LspReferences :lua vim.lsp.buf.references()<CR>]])
-  cmd([[ command! -bar LspRename :lua vim.lsp.buf.rename()<CR> ]])
-  cmd([[ command! -bar LspCodeAction :lua vim.lsp.buf.code_action()<CR> ]])
-  cmd([[ command! -bar LspHover :lua vim.lsp.buf.hover()<CR> ]])
+function on_attach(client, bufnr) -- {{{
+  cmd [[ command! -bar LspFormat :lua vim.lsp.buf.format({async=false})<cr> ]]
+  cmd [[ command! -bar LspDiagnostics :lua vim.lsp.diagnostic.show_line_diagnostics()<CR> ]]
+  cmd [[ command! -bar LspDefination :lua vim.lsp.buf.definition()<CR> ]]
+  cmd [[ command! -bar LspDeclarations :lua vim.lsp.buf.declaration()<CR> ]]
+  cmd [[ command! -bar LspImplementaions :lua vim.lsp.buf.implementation()<CR> ]]
+  cmd [[ command! -bar LspReferences :lua vim.lsp.buf.references()<CR>]]
+  cmd [[ command! -bar LspRename :lua vim.lsp.buf.rename()<CR> ]]
+  cmd [[ command! -bar LspCodeAction :lua vim.lsp.buf.code_action()<CR> ]]
+  cmd [[ command! -bar LspHover :lua vim.lsp.buf.hover()<CR> ]]
 
   map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
   map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr })
@@ -117,7 +123,9 @@ function on_attach(client, bufnr)
   end
   print(string.format('LSP attached (%s)', client.name))
 end
+---}}}
 
+-- Capabilities {{{
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
@@ -125,8 +133,8 @@ cmp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 cmp_capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { 'documentation', 'detail', 'additionalTextEdits' },
 }
-local lspconfig = require('lspconfig')
-local util = lspconfig.util
+--}}}
+
 -- Lua {{{
 local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
@@ -147,10 +155,17 @@ lspconfig.sumneko_lua.setup({
       },
       workspace = {
         library = vim.api.nvim_get_runtime_file('', true),
-        maxPreload = 2000,
+        -- maxPreload = 2000,
         preloadFileSize = 1000,
       },
-      hint = { enable = true, setType = true },
+      hint = {
+        enable = true,
+        setType = true,
+        semicolon = 'SameLine',
+        paramType = true,
+        await = true,
+        arrayIndex = 'Enable',
+      },
       telemetry = { enable = false },
     },
   },
@@ -190,7 +205,7 @@ lspconfig.jsonls.setup({ -- {{{
         {
           name = 'Vsnip snippets',
           description = 'Extend vs code snippet completion for vsnip',
-          fileMatch = { string.format('%s/vsnip/*.json', vim.fn.stdpath('config')) },
+          fileMatch = { string.format('%s/vsnip/*.json', vim.fn.stdpath 'config') },
           url = 'https://raw.githubusercontent.com/Yash-Singh1/vscode-snippets-json-schema/main/schema.json',
         },
       }, require('schemastore').json.schemas()),
@@ -217,6 +232,19 @@ lspconfig.yamlls.setup({ -- {{{
     redhat = { telemetry = { enabled = false } },
   },
 }) -- }}}
+lspconfig.bashls.setup({ -- {{{
+  capabilities = cmp_capabilities,
+  on_attach = on_attach,
+  flags = { debounce_text_changes = 150 },
+  settings = {
+    bashIde = { highlightParsingErrors = true },
+  },
+}) -- }}}
+lspconfig.vimls.setup({ -- {{{
+  capabilities = cmp_capabilities,
+  on_attach = on_attach,
+  flags = { debounce_text_changes = 150 },
+}) -- }}}
 lspconfig.html.setup({ -- {{{
   capabilities = cmp_capabilities,
   on_attach = on_attach,
@@ -227,7 +255,8 @@ lspconfig.cssls.setup({ -- {{{
   on_attach = on_attach,
   flags = { debounce_text_changes = 150 },
 }) -- }}}
-lspconfig.pyright.setup({ -- {{{
+-- Python {{{
+lspconfig.pyright.setup({
   capabilities = cmp_capabilities,
   on_attach = on_attach,
   flags = { debounce_text_changes = 150 },
@@ -240,7 +269,8 @@ lspconfig.pyright.setup({ -- {{{
       exclude = { '**/node_modules', '**/__pycache__' },
     },
   },
-}) -- }}}
+})
+-- }}}
 lspconfig.gopls.setup({ -- {{{
   capabilities = cmp_capabilities,
   on_attach = on_attach,
@@ -248,8 +278,18 @@ lspconfig.gopls.setup({ -- {{{
   settings = {
     gopls = {
       experimentalPostfixCompletions = true,
-      analyses = { unusedparams = true, shadow = true },
+      analyses = { unusedparams = true, shadow = true, nilness = true, unusedwrite = true },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        constantValues = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
       staticcheck = true,
+      codelenses = {
+        usePlaceholders = true,
+      },
     },
   },
 }) -- }}}
@@ -300,10 +340,10 @@ lspconfig.tailwindcss.setup({ -- {{{
       emmetCompletions = true,
     },
   },
-  single_file_support = true,
+  single_file_support = false,
 }) -- }}}
 -- Typescrip, Javascript {{{
-local ts_utils = require('nvim-lsp-ts-utils')
+local ts_utils = require 'nvim-lsp-ts-utils'
 ---Create a nnoremap for buffer
 ---@param bufnr number Buffer number
 ---@param lhs string keys to map
@@ -353,16 +393,35 @@ lspconfig.svelte.setup({ -- {{{
     svelte = { plugin = { svelte = { useNewTransformation = true } } },
   },
 }) --}}}
-lspconfig.volar.setup({ -- {{{
+-- Vue {{{
+local tsdk = os.getenv 'NVM_DIR' .. '/versions/node/v18.7.0/lib/node_modules/typescript/lib'
+lspconfig.volar.setup({
+  init_options = {
+    typescript = {
+      tsdk = tsdk,
+      serverPath = '',
+    },
+  },
+  -- on_new_config = function(new_config, new_root_dir)
+  --   new_config.init_options.typescript.tsdk = get_typescript_lib_path(new_root_dir)
+  --   new_config.init_options.typescript.serverPath = ''
+  -- end,
   capabilities = cmp_capabilities,
   on_attach = on_attach,
   flags = { debounce_text_changes = 150 },
   settings = {
     volar = { autoCompleteRefs = true },
   },
-  init_options = {
-    documentFeatures = {
-      documentColor = true,
+})
+--}}}
+lspconfig.rust_analyzer.setup({ --{{{
+  capabilities = cmp_capabilities,
+  on_attach = on_attach,
+  flags = { debounce_text_changes = 150 },
+  settings = {
+    ['rust-analyzer'] = {
+      hover = { actions = { references = { enable = true } } },
+      typing = { autoClosingAngleBrackets = { enable = true } },
     },
   },
 }) --}}}

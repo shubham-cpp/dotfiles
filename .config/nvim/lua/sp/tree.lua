@@ -105,9 +105,9 @@ require('nvim-treesitter.configs').setup({
     use_virtual_text = true,
     lint_events = { 'BufWrite', 'InsertLeave' },
   },
-  --matchup = {
-  --	enable = true,
-  --},
+  matchup = {
+    enable = true,
+  },
 })
 
 local fn = vim.fn

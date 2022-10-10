@@ -1,11 +1,11 @@
-local Comment = require('Comment')
+local Comment = require 'Comment'
 Comment.setup({
   -- ignore empty lines
   ignore = '^$',
   pre_hook = function(ctx)
     -- Only calculate commentstring for tsx filetypes
     if vim.bo.filetype == 'typescriptreact' then
-      local U = require('Comment.utils')
+      local U = require 'Comment.utils'
 
       -- Detemine whether to use linewise or blockwise commentstring
       local type = ctx.ctype == U.ctype.line and '__default' or '__multiline'

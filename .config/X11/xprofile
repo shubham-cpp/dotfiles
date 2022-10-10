@@ -24,8 +24,8 @@ basic() {
     run picom --experimental-backends
     run xwallpaper --stretch ~/.config/wall.png
   fi
-  run kitty
-  # run alacritty -e "tmux"
+  # run kitty
+  run alacritty -e "tmux"
   run udiskie -q -t --no-terminal
 }
 

@@ -349,6 +349,18 @@ keys = [
         update_brightness(),
         desc="Dec Brightness",
     ),
+    Key(
+        "S-<XF86MonBrightnessUp>",
+        lazy.spawn("brightnessctl s 150"),
+        update_brightness(),
+        desc="Inc Brightness",
+    ),
+    Key(
+        "S-<XF86MonBrightnessDown>",
+        lazy.spawn("brightnessctl s 10"),
+        update_brightness(),
+        desc="Dec Brightness",
+    ),
     # }}}
     # Custom Scripts {{{
     Key("C-A-e", lazy.spawn("rofie"), desc="Launch Emoji Selector"),
@@ -575,7 +587,7 @@ screens = [
                         stdout=subprocess.PIPE,
                     )
                     .stdout.decode("utf-8")
-                    .strip()[:2],
+                    .strip(),  # [:2],
                     padding=3,
                     foreground=colors[0],
                     background="#eeeeee",

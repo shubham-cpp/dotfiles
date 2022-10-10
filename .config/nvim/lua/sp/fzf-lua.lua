@@ -1,5 +1,5 @@
-local fzf = require('fzf-lua')
-local actions = require('fzf-lua.actions')
+local fzf = require 'fzf-lua'
+local actions = require 'fzf-lua.actions'
 local map = require('sp.helper').map
 local bmap = require('sp.helper').bmap
 local opts = {
@@ -11,7 +11,7 @@ local opts = {
     },
   },
 }
-local dotfiles = io.popen("readlink -f ~/.config/awesome/ | cut -d'.' -f1")
+local dotfiles = io.popen "readlink -f ~/.config/awesome/ | cut -d'.' -f1"
 map('n', '<C-p>', '<cmd>FzfLua files<cr>')
 map('n', ',c', '<cmd>FzfLua files cwd=~/.config/nvim<cr>')
 if dotfiles then
