@@ -1,16 +1,17 @@
 local Terminal = require('toggleterm.terminal').Terminal
 local toggleterm = require 'toggleterm'
 local map = require('sp.helper').map
-local bmap = require('helper').bmap
+local bmap = require('sp.helper').bmap
 
 function _G.set_terminal_keymaps()
   local opts = { noremap = true }
   -- bmap("t", "<esc>", [[<C-\><C-n>]], opts)
+  -- bmap('t', '<C-l>', 'clear<cr>', opts)
   bmap('t', '<C-]>', [[<C-\><C-n>]], opts)
   bmap('t', '<C-h>', [[<C-\><C-n><C-W>h]], opts)
   bmap('t', '<C-j>', [[<C-\><C-n><C-W>j]], opts)
   bmap('t', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
-  bmap('t', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
+  -- bmap('t', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
   bmap('n', 'A', 'A<C-k>', opts)
   bmap('n', 'D', 'A<C-k><C-\\><C-n>', opts)
   bmap('n', 'cc', 'A<C-e><C-u>', opts)

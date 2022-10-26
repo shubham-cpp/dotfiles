@@ -23,16 +23,16 @@ vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSig
 vim.fn.sign_define('DiagnosticSignHint', { text = ' ', texthl = 'DiagnosticSignHint' })
 --}}}
 
-require('nvim-lsp-installer').setup({
-  automatic_installation = false,
-  ui = {
-    icons = {
-      server_installed = '✓',
-      server_pending = '➜',
-      server_uninstalled = '✗',
-    },
-  },
-})
+-- require('nvim-lsp-installer').setup({
+--   automatic_installation = false,
+--   ui = {
+--     icons = {
+--       server_installed = '✓',
+--       server_pending = '➜',
+--       server_uninstalled = '✗',
+--     },
+--   },
+-- })
 
 function map(mode, lhs, rhs, opts) -- {{{
   opts.buffer = opts.buffer == nil and true or opts.buffer
@@ -43,6 +43,7 @@ end --- }}}
 
 function on_attach(client, bufnr) -- {{{
   cmd [[ command! -bar LspFormat :lua vim.lsp.buf.format({async=false})<cr> ]]
+  cmd [[ command! -bar LspOrganizeImports :lua vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })<cr> ]]
   cmd [[ command! -bar LspDiagnostics :lua vim.lsp.diagnostic.show_line_diagnostics()<CR> ]]
   cmd [[ command! -bar LspDefination :lua vim.lsp.buf.definition()<CR> ]]
   cmd [[ command! -bar LspDeclarations :lua vim.lsp.buf.declaration()<CR> ]]
@@ -57,6 +58,10 @@ function on_attach(client, bufnr) -- {{{
   map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
   map('i', '<C-s>', 'vim.lsp.buf.signature_help', { buffer = bufnr })
   map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr })
+
+  map('n', 'gs', function()
+    vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+  end, { buffer = bufnr })
   -- map('n', 'gr', ':LspReferences<CR>',{buffer=bufnr})
   if ok_fzf then
     map('n', 'gr', function()
@@ -85,16 +90,16 @@ function on_attach(client, bufnr) -- {{{
   -- map('n', '<leader>cq', vim.lsp.diagnostic.set_loclist, { buffer = bufnr })
 
   map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr })
-  if client.server_capabilities.documentRangeFormattingProvider then
-    map('v', '<Space>=', vim.lsp.buf.range_formatting, { buffer = bufnr })
-  end
+  -- if client.server_capabilities.documentRangeFormattingProvider then
+  --   map('v', '<Space>=', vim.lsp.buf.format, { buffer = bufnr })
+  -- end
   -- For some reason prettier doesn't support svelte by default
   if client.name ~= 'svelte' then
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
   end
   if client.name == 'clangd' then
-    client.offset_encoding = 'utf-8'
+    -- client.offset_encoding = 'utf-8'
     client.offset_encodings = 'utf-8'
   end
 
@@ -123,12 +128,13 @@ function on_attach(client, bufnr) -- {{{
   end
   print(string.format('LSP attached (%s)', client.name))
 end
+
 ---}}}
 
 -- Capabilities {{{
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 cmp_capabilities.textDocument.completion.completionItem.snippetSupport = true
 cmp_capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { 'documentation', 'detail', 'additionalTextEdits' },
@@ -171,7 +177,7 @@ lspconfig.sumneko_lua.setup({
   },
 }) -- }}}
 -- C/C++ {{{
-local clangd_capabilities = capabilities
+local clangd_capabilities = cmp_capabilities
 clangd_capabilities.textDocument.semanticHighlighting = true
 clangd_capabilities.offsetEncoding = 'utf-8'
 lspconfig.clangd.setup({
@@ -316,17 +322,18 @@ lspconfig.tailwindcss.setup({ -- {{{
   capabilities = cmp_capabilities,
   on_attach = on_attach,
   flags = { debounce_text_changes = 150 },
-  filetypes = {
-    'typescriptreact',
-    'javascriptreact',
-    'javascript.jsx',
-    'typescript.tsx',
-    'html',
-    -- 'css',
-    -- 'sass',
-    -- 'scss',
-    -- 'less',
-  },
+  -- filetypes = {
+  --   'typescriptreact',
+  --   'javascriptreact',
+  --   'javascript.jsx',
+  --   'typescript.tsx',
+  --   'html',
+  --   'vue',
+  --   'css',
+  --   -- 'sass',
+  --   'scss',
+  --   -- 'less',
+  -- },
   root_dir = util.root_pattern(
     'tailwind.config.js',
     'tailwind.config.cjs',
@@ -394,7 +401,9 @@ lspconfig.svelte.setup({ -- {{{
   },
 }) --}}}
 -- Vue {{{
-local tsdk = os.getenv 'NVM_DIR' .. '/versions/node/v18.7.0/lib/node_modules/typescript/lib'
+-- local tsdk = os.getenv 'NVM_DIR' .. '/versions/node/v18.7.0/lib/node_modules/typescript/lib'
+local tsdk =
+  util.path.join(vim.fn.stdpath 'data', 'mason', 'packages', 'vue-language-server', 'node_modules', 'typescript', 'lib')
 lspconfig.volar.setup({
   init_options = {
     typescript = {

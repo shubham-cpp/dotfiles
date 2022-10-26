@@ -8,17 +8,8 @@ local conditions = {
   hide_in_width = function()
     return vim.fn.winwidth(0) > 80
   end,
-  check_git_workspace = function()
-    local filepath = vim.fn.expand '%:p:h'
-    local gitdir = vim.fn.finddir('.git', filepath .. ';')
-    return gitdir and #gitdir > 0 and #gitdir < #filepath
-  end,
   lsp_active = function()
     return next(vim.lsp.get_active_clients()) ~= nil
-  end,
-
-  toggle_term = function()
-    return vim.opt.filetype._value == 'toggleterm'
   end,
 }
 local function LspAttach()
@@ -35,10 +26,6 @@ local function LspAttach()
     end
   end
   return msg
-end
-
-local function ToggleTerm()
-  return vim.b.toggle_number
 end
 
 require('lualine').setup({
@@ -114,55 +101,6 @@ require('lualine').setup({
     },
     lualine_y = {},
     lualine_z = {},
-  },
-  tabline = {
-    lualine_a = {
-      {
-        'tabs',
-        tabs_color = { inactive = { fg = '#c7c9cd', bg = '#3e4452' } },
-        separator = { left = '', right = '' },
-        -- right_padding = 2,
-      },
-      {
-        'filename',
-        cond = conditions.buffer_not_empty,
-        symbols = {
-          modified = ' ✹',
-          readonly = '[R]',
-          unnamed = '[No Name]',
-        },
-      },
-    },
-    lualine_b = {},
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {
-      {
-        'branch',
-        icon = { '' },
-        -- padding = vim.fn.winwidth(0) / 4,
-        color = { gui = 'bold' },
-        cond = conditions.hide_in_width,
-      },
-      { 'filetype', icon_only = true, colored = false },
-      {
-        'filename',
-        path = 1,
-        cond = conditions.buffer_not_empty,
-        separator = { right = '' },
-        left_padding = 2,
-        on_click = function()
-          os.execute('xdg-open ' .. vim.fn.expand '%:h')
-        end,
-      },
-      {
-        ToggleTerm,
-        cond = conditions.toggle_term,
-        separator = { right = '' },
-        left_padding = 2,
-      },
-    },
   },
   extensions = { 'nvim-tree', 'toggleterm', 'quickfix' },
 })

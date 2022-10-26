@@ -28,7 +28,9 @@ local sources = {
   -- }),
   format.prettierd,
   -- [java|type]script(react)?
-  -- format.fixjson,
+  format.fixjson.with({
+    filetypes = { 'jsonc' },
+  }),
   lint.jsonlint,
   lint.eslint_d.with({
     condition = has_eslint_config,

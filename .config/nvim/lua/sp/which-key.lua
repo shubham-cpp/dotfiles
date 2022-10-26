@@ -1,4 +1,6 @@
-require('which-key').setup({
+local wk = require 'which-key'
+
+wk.setup({
   plugins = {
     spelling = {
       enabled = true,
@@ -119,9 +121,24 @@ local mappings = {
     F = 'Vifm File manager',
     g = 'Lazgit',
   },
+  y = {
+    '"+y',
+    'Yank to clipboard',
+  },
+  Y = {
+    '"+y$',
+    'Yank to clipboard till end',
+  },
+  p = {
+    '"+p',
+    'Paste from clipboard',
+  },
+  P = {
+    '"+P',
+    'Paste from clipboard',
+  },
 }
 
-local wk = require 'which-key'
 wk.register(mappings, { prefix = '<leader>' })
 wk.register({
   s = { [[ :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]], 'Replace word' },

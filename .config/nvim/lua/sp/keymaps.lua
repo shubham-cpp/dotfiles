@@ -21,7 +21,6 @@ map('n', '<C-l>', '<C-W>l')
 
 map('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
 map('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
-map('n', '<leader>yp', '"ayy"ap')
 
 -- Pasting in visual mode doesn't copy
 map('x', 'p', [[ 'pgv"'.v:register.'y' ]], { noremap = true, expr = true })

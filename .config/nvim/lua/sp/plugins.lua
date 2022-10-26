@@ -51,7 +51,14 @@ return require('packer').startup(function(use)
   --     { 'rafamadriz/friendly-snippets' },
   --   },
   -- })
-  use({ 'williamboman/nvim-lsp-installer' })
+  use({ 'williamboman/mason.nvim' })
+  use({
+    'williamboman/mason-lspconfig.nvim',
+    after = { 'mason.nvim', 'nvim-lspconfig' },
+    config = function()
+      require 'sp.mason'
+    end,
+  })
   use({ 'b0o/schemastore.nvim' })
   use({
     'neovim/nvim-lspconfig',
@@ -76,7 +83,7 @@ return require('packer').startup(function(use)
     config = function()
       require 'sp.telescope'
     end,
-    requires = { 'natecraddock/telescope-zf-native.nvim' },
+    requires = { { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' } },
   })
   use({
     'ibhagwan/fzf-lua',
@@ -138,6 +145,12 @@ return require('packer').startup(function(use)
       require 'sp.lualine'
     end,
     -- requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+  })
+  use({
+    'rafcamlet/tabline-framework.nvim',
+    config = function()
+      require 'sp.tabline'
+    end,
   })
   -- }}}
 
@@ -267,7 +280,7 @@ return require('packer').startup(function(use)
   use({
     'danymat/neogen',
     config = function()
-      require('neogen').setup()
+      require('neogen').setup({})
     end,
     cmd = { 'Neogen' },
   })

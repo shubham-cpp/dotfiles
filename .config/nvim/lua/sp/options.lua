@@ -6,7 +6,8 @@ g.mapleader = ' '
 g.maplocalleader = '\\'
 o.number = true
 o.relativenumber = true
-o.clipboard:append({ 'unnamedplus' })
+-- o.clipboard:append({ 'unnamedplus' })
+o.clipboard = ''
 o.mouse = 'a'
 o.path:append({ '**' })
 o.splitbelow = true
@@ -18,7 +19,7 @@ o.backupcopy = 'yes'
 o.writebackup = true
 o.swapfile = false
 o.history = 500
-o.cmdheight = 2
+o.cmdheight = 1
 o.updatetime = 300
 o.shortmess:append 'c'
 o.signcolumn = 'yes'

@@ -62,16 +62,16 @@ end
 
 telescope.setup({
   defaults = {
-    vimgrep_arguments = {
-      'rg',
-      '--color=never',
-      '--no-heading',
-      '--with-filename',
-      '--line-number',
-      '--column',
-      '--smart-case',
-      '--trim',
-    },
+    -- vimgrep_arguments = {
+    --   'rg',
+    --   '--color=never',
+    --   '--no-heading',
+    --   '--with-filename',
+    --   '--line-number',
+    --   '--column',
+    --   '--smart-case',
+    --   '--trim',
+    -- },
     mappings = {
       i = {
         ['<esc>'] = actions.close,
@@ -93,7 +93,7 @@ telescope.setup({
       '.swap',
       '.langservers',
       '.undo',
-      -- '.git',
+      '.git/',
       'node_modules',
       'vendor',
       '.cache',
@@ -115,7 +115,7 @@ telescope.setup({
     },
   },
 })
-telescope.load_extension 'zf-native'
+telescope.load_extension 'fzf'
 vim.cmd [[ command! -bang Nvim :lua require'sp.telescope'.fd_nvim()<CR> ]]
 vim.cmd [[ command! -bang DotFiles :lua require'sp.telescope'.fd_dotfiles()<CR> ]]
 vim.cmd [[ command! -bang MGrep :lua require'sp.telescope'.grep_current()<CR> ]]
