@@ -33,6 +33,9 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
     export MOZ_ENABLE_WAYLAND=1
+    export XDG_CURRENT_DESKTOP=Unity
+    export _JAVA_AWT_WM_NONREPARENTING=1
+    export XCURSOR_SIZE=24
 fi
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
