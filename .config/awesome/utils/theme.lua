@@ -78,43 +78,42 @@ theme.layout_cornerse = themes_path .. 'default/layouts/cornersew.png'
 -- theme.widget_mail = theme.dir .. "/icons/mail.png"
 -- theme.widget_mail_on = theme.dir .. "/icons/mail_on.png"
 theme.tasklist_plain_task_name = true
-theme.tasklist_disable_icon = true
+theme.tasklist_disable_icon = false
 theme.useless_gap = dpi(2)
 theme.gap_single_client = false
 
 theme.titlebar_close_button_focus = icon_dir .. '/window-close-symbolic.svg'
 theme.titlebar_close_button_normal = icon_dir .. '/window-close-symbolic.svg'
 
-theme.titlebar_ontop_button_focus_active = icon_dir .. '/window-keep-above.svg'
-theme.titlebar_ontop_button_focus_inactive = icon_dir .. '/window-keep-above.svg'
-theme.titlebar_ontop_button_normal_active = icon_dir .. '/window-keep-below.svg'
-theme.titlebar_ontop_button_normal_inactive = icon_dir .. '/window-keep-below.svg'
+theme.titlebar_minimize_button_normal = themes_path .. 'default/titlebar/minimize_normal.png'
+theme.titlebar_minimize_button_focus = themes_path .. 'default/titlebar/minimize_focus.png'
 
-theme.titlebar_sticky_button_focus_active = icon_dir .. '/view-pin-symbolic.svg'
-theme.titlebar_sticky_button_focus_inactive = icon_dir .. '/view-pin-symbolic.svg'
-theme.titlebar_sticky_button_normal_active = icon_dir .. '/pane-hide-symbolic.svg'
-theme.titlebar_sticky_button_normal_inactive = icon_dir .. '/pane-hide-symbolic.svg'
+theme.titlebar_ontop_button_normal_inactive = themes_path .. 'default/titlebar/ontop_normal_inactive.png'
+theme.titlebar_ontop_button_focus_inactive = themes_path .. 'default/titlebar/ontop_focus_inactive.png'
+theme.titlebar_ontop_button_normal_active = themes_path .. 'default/titlebar/ontop_normal_active.png'
+theme.titlebar_ontop_button_focus_active = themes_path .. 'default/titlebar/ontop_focus_active.png'
 
--- theme.titlebar_floating_button_focus_active = theme.dir .. "/icons/titlebar/floating_focus_active.png"
--- theme.titlebar_floating_button_normal_active = theme.dir .. "/icons/titlebar/floating_normal_active.png"
--- theme.titlebar_floating_button_focus_inactive = theme.dir .. "/icons/titlebar/floating_focus_inactive.png"
--- theme.titlebar_floating_button_normal_inactive = theme.dir .. "/icons/titlebar/floating_normal_inactive.png"
+theme.titlebar_sticky_button_normal_inactive = themes_path .. 'default/titlebar/sticky_normal_inactive.png'
+theme.titlebar_sticky_button_focus_inactive = themes_path .. 'default/titlebar/sticky_focus_inactive.png'
+theme.titlebar_sticky_button_normal_active = themes_path .. 'default/titlebar/sticky_normal_active.png'
+theme.titlebar_sticky_button_focus_active = themes_path .. 'default/titlebar/sticky_focus_active.png'
 
-theme.titlebar_maximized_button_focus_active = icon_dir .. '/window-minimize-symbolic.svg'
-theme.titlebar_maximized_button_normal_active = icon_dir .. '/window-minimize-symbolic.svg'
-theme.titlebar_maximized_button_focus_inactive = icon_dir .. '/window-maximize-symbolic.svg'
-theme.titlebar_maximized_button_normal_inactive = icon_dir .. '/window-maximize-symbolic.svg'
+theme.titlebar_floating_button_normal_inactive = themes_path .. 'default/titlebar/floating_normal_inactive.png'
+theme.titlebar_floating_button_focus_inactive = themes_path .. 'default/titlebar/floating_focus_inactive.png'
+theme.titlebar_floating_button_normal_active = themes_path .. 'default/titlebar/floating_normal_active.png'
+theme.titlebar_floating_button_focus_active = themes_path .. 'default/titlebar/floating_focus_active.png'
 
--- theme.titlebar_maximized_button_focus_active    = theme.dir .. "/icons/titlebar/maximized_focus_active.png"
--- theme.titlebar_maximized_button_normal_active   = theme.dir .. "/icons/titlebar/maximized_normal_active.png"
--- theme.titlebar_maximized_button_focus_inactive  = theme.dir .. "/icons/titlebar/maximized_focus_inactive.png"
--- theme.titlebar_maximized_button_normal_inactive = theme.dir .. "/icons/titlebar/maximized_normal_inactive.png"
+theme.titlebar_maximized_button_normal_inactive = themes_path .. 'default/titlebar/maximized_normal_inactive.png'
+theme.titlebar_maximized_button_focus_inactive = themes_path .. 'default/titlebar/maximized_focus_inactive.png'
+theme.titlebar_maximized_button_normal_active = themes_path .. 'default/titlebar/maximized_normal_active.png'
+theme.titlebar_maximized_button_focus_active = themes_path .. 'default/titlebar/maximized_focus_active.png'
+
 theme.notification_max_width = dpi(480)
 theme.notification_max_height = dpi(160)
-theme.notification_icon_size = dpi(48)
+theme.notification_icon_size = dpi(32)
 theme.notification_border_width = dpi(3)
 theme.notification_border_color = '#89b4fa'
 
-theme.icon_theme = nil
+theme.icon_theme = '/usr/share/icons/Arc'
 
 return theme

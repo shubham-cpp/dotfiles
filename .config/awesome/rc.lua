@@ -324,16 +324,17 @@ root.buttons(gears.table.join(
 -- @param total_tags number total number of tags to cycle through (default total no. tags created)
 -- @see client.focus:move_to_tag()
 local move_to_tag = function(val, total_tags)
+  local c = client.focus
   local step = val == 1 and 0 or 2
   local total_tags = total_tags or #awful.screen.focused().tags
   -- get current tag
-  local t = client.focus and client.focus.first_tag or nil
+  local t = c and c.first_tag or nil
   if t == nil then
     return
   end
   -- get previous tag (modulo 9 excluding 0 to wrap from 1 to 9)
-  local tag = client.focus.screen.tags[(t.name - step) % total_tags + 1]
-  awful.client.movetotag(tag)
+  local tag = c.screen.tags[(t.name - step) % total_tags + 1]
+  c:move_to_tag(tag)
   tag:view_only()
 end
 -- Skim through non empty tags.
@@ -581,7 +582,7 @@ globalkeys = gears.table.join(
         naughty.notify({
           preset = naughty.config.presets.critical,
           title = 'Browser Not Found',
-          text = 'Brave or Chromium is not installed in the system ' + err,
+          text = 'Brave or Chromium is not installed in the system ' .. err,
         })
       end
     end)
@@ -623,7 +624,7 @@ globalkeys = gears.table.join(
         naughty.notify({
           preset = naughty.config.presets.critical,
           title = 'Calculator Not Found',
-          text = 'Qalculate-gtk, Gnome-calculator or Galculator is not installed in the system ' + err,
+          text = 'Qalculate-gtk, Gnome-calculator or Galculator is not installed in the system ' .. err,
         })
       end
     end)
