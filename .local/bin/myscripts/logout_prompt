@@ -1,14 +1,22 @@
 #!/usr/bin/env sh
 
 # options="logout\npoweroff\nreboot"
-
-operation=$(printf "logout\npoweroff\nreboot" | dmenu -i -p "Logout Prompt:")
+program=""
+if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+    program="dmenu"
+else
+    program="/bin/rofi -dmenu"
+fi
+operation=$(printf "logout\npoweroff\nreboot" | $program -i -p "Logout Prompt:")
 
 case "$operation" in
-    logout ) notify-send "In Progress" "Still some work left todo"
-        ;;
-    poweroff ) poweroff || loginctl poweroff
-        ;;
-    reboot ) reboot || loginctl reboot
-        ;;
+  logout)
+    notify-send "In Progress" "Still some work left todo"
+    ;;
+  poweroff)
+    poweroff || loginctl poweroff
+    ;;
+  reboot)
+    reboot || loginctl reboot
+    ;;
 esac
