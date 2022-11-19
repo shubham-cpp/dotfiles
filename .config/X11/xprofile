@@ -1,10 +1,10 @@
 #!/bin/bash
 run() {
-  if ! pgrep $1; then
-    if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-      $@ &
-    else
+  if ! pgrep "$1"; then
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
       XDG_CURRENT_DESKTOP=Unity $@ &
+    else
+      $@ &
     fi
   fi
 }
@@ -25,8 +25,9 @@ basic() {
   # run dunst
   if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
     # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-    run picom --experimental-backends
+    run picom #--experimental-backends
     run xwallpaper --stretch ~/.config/wall.png
+    # run feh --bg-fill --no-fehbg -q ~/.config/wall.png
   fi
   # run kitty
   run alacritty -e "tmux"
