@@ -291,7 +291,11 @@ keys = [
         ),
         desc=f"Launch {browser}",
     ),
-    Key("M-e", lazy.spawn("thunar"), desc="Launch File Manager"),
+    Key(
+        "M-e",
+        lazy.spawn("thunar" if isfile("/usr/bin/thunar") else "pcmanfm"),
+        desc="Launch File Manager",
+    ),
     Key("M-S-e", lazy.spawn("alacritty -e lfv"), desc="Launch lf"),
     Key("M-S-q", smart_window_kill(), desc="Kill focused window"),
     Key("M-C-r", lazy.reload_config(), desc="Reload the config"),
@@ -312,8 +316,34 @@ keys = [
         lazy.spawn("rofi -show drun -async-read 10"),
         desc="Spawn Application Menu",
     ),
+    Key(
+        "<XF86Search>",
+        lazy.spawn("rofi -show drun -async-read 10"),
+        desc="Spawn Application Menu",
+    ),
     Key("M-v", lazy.spawn("virt-manager"), desc="Launch Virt-manager"),
-    Key("M-g", lazy.spawn("qalculate-gtk"), desc="Launch Calculator"),
+    Key(
+        "M-g",
+        lazy.spawn(
+            "qalculate-gtk"
+            if isfile("/usr/bin/qalculate-gtk")
+            else "gnome-calculator"
+            if isfile("/usr/bin/gnome-calculator")
+            else "galculator"
+        ),
+        desc="Launch Calculator",
+    ),
+    Key(
+        "<XF86Calculator>",
+        lazy.spawn(
+            "qalculate-gtk"
+            if isfile("/usr/bin/qalculate-gtk")
+            else "gnome-calculator"
+            if isfile("/usr/bin/gnome-calculator")
+            else "galculator"
+        ),
+        desc="Launch Calculator",
+    ),
     # }}}
     # Volume {{{
     Key(
@@ -337,6 +367,18 @@ keys = [
     ),
     # }}}
     # Brightness {{{
+    Key(
+        "<XF86AudioNext>",
+        lazy.spawn("brightnessctl s 10+"),
+        update_brightness(),
+        desc="Inc Brightness",
+    ),
+    Key(
+        "<XF86AudioPrev>",
+        lazy.spawn("brightnessctl s 10-"),
+        update_brightness(),
+        desc="Dec Brightness",
+    ),
     Key(
         "<XF86MonBrightnessUp>",
         lazy.spawn("brightnessctl s 10+"),

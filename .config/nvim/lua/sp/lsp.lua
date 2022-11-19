@@ -99,7 +99,6 @@ function on_attach(client, bufnr) -- {{{
     client.server_capabilities.documentRangeFormattingProvider = false
   end
   if client.name == 'clangd' then
-    -- client.offset_encoding = 'utf-8'
     client.offset_encodings = 'utf-8'
   end
 
@@ -432,5 +431,12 @@ lspconfig.rust_analyzer.setup({ --{{{
       hover = { actions = { references = { enable = true } } },
       typing = { autoClosingAngleBrackets = { enable = true } },
     },
+  },
+}) --}}}
+
+lspconfig.eslint.setup({ --{{{
+  flags = { debounce_text_changes = 150 },
+  settings = {
+    eslint = { autoFixOnSave = true, format = { enable = true }, packageManager = 'yarn' },
   },
 }) --}}}

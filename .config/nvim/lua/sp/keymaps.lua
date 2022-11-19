@@ -43,6 +43,9 @@ map('i', '?', '?<C-g>u')
 map('n', '<M-->', ':exe "vertical resize -10"<CR>')
 map('n', '<M-=>', ':exe "vertical resize +10"<CR>')
 
+map('x', '<leader>y', '"+y')
+map('x', '<leader>p', '"+p')
+
 -- Plugin mappings
 map('', 's', ':HopWord<cr>')
 map('n', 'S', ':HopChar2<cr>')

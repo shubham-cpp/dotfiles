@@ -21,28 +21,26 @@ local add_svelte = {
 }
 local sources = {
   -- Html,css,json
-  -- format.prettierd.with({
-  -- 	disabled_filetypes = { --[[ "json", ]]
-  -- 		'markdown',
-  -- 	},
-  -- }),
-  format.prettierd,
+  format.prettierd.with({
+    disabled_filetypes = { 'json', 'markdown' },
+  }),
+  -- format.prettierd,
   -- [java|type]script(react)?
   format.fixjson.with({
     filetypes = { 'jsonc' },
   }),
   lint.jsonlint,
-  lint.eslint_d.with({
-    condition = has_eslint_config,
-    filetypes = add_svelte,
-  }),
-  format.eslint_d.with({
-    condition = has_eslint_config,
-  }),
-  code_actions.eslint_d.with({
-    condition = has_eslint_config,
-    filetypes = add_svelte,
-  }),
+  -- lint.eslint_d.with({
+  --   condition = has_eslint_config,
+  --   filetypes = add_svelte,
+  -- }),
+  -- format.eslint_d.with({
+  --   condition = has_eslint_config,
+  -- }),
+  -- code_actions.eslint_d.with({
+  --   condition = has_eslint_config,
+  --   filetypes = add_svelte,
+  -- }),
   -- C/C++
   format.clang_format,
   lint.cppcheck,

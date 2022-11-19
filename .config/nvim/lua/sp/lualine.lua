@@ -35,7 +35,7 @@ require('lualine').setup({
     -- everforest | horizon | iceberg_dark | moonfly | nightfly
     -- modus-vivendi | nord
     -- If themes: material-nvim = material-stealth | tokyonight = tokyonight
-    theme = 'horizon',
+    -- theme = 'horizon',
     component_separators = '|',
     section_separators = { left = '', right = '' },
     disabled_filetypes = {},

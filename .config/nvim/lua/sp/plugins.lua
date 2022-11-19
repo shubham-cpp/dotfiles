@@ -111,6 +111,13 @@ return require('packer').startup(function(use)
 
   -- Theming {{{
   use({
+    'Tsuzat/NeoSolarized.nvim',
+    disable = false,
+    config = function()
+      require 'sp.colors.solarize'
+    end,
+  })
+  use({
     'ellisonleao/gruvbox.nvim',
     disable = true,
     config = function()
@@ -119,7 +126,7 @@ return require('packer').startup(function(use)
   })
   use({
     'navarasu/onedark.nvim',
-    disable = false,
+    disable = true,
     config = function()
       require 'sp.colors.onedark'
     end,
@@ -374,6 +381,17 @@ return require('packer').startup(function(use)
     'folke/which-key.nvim',
     config = function()
       require 'sp.which-key'
+    end,
+  })
+  use({
+    'rcarriga/nvim-notify',
+    event = 'BufRead',
+    config = function()
+      local ok, notify = pcall(require, 'notify')
+      if not ok then
+        return
+      end
+      vim.notify = notify
     end,
   })
   -- }}}
