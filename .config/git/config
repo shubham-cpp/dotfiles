@@ -3,11 +3,18 @@
 	email = shubhampawar3007@gmail.com
 [core]
 	excludesfile = ~/.config/git/ignore
+    pager = delta
 [init]
 	defaultBranch = main
 [alias]
 	logline = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	ll = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true    # use n and N to move between diff sections
+    light = false
 
 [diff]
     tool = nvimdiff
