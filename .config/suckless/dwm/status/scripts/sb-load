@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+printf "   %2.0f%%" $(expr 100 - $(vmstat 1 2|tail -1|awk '{print $15}'))

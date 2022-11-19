@@ -114,7 +114,7 @@ diff -up a/dwm.c b/dwm.c
 +	if (selmon->sel == NULL)
 +		return;
 +
-+	if ((tmp = nexttag_skip()) == selmon->tagset[selmon->seltags])
++	if ((tmp = nexttag()) == selmon->tagset[selmon->seltags])
 +		return;
 +
 +	tag(&(const Arg){.ui = tmp });
@@ -129,7 +129,7 @@ diff -up a/dwm.c b/dwm.c
 +	if (selmon->sel == NULL)
 +		return;
 +
-+	if ((tmp = prevtag_skip()) == selmon->tagset[selmon->seltags])
++	if ((tmp = prevtag()) == selmon->tagset[selmon->seltags])
 +		return;
 +
 +	tag(&(const Arg){.ui = tmp });
@@ -147,13 +147,13 @@ diff -up a/dwm.c b/dwm.c
 +void
 +viewnext_skip(const Arg *arg)
 +{
-+	view(&(const Arg){.ui = nexttag_skip()});
++	view(&(const Arg){.ui = nexttag()});
 +}
 +
 +void
 +viewprev_skip(const Arg *arg)
 +{
-+	view(&(const Arg){.ui = prevtag_skip()});
++	view(&(const Arg){.ui = prevtag()});
 +}
 +
  Client *

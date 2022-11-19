@@ -1,6 +1,6 @@
 #!/bin/bash
 
-output="$(light)"
+output="$(brightnessctl g)"
 light="${output/.*}"
 
 [ $? -ne 0 ] && exit $?
@@ -15,4 +15,4 @@ else
 	icon=" "
 fi
 
-echo " $icon  $light%"
+echo "$icon $light%"

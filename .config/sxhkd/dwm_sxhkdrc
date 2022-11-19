@@ -10,10 +10,10 @@ super + Escape
 
 # Launch Filemanager
 super +{_,shift + } e
-    {thunar || pcmanfm || nemo ,alacritty -e vifmrun}
+    {pcmanfm || thunar ,alacritty -e vifmrun}
 
 super +{_,shift +} w
-    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || chromium || brave || flatpak run com.github.Eloston.UngoogledChromium}
+    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) ||  brave-browser || chromium ||flatpak run com.github.Eloston.UngoogledChromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
@@ -39,9 +39,14 @@ XF86Audio{Raise,Lower}Volume
 XF86AudioMute
     audio toggle
 
+XF86{Search,Calculator}
+    {rofi -show drun -async-read 10,qalculate-gtk || gnome-calculator || galculator}
+
 #Brightness up
+XF86Audio{Next,Prev}
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
 XF86MonBrightness{Up,Down}
-    xbacklight -{inc,dec} 10 && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(light) && kill -57 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
-    xbacklight -set {200,30}
+    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)

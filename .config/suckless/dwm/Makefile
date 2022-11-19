@@ -23,10 +23,12 @@ config.h:
 	cp config.def.h $@
 
 dwm: ${OBJ}
+	cp -v config.def.h config.h
 	${CC} -o $@ ${OBJ} ${LDFLAGS}
 
 clean:
-	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz *.rej *.orig
+	rm -f dwm ${OBJ} dwm-${VERSION}.tar.gz
+	rm -rf *.orig *.rej
 
 dist: clean
 	mkdir -p dwm-${VERSION}
