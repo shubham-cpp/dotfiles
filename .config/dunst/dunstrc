@@ -149,7 +149,7 @@
     max_icon_size = 64
 
     # Paths to default icons.
-    icon_path = /usr/share/icons/hicolor/16x16/apps/:/usr/share/icons/hicolor/16x16/status/:/usr/share/icons/hicolor/16x16/device/:/home/shubham/.local/share/icons/Win10Sur-dark/status/symbolic/:/home/shubham/.local/share/icons/Win10Sur-blue-dark/devices/symbolic/
+    icon_path = /usr/share/icons/hicolor/16x16/apps/:/usr/share/icons/hicolor/16x16/status/:/usr/share/icons/hicolor/16x16/device/:/usr/share/icons/hicolor/scalable/status/:/home/shubham/.local/share/icons/Papirus-Dark/32x32/apps/:/home/shubham/.local/share/icons/Papirus-Dark/24x24/panel/
 
     ### History ###
 

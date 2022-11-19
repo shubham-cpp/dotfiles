@@ -31,6 +31,7 @@ alias xcp="xclip -i -r -sel clip"
 # alias dr="d remove"
 # alias du="d upgrade"
 # alias ds="dnf search"
+# alias dp="dnf provides"
 alias yay="paru"
 alias ys="yay -S --noredownload --needed"
 alias yr="yay -Rncs"
@@ -55,7 +56,7 @@ alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel cli
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 
 alias tmux="TERM=xterm-256color /usr/bin/tmux"
-# alias which="alias | /bin/which --tty-only --read-alias"
+alias which="alias | /bin/which --tty-only --read-alias"
 # some helpful git aliases
 alias g="git"
 
