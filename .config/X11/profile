@@ -51,6 +51,7 @@ export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
 export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+[ -x "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 export GOPATH="$XDG_DATA_HOME"/golib
 export GOPATH="$GOPATH:$HOME/Documents/Programming/GoLang"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/npm/npmrc"

@@ -66,6 +66,13 @@ return require('packer').startup(function(use)
       require 'sp.lsp'
     end,
   })
+  use({
+    'simrat39/rust-tools.nvim',
+    after = 'mason-lspconfig.nvim',
+    config = function()
+      require 'sp.rust'
+    end,
+  })
 
   use({
     'j-hui/fidget.nvim',
@@ -391,6 +398,9 @@ return require('packer').startup(function(use)
       if not ok then
         return
       end
+      notify.setup({
+        background_colour = '#001222',
+      })
       vim.notify = notify
     end,
   })

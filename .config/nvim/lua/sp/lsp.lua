@@ -44,6 +44,7 @@ end --- }}}
 function on_attach(client, bufnr) -- {{{
   cmd [[ command! -bar LspFormat :lua vim.lsp.buf.format({async=false})<cr> ]]
   cmd [[ command! -bar LspOrganizeImports :lua vim.lsp.buf.code_action({ context = { only = { "source.organizeImports" } }, apply = true })<cr> ]]
+  cmd [[ command! -bar LspFixAll :lua vim.lsp.buf.code_action({ context = { only = { "source.fixAll" } }, apply = true })<cr> ]]
   cmd [[ command! -bar LspDiagnostics :lua vim.lsp.diagnostic.show_line_diagnostics()<CR> ]]
   cmd [[ command! -bar LspDefination :lua vim.lsp.buf.definition()<CR> ]]
   cmd [[ command! -bar LspDeclarations :lua vim.lsp.buf.declaration()<CR> ]]
@@ -56,12 +57,11 @@ function on_attach(client, bufnr) -- {{{
   map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr })
   map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr })
   map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
-  map('i', '<C-s>', 'vim.lsp.buf.signature_help', { buffer = bufnr })
+  map('i', '<C-s>', vim.lsp.buf.signature_help, { buffer = bufnr })
   map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr })
 
-  map('n', 'gs', function()
-    vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-  end, { buffer = bufnr })
+  map('n', 'gs', '<cmd>LspOrganizeImports<cr>', { buffer = bufnr })
+  map('n', 'gS', '<cmd>LspFixAll<cr>', { buffer = bufnr })
   -- map('n', 'gr', ':LspReferences<CR>',{buffer=bufnr})
   if ok_fzf then
     map('n', 'gr', function()
@@ -422,17 +422,18 @@ lspconfig.volar.setup({
   },
 })
 --}}}
-lspconfig.rust_analyzer.setup({ --{{{
-  capabilities = cmp_capabilities,
-  on_attach = on_attach,
-  flags = { debounce_text_changes = 150 },
-  settings = {
-    ['rust-analyzer'] = {
-      hover = { actions = { references = { enable = true } } },
-      typing = { autoClosingAngleBrackets = { enable = true } },
-    },
-  },
-}) --}}}
+-- lspconfig.rust_analyzer.setup({ --{{{
+--   capabilities = cmp_capabilities,
+--   cmd = { 'rust-analyzer', '--log-file', '/tmp/rust-lang-debug.log' },
+--   on_attach = on_attach,
+--   flags = { debounce_text_changes = 150 },
+--   -- settings = {
+--   --   ['rust-analyzer'] = {
+--   --     hover = { actions = { references = { enable = true } } },
+--   --     typing = { autoClosingAngleBrackets = { enable = true } },
+--   --   },
+--   -- },
+-- }) --}}}
 
 lspconfig.eslint.setup({ --{{{
   flags = { debounce_text_changes = 150 },

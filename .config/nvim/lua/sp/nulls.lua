@@ -44,6 +44,8 @@ local sources = {
   -- C/C++
   format.clang_format,
   lint.cppcheck,
+  -- Rust
+  format.rustfmt,
   -- Go
   format.gofumpt,
   -- format.golines,
