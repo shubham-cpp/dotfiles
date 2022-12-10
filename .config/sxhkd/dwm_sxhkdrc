@@ -10,10 +10,10 @@ super + Escape
 
 # Launch Filemanager
 super +{_,shift + } e
-    {pcmanfm || thunar ,alacritty -e vifmrun}
+    {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
 
 super +{_,shift +} w
-    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) ||  brave-browser || chromium ||flatpak run com.github.Eloston.UngoogledChromium}
+    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) ||  brave-browser || brave || chromium ||flatpak run com.github.Eloston.UngoogledChromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
