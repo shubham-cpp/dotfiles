@@ -19,9 +19,7 @@ from libqtile.log_utils import logger
 
 # from shutil import which
 
-
 # from time import time
-
 
 # }}}
 
@@ -31,10 +29,8 @@ terminal = ""
 if qtile.core.name == "x11":
     terminal = getenv("TERMINAL", "xterm")
 elif qtile.core.name == "wayland":
-
     terminal = "foot"
 browser = getenv("BROWSER", "firefox")
-
 
 # Custom Lazy Functions {{{
 # @hook.subscribe.client_urgent_hint_changed
@@ -293,7 +289,7 @@ keys = [
     ),
     Key(
         "M-e",
-        lazy.spawn("thunar" if isfile("/usr/bin/thunar") else "pcmanfm"),
+        lazy.spawn("thunar || pcmanfm", shell=True),
         desc="Launch File Manager",
     ),
     Key("M-S-e", lazy.spawn("alacritty -e lfv"), desc="Launch lf"),
@@ -303,7 +299,7 @@ keys = [
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
         "M-d",
-        lazy.spawn("dmenu_run_history -i"),
+        lazy.spawn("dmenu_run_history -i || dmenu_run -i", shell=True),
         desc="Spawn Run Prompt",
     ),
     Key(
@@ -324,13 +320,7 @@ keys = [
     Key("M-v", lazy.spawn("virt-manager"), desc="Launch Virt-manager"),
     Key(
         "M-g",
-        lazy.spawn(
-            "qalculate-gtk"
-            if isfile("/usr/bin/qalculate-gtk")
-            else "gnome-calculator"
-            if isfile("/usr/bin/gnome-calculator")
-            else "galculator"
-        ),
+        lazy.spawn("qalculate-gtk || gnome-calculator || galculator", shell=True),
         desc="Launch Calculator",
     ),
     Key(
@@ -485,11 +475,11 @@ def NerdIcon(icon="", fg=colors[0], bg=colors[1]):
     return widget.TextBox(
         fmt=icon,
         fontsize=18,
-        font="FuraCode Nerd Font",
+        font="Hack Nerd Font",
         background=bg,
         foreground=fg,
-        margin=3,
-        padding_x=8,
+        # margin=2,
+        padding=7,
     )
 
 
@@ -500,7 +490,7 @@ def calIcon(level: int, icons: list[str]) -> str:
         return icons[3]
     elif level > 50:
         return icons[2]
-    elif level > 20:
+    elif level > 5:
         return icons[1]
     else:
         return icons[0]
@@ -579,16 +569,18 @@ screens = [
                 ),
                 widget.Prompt(),
                 widget.TaskList(
-                    txt_floating="🗖 ",
-                    txt_minimized="🗕 ",
-                    txt_maximized="🗖 ",
+                    txt_floating="[float]",
+                    txt_minimized="[min]",
+                    txt_maximized="[max]",
                     highlight_method="block",
                     margin=0,
+                    padding=4,
                     borderwidth=3,
+                    fontsize=14,
                     urgent_alert_method="text",
                     urgent_text="#834a61",
                 ),
-                NerdIcon("", bg=colors[3]),
+                NerdIcon("", bg=colors[3]),
                 widget.Clock(
                     format="%a %d, %I:%M %p",
                     update_interval=60,
@@ -611,29 +603,29 @@ screens = [
                     foreground=colors[0],
                     background="#eeeeee",
                 ),
-                ArrowSep(),
-                widget.GenPollText(
-                    name="brightness_icon",
-                    func=lambda: getIcon("brightness"),
-                    font="FuraCode Nerd Font",
-                    fontsize=18,
-                    foreground=colors[0],
-                    background=colors[10],
-                    update_interval=60,
-                    padding=3,
-                ),
-                widget.GenPollText(
-                    name="brightness",
-                    func=lambda: subprocess.run(
-                        ["brightnessctl", "g"],
-                        stdout=subprocess.PIPE,
-                    )
-                    .stdout.decode("utf-8")
-                    .strip(),  # [:2],
-                    padding=3,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                ),
+                # ArrowSep(),
+                # widget.GenPollText(
+                #     name="brightness_icon",
+                #     func=lambda: getIcon("brightness"),
+                #     font="FuraCode Nerd Font",
+                #     fontsize=18,
+                #     foreground=colors[0],
+                #     background=colors[10],
+                #     update_interval=60,
+                #     padding=3,
+                # ),
+                # widget.GenPollText(
+                #     name="brightness",
+                #     func=lambda: subprocess.run(
+                #         ["brightnessctl", "g"],
+                #         stdout=subprocess.PIPE,
+                #     )
+                #     .stdout.decode("utf-8")
+                #     .strip(),  # [:2],
+                #     padding=3,
+                #     foreground=colors[0],
+                #     background="#eeeeee",
+                # ),
                 ArrowSep(),
                 widget.GenPollText(
                     name="volume_icon",
@@ -658,33 +650,35 @@ screens = [
                     background="#eeeeee",
                     update_interval=10,
                 ),
+                # ArrowSep(),
+                # widget.GenPollText(
+                #     name="battery_icon",
+                #     func=lambda: getIcon("battery"),
+                #     font="FuraCode Nerd Font",
+                #     fontsize=18,
+                #     foreground=colors[6],
+                #     background="#86EFAC",
+                #     update_interval=60,
+                #     padding=3,
+                # ),
+                # widget.Battery(
+                #     battery="BAT1",
+                #     unknown_char="",
+                #     discharge_char="",
+                #     empty_char="",
+                #     charge_char="",
+                #     format="{char} {percent:2.0%}",
+                #     # format="{percent:2.0%} {char}",
+                #     low_foreground=colors[5],
+                #     notify_below=15,
+                #     # font="Iosevka Nerd Font",
+                #     fontsize=14,
+                #     padding=3,
+                #     foreground=colors[0],
+                #     background="#eeeeee",
+                # ),
                 ArrowSep(),
-                widget.GenPollText(
-                    name="battery_icon",
-                    func=lambda: getIcon("battery"),
-                    font="FuraCode Nerd Font",
-                    fontsize=18,
-                    foreground=colors[6],
-                    background="#86EFAC",
-                    update_interval=60,
-                    padding=3,
-                ),
-                widget.Battery(
-                    battery="BAT1",
-                    unknown_char="",
-                    discharge_char="",
-                    empty_char="",
-                    charge_char="",
-                    format="{char} {percent:2.0%}",
-                    # format="{percent:2.0%} {char}",
-                    low_foreground=colors[5],
-                    notify_below=15,
-                    # font="Iosevka Nerd Font",
-                    fontsize=14,
-                    padding=3,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                ),
+                widget.CapsNumLockIndicator(update_interval=1.5, fontsize=14),
                 ArrowSep(),
                 widget.Net(format=" {up}   {down}"),
                 ArrowSep(),
