@@ -48,7 +48,7 @@ local file_reloads_commands = {
     event = 'FileType',
     opts = {
       callback = function()
-        vim.opt.foldmethod = 'marker'
+        vim.opt_local.foldmethod = 'marker'
         map({ lhs = '<F5>', rhs = '<cmd>so %<cr>', opts = { noremap = true, buffer = true } })
       end,
       pattern = { 'vim', 'lua' },
@@ -252,7 +252,19 @@ local comments_commands = {
   {
     event = 'FileType',
     opts = {
-      command = 'set formatoptions-=c formatoptions-=r formatoptions-=o',
+      -- command = 'set formatoptions-=c formatoptions-=r formatoptions-=o',
+      callback = function()
+        vim.opt_local.formatoptions = vim.opt_local.formatoptions
+          - 'a' -- Auto formatting is BAD.
+          - 't' -- Don't auto format my code. I got linters for that.
+          + 'c' -- In general, I like it when comments respect textwidth
+          + 'q' -- Allow formatting comments w/ gq
+          - 'o' -- O and o, don't continue comments
+          + 'r' -- But do continue when pressing enter.
+          + 'n' -- Indent past the formatlistpat, not underneath it.
+          + 'j' -- Auto-remove comments if possible.
+          - '2' -- I'm not in gradeschool anymore
+      end,
       desc = 'Pressing O/o inside comment wont open another comment',
     },
   },

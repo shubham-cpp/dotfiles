@@ -44,36 +44,36 @@ require('lualine').setup({
   },
   sections = {
     lualine_a = {
-      {
-        'mode',
-        separator = { left = '' },
-        fmt = function(str)
-          return str:sub(1, 1)
-        end,
-      },
+      -- {
+      --   'mode',
+      --   separator = { left = '' },
+      --   fmt = function(str)
+      --     return str:sub(1, 1)
+      --   end,
+      -- },
     },
     lualine_b = {
-      { 'branch', icon = '' },
+      { 'branch', icon = '', separator = { left = '' } },
       {
         'diff',
         symbols = { added = ' ', modified = '柳 ', removed = ' ' },
         cond = conditions.hide_in_width,
       },
-      {
-        'diagnostics',
-        sources = { 'nvim_diagnostic' },
-        symbols = { error = ' ', warn = ' ', info = ' ' },
-      },
+      -- {
+      --   'diagnostics',
+      --   sources = { 'nvim_diagnostic' },
+      --   symbols = { error = ' ', warn = ' ', info = ' ' },
+      -- },
       { LspAttach, icon = ' LSP:', color = { fg = '#ffffff', gui = 'bold' }, cond = conditions.lsp_active },
     },
     lualine_c = {
-      { 'filename', path = 1, cond = conditions.buffer_not_empty },
+      -- { 'filename', path = 1, cond = conditions.buffer_not_empty },
       { 'filesize', cond = conditions.buffer_not_empty },
     },
     lualine_x = {
       { 'encoding', fmt = string.upper, cond = conditions.hide_in_width },
-      { 'fileformat', fmt = string.upper, cond = conditions.hide_in_width },
-      { 'filetype', cond = conditions.hide_in_width },
+      -- { 'fileformat', fmt = string.upper, cond = conditions.hide_in_width },
+      -- { 'filetype', cond = conditions.hide_in_width },
     },
     lualine_y = { { 'progress', cond = conditions.hide_in_width } },
     lualine_z = { { 'location', separator = { right = '' }, left_padding = 2 } },

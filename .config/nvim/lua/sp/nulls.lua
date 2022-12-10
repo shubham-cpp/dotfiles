@@ -27,7 +27,8 @@ local sources = {
   -- format.prettierd,
   -- [java|type]script(react)?
   format.fixjson.with({
-    filetypes = { 'jsonc' },
+    filetypes = { 'jsonc', 'json' },
+    extra_args = { '-i', '2' },
   }),
   lint.jsonlint,
   -- lint.eslint_d.with({
@@ -61,7 +62,7 @@ local sources = {
   --       or vim.fn.expand '~/.config/selene/' -- fallback value
   --   end,
   -- }),
-  format.stylua.with({
+  format.stylua,--[[ .with({
     extra_args = {
       '--indent-type',
       'Spaces',
@@ -74,7 +75,7 @@ local sources = {
       '--call-parentheses',
       'NoSingleString',
     },
-  }),
+  }) ]]
   -- Python
   format.isort,
   format.black.with({ extra_args = { '-l', '80', '--fast' } }),

@@ -1,5 +1,23 @@
 return require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim'
+  use({
+    'wbthomason/packer.nvim',
+    cmd = {
+      'PackerSnapshot',
+      'PackerSnapshotRollback',
+      'PackerSnapshotDelete',
+      'PackerInstall',
+      'PackerUpdate',
+      'PackerSync',
+      'PackerClean',
+      'PackerCompile',
+      'PackerStatus',
+      'PackerProfile',
+      'PackerLoad',
+    },
+    config = function()
+      require 'sp.plugins'
+    end,
+  })
   use 'lewis6991/impatient.nvim'
   use 'nathom/filetype.nvim'
 
@@ -35,21 +53,21 @@ return require('packer').startup(function(use)
     end,
   })
   -- use({
-  --   'neoclide/coc.nvim',
-  --   branch = 'release',
-  --   requires = {
-  --     { 'honza/vim-snippets' },
-  --     { 'SirVer/ultisnips' },
-  --     {
-  --       'L3MON4D3/LuaSnip',
-  --       tag = 'v1.*',
-  --       config = function()
-  --         require('luasnip.loaders.from_vscode').lazy_load()
-  --         require('luasnip.loaders.from_snipmate').lazy_load()
-  --       end,
-  --     },
-  --     { 'rafamadriz/friendly-snippets' },
-  --   },
+  --	 'neoclide/coc.nvim',
+  --	 branch = 'release',
+  --	 requires = {
+  --		 { 'honza/vim-snippets' },
+  --		 { 'SirVer/ultisnips' },
+  --		 {
+  --			 'L3MON4D3/LuaSnip',
+  --			 tag = 'v1.*',
+  --			 config = function()
+  --				 require('luasnip.loaders.from_vscode').lazy_load()
+  --				 require('luasnip.loaders.from_snipmate').lazy_load()
+  --			 end,
+  --		 },
+  --		 { 'rafamadriz/friendly-snippets' },
+  --	 },
   -- })
   use({ 'williamboman/mason.nvim' })
   use({
@@ -94,6 +112,7 @@ return require('packer').startup(function(use)
   })
   use({
     'ibhagwan/fzf-lua',
+    disable = true,
     config = function()
       require 'sp.fzf-lua'
     end,
@@ -193,6 +212,11 @@ return require('packer').startup(function(use)
 
   use({
     'phaazon/hop.nvim',
+    setup = function()
+      local map = require('sp.helper').map
+      map('', 'S', ':HopWord<cr>')
+      map('', 's', ':HopChar2<cr>')
+    end,
     config = function()
       require('hop').setup()
     end,
@@ -228,6 +252,10 @@ return require('packer').startup(function(use)
   use({
     'TimUntersberger/neogit',
     cmd = { 'Neogit' },
+    setup = function()
+      local map = require('sp.helper').map
+      map('n', '<leader>gg', ':Neogit<cr>')
+    end,
     config = function()
       require('neogit').setup({
         integrations = {
@@ -269,6 +297,12 @@ return require('packer').startup(function(use)
 
   use({
     'numToStr/Comment.nvim',
+    setup = function()
+      local map = require('sp.helper').map
+      map('x', '<leader>/', '<Plug>(comment_toggle_linewise_visual)')
+      -- Copy and Comment
+      map('n', '<A-/>', '"ayy"apk<Plug>(comment_toggle_linewise_current)j')
+    end,
     config = function()
       require 'sp.comments'
     end,
@@ -296,6 +330,13 @@ return require('packer').startup(function(use)
     config = function()
       require('neogen').setup({})
     end,
+    setup = function()
+      local map = require('sp.helper').map
+      map('n', '<leader>nn', ':Neogen<cr>')
+      map('n', '<leader>nt', ':Neogen type<cr>')
+      map('n', '<leader>nf', ':Neogen file<cr>')
+      map('n', '<leader>nc', ':Neogen class<cr>')
+    end,
     cmd = { 'Neogen' },
   })
   use({
@@ -321,37 +362,7 @@ return require('packer').startup(function(use)
   use({
     'monaqa/dial.nvim',
     config = function()
-      local map = function(mode, lhs, rhs)
-        require('sp.helper').map(mode, lhs, rhs, { noremap = false, silent = false })
-      end
-      local augend = require 'dial.augend'
-      require('dial.config').augends:register_group({
-        default = {
-          augend.integer.alias.decimal,
-          augend.constant.alias.bool,
-          augend.integer.alias.hex,
-          augend.date.alias['%Y/%m/%d'],
-        },
-        typescript = {
-          augend.integer.alias.decimal,
-          augend.integer.alias.hex,
-          augend.constant.new({ elements = { 'let', 'const' } }),
-        },
-        visual = {
-          augend.integer.alias.decimal,
-          augend.integer.alias.hex,
-          augend.integer.alias.hex,
-          augend.date.alias['%Y/%m/%d'],
-          augend.constant.alias.alpha,
-          augend.constant.alias.Alpha,
-        },
-      })
-      map('n', '<C-a>', '<Plug>(dial-increment)')
-      map('n', '<C-x>', '<Plug>(dial-decrement)')
-      map('v', '<C-a>', '<Plug>(dial-increment)')
-      map('v', '<C-x>', '<Plug>(dial-decrement)')
-      map('v', 'g<C-a>', 'g<Plug>(dial-increment)')
-      map('v', 'g<C-x>', 'g<Plug>(dial-decrement)')
+      require 'sp.dial'
     end,
   })
   -- }}}
@@ -359,6 +370,11 @@ return require('packer').startup(function(use)
   -- IDE bloat {{{
   use({
     'kyazdani42/nvim-tree.lua',
+    setup = function()
+      local map = require('sp.helper').map
+      map('n', '<C-e>', ':NvimTreeToggle<cr>')
+      map('n', '<C-n>', ':NvimTreeFindFileToggle<cr>')
+    end,
     cmd = { 'NvimTreeToggle', 'NvimTreeFindFileToggle' },
     config = function()
       require 'sp.nvim-tree'
@@ -369,7 +385,7 @@ return require('packer').startup(function(use)
     config = function()
       require('dressing').setup({
         select = {
-          backend = { 'fzf_lua', 'telescope', 'builtin' },
+          backend = { 'telescope', 'fzf_lua', 'builtin' },
         },
       })
     end,
@@ -394,14 +410,13 @@ return require('packer').startup(function(use)
     'rcarriga/nvim-notify',
     event = 'BufRead',
     config = function()
-      local ok, notify = pcall(require, 'notify')
-      if not ok then
-        return
-      end
-      notify.setup({
-        background_colour = '#001222',
-      })
-      vim.notify = notify
+      require 'sp.notify'
+    end,
+  })
+  use({
+    'Darazaki/indent-o-matic',
+    config = function()
+      require('indent-o-matic').setup({})
     end,
   })
   -- }}}

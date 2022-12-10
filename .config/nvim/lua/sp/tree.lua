@@ -30,7 +30,7 @@ require('nvim-treesitter.configs').setup({
   },
   highlight = {
     enable = true,
-    use_languagetree = true,
+    use_languagetree = false,
     -- disable = { 'org' }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
     -- additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
   },
@@ -105,9 +105,7 @@ require('nvim-treesitter.configs').setup({
     use_virtual_text = true,
     lint_events = { 'BufWrite', 'InsertLeave' },
   },
-  matchup = {
-    enable = true,
-  },
+  matchup = { enable = true },
 })
 
 local fn = vim.fn

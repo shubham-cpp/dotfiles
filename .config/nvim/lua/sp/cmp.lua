@@ -156,6 +156,7 @@ cmp.setup({
         end,
       },
     },
+    -- { name = 'buffer-lines' },
     { name = 'cmp_tabnine' },
   }),
   formatting = {
@@ -195,7 +196,9 @@ cmp.setup({
 
 cmp.setup.cmdline(':', {
   sources = sources({
-    { name = 'cmdline' },
+    { name = 'cmdline', option = {
+      ignore_cmds = { 'Man', '!' },
+    } },
     { name = 'path' },
   }),
   mapping = cmp.mapping.preset.cmdline({}),
@@ -208,3 +211,15 @@ cmp.setup.cmdline('/', {
   }),
   mapping = cmp.mapping.preset.cmdline({}),
 })
+
+-- TabNine Prefetch {{{
+local prefetch = vim.api.nvim_create_augroup('prefetch', { clear = true })
+
+vim.api.nvim_create_autocmd('BufRead', {
+  group = prefetch,
+  pattern = { '*.py', '*.ts', '*.tsx', '*.js', '*.jsx', '*.lua' },
+  callback = function()
+    require('cmp_tabnine'):prefetch(vim.fn.expand '%:p')
+  end,
+})
+-- }}}

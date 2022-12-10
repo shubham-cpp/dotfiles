@@ -33,7 +33,7 @@ require('nvim-tree').setup({
   },
   view = { mappings = { list = list }, relativenumber = true, width = '35%' },
   trash = {
-    cmd = 'trash',
+    cmd = 'trash-put',
     require_confirm = false,
   },
   system_open = {

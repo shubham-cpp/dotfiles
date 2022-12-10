@@ -6,8 +6,8 @@ g.mapleader = ' '
 g.maplocalleader = '\\'
 o.number = true
 o.relativenumber = true
--- o.clipboard:append({ 'unnamedplus' })
-o.clipboard = ''
+o.clipboard:append({ 'unnamedplus' })
+-- o.clipboard = ''
 o.mouse = 'a'
 o.path:append({ '**' })
 o.splitbelow = true
@@ -17,7 +17,7 @@ o.backupdir = vim.fn.stdpath 'cache' .. '/backups//'
 o.backup = true
 o.backupcopy = 'yes'
 o.writebackup = true
-o.swapfile = false
+o.swapfile = true
 o.history = 500
 o.cmdheight = 1
 o.updatetime = 300

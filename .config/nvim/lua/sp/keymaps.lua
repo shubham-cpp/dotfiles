@@ -24,6 +24,10 @@ map('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent
 
 -- Pasting in visual mode doesn't copy
 map('x', 'p', [[ 'pgv"'.v:register.'y' ]], { noremap = true, expr = true })
+map('n', 'dl', '"_dl')
+map('n', 'c', '"_c')
+map('n', 'C', '"_C')
+map('x', 'c', '"_c')
 
 map('c', '<C-a>', '<Home>', { silent = false })
 map('c', '<C-e>', '<End>', { silent = false })
@@ -47,16 +51,7 @@ map('x', '<leader>y', '"+y')
 map('x', '<leader>p', '"+p')
 
 -- Plugin mappings
-map('', 's', ':HopWord<cr>')
-map('n', 'S', ':HopChar2<cr>')
-map('n', '<C-e>', ':NvimTreeToggle<cr>')
-map('n', '<C-n>', ':NvimTreeFindFileToggle<cr>')
 map('n', '<F7>', ':ColorizerToggle<cr>')
-map('n', '<leader>gg', ':Neogit<cr>')
-
-map('x', '<leader>/', '<Plug>(comment_toggle_linewise_visual)')
--- Copy and Comment
-map('n', '<A-/>', '"ayy"apk<Plug>(comment_toggle_linewise_current)j')
 
 map('o', 'ie', ':exec "normal! ggVG"<cr>', { noremap = true, silent = true })
 map('o', 'iv', ':exec "normal! HVL"<cr>', { noremap = true, silent = true })

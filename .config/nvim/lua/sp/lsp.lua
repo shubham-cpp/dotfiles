@@ -3,6 +3,7 @@ local util = lspconfig.util
 local cmd = vim.cmd
 
 local ok_fzf, fzf = pcall(require, 'fzf-lua')
+local ok_tele, telescope = pcall(require, 'telescope.builtin')
 
 vim.diagnostic.config({ --- {{{
   underline = true,
@@ -22,17 +23,6 @@ vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSi
 vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
 vim.fn.sign_define('DiagnosticSignHint', { text = ' ', texthl = 'DiagnosticSignHint' })
 --}}}
-
--- require('nvim-lsp-installer').setup({
---   automatic_installation = false,
---   ui = {
---     icons = {
---       server_installed = '✓',
---       server_pending = '➜',
---       server_uninstalled = '✗',
---     },
---   },
--- })
 
 function map(mode, lhs, rhs, opts) -- {{{
   opts.buffer = opts.buffer == nil and true or opts.buffer
@@ -62,9 +52,8 @@ function on_attach(client, bufnr) -- {{{
 
   map('n', 'gs', '<cmd>LspOrganizeImports<cr>', { buffer = bufnr })
   map('n', 'gS', '<cmd>LspFixAll<cr>', { buffer = bufnr })
-  -- map('n', 'gr', ':LspReferences<CR>',{buffer=bufnr})
-  if ok_fzf then
-    map('n', 'gr', function()
+  map('n', 'gr', function()
+    if ok_fzf then
       fzf.lsp_references({
         winopts = {
           preview = {
@@ -73,11 +62,12 @@ function on_attach(client, bufnr) -- {{{
           },
         },
       })
-    end, { buffer = bufnr })
-  else
-    map('n', 'gr', '<cmd>Telescope lsp_references<CR>', { buffer = bufnr })
-    -- map('n', '<leader>ca', '<cmd>Telescope lsp_code_actions<CR>', { buffer = bufnr })
-  end
+    elseif ok_tele then
+      telescope.lsp_references(require('telescope.themes').get_dropdown({}))
+    else
+      vim.lsp.buf.references()
+    end
+  end, { buffer = bufnr })
   map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr })
   map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr })
   map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr })
@@ -438,6 +428,6 @@ lspconfig.volar.setup({
 lspconfig.eslint.setup({ --{{{
   flags = { debounce_text_changes = 150 },
   settings = {
-    eslint = { autoFixOnSave = true, format = { enable = true }, packageManager = 'yarn' },
+    eslint = { autoFixOnSave = true, format = { enable = true } },
   },
 }) --}}}

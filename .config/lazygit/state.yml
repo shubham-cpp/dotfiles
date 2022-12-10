@@ -1,12 +1,9 @@
 lastupdatecheck: 0
 recentrepos:
 - /home/shubham/Documents/dotfiles
-- /home/shubham/.config/dwm
-- /home/shubham/Documents/Programming/WebDevs/React/kanban-software
-- /home/shubham/Documents/Programming/WebDevs/React/social-app
-- /home/shubham/Documents/Programming/WebDevs/Vuejs/vue3-poc-blog
-- /home/shubham/Documents/Programming/WebDevs/React/drag-n-drop
-- /home/shubham/Documents/Programming/WebDevs/React/TodoList-Draggable
+- /home/shubham/Documents/Programming/Go/APIs/StudentManagement
+- /home/shubham/Documents/Programming/WebDev/Backend/nest-typeorm-mysql
+- /home/shubham/.local/share/nvim/site/pack/packer/opt/hop.nvim
 startuppopupversion: 5
 customcommandshistory: []
 hidecommandlog: false
