@@ -32,3 +32,13 @@
 
 # [mergetool "vimdiff"]
 # 	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[maintenance]
+	repo = /home/shubham/.cache/fast-syntax-highlighting
+	repo = /home/shubham/.cache/powerlevel10k
+	repo = /home/shubham/.cache/yarn-completion
+	repo = /home/shubham/.cache/z.lua
+	repo = /home/shubham/.cache/zsh-autosuggestions
+	repo = /home/shubham/.cache/zsh-better-npm-completion
+	repo = /home/shubham/.cache/zsh-completions
+	repo = /home/shubham/.cache/zsh-history-substring-search
+	repo = /home/shubham/.cache/zsh-zsnap
