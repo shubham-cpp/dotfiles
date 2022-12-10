@@ -22,19 +22,24 @@ alias xcp="xclip -i -r -sel clip"
 # alias zrc="$EDITOR $HOME/.config/zsh/alias.zsh"
 # alias szrc="source $HOME/.config/zsh/.zshrc"
 
-# alias a="sudo aptitude"
-# alias ai="sudo aptitude install"
-# alias ar="sudo aptitude remove"
-# alias au="sudo aptitude update; and sudo aptitude full-upgrade; and sudo aptitude autoclean"
 # alias d="sudo dnf"
 # alias di="d install"
 # alias dr="d remove"
 # alias du="d upgrade"
 # alias ds="dnf search"
 # alias dp="dnf provides"
-alias yay="paru"
-alias ys="yay -S --noredownload --needed"
-alias yr="yay -Rncs"
+alias a="sudo nala"
+alias ai="a install"
+alias ar="a remove"
+alias au="a update;and a upgrade;and a autopurge"
+alias as="nala search"
+alias in="a install"
+alias un="a remove"
+alias up="a update;and a upgrade;and a autopurge"
+alias sea="nala search"
+# alias yay="paru"
+# alias ys="yay -S --noredownload --needed"
+# alias yr="yay -Rncs"
 # alias xin="sudo xbps-install -S"
 # alias xr="sudo xbps-remove -R"
 # alias xs="xbps-query -R --regex -s"
@@ -81,8 +86,13 @@ alias gcl="git clone"
 alias gclr="git clone --recurse-submodules"
 
 alias p="pnpm"
-alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+alias y='y --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 # if /bin/grep -iq void /etc/issue*
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"
 # end
+
+if  [ -f /etc/os-release ];and /bin/grep -iq debian /etc/os-release
+  alias fd="fdfind"
+  alias bat="batcat"
+end

@@ -1,4 +1,4 @@
-set -x ZLUA_SCRIPT "$HOME/Downloads/GitClones/z.lua/z.lua"
+set -x ZLUA_SCRIPT "$HOME/.cache/z.lua/z.lua"
 set -x ZLUA_LUAEXE "/bin/luajit"
 function _zlua
 	set -l arg_mode ""
