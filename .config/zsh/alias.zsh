@@ -21,13 +21,18 @@ alias tls="trash-list"
 # alias du="d upgrade"
 # alias dp="dnf provides"
 # alias ds="dnf search"
-# alias a="sudo aptitude"
-# alias ai="sudo aptitude install"
-# alias ar="sudo aptitude remove"
-# alias au="sudo aptitude update && sudo aptitude full-upgrade && and sudo aptitude autoclean"
-alias yay="paru"
-alias ys="yay -S --noredownload --needed"
-alias yr="yay -Rcns"
+alias a="sudo nala"
+alias ai="a install"
+alias ar="a remove"
+alias au="a update && a upgrade && a autopurge"
+alias as="nala search"
+alias in="a install"
+alias un="a remove"
+alias up="a update;and a upgrade;and a autopurge"
+alias sea="nala search"
+# alias yay="paru"
+# alias ys="yay -S --noredownload --needed"
+# alias yr="yay -Rcns"
 # alias xin="sudo xbps-install -S"
 # alias xr="sudo xbps-remove -R"
 # alias xs="xbps-query -R --regex -s"
@@ -73,8 +78,13 @@ alias gcl='git clone'
 alias gch='git checkout'
 
 alias p="pnpm"
-alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 # if /bin/grep -iq void /etc/issue*; then
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"
 # fi
+if  [ -f /etc/os-release ] && /bin/grep -iq debian /etc/os-release; then
+  alias fd="fdfind"
+  alias bat="batcat"
+fi
+

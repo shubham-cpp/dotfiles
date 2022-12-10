@@ -32,30 +32,29 @@ zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'    # I
 ## complete as much as you can ..
 # zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
 HISTFILE=$ZDOTDIR/.zhistory
-HISTSIZE=10000
-SAVEHIST=5000
+HISTSIZE=50000
+SAVEHIST=10000
 HISTDUP=erase
 
 WORDCHARS=${WORDCHARS//\/[&.;]}
 
-autoload -Uz compinit colors zcalc edit-command-line
-autoload -Uz bashcompinit && bashcompinit
-zmodload -i zsh/complist
+# autoload -Uz compinit
+autoload -Uz colors edit-command-line
+# autoload -Uz bashcompinit && bashcompinit
+# zmodload -i zsh/complist
 
-compinit -d "$HOME/.cache/zcompdump"
+# compinit -d "$HOME/.cache/zcompdump"
 colors
 
 # Download Znap, if it's not there yet.
-[[ -f ${MZNAP_PATH:-$HOME/.cache/zsh-znap}/znap.zsh ]] ||
+[[ -f $HOME/.cache/zsh-znap/znap.zsh ]] ||
     git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ${MZNAP_PATH:-$HOME/.cache/zsh-znap}
+        https://github.com/marlonrichert/zsh-snap.git $HOME/.cache/zsh-znap
 
-source ${MZNAP_PATH:-$HOME/.cache/zsh-znap}/znap.zsh  # Start Znap
+source $HOME/.cache/zsh-znap/znap.zsh  # Start Znap
 
-# `znap prompt` makes your prompt visible in just 15-40ms!
-# The same goes for any other kind of custom prompt:
-znap eval starship 'starship init zsh --print-full-init'
-znap prompt
+# znap eval starship 'starship init zsh --print-full-init'
+znap prompt "romkatv/powerlevel10k"
 
 # `znap source` automatically downloads and starts your plugins.
 ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
@@ -67,6 +66,8 @@ znap source zdharma-continuum/fast-syntax-highlighting
 znap source zsh-users/zsh-completions zsh-completions.plugin.zsh
 znap source lukechilds/zsh-better-npm-completion
 znap source buonomo/yarn-completion
+znap source skywind3000/z.lua z.lua.plugin.zsh
+# znap source jeffreytse/zsh-vi-mode
 
 # `znap function` lets you lazy-load features you don't always need.
 znap function _pip_completion pip    'eval "$(pip completion --zsh)"'
@@ -77,7 +78,7 @@ compctl -K    _pip_completion pip
 # compdef       _pipenv         pipenv
 compdef       _nvm            nvm
 
-znap eval zlua 'luajit $HOME/Downloads/GitClones/z.lua/z.lua --init zsh enhanced once fzf'
+# znap eval zlua 'luajit $HOME/Downloads/GitClones/z.lua/z.lua --init zsh enhanced once fzf'
 # source ~/Downloads/Gits/z.lua/z.lua.plugin.zsh
 
 source "$ZDOTDIR"/alias.zsh
@@ -85,6 +86,7 @@ source "$ZDOTDIR"/bindings.zsh
 source "$ZDOTDIR"/mfunctions.zsh
 
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
+[[ -f ~/.config/zsh/.p10k.zsh ]] && . ~/.config/zsh/.p10k.zsh || true
 
 # bindings
 
