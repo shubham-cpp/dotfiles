@@ -1,49 +1,50 @@
 #!/bin/bash
 run() {
-  if ! pgrep "$1"; then
-    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-      XDG_CURRENT_DESKTOP=Unity $@ &
-    else
-      $@ &
-    fi
-  fi
+	if ! pgrep "$1"; then
+		if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+			XDG_CURRENT_DESKTOP=Unity $@ &
+		else
+			$@ &
+		fi
+	fi
 }
 
-setsid -f kmonad ~/.config/kmonad/mkmonad.kbd
+# setsid -f kmonad ~/.config/kmonad/mkmonad.kbd
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-  bash ~/.local/bin/myscripts/default_mouse_settings &
-  # setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
-  # xcape -e 'Control_L=Escape'
-  numlockx on
-  xset -b
-  xsetroot -cursor_name left_ptr
+	bash ~/.local/bin/myscripts/default_mouse_settings &
+	setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
+	xcape -e 'Control_L=Escape'
+	numlockx on
+	xset -b
+	xsetroot -cursor_name left_ptr
 fi
 
 basic() {
-  # bash ~/.local/bin/myscripts/if_void &
-  run lxpolkit
-  # run dunst
-  if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-    # run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-    run picom #--experimental-backends
-    run xwallpaper --stretch ~/.config/wall.png
-    # run feh --bg-fill --no-fehbg -q ~/.config/wall.png
-  fi
-  # run kitty
-  run alacritty -e "tmux"
-  run udiskie -q -t --no-terminal
+	# bash ~/.local/bin/myscripts/if_void &
+	# run lxpolkit
+	run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+	# run dunst
+	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+		# run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
+		run picom -b #--experimental-backends
+		run xwallpaper --stretch ~/.config/wall.png
+		# run feh --bg-fill --no-fehbg -q ~/.config/wall.png
+	fi
+	run kitty
+	# run alacritty -e "tmux"
+	run udiskie -q -t --no-terminal
 }
 
 case "$DESKTOP_SESSION" in
-  bspwm | awesome | qtile)
-    basic
-    xset -b
-    ;;
-  dwm)
-    basic
-    run dwmblocks
-    run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
-    ;;
+bspwm | awesome | qtile | dk)
+	basic
+	xset -b
+	;;
+dwm)
+	basic
+	run dwmblocks
+	run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
+	;;
 esac
 
 run redshift

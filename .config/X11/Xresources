@@ -1,10 +1,10 @@
 Xft.dpi: 96
-! Xft.autohint: 1
-! Xft.antialias: 1
-! Xft.hintstyle: hintmedium
-! Xft.hinting: true
-! Xft.rgba: rgb
-! Xft.lcdfilter: lcddefault
+Xft.autohint: 0
+Xft.antialias: 1
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+Xft.rgba: rgb
+Xft.lcdfilter: lcddefault
 
 ! Basic settings
 xterm*termName: xterm-256color
@@ -125,7 +125,7 @@ xterm*color14:  #0f7cda
 xterm*color7:   #d6dae4
 xterm*color15:  #ffffff
 
-st*font: FuraCode Nerd Font:size=15:antialias=true:autohint=true
+st*font: FiraCode Nerd Font:size=12:antialias=true:autohint=true
 
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
 !! ! URxvt.letterSpace: -1

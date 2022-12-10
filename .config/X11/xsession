@@ -6,5 +6,4 @@
 # Executed by xdm/gdm/kdm at login
 #
 
-/bin/bash --login -i ~/.xinitrc
-
+[ -f $HOME/.xinitrc ] && /bin/bash --login -i ~/.xinitrc
