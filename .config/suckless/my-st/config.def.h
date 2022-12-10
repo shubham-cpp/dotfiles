@@ -5,10 +5,10 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char* font = "FuraCode Nerd Font:pixelsize=14:antialias=true:autohint=true";
+static char* font = "FiraCode Nerd Font:size=10:antialias=true:autohint=true";
 /* Spare fonts */
 static char* font2[] = {
-    "JoyPixels:size=10:antialias=true:autohint=true",
+    "Noto Color Emoji:size=10:antialias=true:autohint=true",
     "FontAwesome:size=11:antialias=true:autohint=true",
 };
 
