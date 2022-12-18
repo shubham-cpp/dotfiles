@@ -7,6 +7,13 @@ local init = {
       require 'user.plugins.subversive'
     end,
   },
+  ['junegunn/vim-easy-align'] = {
+    after = 'vim-subversive',
+    setup = function()
+      vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+      vim.keymap.set('x', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+    end,
+  },
   ['nvim-treesitter/nvim-treesitter-textobjects'] = {
     after = 'nvim-treesitter',
     commit = '98476e7364821989ab9b500e4d20d9ae2c5f6564',
