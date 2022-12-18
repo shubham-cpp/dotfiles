@@ -1,9 +1,14 @@
 set sandbox none
 set selection-clipboard clipboard
+set continuous-hist-save true
+set window-title-basename true
+set window-title-basename true
+set statusbar-basename true
+
 map i recolor
 map p print
-map u scroll full-up
-map d scroll full-down
+map u navigate previous
+map d navigate next
 map D toggle_page_mode
 map r reload
 map R rotate
