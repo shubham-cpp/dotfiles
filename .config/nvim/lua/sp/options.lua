@@ -18,6 +18,7 @@ o.backup = true
 o.backupcopy = 'yes'
 o.writebackup = true
 o.swapfile = true
+o.directory = vim.fn.stdpath 'cache' .. '/swaps//'
 o.history = 500
 o.cmdheight = 1
 o.updatetime = 300
@@ -64,7 +65,7 @@ o.tags:append({ './.git/tags' })
 o.inccommand = 'nosplit'
 o.undofile = true
 o.laststatus = 3
-o.winbar = '%f %m'
+-- o.winbar = '%f %m'
 g.session_directory = string.format('%s/session', vim.fn.stdpath 'data')
 g.session_autoload = 'no'
 g.session_autosave = 'no'

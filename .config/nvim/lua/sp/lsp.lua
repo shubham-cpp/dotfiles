@@ -99,9 +99,9 @@ function on_attach(client, bufnr) -- {{{
   if client.server_capabilities.documentHighlightProvider then
     vim.api.nvim_exec(
       [[
-		hi LspReferenceWrite cterm=bold ctermfg=red gui=bold guisp= guifg= guibg=#565575
-		hi LspReferenceRead cterm=bold ctermfg=red gui=bold guisp= guifg= guibg=#565575
-		hi LspReferenceText cterm=bold ctermfg=red gui=bold guisp= guifg= guibg=#565575
+		hi LspReferenceWrite cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
+		hi LspReferenceRead cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
+		hi LspReferenceText cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
 		hi LspDiagnosticsDefaultError cterm=bold ctermbg=red guifg=#ff3333
 		hi LspDiagnosticsDefaultWarning cterm=bold ctermbg=red guifg=#e7ae05
 		augroup lsp_document_highlight

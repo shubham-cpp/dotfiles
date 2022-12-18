@@ -1,23 +1,5 @@
 return require('packer').startup(function(use)
-  use({
-    'wbthomason/packer.nvim',
-    cmd = {
-      'PackerSnapshot',
-      'PackerSnapshotRollback',
-      'PackerSnapshotDelete',
-      'PackerInstall',
-      'PackerUpdate',
-      'PackerSync',
-      'PackerClean',
-      'PackerCompile',
-      'PackerStatus',
-      'PackerProfile',
-      'PackerLoad',
-    },
-    config = function()
-      require 'sp.plugins'
-    end,
-  })
+  use 'wbthomason/packer.nvim'
   use 'lewis6991/impatient.nvim'
   use 'nathom/filetype.nvim'
 
@@ -84,13 +66,13 @@ return require('packer').startup(function(use)
       require 'sp.lsp'
     end,
   })
-  use({
-    'simrat39/rust-tools.nvim',
-    after = 'mason-lspconfig.nvim',
-    config = function()
-      require 'sp.rust'
-    end,
-  })
+  -- use({
+  --   'simrat39/rust-tools.nvim',
+  --   after = 'mason-lspconfig.nvim',
+  --   config = function()
+  --     require 'sp.rust'
+  --   end,
+  -- })
 
   use({
     'j-hui/fidget.nvim',
@@ -138,9 +120,33 @@ return require('packer').startup(function(use)
   -- Theming {{{
   use({
     'Tsuzat/NeoSolarized.nvim',
-    disable = false,
+    disable = true,
     config = function()
       require 'sp.colors.solarize'
+    end,
+  })
+  use({
+    'hoppercomplex/calvera-dark.nvim',
+    disable = false,
+    setup = function()
+      vim.g.calvera_italic_keywords = false
+      vim.g.calvera_borders = true
+      vim.g.calvera_contrast = true
+      vim.g.calvera_hide_eob = true
+      -- vim.g.calvera_custom_colors = {contrast = "#0f111a"}
+    end,
+    config = function()
+      vim.cmd.colorscheme 'calvera'
+      vim.api.nvim_set_hl(
+        0,
+        'QuickScopePrimary',
+        { ctermfg = 'lightgreen', ctermbg = 'black', fg = '#c3e88d', bg = '#0c0c1f', bold = true, underline = true }
+      )
+      vim.api.nvim_set_hl(
+        0,
+        'QuickScopeSecondary',
+        { ctermfg = 'lightblue', ctermbg = 'black', fg = '#82aaff', bg = '#0c0c1f', bold = true, underline = true }
+      )
     end,
   })
   use({
@@ -214,13 +220,21 @@ return require('packer').startup(function(use)
     'phaazon/hop.nvim',
     setup = function()
       local map = require('sp.helper').map
-      map('', 'S', ':HopWord<cr>')
-      map('', 's', ':HopChar2<cr>')
+      map('', 's', ':HopWord<cr>')
+      map('', 'S', ':HopChar2<cr>')
     end,
     config = function()
       require('hop').setup()
     end,
     cmd = { 'HopChar2', 'HopWord' },
+  })
+
+  use({
+    'junegunn/vim-easy-align',
+    config = function()
+      vim.keymap.set('n', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+      vim.keymap.set('x', 'ga', '<Plug>(EasyAlign)', { noremap = false })
+    end,
   })
   -- }}}
 
@@ -417,6 +431,15 @@ return require('packer').startup(function(use)
     'Darazaki/indent-o-matic',
     config = function()
       require('indent-o-matic').setup({})
+    end,
+  })
+
+  use({
+    'utilyre/barbecue.nvim',
+    after = 'nvim-web-devicons',
+    requires = { 'smiteshp/nvim-navic' },
+    config = function()
+      require('barbecue').setup()
     end,
   })
   -- }}}

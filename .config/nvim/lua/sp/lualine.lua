@@ -71,6 +71,7 @@ require('lualine').setup({
       { 'filesize', cond = conditions.buffer_not_empty },
     },
     lualine_x = {
+      { 'searchcount', cond = conditions.hide_in_width },
       { 'encoding', fmt = string.upper, cond = conditions.hide_in_width },
       -- { 'fileformat', fmt = string.upper, cond = conditions.hide_in_width },
       -- { 'filetype', cond = conditions.hide_in_width },
