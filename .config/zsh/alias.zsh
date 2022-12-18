@@ -41,7 +41,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias v="nvim"
-alias se="sudoedit"
+alias se="sudo nvim"
 alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
 
 alias xcp="xclip -i -r -sel clip"
@@ -83,8 +83,3 @@ alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"
 # fi
-if  [ -f /etc/os-release ] && /bin/grep -iq debian /etc/os-release; then
-  alias fd="fdfind"
-  alias bat="batcat"
-fi
-

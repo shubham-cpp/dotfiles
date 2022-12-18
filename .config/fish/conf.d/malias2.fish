@@ -1,6 +1,8 @@
 alias df="/bin/df -h"
 alias du="/bin/du -h"
 alias free="/bin/free -h"
+# alias sudo='/bin/doas'
+# alias sudoedit='/bin/doas nvim'
 
 # alias curl="/bin/curl -O -L -C -"
 alias grep="/bin/grep -Ei --color=auto"
@@ -48,7 +50,7 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias merge="xrdb ~/.config/X11/Xresources"
 alias v="nvim"
-alias se="sudoedit"
+alias se="sudo nvim"
 alias mci="make -j5 && sudo make install clean"
 alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
 
@@ -91,8 +93,3 @@ alias y='y --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"
 # end
-
-if  [ -f /etc/os-release ];and /bin/grep -iq debian /etc/os-release
-  alias fd="fdfind"
-  alias bat="batcat"
-end
