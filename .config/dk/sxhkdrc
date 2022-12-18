@@ -1,0 +1,122 @@
+# terminal
+super {_, + shift } + Return
+	{ $TERMINAL || xterm,kitty }
+
+# screenshot and selection capture
+{_,shift + }@Print
+	 take_ss {focus,full}
+
+# Browser
+super {_, + shift } + w
+	{ $BROWSER || firefox,brave || brave-browser || chromium }
+# File Manager
+super {_, + shift } + e
+	{ thunar,alacritty -e lfv }
+
+super + control + s
+    logout_prompt
+
+super + {_,shift + } d
+    {dmenu_run_history -i,rofi -show run -async-pre-read}
+
+super + @g
+    qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical
+super + {r,v,y,p}
+    {rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+
+control + alt + {p,c,v,e}
+    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+
+# dedicated volume keys
+XF86Audio{Raise,Lower}Volume
+    audio {inc,dec}
+XF86AudioMute
+    audio toggle
+
+# dedicated backlight keys
+XF86MonBrightness{Up,Down}
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
+# && polybar-msg hook mbrightness 1
+
+# reload sxhkd
+super + Escape
+	pkill -USR1 -x sxhkd && notify-send "SXHKD" "Restarted"
+
+# quit dk
+super + ctrl + x
+	dkcmd exit
+
+# reload dkrc
+super + shift + r
+	dkcmd reload
+
+# restart dk
+super + ctrl + shift + r
+	dkcmd restart
+
+# focus next or previous window
+super + {j,k}
+	dkcmd win focus {next,prev}
+alt + {_,shift + } Tab
+	dkcmd win focus {next,prev}
+super + Tab
+  dkcmd ws view last
+
+# close window, swap tiled window in/out of master, cycle tiled windows in place
+super + { shift + q,space}
+	dkcmd win {kill,swap}
+
+# toggle fullscreen and fake fullscreen (enable manipulating fullscreen window)
+{_,super + }F11
+	dkcmd win {full,fakefull}
+
+super + {_,shift + } f
+	dkcmd win {full,fakefull}
+
+# toggle floating or sticky
+super + shift + {s,space}
+	dkcmd win {float,stick}
+
+# move window, signed (+/-) for relative changes
+super + shift + {h,j,k,l}
+	dkcmd win resize {x=-20,y=+20,y=-20,x=+20}
+
+# resize window, signed (+/-) for relative changes
+super + ctrl + {h,j,k,l}
+	dkcmd win resize {w=-20,h=+20,h=-20,w=+20}
+
+# move the active window up/down the stack
+super + {Up,Down}
+	dkcmd win mvstack {up,down}
+
+# view, send, or follow to a workspace (by number)
+super + {_,shift + ,ctrl + }{1-9,0}
+	dkcmd ws {view,send,follow} {1-9,10}
+
+# view, send, or follow to the next, previous, last active,
+# next non-empty, or prev non-empty workspace
+super + {_,shift + ,ctrl + }{bracketleft,bracketright,BackSpace,Left,Right}
+	dkcmd ws {view,send,follow} {prev,next,last,prevne,nextne}
+
+super + {_,shift + ,ctrl + } grave
+	dkcmd ws {view,send,follow} nextne
+
+# view, send, or follow to the next, previous, or last active monitor
+super + {_,shift + ,ctrl + }{comma,period,backslash}
+	dkcmd mon {view,send,follow} {prev,next,last}
+
+# change active workspace layout
+super + {t,r,m,g,s,w,f,u}
+	dkcmd set layout {tile,rtile,mono,grid,spiral,dwindle,none,tstack}
+
+# change number of windows in master or first stack
+# super + {_,shift + }{i,d}
+# 	dkcmd set {master,stack} {+1,-1}
+
+# change gap width
+super + {equal,minus}
+	dkcmd set gap width {+5,-5}
+
+# change border widths
+super + ctrl + {_,shift + }{equal,minus}
+	dkcmd set border {width,outer_width} {+1,-1}
