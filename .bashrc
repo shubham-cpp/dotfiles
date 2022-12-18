@@ -3,10 +3,12 @@
 [[ $- != *i* ]] && return
 
 _set_my_PS1() {
-    PS1='[\u@\h \W]\$ '
+	PS1='[\u@\h \W]\$ '
 }
 _set_my_PS1
 unset -f _set_my_PS1
+
+complete -cf doas
 
 export EDITOR=nvim
 export VISUAL=nvim
@@ -35,5 +37,5 @@ PROMPT_COMMAND='history -a'
 source "$HOME"/.config/zsh/alias.zsh
 
 export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
