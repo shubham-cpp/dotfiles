@@ -1,69 +1,62 @@
----
 env:
   TERM: xterm-256color
-
 window:
   # decorations: full
-  opacity: 0.8
+  opacity: 0.9
   title: Alacritty
   class:
     instance: Alacritty
     general: Alacritty
 font:
   normal:
-    family: JetBrainsMono Nerd Font
-    style: Regular
+    family: Operator Mono
+    style: Book
   bold:
-    family: JetBrainsMono Nerd Font
+    family: Operator Mono
     style: Bold
   italic:
-    family: JetBrainsMono Nerd Font
+    family: Operator Mono
     style: Italic
   bold_italic:
-    family: JetBrainsMono Nerd Font
+    family: Operator Mono
     style: Bold Italic
-  size: 10.5
+  size: 11.5
   # use_thin_strokes: false
-
 draw_bold_text_with_bright_colors: true
-
 schemes:
   SpaceDuck: &SpaceDuck
     primary:
-      background: "#060507"
-      foreground: "#ecf0c1"
-
+      background: "#090e13"
+      foreground: "#c0caf5"
     selection:
       text: "#ffffff"
       background: "#686f9a"
     # Normal colors
     normal:
-      black: "#000000"
-      red: "#e33400"
-      green: "#5ccc96"
-      yellow: "#b3a1e6"
-      blue: "#00a3cc"
-      magenta: "#f2ce00"
-      cyan: "#7a5ccc"
-      white: "#686f9a"
-
+      black: "#414868"
+      red: "#f7768e"
+      green: "#9ece6a"
+      yellow: "#e0af68"
+      blue: "#7aa2f7"
+      magenta: "#bb9af7"
+      cyan: "#7dcfff"
+      white: "#a9b1d6"
     # Bright colors
     bright:
-      black: "#686f9a"
-      red: "#e33400"
-      green: "#5ccc96"
-      yellow: "#b3a1e6"
-      blue: "#00a3cc"
-      magenta: "#f2ce00"
-      cyan: "#7a5ccc"
-      white: "#f0f1ce"
-  gruvbox: &gruvbox
+      black: "#414868"
+      red: "#f7768e"
+      green: "#9ece6a"
+      yellow: "#e0af68"
+      blue: "#7aa2f7"
+      magenta: "#bb9af7"
+      cyan: "#7dcfff"
+      white: "#c0caf5"
+  gruvbox:
     primary:
       # hard contrast:
       background: "0x1d2021"
       # background: "#282828"
       foreground: "#ebdbb2"
-
       # Normal colors
       normal:
         black: "#282828"
@@ -74,7 +67,6 @@ schemes:
         magenta: "#b16286"
         cyan: "#689d6a"
         white: "#a89984"
-
       # Bright colors
       bright:
         black: "#928374"
@@ -85,8 +77,7 @@ schemes:
         magenta: "#d3869b"
         cyan: "#8ec07c"
         white: "#ebdbb2"
-
-  gruvboxMaterial: &gruvboxMaterial
+  gruvboxMaterial:
     primary:
       background: "0x1d2021"
       foreground: "0xd4be98"
@@ -108,7 +99,7 @@ schemes:
       magenta: "0xd3869b"
       cyan: "0x89b482"
       white: "0xd4be98"
-  mcustom: &mcustom
+  mcustom:
     primary:
       background: "#090e13"
       foreground: "#fffacd"
@@ -134,7 +125,6 @@ schemes:
       magenta: "#cb1ed1"
       cyan: "#0dcdcd"
       white: "#dddddd"
-
     # Bright colors
     bright:
       black: "#767676"
@@ -154,46 +144,37 @@ schemes:
       magenta: "#75617b"
       cyan: "#5b7d78"
       white: "#828482"
-
 colors: *SpaceDuck
-
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
   # When set to `true`, selected text will be copied to the primary clipboard.
   save_to_clipboard: true
-
 # Allow terminal applications to change Alacritty's window title.
 # dynamic_title: true
-
 cursor:
   # style: Beam
   # vi_mode_style: Block
   unfocused_hollow: true
   blinking: true
-
 live_config_reload: true
-
 Default:
 shell:
-  #program: /bin/fish
+# program: /bin/fish
 # args:
 #   - --login
 mouse:
   hide_when_typing: true
-
 hints:
-  alphabet: "jfkdls;ahgurieowpq"
-
+  alphabet: jfkdls;ahgurieowpq
   enabled:
-    - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
-        [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
-      action: Copy
-      mouse:
-        enabled: true
-        mods: Control
-      binding:
-        key: U
-        mods: Control|Shift
+    # - regex: "(mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)[^\0\-\x1F\x7F-\x9F<>\"\\s{-}\\^⟨⟩`]+"
+    #   action: Copy
+    #   mouse:
+    #     enabled: true
+    #     mods: Control
+    #   binding:
+    #     key: U
+    #     mods: Control|Shift
     - regex: "[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+"
       action: Copy
       mouse:
@@ -202,11 +183,9 @@ hints:
       binding:
         key: E
         mods: Control|Shift
-
 mouse_bindings:
-  - {mouse: Middle, action: PasteSelection}
-  # - { mouse: Left, action: CopySelection }
-
+  - { mouse: Middle, action: PasteSelection }
+  - { mouse: Left, action: CopySelection }
 # - `action`: Execute a predefined action
 #
 #   - ToggleViMode
@@ -367,80 +346,78 @@ mouse_bindings:
 #
 #    A `~` operator can be used before a mode to apply the binding whenever
 #    the mode is *not* active, e.g. `~Alt`.
-
 key_bindings:
-  - {key: Paste, action: Paste}
-  - {key: Copy, action: Copy}
+  - { key: Paste, action: Paste }
+  - { key: Copy, action: Copy }
   # - { key: F11,                                  action: ToggleFullscreen}
-  - {key: V, mods: Control|Shift, action: Paste}
-  - {key: C, mods: Control|Shift, action: Copy}
-  - {key: F, mods: Control|Shift, action: SearchForward}
-  - {key: B, mods: Control|Shift, action: SearchBackward}
-  - {key: L, mods: Control, action: ClearLogNotice}
-  - {key: L, mods: Control, mode: ~Vi, chars: "\x0c"}
-  - {key: Up, mods: Shift|Control, mode: ~Alt, action: ScrollLineUp}
-  - {key: Down, mods: Shift|Control, mode: ~Alt, action: ScrollLineDown}
-  - {key: PageUp, mods: Shift|Control, mode: ~Alt, action: ScrollPageUp}
-  - {key: PageDown, mods: Shift|Control, mode: ~Alt, action: ScrollPageDown}
-  - {key: Up, mods: Shift, mode: ~Alt, action: ScrollLineUp}
-  - {key: Down, mods: Shift, mode: ~Alt, action: ScrollLineDown}
-  - {key: PageUp, mods: Shift, mode: ~Alt, action: ScrollPageUp}
-  - {key: PageDown, mods: Shift, mode: ~Alt, action: ScrollPageDown}
-  - {key: Home, mods: Shift, mode: ~Alt, action: ScrollToTop}
-  - {key: End, mods: Shift, mode: ~Alt, action: ScrollToBottom}
-  #- { key: C,        mods: Control|Shift, mode: Vi, action: ClearSelection   }
-  #- { key: Insert,   mods: Shift,                   action: PasteSelection   }
-  - {key: Key0, mods: Control, action: ResetFontSize}
-  - {key: Equals, mods: Control, action: IncreaseFontSize}
-  - {key: Minus, mods: Control, action: DecreaseFontSize}
-
+  - { key: V, mods: Control|Shift, action: Paste }
+  - { key: C, mods: Control|Shift, action: Copy }
+  - { key: F, mods: Control|Shift, action: SearchForward }
+  - { key: B, mods: Control|Shift, action: SearchBackward }
+  - { key: L, mods: Control, action: ClearLogNotice }
+  - { key: L, mods: Control, mode: ~Vi, chars: "\f" }
+  - { key: Up, mods: Shift|Control, mode: ~Alt, action: ScrollLineUp }
+  - { key: Down, mods: Shift|Control, mode: ~Alt, action: ScrollLineDown }
+  - { key: PageUp, mods: Shift|Control, mode: ~Alt, action: ScrollPageUp }
+  - { key: PageDown, mods: Shift|Control, mode: ~Alt, action: ScrollPageDown }
+  - { key: Up, mods: Shift, mode: ~Alt, action: ScrollLineUp }
+  - { key: Down, mods: Shift, mode: ~Alt, action: ScrollLineDown }
+  - { key: PageUp, mods: Shift, mode: ~Alt, action: ScrollPageUp }
+  - { key: PageDown, mods: Shift, mode: ~Alt, action: ScrollPageDown }
+  - { key: Home, mods: Shift, mode: ~Alt, action: ScrollToTop }
+  - { key: End, mods: Shift, mode: ~Alt, action: ScrollToBottom }
+  # - {key: C,mods: Control|Shift, mode: Vi, action: ClearSelection}
+  # - {key: Insert, mods: Shift, action: PasteSelection}
+  - { key: Key0, mods: Control, action: ResetFontSize }
+  - { key: Equals, mods: Control, action: IncreaseFontSize }
+  - { key: Minus, mods: Control, action: DecreaseFontSize }
   # Vi Mode
-  - {key: Space, mods: Shift|Control, mode: Vi, action: ScrollToBottom}
-  - {key: Space, mods: Shift|Control, action: ToggleViMode}
-  - {key: Escape, mods: Alt, action: ToggleViMode}
-  - {key: Escape, mode: Vi, action: ClearSelection}
-  - {key: I, mode: Vi, action: ScrollToBottom}
-  - {key: I, mode: Vi, action: ToggleViMode}
+  - { key: Space, mods: Shift|Control, mode: Vi, action: ScrollToBottom }
+  - { key: Space, mods: Shift|Control, action: ToggleViMode }
+  - { key: Escape, mods: Alt, action: ToggleViMode }
+  - { key: Escape, mode: Vi, action: ClearSelection }
+  - { key: I, mode: Vi, action: ScrollToBottom }
+  - { key: I, mode: Vi, action: ToggleViMode }
   # - {key: Y, mods: Control, mode: Vi, action: ScrollLineUp}
   # - {key: E, mods: Control, mode: Vi, action: ScrollLineDown}
-  - {key: G, mode: Vi, action: ScrollToTop}
-  - {key: G, mods: Shift, mode: Vi, action: ScrollToBottom}
-  - {key: B, mods: Control, mode: Vi, action: ScrollPageUp}
-  - {key: F, mods: Control, mode: Vi, action: ScrollPageDown}
-  - {key: U, mods: Control, mode: Vi, action: Open}
-  - {key: D, mods: Control, mode: Vi, action: ScrollHalfPageDown}
-  - {key: Y, mode: Vi, action: Copy}
+  - { key: G, mode: Vi, action: ScrollToTop }
+  - { key: G, mods: Shift, mode: Vi, action: ScrollToBottom }
+  - { key: B, mods: Control, mode: Vi, action: ScrollPageUp }
+  - { key: F, mods: Control, mode: Vi, action: ScrollPageDown }
+  - { key: U, mods: Control, mode: Vi, action: Open }
+  - { key: D, mods: Control, mode: Vi, action: ScrollHalfPageDown }
+  - { key: Y, mode: Vi, action: Copy }
   # - {key: Y, mode: Vi, action: ClearSelection}
   # - {key: Copy, mode: Vi, action: ClearSelection}
-  - {key: V, mode: Vi, action: ToggleNormalSelection}
-  - {key: V, mods: Shift, mode: Vi, action: ToggleLineSelection}
-  - {key: V, mods: Control, mode: Vi, action: ToggleBlockSelection}
-  - {key: V, mods: Alt, mode: Vi, action: ToggleSemanticSelection}
-  - {key: Return, mode: Vi, action: Open}
-  - {key: K, mode: Vi, action: Up}
-  - {key: K, mods: Shift, mode: Vi, action: ScrollHalfPageUp}
-  - {key: J, mode: Vi, action: Down}
-  - {key: J, mods: Shift, mode: Vi, action: ScrollHalfPageDown}
-  - {key: H, mode: Vi, action: Left}
-  - {key: L, mode: Vi, action: Right}
-  - {key: Up, mode: Vi, action: Up}
-  - {key: Down, mode: Vi, action: Down}
-  - {key: Left, mode: Vi, action: Left}
-  - {key: Right, mode: Vi, action: Right}
-  - {key: Key0, mode: Vi, action: FirstOccupied}
-  - {key: Key4, mode: Vi, action: Last}
+  - { key: V, mode: Vi, action: ToggleNormalSelection }
+  - { key: V, mods: Shift, mode: Vi, action: ToggleLineSelection }
+  - { key: V, mods: Control, mode: Vi, action: ToggleBlockSelection }
+  - { key: V, mods: Alt, mode: Vi, action: ToggleSemanticSelection }
+  - { key: Return, mode: Vi, action: Open }
+  - { key: K, mode: Vi, action: Up }
+  - { key: K, mods: Shift, mode: Vi, action: ScrollHalfPageUp }
+  - { key: J, mode: Vi, action: Down }
+  - { key: J, mods: Shift, mode: Vi, action: ScrollHalfPageDown }
+  - { key: H, mode: Vi, action: Left }
+  - { key: L, mode: Vi, action: Right }
+  - { key: Up, mode: Vi, action: Up }
+  - { key: Down, mode: Vi, action: Down }
+  - { key: Left, mode: Vi, action: Left }
+  - { key: Right, mode: Vi, action: Right }
+  - { key: Key0, mode: Vi, action: FirstOccupied }
+  - { key: Key4, mode: Vi, action: Last }
   # - {key: Key6,mods: Shift,mode: Vi, action: FirstOccupied}
-  - {key: H, mods: Shift, mode: Vi, action: High}
-  - {key: M, mods: Shift, mode: Vi, action: Middle}
-  - {key: L, mods: Shift, mode: Vi, action: Low}
-  - {key: B, mode: Vi, action: SemanticLeft}
-  - {key: W, mode: Vi, action: SemanticRight}
-  - {key: E, mode: Vi, action: SemanticRightEnd}
-  - {key: B, mods: Shift, mode: Vi, action: WordLeft}
-  - {key: W, mods: Shift, mode: Vi, action: WordRight}
-  - {key: E, mods: Shift, mode: Vi, action: WordRightEnd}
-  #- {key: Key5, mods: Shift, mode: Vi, action: Bracket}
-  - {key: Slash, mode: Vi, action: SearchForward}
-  - {key: Slash, mods: Shift, mode: Vi, action: SearchBackward}
-  - {key: N, mode: Vi, action: SearchNext}
-  - {key: N, mods: Shift, mode: Vi, action: SearchPrevious}
+  - { key: H, mods: Shift, mode: Vi, action: High }
+  - { key: M, mods: Shift, mode: Vi, action: Middle }
+  - { key: L, mods: Shift, mode: Vi, action: Low }
+  - { key: B, mode: Vi, action: SemanticLeft }
+  - { key: W, mode: Vi, action: SemanticRight }
+  - { key: E, mode: Vi, action: SemanticRightEnd }
+  - { key: B, mods: Shift, mode: Vi, action: WordLeft }
+  - { key: W, mods: Shift, mode: Vi, action: WordRight }
+  - { key: E, mods: Shift, mode: Vi, action: WordRightEnd }
+  # - {key: Key5, mods: Shift, mode: Vi, action: Bracket}
+  - { key: Slash, mode: Vi, action: SearchForward }
+  - { key: Slash, mods: Shift, mode: Vi, action: SearchBackward }
+  - { key: N, mode: Vi, action: SearchNext }
+  - { key: N, mods: Shift, mode: Vi, action: SearchPrevious }
