@@ -1,0 +1,18 @@
+
+set runtimepath=$VIMRUNTIME
+set packpath=/home/shubham/.cache/nvim-vscode/site
+
+call plug#begin('~/.cache/nvim-vscode/plugged')
+  Plug 'tpope/vim-repeat'
+  Plug 'sainnhe/everforest'
+  Plug 'tpope/vim-commentary'
+  Plug 'svermeulen/vim-subversive'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'kylechui/nvim-surround'
+  Plug 'unblevable/quick-scope'
+call plug#end()
+
+let g:everforest_background = 'hard'
+let g:everforest_better_performance = 1
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:qs_lazy_highlight = 1
