@@ -141,26 +141,26 @@ lspconfig.sumneko_lua.setup({
   flags = { debounce_text_changes = 150 },
   settings = {
     Lua = {
-      runtime = { version = 'LuaJIT', path = runtime_path },
-      completion = { enable = true, callSnippet = 'Both' },
+      -- runtime = { version = 'LuaJIT', path = runtime_path },
+      -- completion = { enable = true, callSnippet = 'Both' },
       diagnostics = {
         enable = true,
         globals = { 'vim', 'describe' },
         disable = { 'lowercase-global' },
       },
-      workspace = {
-        library = vim.api.nvim_get_runtime_file('', true),
-        -- maxPreload = 2000,
-        preloadFileSize = 1000,
-      },
-      hint = {
-        enable = true,
-        setType = true,
-        semicolon = 'SameLine',
-        paramType = true,
-        await = true,
-        arrayIndex = 'Enable',
-      },
+      -- workspace = {
+      --   library = vim.api.nvim_get_runtime_file('', true),
+      --   -- maxPreload = 2000,
+      --   preloadFileSize = 1000,
+      -- },
+      -- hint = {
+      --   enable = true,
+      --   setType = true,
+      --   semicolon = 'SameLine',
+      --   paramType = true,
+      --   await = true,
+      --   arrayIndex = 'Enable',
+      -- },
       telemetry = { enable = false },
     },
   },
@@ -265,6 +265,21 @@ lspconfig.pyright.setup({
     },
   },
 })
+-- lspconfig.pylsp.setup({
+--   capabilities = cmp_capabilities,
+--   on_attach = on_attach,
+--   flags = { debounce_text_changes = 150 },
+--   settings = {
+--     pylsp = {
+--       plugins = {
+--         autopep = { enabled = false },
+--         flake8 = { enabled = true, maxLineLength = 120 },
+--         rope_autoimport = { enabled = true },
+--       },
+--       configurationSources = { 'flake8' },
+--     },
+--   },
+-- })
 -- }}}
 lspconfig.gopls.setup({ -- {{{
   capabilities = cmp_capabilities,
@@ -298,6 +313,7 @@ lspconfig.emmet_ls.setup({ -- {{{
     'javascript.jsx',
     'typescript.tsx',
     'html',
+    'htmldjango',
     'css',
     'sass',
     'scss',
@@ -424,7 +440,19 @@ lspconfig.volar.setup({
 --   --   },
 --   -- },
 -- }) --}}}
-
+lspconfig.graphql.setup({ --- {{{
+  flags = { debounce_text_changes = 150 },
+  capabilities = cmp_capabilities,
+  on_attach = on_attach,
+  filetypes = {
+    'graphql',
+    -- 'typescript',
+    -- 'javascript',
+    'typescriptreact',
+    'javascriptreact',
+  },
+  root_dir = util.root_pattern('.graphqlrc*', '.graphql.config.*', 'graphql.config.*'),
+}) --- }}}
 lspconfig.eslint.setup({ --{{{
   flags = { debounce_text_changes = 150 },
   settings = {

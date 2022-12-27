@@ -28,17 +28,9 @@ require('nvim-treesitter.configs').setup({
     'comment',
     'dockerfile',
   },
-  highlight = {
-    enable = true,
-    use_languagetree = false,
-    -- disable = { 'org' }, -- Remove this to use TS highlighter for some of the highlights (Experimental)
-    -- additional_vim_regex_highlighting = { 'org' }, -- Required since TS highlighter doesn't support all syntax features (conceal)
-  },
+  highlight = { enable = true, additional_vim_regex_highlighting = false },
   autotag = { enable = true },
-  context_commentstring = {
-    enable = true,
-    enable_autocmd = false,
-  },
+  context_commentstring = { enable = true, enable_autocmd = false },
   textobjects = {
     select = {
       enable = true,

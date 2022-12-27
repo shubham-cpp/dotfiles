@@ -1,8 +1,8 @@
 local onedark = require 'onedark'
 -- Options: deep | dark | darker | warm | warmer
 onedark.setup({
-  style = 'darker',
-  transparent = true,
+  style = 'deep',
+  -- transparent = true,
   cmp_itemkind_reverse = true,
   lualine = { transparent = true },
   highlights = {
