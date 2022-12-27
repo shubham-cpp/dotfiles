@@ -74,7 +74,7 @@ super + {_,shift + } f
 	dkcmd win {full,fakefull}
 
 # toggle floating or sticky
-super + shift + {s,space}
+super + {s, shift + s}
 	dkcmd win {float,stick}
 
 # move window, signed (+/-) for relative changes
@@ -106,8 +106,8 @@ super + {_,shift + ,ctrl + }{comma,period,backslash}
 	dkcmd mon {view,send,follow} {prev,next,last}
 
 # change active workspace layout
-super + {t,r,m,g,s,w,f,u}
-	dkcmd set layout {tile,rtile,mono,grid,spiral,dwindle,none,tstack}
+super + {t,r,m,g}
+	dkcmd set layout {tile,rtile,mono,grid}
 
 # change number of windows in master or first stack
 # super + {_,shift + }{i,d}
