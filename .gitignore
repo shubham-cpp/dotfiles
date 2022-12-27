@@ -37,3 +37,4 @@ npm
 
 .config/qtile/__pycache__
 .config/suckless/my-st/tmux-client-29128.log
+.config/nvim-vscode/plugin
