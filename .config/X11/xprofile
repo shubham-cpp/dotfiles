@@ -47,7 +47,8 @@ dwm)
 	;;
 esac
 
-run redshift
+run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '0.9:0.7'
 run nm-applet
 run greenclip daemon
 run flameshot
+run imwheel
