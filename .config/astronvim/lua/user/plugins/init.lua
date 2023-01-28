@@ -50,14 +50,14 @@ local init = {
         autoload_mode = conf.AutoloadMode.CurrentDir,
       })
     end,
-    commit = '7cde4df6790c708ea304f17ac92f00425bd63e9a',
+    commit = '4005dac93f5cd1257792259ef4df6af0e3afc213',
   },
   ['monaqa/dial.nvim'] = {
     config = function()
       require 'user.plugins.dial'
     end,
     event = 'BufEnter',
-    commit = '9ba17c2ee636a8e7fdef5b69d6aac54dd26f4384',
+    commit = '1bf15b96126711424918cc66ccbbd53c4c1cec19',
   },
   ['mg979/vim-visual-multi'] = {
     setup = function()
@@ -73,7 +73,15 @@ local init = {
     end,
     after = 'dial.nvim',
   },
+  ['ggandor/leap.nvim'] = {
+    after = 'vim-visual-multi',
+    config = function()
+      require('leap').add_default_mappings()
+    end,
+    commit = 'a968ab4250840dc879e805f918b4f3b892310a12',
+  },
   ['phaazon/hop.nvim'] = {
+    disable = true,
     setup = function()
       vim.keymap.set('n', 'S', ':HopWord<cr>')
       vim.keymap.set('n', 's', ':HopChar2<cr>', { silent = false })
@@ -85,6 +93,8 @@ local init = {
     commit = '90db1b2c61b820e230599a04fedcd2679e64bd07',
   },
   ['rafcamlet/tabline-framework.nvim'] = {
+    disable = true,
+    event = 'VimEnter',
     config = function()
       require 'user.plugins.tabline'
     end,
