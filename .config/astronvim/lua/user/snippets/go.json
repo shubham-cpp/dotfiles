@@ -1,0 +1,7 @@
+{
+  "var": {
+    "prefix": ["v", "var"],
+    "body": "${1:name} := $2",
+    "description": "Create a variable and assign value to it"
+  }
+}
