@@ -1,36 +1,12 @@
 local config = {
   default_theme = {
     plugins = {
-      hop = true,
-    },
-  },
-  lsp = {
-    mappings = {
-      n = {
-        ['<leader>='] = {
-          function()
-            vim.lsp.buf.format({ async = false })
-          end,
-          desc = 'Format File',
-        },
-        ['<leader>ff'] = {
-          '<cmd>Telescope find_files hidden=true<cr>',
-          desc = 'Find Files(hidden)',
-        },
-        ['<C-\\>'] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
-      },
-      i = {
-        ['<C-\\>'] = { '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
-      },
-      t = {
-        ['<C-l>'] = false,
-        ['<C-k>'] = false,
-      },
+      hop = false,
     },
   },
   mappings = {
     n = {
-      ['<C-\\>'] = false,
+      ['<C-\\>'] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
       ['<leader>c'] = false,
       ['0'] = { '^' },
       ['<Esc>'] = { '<cmd>nohl<cr>', desc = 'No Highlight' },
@@ -46,6 +22,7 @@ local config = {
       ['dl'] = { '"_dl' },
       ['c'] = { '"_c' },
       ['C'] = { '"_C' },
+      ['Q'] = { '<cmd>copen<cr>', desc = 'Open Quickfix list' },
       ['k'] = { "v:count == 0 ? 'gk' : 'k'", expr = true, silent = true },
       ['j'] = { "v:count == 0 ? 'gj' : 'j'", expr = true, silent = true },
     },
@@ -65,10 +42,15 @@ local config = {
       [','] = { ',<C-g>u' },
       ['.'] = { '.<C-g>u' },
       ['?'] = { '?<C-g>u' },
+      ['<C-\\>'] = { '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
     },
     o = {
       ['ie'] = { ':exec "normal! ggVG"<cr>', desc = 'New operator for entire file' },
       ['iv'] = { ':exec "normal! HVL"<cr>', desc = 'New operator for entire file' },
+    },
+    t = {
+      ['<C-l>'] = false,
+      ['<C-k>'] = false,
     },
   },
   plugins = {
@@ -176,6 +158,13 @@ local config = {
       }
       return opts
     end,
+  },
+  luasnip = {
+    vscode = {
+      paths = {
+        '~/Documents/dotfiles/.config/astronvim/lua/user/snippets',
+      },
+    },
   },
 }
 
