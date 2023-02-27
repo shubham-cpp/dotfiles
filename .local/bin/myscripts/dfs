@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
-arg=$(readlink -f ~/.config/awesome/ | cut -d'.' -f1)
+arg=$(readlink -f ~/.config/bspwm/ | cut -d'.' -f1)
 
-rg --hidden --files "$arg" --files-without-match="$HOME"/.config/git/ignore  -g '!.git*' -g '!*.bak' \
-    | sed "s#$arg##g" \
-    | fzf --reverse \
-    | xargs -r -I {} nvim "$arg"{} \
-    || echo "Please provide a directory"
+rg --hidden --files "$arg" --files-without-match="$HOME"/.config/git/ignore -g '!.git*' -g '!*.bak' |
+	sed "s#$arg##g" |
+	fzf --reverse |
+	xargs -r -I {} nvim "$arg"{} ||
+	echo "Please provide a directory"
