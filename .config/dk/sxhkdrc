@@ -95,8 +95,8 @@ super + {_,shift + ,ctrl + }{1-9,0}
 
 # view, send, or follow to the next, previous, last active,
 # next non-empty, or prev non-empty workspace
-super + {_,shift + ,ctrl + }{bracketleft,bracketright,BackSpace,Left,Right}
-	dkcmd ws {view,send,follow} {prev,next,last,prevne,nextne}
+super + {_,ctrl + ,shift + }{bracketleft,bracketright,BackSpace}
+	dkcmd ws {view,send,follow} {prev,next,last}
 
 super + {_,shift + ,ctrl + } grave
 	dkcmd ws {view,send,follow} nextne
