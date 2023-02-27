@@ -10,5 +10,12 @@ return {
       '<cmd>Telescope find_files hidden=true<cr>',
       desc = 'Find Files(hidden)',
     },
+    ['gs'] = {
+      function()
+        vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+        vim.lsp.buf.code_action({ context = { only = { 'source.removeUnused' } }, apply = true })
+      end,
+      desc = 'Organize Imports and Remove Unused',
+    },
   },
 }
