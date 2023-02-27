@@ -30,7 +30,7 @@ default_x="1366"
 default_y="768"
 
 case "$1" in
-  *.7z|*.a|*.ace|*.alz|*.arc|*.arj|*.bz|*.bz2|*.cab|*.cpio|*.deb|*.gz|*.jar|\
+  *.7z|*.a|*.ace|*.alz|*.arc|*.arj|*.bz|*.bz2|*.cab|*.cpio|*.gz|*.jar|\
   *.lha|*.lrz|*.lz|*.lzh|*.lzma|*.lzo|*.rar|*.rpm|*.rz|*.t7z|*.tar|*.tbz|\
   *.tbz2|*.tgz|*.tlz|*.txz|*.tZ|*.tzo|*.war|*.xz|*.Z|*.zip)
     als -- "$1"
@@ -80,6 +80,11 @@ case "$1" in
       cache "$cache"
       convert -- "$1" "$cache"
       draw "$cache"
+    fi
+    ;;
+  *.deb)
+    if [ -x /bin/dpkg-deb ]; then
+      dpkg-deb --info "$1"
     fi
     ;;
 esac
