@@ -1,8 +1,57 @@
+local util = require 'user.lsp.util'
+
 local config = {
   default_theme = {
     plugins = {
       hop = false,
     },
+  },
+  lsp = {
+    ['server-settings'] = {
+      html = { cmd = { util.bun_path() .. '/vscode-html-language-server', '--stdio' } },
+      cssls = { cmd = { util.bun_path() .. '/vscode-css-language-server', '--stdio' } },
+      jsonls = { cmd = { util.bun_path() .. '/vscode-json-language-server', '--stdio' } },
+      eslint = { cmd = { util.bun_path() .. '/vscode-eslint-language-server', '--stdio' } },
+      volar = { cmd = { util.bun_path() .. '/vue-language-server', '--stdio' } },
+      bashls = { cmd = { util.bun_path() .. '/bash-language-server', 'start' } },
+      awk_ls = { cmd = { util.bun_path() .. '/awk-language-server' } },
+      docker_compose_language_service = { cmd = { util.bun_path() .. '/docker-compose-langserver', '--stdio' } },
+      dockerls = { cmd = { util.bun_path() .. '/docker-langserver', '--stdio' } },
+      tailwindcss = { cmd = { util.bun_path() .. '/tailwindcss-language-server', '--stdio' } },
+      svelte = { cmd = { util.bun_path() .. '/svelteserver', '--stdio' } },
+      emmet_ls = { cmd = { util.bun_path() .. '/emmet-ls', '--stdio' } },
+      vimls = { cmd = { util.bun_path() .. '/vim-language-server', '--stdio' } },
+      astro = { cmd = { util.bun_path() .. '/astro-ls', '--stdio' } },
+      prismals = { cmd = { util.bun_path() .. '/prisma-language-server', '--stdio' } },
+    },
+  },
+  highlights = {
+    -- set highlights for all themes
+    -- use a function override to let us use lua to retrieve colors from highlight group
+    -- there is no default table so we don't need to put a parameter for this function
+    init = function()
+      -- get highlights from highlight groups
+      local normal = astronvim.get_hlgroup 'Normal'
+      local fg, bg = normal.fg, normal.bg
+      local bg_alt = astronvim.get_hlgroup('Visual').bg
+      local green = astronvim.get_hlgroup('String').fg
+      local red = astronvim.get_hlgroup('Error').fg
+      -- return a table of highlights for telescope based on colors gotten from highlight groups
+      return {
+        TelescopeBorder = { fg = bg_alt, bg = bg },
+        TelescopeNormal = { bg = bg },
+        TelescopePreviewBorder = { fg = bg, bg = bg },
+        TelescopePreviewNormal = { bg = bg },
+        TelescopePreviewTitle = { fg = bg, bg = green },
+        TelescopePromptBorder = { fg = bg_alt, bg = bg_alt },
+        TelescopePromptNormal = { fg = fg, bg = bg_alt },
+        TelescopePromptPrefix = { fg = red, bg = bg_alt },
+        TelescopePromptTitle = { fg = bg, bg = red },
+        TelescopeResultsBorder = { fg = bg, bg = bg },
+        TelescopeResultsNormal = { bg = bg },
+        TelescopeResultsTitle = { fg = bg, bg = bg },
+      }
+    end,
   },
   mappings = {
     n = {
@@ -99,7 +148,7 @@ local config = {
       cmp.setup.cmdline('/', {
         sources = sources({
           { name = 'nvim_lsp_signature_help' },
-          { name = 'buffer', keyword_pattern = [=[[^[:blank:]].*]=] },
+          { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
         }),
         mapping = cmp.mapping.preset.cmdline({}),
       })

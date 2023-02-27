@@ -1,4 +1,6 @@
+local util = require 'user.lsp.util'
 return {
+  cmd = { util.bun_path() .. '/yaml-language-server', '--stdio' },
   settings = {
     yaml = {
       schemas = {
