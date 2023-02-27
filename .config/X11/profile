@@ -32,10 +32,10 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-    export MOZ_ENABLE_WAYLAND=1
-    export XDG_CURRENT_DESKTOP=Unity
-    export _JAVA_AWT_WM_NONREPARENTING=1
-    export XCURSOR_SIZE=24
+  export MOZ_ENABLE_WAYLAND=1
+  export XDG_CURRENT_DESKTOP=Unity
+  export _JAVA_AWT_WM_NONREPARENTING=1
+  export XCURSOR_SIZE=24
 fi
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
@@ -43,11 +43,14 @@ export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
 export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
 # export WINEESYNC=1
 export MOZ_USE_XINPUT2="1"
+export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
+export ASDF_DATA_DIR="${XDG_DATA_HOME}/asdf"
 export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 export ADB_VENDOR_KEY="$XDG_CONFIG_HOME"/android
 export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME"/android/
 export MYSQL_HISTFILE="$XDG_DATA_HOME"/mysql_history
 export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
@@ -62,22 +65,28 @@ export ICEAUTHORITY="${XDG_CACHE_HOME:-$HOME/.cache}/ICEauthority"
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
 export WORKON_HOME="$XDG_DATA_HOME/virtualenvs"
-export PYLINTHOME="$XDG_CACHE_HOME"/pylint
-export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
-export JUPYTERLAB_DIR="$XDG_DATA_HOME"/jupyter/lab
-export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
-export PYTHON_EGG_CACHE="$XDG_CACHE_HOME"/python-eggs
+export PYLINTHOME="$XDG_CACHE_HOME/pylint"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+export JUPYTERLAB_DIR="$XDG_DATA_HOME/jupyter/lab"
+export IPYTHONDIR="$XDG_CONFIG_HOME/jupyter"
+export PYTHON_EGG_CACHE="$XDG_CACHE_HOME/python-eggs"
+export PYTHONPYCACHEPREFIX="$XDG_CACHE_HOME/python"
+export PYTHONUSERBASE="$XDG_DATA_HOME/python"
 export CONDARC="$XDG_CONFIG_HOME/conda/condarc"
 export GRIPHOME="$XDG_CONFIG_HOME/grip"
-export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
-export XSERVERRC="$XDG_CONFIG_HOME"/X11/xserverrc
+export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
+export XSERVERRC="$XDG_CONFIG_HOME/X11/xserverrc"
 export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc
-export XCOMPOSEFILE="$XDG_CONFIG_HOME"/X11/xcompose
-export XCOMPOSECACHE="$XDG_CACHE_HOME"/X11/xcompose
-export GRADLE_USER_HOME="$XDG_DATA_HOME"/gradle
-export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
-export LEIN_HOME="$XDG_DATA_HOME"/lein
+export XCOMPOSEFILE="$XDG_CONFIG_HOME/X11/xcompose"
+export XCOMPOSECACHE="$XDG_CACHE_HOME/X11/xcompose"
+export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+export LEIN_HOME="$XDG_DATA_HOME/lein"
 export LESSHISTFILE=-
+export DENO_INSTALL="$XDG_CONFIG_HOME/deno"
+[ -s "$DENO_INSTALL" ] && export PATH="$PATH:$DENO_INSTALL/bin"
+export BUN_INSTALL="$XDG_DATA_HOME/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 # export LESSOPEN="| /usr/bin/highlight -O xterm256 --style=leo %s 2>/dev/null"
 # export LESS='-q -F -i -J -M -W -x4 -z-4 -R --use-color'
 export LESS='-R --use-color -Dd+r$Du+b'
@@ -111,8 +120,8 @@ export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
 # This is the list for lf icons:
 LF_ICONS=$(sed ~/.config/lf/dir_icons \
-            -e '/^[ \t]*#/d'       \
-            -e '/^[ \t]*$/d'       \
-            -e 's/[ \t]\+/=/g'     \
-            -e 's/$/ /' | tr '\n' :)
+	-e '/^[ \t]*#/d' \
+	-e '/^[ \t]*$/d' \
+	-e 's/[ \t]\+/=/g' \
+	-e 's/$/ /' | tr '\n' :)
 export LF_ICONS
