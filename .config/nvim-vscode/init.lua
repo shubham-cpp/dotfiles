@@ -22,6 +22,7 @@ local function load_plugins()
 			'sainnhe/everforest',
 			'tpope/vim-commentary',
 			'unblevable/quick-scope',
+			'andymass/vim-matchup',
 			{
 				'tommcdo/vim-lion',
 				setup = function()
@@ -48,21 +49,25 @@ local function load_plugins()
 					require('nvim-surround').setup({})
 				end,
 			},
-			{
-				'mg979/vim-visual-multi',
-				branch = 'master',
-				setup = function()
-					vim.g.VM_maps = {}
-					vim.g.VM_mouse_mappings = 1
-					vim.g.VM_maps = {
-						['Find Under'] = '<C-n>',
-						['Find Subword Under'] = '<C-n>',
-						['Skip Region'] = '<C-x>',
-						-- ['Select All'] = '<C-a>',
-						['Start Regex Search'] = '\\/',
-					}
-				end,
-			},
+			-- {
+			-- 	'Exafunction/codeium.vim',
+			-- 	config = function()
+			-- 		vim.g.codeium_disable_bindings = 1
+			-- 		-- Change '<C-g>' here to any keycode you like.
+			-- 		vim.keymap.set('i', '<C-g>', function()
+			-- 			return vim.fn['codeium#Accept']()
+			-- 		end, { expr = true })
+			-- 		vim.keymap.set('i', '<c-;>', function()
+			-- 			return vim.fn['codeium#CycleCompletions'](1)
+			-- 		end, { expr = true })
+			-- 		vim.keymap.set('i', '<c-,>', function()
+			-- 			return vim.fn['codeium#CycleCompletions'](-1)
+			-- 		end, { expr = true })
+			-- 		vim.keymap.set('i', '<c-x>', function()
+			-- 			return vim.fn['codeium#Clear']()
+			-- 		end, { expr = true })
+			-- 	end,
+			-- },
 			{
 				'ggandor/leap.nvim',
 				config = function()
@@ -114,13 +119,32 @@ local function load_plugins()
 								cyclic = true,
 							}),
 						},
-						vue = webs,
-						javascript = webs,
-						javascriptreact = webs,
-						typescript = webs,
-						typescriptreact = webs,
+						javascript = {
+							augend.integer.alias.decimal,
+							augend.integer.alias.hex,
+							augend.constant.alias.bool,
+							augend.constant.new({
+								elements = { '&&', '||' },
+								word = false,
+								cyclic = true,
+							}),
+							augend.constant.new({ elements = { 'let', 'const' } }),
+						},
 						lua = py_lua,
-						python = py_lua,
+						python = {
+							augend.integer.alias.decimal,
+							augend.integer.alias.hex,
+							augend.constant.new({
+								elements = { 'and', 'or' },
+								word = false, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+								cyclic = true, -- "or" is incremented into "and".
+							}),
+							augend.constant.new({
+								elements = { 'True', 'False' },
+								word = false,
+								cyclic = true,
+							}),
+						},
 						visual = {
 							augend.integer.alias.decimal,
 							augend.integer.alias.hex,
@@ -138,7 +162,6 @@ local function load_plugins()
 					iom.setup({})
 				end,
 			},
-			{ 'andymass/vim-matchup' },
 		},
 		config = {
 			package_root = package_root,
@@ -209,7 +232,7 @@ o.tabstop = 4
 -- o.smartindent = true
 -- o.showtabline = 2
 -- o.showmode = false
-if vim.fn.has('termguicolors') == 1 then
+if vim.fn.has 'termguicolors' == 1 then
 	o.termguicolors = true
 end
 -- o.tags:append({ './.git/tags' })
@@ -261,7 +284,7 @@ end
 
 local map = function(mode, lhs, rhs, options)
 	local opts = (options == nil or next(options) == nil) and { silent = true, noremap = true } or options
-	vim.keymap.set(mode, lhs, rhs, options)
+	vim.keymap.set(mode, lhs, rhs, opts)
 end
 
 map('', '0', '^', { noremap = false, silent = true })
@@ -283,8 +306,8 @@ map('n', '<C-j>', '<C-W>j')
 map('n', '<C-k>', '<C-W>k')
 map('n', '<C-l>', '<C-W>l')
 
-map('n', 'k', 'gk', { noremap = false, silent = true })
-map('n', 'j', 'gj', { noremap = false, silent = true })
+map('n', 'j', 'gj', { noremap = false })
+map('n', 'k', 'gk', { noremap = false })
 
 -- Pasting in visual mode doesn't copy
 map('x', 'p', [[ 'pgv"'.v:register.'y' ]], { noremap = true, expr = true })
@@ -321,9 +344,12 @@ map('o', 'ie', ':exec "normal! ggVG"<cr>', { noremap = true, silent = true })
 map('o', 'iv', ':exec "normal! HVL"<cr>', { noremap = true, silent = true })
 
 if vim.g.vscode then
+	-- cmd [[ nmap j gj ]]
+	-- cmd [[ nmap k gk ]]
 	map('', 'gD', "<Cmd>call VSCodeNotify('editor.action.revealDefinitionAside')<CR>")
 	map('', 'gr', "<Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>")
 	map('', '[s', "<Cmd>call VSCodeNotify('editor.action.toggleStickyScroll')<CR>")
+	map('n', ',d', '<cmd>Neogen<cr>', { noremap = true })
 
 	map(
 		'x',
@@ -347,8 +373,9 @@ if vim.g.vscode then
 	map('n', '<leader>gf', "<Cmd>call VSCodeNotify('workbench.view.explorer')<cr>")
 	map('n', '<leader>gk', "<Cmd>call VSCodeNotify('workbench.action.openGlobalKeybindings')<cr>")
 
-	map('n', ',w ', "<Cmd>call VSCodeNotify('workbench.action.files.save')<cr>")
-	map('n', ',W ', "<Cmd>call VSCodeNotify('workbench.action.files.saveWithoutFormatting')<cr>")
+	map('n', ',w', "<Cmd>call VSCodeNotify('workbench.action.files.save')<cr>")
+
+	map('n', ',W', "<Cmd>call VSCodeNotify('workbench.action.files.saveWithoutFormatting')<cr>")
 	map('n', 'gh', "<Cmd>call VSCodeNotify('editor.action.showHover')<cr>")
 	-- VsCode Folding
 	map('', 'za', "<Cmd>call VSCodeNotify('editor.toggleFold')<CR>")
@@ -376,8 +403,34 @@ local highlight_yank_commands = {
 	{
 		event = 'FileType',
 		opts = {
-			command = 'setlocal sw=2 ts=2',
-			pattern = { 'css', 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'html', 'json' },
+			callback = function()
+				vim.opt_local.shiftwidth = 2
+				vim.opt_local.tabstop = 2
+				vim.opt_local.softtabstop = 2
+				vim.keymap.set(
+					{ 'n', 'v' },
+					'<C-a>',
+					'"=javascript<CR><Plug>(dial-increment)',
+					{ noremap = false, buffer = true }
+				)
+				vim.keymap.set(
+					{ 'n', 'v' },
+					'<C-x>',
+					'"=javascript<CR><Plug>(dial-decrement)',
+					{ noremap = false, buffer = true }
+				)
+			end,
+			pattern = {
+				'css',
+				'javascript',
+				'javascriptreact',
+				'typescript',
+				'typescriptreact',
+				'html',
+				'json',
+				'vue',
+				'svelte',
+			},
 			desc = 'Clean whitespaces',
 		},
 	},
@@ -387,6 +440,22 @@ local highlight_yank_commands = {
 			command = 'nnoremap <buffer> q :q<cr>',
 			pattern = { 'help', 'man' },
 			desc = 'Use q to close help/man window',
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = 'nmap <buffer> <C-a> "=python<CR><Plug>(dial-increment) | nmap <buffer> <C-x> "=python<CR><Plug>(dial-decrement)  ',
+			pattern = 'python',
+			desc = 'Using dial.nvim for python',
+		},
+	},
+	{
+		event = 'FileType',
+		opts = {
+			command = 'nmap <buffer> <C-a> "=lua<CR><Plug>(dial-increment) | nmap <buffer> <C-x> "=python<CR><Plug>(dial-decrement)  ',
+			pattern = 'lua',
+			desc = 'Using dial.nvim for python',
 		},
 	},
 	{
@@ -480,6 +549,6 @@ for _, cmds in ipairs(highlight_yank_commands) do
 		return 1
 	end
 	cmds.opts.pattern = cmds.opts.pattern or '*'
-	cmds.opts.group = File_Reloads
+	cmds.opts.group = highlight_yank
 	vim.api.nvim_create_autocmd(cmds.event, cmds.opts)
 end

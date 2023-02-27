@@ -1,6 +1,7 @@
-
 set runtimepath=$VIMRUNTIME
 set packpath=/home/shubham/.cache/nvim-vscode/site
+set packpath+=/home/shubham/.config/nvim-vscode
+source ~/.config/nvim-vscode/plugin/plug.vim
 
 call plug#begin('~/.cache/nvim-vscode/plugged')
   Plug 'tpope/vim-repeat'
@@ -10,9 +11,88 @@ call plug#begin('~/.cache/nvim-vscode/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'kylechui/nvim-surround'
   Plug 'unblevable/quick-scope'
+  Plug 'andymass/vim-matchup'
+  Plug 'tommcdo/vim-lion'
+  Plug 'Darazaki/indent-o-matic'
+  Plug 'monaqa/dial.nvim'
 call plug#end()
 
 let g:everforest_background = 'hard'
 let g:everforest_better_performance = 1
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_lazy_highlight = 1
+
+nmap <C-a> <Plug>(dial-increment)
+nmap <C-x> <Plug>(dial-decrement)
+xmap <C-a> <Plug>(dial-increment)
+xmap <C-x> <Plug>(dial-decrement)
+xmap g<C-a> g<Plug>(dial-increment)
+xmap g<C-x> g<Plug>(dial-decrement)
+
+lua << EOF
+
+  local ok_leap, leap = pcall(require,'leap')
+  if ok_leap then
+	leap.add_default_mappings()
+  end
+
+  local ok_dia, augend = pcall(require,'dial.augend')
+  if ok_dia then
+			local webs = {
+				augend.integer.alias.decimal,
+				augend.integer.alias.hex,
+				augend.constant.alias.bool,
+				augend.constant.new({
+					elements = { '&&', '||' },
+					word = false,
+					cyclic = true,
+				}),
+				augend.constant.new({ elements = { 'let', 'const' } }),
+			}
+			local py_lua = {
+				augend.integer.alias.decimal,
+				augend.integer.alias.hex,
+				augend.constant.alias.bool,
+				augend.constant.new({
+					elements = { 'and', 'or' },
+					word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
+					cyclic = true, -- "or" is incremented into "and".
+				}),
+			}
+			require('dial.config').augends:register_group({
+				default = {
+					augend.integer.alias.decimal,
+					augend.integer.alias.hex,
+					augend.constant.alias.bool,
+					augend.constant.new({
+						elements = { '&&', '||' },
+						word = false,
+						cyclic = true,
+					}),
+				},
+				vue = webs,
+				javascript = webs,
+				javascriptreact = webs,
+				typescript = webs,
+				typescriptreact = webs,
+				lua = py_lua,
+				python = py_lua,
+				-- python = vim.tbl_extend("force",py_lua,{
+
+				-- 	augend.constant.new({
+				-- 		elements = { 'False' 'True' },
+				-- 		word = false,
+				-- 		cyclic = true,
+				-- 	})
+				-- }),
+				visual = {
+					augend.integer.alias.decimal,
+					augend.integer.alias.hex,
+					augend.date.alias['%Y/%m/%d'],
+					augend.constant.alias.alpha,
+					augend.constant.alias.Alpha,
+				},
+			})
+  end
+
+EOF
