@@ -1,11 +1,11 @@
 # vim:fileencoding=utf-8:ft=python:foldmethod=marker:foldlevel=1
 # Import {{{
-import subprocess
 from os import getenv
 from os.path import isfile
 from typing import Dict, List, Union
 
-from libqtile import bar, hook, qtile, widget
+from bar_config import colors, top_another
+from libqtile import hook, qtile
 from libqtile.command import lazy as lz
 from libqtile.config import Click, Drag
 from libqtile.config import EzKey as Key
@@ -16,6 +16,7 @@ from libqtile.layout.max import Max
 from libqtile.layout.xmonad import MonadTall
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
+from qtile_extras.widget.decorations import BorderDecoration
 
 # from shutil import which
 
@@ -283,13 +284,15 @@ keys = [
             if browser != "firefox"
             else "brave"
             if isfile("/usr/bin/brave")
+            else "brave-browser"
+            if isfile("/usr/bin/brave-browser")
             else "chromium"
         ),
         desc=f"Launch {browser}",
     ),
     Key(
         "M-e",
-        lazy.spawn("thunar || pcmanfm", shell=True),
+        lazy.spawn("bash -c 'thunar || pcmanfm'", shell=True),
         desc="Launch File Manager",
     ),
     Key("M-S-e", lazy.spawn("alacritty -e lfv"), desc="Launch lf"),
@@ -299,7 +302,7 @@ keys = [
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
         "M-d",
-        lazy.spawn("dmenu_run_history -i || dmenu_run -i", shell=True),
+        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'", shell=True),
         desc="Spawn Run Prompt",
     ),
     Key(
@@ -320,7 +323,9 @@ keys = [
     Key("M-v", lazy.spawn("virt-manager"), desc="Launch Virt-manager"),
     Key(
         "M-g",
-        lazy.spawn("qalculate-gtk || gnome-calculator || galculator", shell=True),
+        lazy.spawn(
+            "bash -c 'qalculate-gtk || gnome-calculator || galculator'", shell=True
+        ),
         desc="Launch Calculator",
     ),
     Key(
@@ -338,7 +343,7 @@ keys = [
     # Volume {{{
     Key(
         "<XF86AudioLowerVolume>",
-        lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%"),
+        lazy.spawn("pactl set-sink-volume @DEFAULT_SINK@ -5%", shell=True),
         update_volume(),
         desc="Audio Lower",
     ),
@@ -350,8 +355,8 @@ keys = [
     ),
     Key(
         "<XF86AudioMute>",
-        # lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
-        lazy.spawn("pamixer --toggle-mute"),
+        lazy.spawn("pactl set-sink-mute @DEFAULT_SINK@ toggle"),
+        # lazy.spawn("pamixer --toggle-mute"),
         update_volume(),
         desc="Audio Toggle Mute ",
     ),
@@ -435,6 +440,7 @@ layout_theme: Dict[str, Union[str, int]] = {
     "border_focus": "#bd93f9",
     "border_normal": "#1D2330",
 }
+
 layouts: List[Layout] = [
     MonadTall(
         change_size=10,
@@ -449,249 +455,24 @@ layouts: List[Layout] = [
 # }}}
 
 # Bar {{{
-widget_defaults: Dict[str, Union[str, int]] = dict(
-    font="Ubuntu Medium",
-    fontsize=12,
-    padding=2,
+# widget_defaults: Dict[str, Union[str, int]] = dict(
+widget_defaults = dict(
+    font="FontAwesome",
+    fontsize=14,
+    # background=colors[0],
+    # padding=2,
+    # decorations=[
+    #     BorderDecoration(
+    #         colour="#3b4252",  # colors[0],
+    #         border_width=[11, 0, 10, 0],
+    #     )
+    # ],
 )
 extension_defaults = widget_defaults.copy()
 
-colors = [
-    "#1E1F29",  # 0 darker purple
-    "#bfbfbf",  # 1 white
-    "#bd93f9",  # 2 lighter purple
-    "#ff92d0",  # 3 pink
-    "#8fae81",  # 4 soft green
-    "#ff6e67",  # 5 red
-    "#3A2F4D",  # 6 grey
-    "#50fa7b",  # 7 hard green
-    "#282a36",  # 8 middle purple
-    "#ffae42",  # 9 orange yellow
-    "#fff44f",  # 10 lemon yellow
-]
-
-
-def NerdIcon(icon="", fg=colors[0], bg=colors[1]):
-    return widget.TextBox(
-        fmt=icon,
-        fontsize=18,
-        font="Hack Nerd Font",
-        background=bg,
-        foreground=fg,
-        # margin=2,
-        padding=7,
-    )
-
-
-def calIcon(level: int, icons: list[str]) -> str:
-    if level >= 100:
-        return icons[4]
-    elif level > 80:
-        return icons[3]
-    elif level > 50:
-        return icons[2]
-    elif level > 5:
-        return icons[1]
-    else:
-        return icons[0]
-
-
-def getIcon(name: str) -> str:
-
-    if name == "battery":
-        with open("/sys/class/power_supply/BAT1/capacity", "r") as bat_file:
-            bat_level = int(bat_file.read().strip())
-            return calIcon(
-                bat_level,
-                [
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                ],
-            )
-    elif name == "volume":
-        vol = (
-            subprocess.run(
-                ["pamixer", "--get-volume-human"],
-                stdout=subprocess.PIPE,
-            )
-            .stdout.decode("utf-8")
-            .strip()[:2]
-        )
-        vol_level = 0 if vol == "mu" else int(vol)
-        logger.info(f"Volume {vol_level}")
-        return calIcon(vol_level, ["婢", "奔", "墳", "", ""])
-    elif name == "brightness":
-        return calIcon(
-            int(
-                float(
-                    subprocess.run(["brightnessctl", "g"], stdout=subprocess.PIPE)
-                    .stdout.decode("utf-8")
-                    .strip()
-                )
-            ),
-            ["", "", "", "", ""],
-        )
-    else:
-        logger.warn("function getIcon expects an argument")
-        return "Unknown"
-
-
-def ArrowSep():
-    # icon=""
-    # return widget.TextBox(
-    #     text=icon,
-    #     font="FuraCode Nerd Font",
-    #     fontsize=34,
-    # )
-    return widget.Spacer(14)
-
 
 screens = [
-    Screen(
-        top=bar.Bar(
-            [
-                widget.GroupBox(
-                    fontsize=14,
-                    margin_y=3,
-                    margin_x=2,
-                    padding_y=5,
-                    padding_x=3,
-                    borderwidth=3,
-                    rounded=False,
-                    highlight_method="line",
-                    hide_unused=True,
-                    this_current_screen_border=colors[4],
-                    active=colors[3],
-                    inactive=colors[2],
-                ),
-                widget.Prompt(),
-                widget.TaskList(
-                    txt_floating="[float]",
-                    txt_minimized="[min]",
-                    txt_maximized="[max]",
-                    highlight_method="block",
-                    margin=0,
-                    padding=4,
-                    borderwidth=3,
-                    fontsize=14,
-                    urgent_alert_method="text",
-                    urgent_text="#834a61",
-                ),
-                NerdIcon("", bg=colors[3]),
-                widget.Clock(
-                    format="%a %d, %I:%M %p",
-                    update_interval=60,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                ),
-                ArrowSep(),
-                NerdIcon("省", bg=colors[2]),
-                widget.CPU(
-                    format="{load_percent}%",
-                    update_interval=2,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                ),
-                ArrowSep(),
-                NerdIcon("", bg=colors[9]),
-                widget.Memory(
-                    format="{MemUsed:.0f}{mm}",
-                    update_interval=2,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                ),
-                # ArrowSep(),
-                # widget.GenPollText(
-                #     name="brightness_icon",
-                #     func=lambda: getIcon("brightness"),
-                #     font="FuraCode Nerd Font",
-                #     fontsize=18,
-                #     foreground=colors[0],
-                #     background=colors[10],
-                #     update_interval=60,
-                #     padding=3,
-                # ),
-                # widget.GenPollText(
-                #     name="brightness",
-                #     func=lambda: subprocess.run(
-                #         ["brightnessctl", "g"],
-                #         stdout=subprocess.PIPE,
-                #     )
-                #     .stdout.decode("utf-8")
-                #     .strip(),  # [:2],
-                #     padding=3,
-                #     foreground=colors[0],
-                #     background="#eeeeee",
-                # ),
-                ArrowSep(),
-                widget.GenPollText(
-                    name="volume_icon",
-                    func=lambda: getIcon("volume"),
-                    font="FuraCode Nerd Font",
-                    fontsize=18,
-                    foreground=colors[0],
-                    background=colors[5],
-                    update_interval=60,
-                    padding=3,
-                ),
-                widget.GenPollText(
-                    name="volume",
-                    func=lambda: subprocess.run(
-                        ["pamixer", "--get-volume-human"],
-                        stdout=subprocess.PIPE,
-                    )
-                    .stdout.decode("utf-8")
-                    .strip(),
-                    padding=3,
-                    foreground=colors[0],
-                    background="#eeeeee",
-                    update_interval=10,
-                ),
-                # ArrowSep(),
-                # widget.GenPollText(
-                #     name="battery_icon",
-                #     func=lambda: getIcon("battery"),
-                #     font="FuraCode Nerd Font",
-                #     fontsize=18,
-                #     foreground=colors[6],
-                #     background="#86EFAC",
-                #     update_interval=60,
-                #     padding=3,
-                # ),
-                # widget.Battery(
-                #     battery="BAT1",
-                #     unknown_char="",
-                #     discharge_char="",
-                #     empty_char="",
-                #     charge_char="",
-                #     format="{char} {percent:2.0%}",
-                #     # format="{percent:2.0%} {char}",
-                #     low_foreground=colors[5],
-                #     notify_below=15,
-                #     # font="Iosevka Nerd Font",
-                #     fontsize=14,
-                #     padding=3,
-                #     foreground=colors[0],
-                #     background="#eeeeee",
-                # ),
-                ArrowSep(),
-                widget.CapsNumLockIndicator(update_interval=1.5, fontsize=14),
-                ArrowSep(),
-                widget.Net(format=" {up}   {down}"),
-                ArrowSep(),
-                widget.Wttr(location={"Pune": "Home"}, fontsize=15),
-                ArrowSep(),
-                widget.CurrentLayoutIcon(scale=0.7),
-                widget.Systray(),
-            ],
-            24,
-            background="#1a1826",
-            opacity=0.6,
-        ),
-    ),
+    Screen(top=top_another),
 ]
 # }}}
 
