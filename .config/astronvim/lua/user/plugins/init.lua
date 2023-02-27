@@ -38,7 +38,6 @@ local init = {
       vim.g.qs_lazy_highlight = 1
     end,
   },
-
   ['Shatur/neovim-session-manager'] = {
     event = 'VimEnter',
     config = function()
@@ -103,15 +102,46 @@ local init = {
   ['hrsh7th/cmp-nvim-lsp-signature-help'] = {
     after = 'nvim-cmp',
     config = function()
-      astronvim.add_cmp_source({ name = 'nvim_lsp_signature_help', priority = 700 })
+      astronvim.add_cmp_source({ name = 'nvim_lsp_signature_help', priority = 1000 })
     end,
   },
   ['hrsh7th/cmp-cmdline'] = { after = 'nvim-cmp' },
-  ['tzachar/cmp-tabnine'] = {
+  -- ['tzachar/cmp-tabnine'] = {
+  --   after = 'nvim-cmp',
+  --   run = './install.sh',
+  --   config = function()
+  --     astronvim.add_cmp_source({ name = 'cmp_tabnine', priority = 100 })
+  --   end,
+  -- },
+  ['hrsh7th/cmp-nvim-lua'] = {
     after = 'nvim-cmp',
-    run = './install.sh',
     config = function()
-      astronvim.add_cmp_source({ name = 'cmp_tabnine', priority = 100 })
+      astronvim.add_cmp_source({ name = 'nvim_lua', priority = 700 })
+    end,
+  },
+  ['lvimuser/lsp-inlayhints.nvim'] = {
+    module = 'lsp-inlayhints',
+    config = function()
+      require 'user.plugins.lsp-inlayhints'
+    end,
+    commit = '84ca3abe8aaecbb5b30ad89e4701d4a9c821b72c',
+  },
+  ['Exafunction/codeium.vim'] = {
+    config = function()
+      vim.g.codeium_disable_bindings = 1
+      -- Change '<C-g>' here to any keycode you like.
+      vim.keymap.set('i', '<A-g>', function()
+        return vim.fn['codeium#Accept']()
+      end, { expr = true })
+      vim.keymap.set('i', '<C-;>', function()
+        return vim.fn['codeium#CycleCompletions'](1)
+      end, { expr = true })
+      vim.keymap.set('i', '<C-,>', function()
+        return vim.fn['codeium#CycleCompletions']( -1)
+      end, { expr = true })
+      vim.keymap.set('i', '<C-c>', function()
+        return vim.fn['codeium#Clear']()
+      end, { expr = true })
     end,
   },
 }

@@ -64,7 +64,20 @@ local file_reloads_commands = {
         vim.opt_local.foldmethod = 'expr'
         vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
       end,
-      pattern = { '*.go', '*.js', '*.jsx', '*.ts', '*.tsx' },
+      pattern = {
+        '*.js',
+        '*.jsx',
+        '*.ts',
+        '*.tsx',
+        '*.vue',
+        '*.html',
+        '*.css',
+        '*.scss',
+        '*.c',
+        '*.cpp',
+        '*.rs',
+        '*.go',
+      },
       desc = 'Use nvim-treesitter folding',
     },
   },
