@@ -149,7 +149,15 @@ local spr = wibox.widget.textbox ' | '
 -- 	shape = gears.shape.powerline,
 -- 	widget = wibox.widget.separator,
 -- })
-local mytextclock = wibox.widget.textclock ' %a %b %d, %I:%M %p'
+local big_icon = function(icon)
+  return wibox.widget({
+    widget = wibox.widget.textbox,
+    text = icon,
+    font = 'Hack Nerd Font 12',
+  })
+end
+-- local clock_icon = big_icon(" ")
+local mytextclock = wibox.widget.textclock '%a %b %d, %I:%M %p'
 local systray = wibox.widget.systray()
 systray:set_base_size(26)
 -- local systray_margin = wibox.layout.margin()
@@ -266,33 +274,34 @@ awful.screen.connect_for_each_screen(function(s)
       layout = wibox.layout.fixed.horizontal,
       -- spr,
       -- awful.widget.watch('bash -c "dwm_bat"', 10),
-      battery_widget({
-        display_notification = true,
-        show_current_level = true,
-        font = beautiful.font,
-        warning_msg_position = 'top_right',
-        -- path_to_icons = '/usr/share/icons/Qogir/symbolic/status/',
-        -- path_to_icons = gfs.get_xdg_data_home() .. 'icons/Fluent-grey-dark/symbolic/status/',
-      }),
-      spr,
-      wibox.widget.textbox ' ',
+      -- battery_widget({
+      --   display_notification = true,
+      --   show_current_level = true,
+      --   font = beautiful.font,
+      --   warning_msg_position = 'top_right',
+      --   -- path_to_icons = '/usr/share/icons/Qogir/symbolic/status/',
+      --   -- path_to_icons = gfs.get_xdg_data_home() .. 'icons/Fluent-grey-dark/symbolic/status/',
+      -- }),
+      -- spr,
+      big_icon ' ',
       awful.widget.watch('bash -c "printf %d%% $(expr 100 - $(vmstat 1 2 | tail -1 | awk \'{print $15}\'))"', 3),
       spr,
-      wibox.widget.textbox ' ',
+      big_icon ' ',
       awful.widget.watch('sh -c "free -h | awk \'/^Mem/ {print $3}\'"', 5),
       spr,
       volume(),
-      spr,
-      brightness_widget({
-        type = 'icon_and_text',
-        program = 'brightnessctl',
-        font = beautiful.font,
-        tooltip = true,
-        timeout = 120,
-      }),
+      -- spr,
+      -- brightness_widget({
+      --   type = 'icon_and_text',
+      --   program = 'brightnessctl',
+      --   font = beautiful.font,
+      --   tooltip = true,
+      --   timeout = 120,
+      -- }),
       -- spr,
       -- awful.widget.watch('bash -c "curl wttr.in/411043\\?format=1"', 3600),
       spr,
+      big_icon ' ',
       mytextclock,
       spr,
       s.mylayoutbox,
@@ -426,18 +435,18 @@ end
 
 globalkeys = gears.table.join(
 
-  -- Tag browsing {{{
+-- Tag browsing {{{
 
-  -- This is for testing something or anything
-  -- awful.key({ modkey,           }, "backslash",
-  --         function ()
-  -- local c = client.focus
-  -- local layout_name = awful.layout.get().name
-  -- naughty.notify({ preset = naughty.config.presets.normal,
-  --                 title = "Current Layout",
-  --                 timeout = 2,
-  --                 text = tostring(c.floating) })
-  -- end, {description = "Testing purpose", group = "tag"}),
+-- This is for testing something or anything
+-- awful.key({ modkey,           }, "backslash",
+--         function ()
+-- local c = client.focus
+-- local layout_name = awful.layout.get().name
+-- naughty.notify({ preset = naughty.config.presets.normal,
+--                 title = "Current Layout",
+--                 timeout = 2,
+--                 text = tostring(c.floating) })
+-- end, {description = "Testing purpose", group = "tag"}),
 
   awful.key({ modkey }, '[', awful.tag.viewprev, { description = 'view previous', group = 'tag' }),
   awful.key({ modkey }, ']', awful.tag.viewnext, { description = 'view next', group = 'tag' }),
@@ -576,15 +585,15 @@ globalkeys = gears.table.join(
     awful.spawn(browser)
   end, { description = 'open a ' .. browser, group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'w', function()
-    local cmd = browser ~= 'firefox' and 'firefox' or 'brave || chromium'
+    local cmd = browser ~= 'firefox' and 'firefox' or 'brave || brave-browser || chromium'
     awful.spawn.easy_async_with_shell(cmd, function(_, err)
-      if err ~= '' or err ~= nil then
-        naughty.notify({
-          preset = naughty.config.presets.critical,
-          title = 'Browser Not Found',
-          text = 'Brave or Chromium is not installed in the system ' .. err,
-        })
-      end
+      -- if err ~= '' or err ~= nil then
+      --   naughty.notify({
+      --     preset = naughty.config.presets.critical,
+      --     title = 'Browser Not Found',
+      --     text = 'Brave or Chromium is not installed in the system ' .. err,
+      --   })
+      -- end
     end)
   end, { description = 'open a firefox', group = 'launcher' }),
   awful.key({ modkey }, 'e', function()
@@ -690,7 +699,8 @@ globalkeys = gears.table.join(
   awful.key({ modkey, 'Control' }, 'l', function()
     awful.spawn(
       string.format(
-        'i3lock -k --time-pos "100:1000" --greeter-text="Welcome Back" --wrong-text="Incorrect password!" -i %s/Pictures/Wallpapers/canvas.jpg',
+        'i3lock -k --time-pos "100:1000" --greeter-text="Welcome Back" --wrong-text="Incorrect password!" -i %s/Pictures/Wallpapers/canvas.jpg'
+        ,
         os.getenv 'HOME'
       )
     )
@@ -756,7 +766,7 @@ globalkeys = gears.table.join(
     -- beautiful.volume.update()
   end, { description = 'toggle mute', group = 'hotkeys' })
 
-  ---  }}}
+---  }}}
 )
 
 -- Handle Windows(Like toggle floating,move to another tag,etc) {{{
