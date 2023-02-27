@@ -6,7 +6,7 @@ SETUVAR SXHKD_SHELL:/usr/bin/sh
 SETUVAR --export ZDOTDIR:/home/shubham/\x2econfig/zsh/
 SETUVAR _ZL_DATA:/home/shubham/\x2elocal/share/zlua/zlua\x2etxt
 SETUVAR _ZL_DATA_DIR:/home/shubham/\x2elocal/share/zlua
-SETUVAR __fish_initialized:3100
+SETUVAR __fish_initialized:3400
 SETUVAR _fish_abbr_chx:chmod\x20\x2bx
 SETUVAR _fish_abbr_emc:emacsclient\x20\x2dcn
 SETUVAR _fish_abbr_emd:emacs\x20\x2d\x2dbg\x2ddaemon
