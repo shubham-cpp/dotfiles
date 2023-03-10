@@ -45,7 +45,7 @@ local file_reloads_commands = {
         vim.opt_local.foldmethod = 'marker'
         map({ lhs = '<F5>', rhs = '<cmd>so %<cr>', opts = { noremap = true, buffer = true } })
       end,
-      pattern = { 'vim', 'lua' },
+      pattern = { 'vim' },
       desc = 'Setup foldmethod and use F5 to source current buffer',
     },
   },
@@ -57,30 +57,30 @@ local file_reloads_commands = {
       desc = 'Run xrdb after writing to Xresources',
     },
   },
-  {
-    event = 'BufReadPost',
-    opts = {
-      callback = function()
-        vim.opt_local.foldmethod = 'expr'
-        vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
-      end,
-      pattern = {
-        '*.js',
-        '*.jsx',
-        '*.ts',
-        '*.tsx',
-        '*.vue',
-        '*.html',
-        '*.css',
-        '*.scss',
-        '*.c',
-        '*.cpp',
-        '*.rs',
-        '*.go',
-      },
-      desc = 'Use nvim-treesitter folding',
-    },
-  },
+  -- {
+  --   event = 'BufReadPost',
+  --   opts = {
+  --     callback = function()
+  --       vim.opt_local.foldmethod = 'expr'
+  --       vim.opt_local.foldexpr = 'nvim_treesitter#foldexpr()'
+  --     end,
+  --     pattern = {
+  --       '*.js',
+  --       '*.jsx',
+  --       '*.ts',
+  --       '*.tsx',
+  --       '*.vue',
+  --       '*.html',
+  --       '*.css',
+  --       '*.scss',
+  --       '*.c',
+  --       '*.cpp',
+  --       '*.rs',
+  --       '*.go',
+  --     },
+  --     desc = 'Use nvim-treesitter folding',
+  --   },
+  -- },
   -- {
   --   event = { 'BufEnter', 'FocusGained' },
   --   opts = { command = 'checktime', desc = 'Check for changes to current file from other programs' },
@@ -137,6 +137,18 @@ local file_reloads_commands = {
         vim.opt_local.signcolumn = 'no'
         vim.opt_local.relativenumber = false
         vim.opt_local.number = false
+      end,
+    },
+  },
+  {
+    event = 'FileType',
+    opts = {
+      pattern = { 'markdown' },
+      callback = function()
+        map({ lhs = 'M-p', rhs = '<cmd>MarkdownPreview<CR>' })
+        map({ lhs = '<leader>mp', rhs = '<Plug>MarkdownPreview' })
+        map({ lhs = '<leader>ms', rhs = '<Plug>MarkdownStop' })
+        map({ lhs = '<leader>mt', rhs = '<Plug>MarkdownToggle' })
       end,
     },
   },

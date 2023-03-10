@@ -25,83 +25,6 @@ local config = {
       prismals = { cmd = { util.bun_path() .. '/prisma-language-server', '--stdio' } },
     },
   },
-  highlights = {
-    -- set highlights for all themes
-    -- use a function override to let us use lua to retrieve colors from highlight group
-    -- there is no default table so we don't need to put a parameter for this function
-    init = function()
-      -- get highlights from highlight groups
-      local normal = astronvim.get_hlgroup 'Normal'
-      local fg, bg = normal.fg, normal.bg
-      local bg_alt = astronvim.get_hlgroup('Visual').bg
-      local green = astronvim.get_hlgroup('String').fg
-      local red = astronvim.get_hlgroup('Error').fg
-      -- return a table of highlights for telescope based on colors gotten from highlight groups
-      return {
-        TelescopeBorder = { fg = bg_alt, bg = bg },
-        TelescopeNormal = { bg = bg },
-        TelescopePreviewBorder = { fg = bg, bg = bg },
-        TelescopePreviewNormal = { bg = bg },
-        TelescopePreviewTitle = { fg = bg, bg = green },
-        TelescopePromptBorder = { fg = bg_alt, bg = bg_alt },
-        TelescopePromptNormal = { fg = fg, bg = bg_alt },
-        TelescopePromptPrefix = { fg = red, bg = bg_alt },
-        TelescopePromptTitle = { fg = bg, bg = red },
-        TelescopeResultsBorder = { fg = bg, bg = bg },
-        TelescopeResultsNormal = { bg = bg },
-        TelescopeResultsTitle = { fg = bg, bg = bg },
-      }
-    end,
-  },
-  mappings = {
-    n = {
-      ['<C-\\>'] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
-      ['<leader>c'] = false,
-      ['0'] = { '^' },
-      ['<Esc>'] = { '<cmd>nohl<cr>', desc = 'No Highlight' },
-      [',w'] = { '<cmd>w!<cr>', desc = 'Save File' },
-      [',W'] = { '<cmd>noautocmd w!<cr>', desc = 'Save File(Without Aus)' },
-      ['<A-h>'] = { '<cmd>tabp<cr>', desc = 'Switch to Prev Tab' },
-      ['<A-l>'] = { '<cmd>tabn<cr>', desc = 'Switch to Next Tab' },
-      ['<A-j>'] = { 'mz:m+<cr>`z', desc = 'Move line down' },
-      ['<A-k>'] = { 'mz:m-2<cr>`z', desc = 'Move line up' },
-      ['<C-p>'] = { '<cmd>Telescope find_files<cr>', desc = 'Find Files' },
-      ['<C-n>'] = { '<cmd>Neotree focus toggle<cr>' },
-      ['<A-/>'] = { '"ayy"apk<Plug>(comment_toggle_linewise_current)j', desc = 'Copy Line and Comment' },
-      ['dl'] = { '"_dl' },
-      ['c'] = { '"_c' },
-      ['C'] = { '"_C' },
-      ['Q'] = { '<cmd>copen<cr>', desc = 'Open Quickfix list' },
-      ['k'] = { "v:count == 0 ? 'gk' : 'k'", expr = true, silent = true },
-      ['j'] = { "v:count == 0 ? 'gj' : 'j'", expr = true, silent = true },
-    },
-    v = {
-      p = {
-        [[ 'pgv"'.v:register.'y' ]],
-        expr = true,
-        noremap = true,
-        silent = false,
-        desc = "Don't Copy when pasting in visual mode",
-      },
-      c = { '"_c' },
-      J = { ":m '>+1<CR>gv=gv", desc = 'Move Line Down' },
-      K = { ":m '<-2<CR>gv=gv", desc = 'Move Line Up' },
-    },
-    i = {
-      [','] = { ',<C-g>u' },
-      ['.'] = { '.<C-g>u' },
-      ['?'] = { '?<C-g>u' },
-      ['<C-\\>'] = { '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
-    },
-    o = {
-      ['ie'] = { ':exec "normal! ggVG"<cr>', desc = 'New operator for entire file' },
-      ['iv'] = { ':exec "normal! HVL"<cr>', desc = 'New operator for entire file' },
-    },
-    t = {
-      ['<C-l>'] = false,
-      ['<C-k>'] = false,
-    },
-  },
   plugins = {
     toggleterm = function(config_tt)
       config_tt.open_mapping = '<F1>'
@@ -148,7 +71,7 @@ local config = {
       cmp.setup.cmdline('/', {
         sources = sources({
           { name = 'nvim_lsp_signature_help' },
-          { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
+          { name = 'buffer', keyword_pattern = [=[[^[:blank:]].*]=] },
         }),
         mapping = cmp.mapping.preset.cmdline({}),
       })
@@ -205,6 +128,16 @@ local config = {
           },
         },
       }
+      return opts
+    end,
+    ['null-ls'] = function(opts)
+      local null_ls = require 'null-ls'
+      local my_sources = {
+        null_ls.builtins.diagnostics.mypy,
+      }
+      -- table.insert(opts.sources, null_ls.builtins.diagnostics.mypy)
+      print(vim.inspect(opts))
+      opts.sources = vim.tbl_extend('keep', opts.sources or {}, my_sources)
       return opts
     end,
   },

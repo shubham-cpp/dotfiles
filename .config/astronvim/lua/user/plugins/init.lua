@@ -92,8 +92,8 @@ local init = {
     commit = '90db1b2c61b820e230599a04fedcd2679e64bd07',
   },
   ['rafcamlet/tabline-framework.nvim'] = {
-    disable = true,
-    event = 'VimEnter',
+    disable = false,
+    after = 'heirline.nvim',
     config = function()
       require 'user.plugins.tabline'
     end,
@@ -106,13 +106,6 @@ local init = {
     end,
   },
   ['hrsh7th/cmp-cmdline'] = { after = 'nvim-cmp' },
-  -- ['tzachar/cmp-tabnine'] = {
-  --   after = 'nvim-cmp',
-  --   run = './install.sh',
-  --   config = function()
-  --     astronvim.add_cmp_source({ name = 'cmp_tabnine', priority = 100 })
-  --   end,
-  -- },
   ['hrsh7th/cmp-nvim-lua'] = {
     after = 'nvim-cmp',
     config = function()
@@ -137,12 +130,29 @@ local init = {
         return vim.fn['codeium#CycleCompletions'](1)
       end, { expr = true })
       vim.keymap.set('i', '<C-,>', function()
-        return vim.fn['codeium#CycleCompletions']( -1)
+        return vim.fn['codeium#CycleCompletions'](-1)
       end, { expr = true })
       vim.keymap.set('i', '<C-c>', function()
         return vim.fn['codeium#Clear']()
       end, { expr = true })
     end,
+  },
+  ['kevinhwang91/nvim-ufo'] = {
+    after = 'nvim-lspconfig',
+    requires = 'kevinhwang91/promise-async',
+    tag = '*',
+    config = function()
+      require 'user.plugins.ufo'
+    end,
+  },
+  ['iamcco/markdown-preview.nvim'] = {
+    run = 'cd app && pnpm install',
+    setup = function()
+      vim.g.mkdp_filetypes = { 'markdown' }
+      vim.g.mkdp_refresh_slow = 1
+    end,
+    ft = { 'markdown' },
+    cmd = { 'MarkdownPreview', 'MarkdownPreviewStop' },
   },
 }
 return init

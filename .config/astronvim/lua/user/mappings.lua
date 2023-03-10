@@ -1,0 +1,50 @@
+local config = {
+  n = {
+    ['<C-\\>'] = { '<Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
+    ['<leader>c'] = false,
+    ['0'] = { '^' },
+    ['<Esc>'] = { '<cmd>nohl<cr>', desc = 'No Highlight' },
+    [',w'] = { '<cmd>w!<cr>', desc = 'Save File' },
+    [',W'] = { '<cmd>noautocmd w!<cr>', desc = 'Save File(Without Aus)' },
+    ['<A-h>'] = { '<cmd>tabp<cr>', desc = 'Switch to Prev Tab' },
+    ['<A-l>'] = { '<cmd>tabn<cr>', desc = 'Switch to Next Tab' },
+    ['<A-j>'] = { 'mz:m+<cr>`z', desc = 'Move line down' },
+    ['<A-k>'] = { 'mz:m-2<cr>`z', desc = 'Move line up' },
+    ['<C-p>'] = { '<cmd>Telescope find_files<cr>', desc = 'Find Files' },
+    ['<C-n>'] = { '<cmd>Neotree focus toggle<cr>' },
+    ['<A-/>'] = { '"ayy"apk<Plug>(comment_toggle_linewise_current)j', desc = 'Copy Line and Comment' },
+    ['dl'] = { '"_dl' },
+    ['c'] = { '"_c' },
+    ['C'] = { '"_C' },
+    ['Q'] = { '<cmd>copen<cr>', desc = 'Open Quickfix list' },
+    ['k'] = { "v:count == 0 ? 'gk' : 'k'", expr = true, silent = true },
+    ['j'] = { "v:count == 0 ? 'gj' : 'j'", expr = true, silent = true },
+  },
+  v = {
+    p = {
+      [[ 'pgv"'.v:register.'y' ]],
+      expr = true,
+      noremap = true,
+      silent = false,
+      desc = "Don't Copy when pasting in visual mode",
+    },
+    c = { '"_c' },
+    J = { ":m '>+1<CR>gv=gv", desc = 'Move Line Down' },
+    K = { ":m '<-2<CR>gv=gv", desc = 'Move Line Up' },
+  },
+  i = {
+    [','] = { ',<C-g>u' },
+    ['.'] = { '.<C-g>u' },
+    ['?'] = { '?<C-g>u' },
+    ['<C-\\>'] = { '<Esc><Cmd>exe v:count1 . "ToggleTerm"<CR>', desc = 'Open terminal' },
+  },
+  o = {
+    ['ie'] = { ':exec "normal! ggVG"<cr>', desc = 'New operator for entire file' },
+    ['iv'] = { ':exec "normal! HVL"<cr>', desc = 'New operator for entire file' },
+  },
+  t = {
+    ['<C-l>'] = false,
+    ['<C-k>'] = false,
+  },
+}
+return config
