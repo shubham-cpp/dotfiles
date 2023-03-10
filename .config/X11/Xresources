@@ -125,7 +125,7 @@ xterm*color14:  #0f7cda
 xterm*color7:   #d6dae4
 xterm*color15:  #ffffff
 
-st*font: FiraCode Nerd Font:size=12:antialias=true:autohint=true
+st*font: Iosevka Nerd Font:size=12:antialias=true:autohint=true
 
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
 !! ! URxvt.letterSpace: -1

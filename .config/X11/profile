@@ -5,7 +5,7 @@
 
 PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
 PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
-PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/"
+PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/"
 # Deduplicate entries in PATH
 PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 
@@ -59,8 +59,9 @@ export GOPATH="$XDG_DATA_HOME"/golib
 export GOPATH="$GOPATH:$HOME/Documents/Programming/GoLang"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/npm/npmrc"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh" ] && . "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh"
+export PATH="$PATH:$XDG_DATA_HOME/fnm"
+# export NVM_DIR="$HOME/.config/nvm"
+# [ -s "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh" ] && . "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh"
 export ICEAUTHORITY="${XDG_CACHE_HOME:-$HOME/.cache}/ICEauthority"
 export RXVT_SOCKET="$XDG_RUNTIME_DIR"/urxvtd
 export SCREENRC="$XDG_CONFIG_HOME"/screen/screenrc
@@ -120,8 +121,8 @@ export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
 # This is the list for lf icons:
 LF_ICONS=$(sed ~/.config/lf/dir_icons \
-	-e '/^[ \t]*#/d' \
-	-e '/^[ \t]*$/d' \
-	-e 's/[ \t]\+/=/g' \
-	-e 's/$/ /' | tr '\n' :)
+  -e '/^[ \t]*#/d' \
+  -e '/^[ \t]*$/d' \
+  -e 's/[ \t]\+/=/g' \
+  -e 's/$/ /' | tr '\n' :)
 export LF_ICONS

@@ -37,15 +37,15 @@ basic() {
 }
 
 case "$DESKTOP_SESSION" in
-bspwm | awesome | qtile | dk)
-  basic
-  xset -b
-  ;;
-dwm)
-  basic
-  run dwmblocks
-  run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
-  ;;
+  bspwm | awesome | qtile | dk)
+    basic
+    xset -b
+    ;;
+  dwm)
+    basic
+    run dwmblocks
+    run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
+    ;;
 esac
 
 run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '0.9:0.7'

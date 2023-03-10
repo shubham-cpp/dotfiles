@@ -16,6 +16,7 @@ set fish_prompt_pwd_full_dirs 2
 
 set -U SXHKD_SHELL /usr/bin/sh
 starship init fish | source
+fnm env --use-on-cd | source
 # Keybindings
 # Refer: https://fishshell.com/docs/3.2/cmds/bind.html
 # fish_key_reader to view keycode and bind -f to view functions
