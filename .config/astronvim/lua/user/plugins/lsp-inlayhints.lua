@@ -1,1 +1,6 @@
-require('lsp-inlayhints').setup()
+return {
+  'lvimuser/lsp-inlayhints.nvim',
+  config = function()
+    require('lsp-inlayhints').setup()
+  end,
+}

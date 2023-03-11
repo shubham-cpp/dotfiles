@@ -53,11 +53,18 @@ local render = function(f)
   f.add ' '
 end
 
-local tf = require 'tabline_framework'
--- local render = require 'tabline_framework.examples.fancy_indexes'
-tf.setup({
-  render = render,
-  -- hl = { fg = '#abb2bf', bg = '#181A1F' },
-  -- hl_sel = { fg = '#abb2bf', bg = '#282c34' },
-  -- hl_fill = { fg = '#ffffff', bg = '#000000' },
-})
+return {
+  'rafcamlet/tabline-framework.nvim',
+  enabled = true,
+  event = 'BufRead',
+  config = function()
+    local tf = require 'tabline_framework'
+    -- local render = require 'tabline_framework.examples.fancy_indexes'
+    tf.setup({
+      render = render,
+      -- hl = { fg = '#abb2bf', bg = '#181A1F' },
+      -- hl_sel = { fg = '#abb2bf', bg = '#282c34' },
+      -- hl_fill = { fg = '#ffffff', bg = '#000000' },
+    })
+  end,
+}
