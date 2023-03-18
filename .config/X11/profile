@@ -19,8 +19,8 @@ export TERMINAL="alacritty"
 
 export FILE_BROWSER="thunar"
 
-export BROWSER="firefox"
-# export BROWSER="brave"
+# export BROWSER="firefox"
+export BROWSER="brave"
 export READER="zathura"
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
