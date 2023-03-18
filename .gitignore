@@ -39,3 +39,7 @@ npm
 .config/suckless/my-st/tmux-client-29128.log
 .config/nvim-vscode/plugin
 .config/qtile/qtile_extras
+.config/xmonad/.stack-work
+.config/xmonad/dbus-git
+.config/xmonad/xmonad-contrib-git
+.config/xmonad/xmonad-git

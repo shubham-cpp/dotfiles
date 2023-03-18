@@ -6,10 +6,11 @@ import System.IO (hClose, hPutStr, hPutStrLn)
 import System.Exit (exitWith, exitSuccess)
 import qualified XMonad.StackSet as W
 
-    -- Actions
+-- Actions
 import XMonad.Actions.CopyWindow (kill1)
 import XMonad.Actions.CycleWS
 import XMonad.Actions.CycleWS (Direction1D(..), moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
+import XMonad.Actions.CycleRecentWS (toggleRecentWS )
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
 import XMonad.Actions.Promote
@@ -41,6 +42,7 @@ import XMonad.Hooks.StatusBar.PP
 import XMonad.Hooks.WindowSwallowing
 import XMonad.Hooks.WorkspaceHistory
 import XMonad.Hooks.Minimize
+import XMonad.Hooks.TaffybarPagerHints (pagerHints) -- for xprop -root
 
     -- Layouts
 import XMonad.Layout.Accordion
@@ -235,7 +237,7 @@ main = do
     -- Request access to the DBus name
   D.requestName dbus (D.busName_ "org.xmonad.Log")
       [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-  xmonad $ docks . ewmhFullscreen . ewmh $ def
+  xmonad $ docks . ewmhFullscreen . ewmh . pagerHints $ def
     { manageHook         = myManageHook <+> manageDocks
     , handleEventHook    =  windowedFullscreenFixEventHook <> minimizeEventHook <> swallowEventHook (className =? "Alacritty"  <||> className =? "st-256color" <||> className =? "XTerm") (return True)
     , logHook = dynamicLogWithPP (myLogHook dbus)
@@ -260,35 +262,36 @@ main = do
     , ("M-S-e",        spawn  "alacritty -e lfv")
     , ("M-d",          spawn  "dmenu_run_history -i")
     , ("M-S-d",        spawn  "rofi -show run -async-pre-read")
-    , ("M-w",          spawn  "firefox")
-    , ("M-S-w",        spawn  "brave")
+    -- , ("M-w",          spawn  "firefox")
+    , ("M-w",          spawn  "brave")
+    , ("M-S-w",        spawn  "chromium")
     , ("M-r",          spawn  "rofi -show drun -async-pre-read")
     , ("M-y",          spawn  "clipboard")
 
     , ("<Print>",      spawn  "flameshot gui")
     , ("S-<Print>",    spawn  "take_ss focus")
-    , ("A-<Print>",    spawn  "take_ss full")
+    , ("M1-<Print>",   spawn  "take_ss full")
     , ("M-g",          spawn  "qalculate-gtk || galculator || gnome-calculator || notify-send \"Error\" \"Calculator App not installed\" -u critical")
     , ("M-C-s",        spawn  "logout_prompt")
 
-    , ("C-A-e",        spawn  "rofie")
-    , ("C-A-p",        spawn  "get-class-name")
-    , ("C-A-c",        spawn  "xcolor -s")
-    , ("C-A-v",        spawn  "pavucontrol")
+    , ("C-M1-e",        spawn  "rofie")
+    , ("C-M1-p",        spawn  "get-class-name")
+    , ("C-M1-c",        spawn  "xcolor -s")
+    , ("C-M1-v",        spawn  "pavucontrol")
 
     , ("<XF86AudioRaiseVolume>", spawn  "audio inc")
     , ("<XF86AudioLowerVolume>", spawn  "audio dec")
     , ("<XF86AudioMute>",        spawn  "audio toggle")
 
-    , ("C-A-v",        spawn  "pavucontrol")
-
     , ("M-f",          sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)
     , ("M-s",          withFocused toggleFloat)
-    , ("M-t",          sendMessage $ T.Toggle "tall")
-    , ("M-m",          sendMessage $ T.Toggle "monocle")
-    , ("M-<Space>",    sendMessage NextLayout)
+    , ("M-t",          sendMessage (T.Toggle "tall") >> spawn "polybar-msg action xmonad-layout hook 0")
+    , ("M-m",          sendMessage (T.Toggle "monocle") >> spawn "polybar-msg action xmonad-layout hook 0")
+    , ("M-<Space>",    sendMessage NextLayout >> spawn "polybar-msg action xmonad-layout hook 0")
 
-    , ("A-<Tab>",      windows W.focusUp)
+    , ("M1-<Tab>",     windows W.focusDown)
+    , ("M1-S-<Tab>",   windows W.focusUp)
+    , ("M-<Tab>",      toggleRecentWS)
 
     , ("M-]",          nextWS)
     , ("M-[",          prevWS)
