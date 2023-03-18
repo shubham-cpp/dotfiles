@@ -29,6 +29,7 @@ local render = function(f)
     f.add ' '
     if info.filename then
       local filename = vim.fn.bufname(info.buf)
+      ---@diagnostic disable-next-line: param-type-mismatch
       filename = filename:gsub(os.getenv 'HOME', '~')
       f.add(info.modified and '+')
       f.add(filename)
@@ -55,7 +56,7 @@ end
 
 return {
   'rafcamlet/tabline-framework.nvim',
-  enabled = true,
+  enabled = false,
   event = 'BufRead',
   config = function()
     local tf = require 'tabline_framework'
