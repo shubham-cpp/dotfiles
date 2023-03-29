@@ -41,10 +41,10 @@ super +{_,shift + } Escape
 
 # Control the Brightness
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && polybar-msg hook mbrightness 1 &&  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
+    brightnessctl s 10{+,-} && polybar-msg action mbrightness hook 0 &&  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
 
 shift + XF86MonBrightness{Up,Down}
-    brightnessctl s {200,30} && polybar-msg hook mbrightness 1
+    brightnessctl s {200,30} && polybar-msg action mbrightness hook 0
 # Changing the Volume
 # pactl set-sink-volume @DEFAULT_SINK@ -5%
 XF86Audio{Raise,Lower}Volume
