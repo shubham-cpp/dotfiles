@@ -90,11 +90,14 @@ import qualified Codec.Binary.UTF8.String as UTF8
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "polybar --reload xmonad"
-  spawnOnce "xwallpaper --stretch ~/.config/wall.png"
-  spawnOnce "picom -b --experimental-backends"
+  -- spawnOnce "xwallpaper --stretch ~/.config/wall.png"
+  spawnOnce "feh --bg-fill --no-fehbg -q ~/.config/wall.png"
+  -- spawnOnce "picom -b --experimental-backends"
+  spawnOnce "xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8"
   spawnOnce "kitty"
   spawnOnce "udiskie -q -t --no-terminal"
-  spawnOnce "/usr/lib/polkit-kde-authentication-agent-1"
+  -- spawnOnce "/usr/lib/polkit-kde-authentication-agent-1" -- for arch
+  spawnOnce "/usr/libexec/kf5/polkit-kde-authentication-agent-1" -- for fedora
   setWMName "LG3D"
 
 myBorderWidth :: Dimension
@@ -256,15 +259,15 @@ main = do
     , ("M-C-q",        killOthers)
     , ("M-C-x",        io exitSuccess)
 
-    , ("M-<Return>",   spawn  "$TERMINAL || xterm")
-    , ("M-S-<Return>", spawn  "kitty")
+    , ("M-<Return>",   spawn  "$TERMINAL --working-directory ~/ || xterm")
+    , ("M-S-<Return>", spawn  "kitty -d ~/")
     , ("M-e",          spawn  "thunar || pcmanfm")
     , ("M-S-e",        spawn  "alacritty -e lfv")
     , ("M-d",          spawn  "dmenu_run_history -i")
     , ("M-S-d",        spawn  "rofi -show run -async-pre-read")
     -- , ("M-w",          spawn  "firefox")
-    , ("M-w",          spawn  "brave")
-    , ("M-S-w",        spawn  "chromium")
+    , ("M-w",          spawn  "brave || brave-browser")
+    , ("M-S-w",        spawn  "chromium || chromium-browser")
     , ("M-r",          spawn  "rofi -show drun -async-pre-read")
     , ("M-y",          spawn  "clipboard")
 
