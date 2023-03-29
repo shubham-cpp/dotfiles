@@ -86,7 +86,7 @@ source "$ZDOTDIR"/bindings.zsh
 source "$ZDOTDIR"/mfunctions.zsh
 
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
-[[ -f ~/.config/zsh/.p10k.zsh ]] && . ~/.config/zsh/.p10k.zsh || true
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
 # bindings
 
@@ -113,3 +113,5 @@ source "$ZDOTDIR"/mfunctions.zsh
 # bindkey -M viins -M viins '^[OB' history-substring-search-down
 # bindkey -M viins -M viins '^[k' autosuggest-accept
 # bindkey -M viins -M viins '^[j' history-substring-search-up
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
