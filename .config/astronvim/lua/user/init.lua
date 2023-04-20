@@ -3,7 +3,7 @@ local util = require 'user.lsp.util'
 return {
   lsp = {
     config = {
-      hls = { cmd = { util.xdg_data_bin() .. "/haskell-language-server-9.2.5", "--lsp" } },
+      hls = { cmd = { util.xdg_data_bin() .. '/haskell-language-server-9.2.5', '--lsp' } },
       html = { cmd = { util.bun_path() .. '/vscode-html-language-server', '--stdio' } },
       cssls = { cmd = { util.bun_path() .. '/vscode-css-language-server', '--stdio' } },
       jsonls = { cmd = { util.bun_path() .. '/vscode-json-language-server', '--stdio' } },
@@ -34,7 +34,7 @@ return {
     {
       'nvim-neo-tree/neo-tree.nvim',
       version = '*',
-      config = function(_, opts)
+      opts = function(_, opts)
         -- opts.default_component_configs.name.trailing_slash = true
         opts.window.mappings['l'] = 'open'
         opts.window.mappings['t'] = 'open_tabnew'

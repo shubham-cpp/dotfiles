@@ -42,6 +42,7 @@ local config = {
       t = { ':tabedit <C-r>=expand("%:p:h")<cr>/', 'in new tab', silent = false },
     },
     ['<leader>C'] = { '<cmd>cd %:p:h<cr>:pwd<cr>', desc = 'Change directory to file' },
+    ['<leader>fs'] = { '<cmd>Telescope live_grep<cr>', desc = '[F]ind [S]earch Project' },
     ['<leader>fn'] = {
       function()
         local builtin = require 'telescope.builtin'
@@ -81,6 +82,8 @@ local config = {
     c = { '"_c' },
     J = { ":m '>+1<CR>gv=gv", desc = 'Move Line Down' },
     K = { ":m '<-2<CR>gv=gv", desc = 'Move Line Up' },
+    ['<'] = { '<gv' },
+    ['>'] = { '>gv' },
   },
   i = {
     [','] = { ',<C-g>u' },

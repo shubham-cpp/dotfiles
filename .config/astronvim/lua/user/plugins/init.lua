@@ -11,7 +11,7 @@ local init = {
     opts = function(_, opts)
       local cmp = require 'cmp'
       local sources = require 'cmp.config.sources'
-      opts.mapping['<C-x><C-x>'] = cmp.mapping.complete({
+      opts.mapping['<C-x><C-s>'] = cmp.mapping.complete({
         config = { sources = { { name = 'luasnip' } } },
       })
       opts.mapping['<C-x><C-f>'] = cmp.mapping.complete({
@@ -38,6 +38,18 @@ local init = {
         },
         { name = 'path', priority = 250 },
       })
+      -- opts.sorting = {
+      --   priority_weight = 2,
+      --   comparators = {
+      --     cmp.config.compare.recently_used,
+      --     cmp.config.compare.score,
+      --     cmp.config.compare.locality,
+      --     cmp.config.compare.offset,
+      --     cmp.config.compare.order,
+      --     cmp.config.compare.exact,
+      --     cmp.config.compare.kind,
+      --   },
+      -- }
 
       cmp.setup.cmdline(':', {
         sources = sources({
