@@ -35,8 +35,7 @@ XF86AudioMute
 
 # dedicated backlight keys
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
-# && polybar-msg hook mbrightness 1
+    brightnessctl s 10{+,-} ;notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g) ;polybar-msg action mbrightness hook 0
 
 # reload sxhkd
 super + Escape
