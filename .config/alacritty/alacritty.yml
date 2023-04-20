@@ -152,10 +152,10 @@ selection:
 # Allow terminal applications to change Alacritty's window title.
 # dynamic_title: true
 cursor:
-  # style: Beam
   # vi_mode_style: Block
   unfocused_hollow: true
-  blinking: true
+  # style:
+  #   blinking: "On"
 live_config_reload: true
 Default:
 shell:

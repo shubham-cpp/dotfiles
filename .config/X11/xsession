@@ -6,4 +6,7 @@
 # Executed by xdm/gdm/kdm at login
 #
 
-[ -f $HOME/.xinitrc ] && /bin/bash --login -i ~/.xinitrc
+[ -f "$HOME"/.xinitrc ] && /bin/bash --login -i ~/.xinitrc
+[ -f "$HOME"/.config/X11/profile ] && . "$HOME"/.config/X11/profile
+[ -f "$HOME"/.config/X11/xprofile ] && . "$HOME"/.config/X11/xprofile
+[ -f "$HOME"/.config/X11/Xresources ] && xrdb "$HOME"/.config/X11/Xresources
