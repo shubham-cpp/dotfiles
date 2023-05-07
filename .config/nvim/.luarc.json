@@ -69,5 +69,6 @@
         "/home/shubham/.local/share/nvim/site/pack/packer/start/vim-matchup/after",
         "/home/shubham/.config/nvim/after",
         "${3rd}/luassert/library"
-    ]
+    ],
+    "workspace.checkThirdParty": false
 }

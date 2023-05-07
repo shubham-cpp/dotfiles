@@ -6,7 +6,9 @@ return {
   config = function()
     local conditions = {
       buffer_not_empty = function()
-        if vim.opt.filetype._value == 'toggleterm' then return false end
+        if vim.opt.filetype._value == 'toggleterm' then
+          return false
+        end
         return vim.fn.empty(vim.fn.expand '%:t') ~= 1
       end,
       hide_in_width = function()
@@ -19,7 +21,9 @@ return {
     local function servers_attached()
       local msg = 'None'
       local clients = vim.lsp.buf_get_clients()
-      if next(clients) == nil then return msg end
+      if next(clients) == nil then
+        return msg
+      end
       local active_servers = ''
       for _, client in ipairs(clients) do
         active_servers = string.format('%s, %s', client.name, active_servers)
@@ -37,6 +41,7 @@ return {
           },
         },
         lualine_b = {
+          { 'filename', path = 1 },
           { 'branch', icon = ' ' },
           {
             'diff',
@@ -46,7 +51,6 @@ return {
           'diagnostics',
         },
         lualine_c = {
-          'filename',
           { 'searchcount', icon = '', cond = conditions.hide_in_width },
           {
             servers_attached,
@@ -55,12 +59,15 @@ return {
             cond = conditions.lsp_active,
           },
         },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_x = { 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' },
       },
       inactive_sections = {
         lualine_a = { { 'buffers', cond = conditions.hide_in_width } },
+        lualine_b = {
+          { 'filename', path = conditions.hide_in_width and 1 or 4, cond = conditions.hide_in_width },
+        },
         lualine_c = {
           { 'searchcount', cond = conditions.hide_in_width },
           {
@@ -72,12 +79,12 @@ return {
         },
       },
       tabline = {
-        lualine_a = { 'branch' },
+        lualine_a = {},
         lualine_b = { 'buffers' },
         lualine_c = {},
         lualine_x = {},
         lualine_y = {},
-        lualine_z = { 'tabs', 'filename' },
+        lualine_z = { { 'tabs', mode = 2, use_mode_colors = false } },
       },
       extensions = { 'neo-tree', 'toggleterm', 'quickfix' },
     })

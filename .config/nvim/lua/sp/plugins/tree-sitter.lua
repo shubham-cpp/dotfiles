@@ -14,17 +14,13 @@ local config = {
       vim.g.matchup_matchparen_offscreen = { method = 'popup' }
     end,
     opts = {
-      highlight = { enable = true },
+      highlight = { enable = true, additional_vim_regex_highlighting = { 'markdown' } },
       context_commentstring = { enable = true, enable_autocmd = false },
       autotag = { enable = true },
-      matchup = {
-        enable = true, -- mandatory, false will disable the whole extension
-        -- disable = { "c", "ruby" },  -- optional, list of language that will be disabled
-        -- [options]
-      },
+      matchup = { enable = true },
       ensure_installed = {
         'bash',
-        'help',
+        'vimdoc',
         'html',
         'c',
         'cpp',

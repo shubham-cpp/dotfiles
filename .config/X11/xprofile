@@ -28,15 +28,23 @@ basic() {
 		run /usr/libexec/kf5/polkit-kde-authentication-agent-1
 	elif [ -x "$(which lxpolkit)" ]; then
 		run lxpolkit
+	elif [ -x /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 ]; then
+		run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 	else
 		run polkit-gnome-authentication-agent-1
 	fi
 	# run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-		run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-		# run picom -b #--experimental-backends
-		# run xwallpaper --stretch ~/.config/wall.png
-		run feh --bg-fill --no-fehbg -q ~/.config/wall.png
+		if [ -x /bin/xcompmgr ]; then
+			run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
+		else
+			run picom -b #--experimental-backends
+		fi
+		if [ -x /bin/xwallpaper ]; then
+			run xwallpaper --stretch ~/.config/wall.png
+		else
+			run feh --bg-fill --no-fehbg -q ~/.config/wall.png
+		fi
 	fi
 	run kitty
 	# run alacritty -e "tmux"

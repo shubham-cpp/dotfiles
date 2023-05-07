@@ -20,7 +20,9 @@ export TERMINAL="alacritty"
 export FILE_BROWSER="thunar"
 
 # export BROWSER="firefox"
-export BROWSER="brave"
+
+[ -x /bin/brave ] && export BROWSER="brave"
+[ -x /bin/brave-browser ] && export BROWSER="brave-browser"
 export READER="zathura"
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
@@ -32,10 +34,10 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-  export MOZ_ENABLE_WAYLAND=1
-  export XDG_CURRENT_DESKTOP=Unity
-  export _JAVA_AWT_WM_NONREPARENTING=1
-  export XCURSOR_SIZE=24
+	export MOZ_ENABLE_WAYLAND=1
+	export XDG_CURRENT_DESKTOP=Unity
+	export _JAVA_AWT_WM_NONREPARENTING=1
+	export XCURSOR_SIZE=24
 fi
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
@@ -121,8 +123,8 @@ export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
 # This is the list for lf icons:
 LF_ICONS=$(sed ~/.config/lf/dir_icons \
-  -e '/^[ \t]*#/d' \
-  -e '/^[ \t]*$/d' \
-  -e 's/[ \t]\+/=/g' \
-  -e 's/$/ /' | tr '\n' :)
+	-e '/^[ \t]*#/d' \
+	-e '/^[ \t]*$/d' \
+	-e 's/[ \t]\+/=/g' \
+	-e 's/$/ /' | tr '\n' :)
 export LF_ICONS

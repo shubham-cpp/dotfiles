@@ -2,7 +2,7 @@ return {
   {
     'numToStr/Comment.nvim',
     keys = {
-      'gc',
+      {'gc',mode={'x','n'}},
       'gb',
       { '<leader>/', '<cmd>lua require("Comment.api").toggle.linewise.current()<CR>', desc = 'Toggle Comment' },
       {
@@ -30,10 +30,10 @@ return {
   {
     'danymat/neogen',
     keys = {
-      { '<leader>nn', '<cmd>Neogen<cr>' },
-      { '<leader>nt', '<cmd>Neogen type<cr>' },
-      { '<leader>nf', '<cmd>Neogen file<cr>' },
-      { '<leader>nc', '<cmd>Neogen class<cr>' },
+      { '<leader>nn', '<cmd>Neogen<cr>',desc = "Default" },
+      { '<leader>nt', '<cmd>Neogen type<cr>', desc="Type" },
+      { '<leader>nf', '<cmd>Neogen file<cr>', desc="File" },
+      { '<leader>nc', '<cmd>Neogen class<cr>',desc="Class" },
     },
   },
 }

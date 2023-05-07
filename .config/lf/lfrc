@@ -1,7 +1,7 @@
 # Basic Settings
 
-set previewer ~/.config/lf/preview
-set cleaner ~/.config/lf/cleaner
+set previewer ~/Downloads/GitClones/lfimg/preview
+set cleaner ~/Downloads/GitClones/lfimg/cleaner
 
 set shell bash
 set shellopts '-eu'

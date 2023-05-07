@@ -1,14 +1,13 @@
 return {
     'nvim-neo-tree/neo-tree.nvim',
-    branch = 'v2.x',
+    -- branch = 'v2.x',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
       'MunifTanjim/nui.nvim',
       {
-        -- only needed if you want to use the commands with "_with_window_picker" suffix
         's1n7ax/nvim-window-picker',
-        version = '1.x',
+        version = '*',
         config = function()
           require('window-picker').setup({
             autoselect_one = true,
@@ -28,18 +27,22 @@ return {
       },
     },
     keys = {
-      { '<leader>e', '<cmd>NeoTreeFocusToggle<cr>', desc = 'Open File [E]xplorer' },
-      { '<leader>E', '<cmd>NeoTreeFloatToggle<cr>', desc = 'Open File [E]xplorer(Float)' },
+      { '<leader>e', '<cmd>Neotree focus toggle<cr>', desc = 'Open File [E]xplorer' },
     },
+    init = function ()
+        vim.g.neo_tree_remove_legacy_commands = 1
+    end,
     opts = {
       window = {
         mappings = {
           l = 'open',
-          t = 'open_tabnew',
           ['?'] = 'show_help',
           ['<'] = 'prev_source',
           ['>'] = 'next_source',
         },
       },
+      filesystem = {
+          use_libuv_file_watcher = true,
+      }
     },
   }

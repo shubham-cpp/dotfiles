@@ -1,6 +1,6 @@
 return {
   'hrsh7th/nvim-cmp',
-  event = 'InsertEnter',
+  event = {'BufReadPost', 'BufNewFile'},
   dependencies = {
     'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
@@ -11,7 +11,6 @@ return {
     'rafamadriz/friendly-snippets',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
-    -- { 'tzachar/cmp-tabnine', run = './install.sh' },
     'onsails/lspkind.nvim',
     {
       'Exafunction/codeium.vim',
@@ -159,11 +158,11 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lsp', priority = 1000 },
+        { name = 'nvim_lsp',                priority = 1000 },
         { name = 'nvim_lsp_signature_help', priority = 700 },
-        { name = 'nvim_lua', priority = 900 },
-        { name = 'vsnip', priority = 600 },
-        { name = 'path', priority = 100 },
+        { name = 'nvim_lua',                priority = 900 },
+        { name = 'vsnip',                   priority = 600 },
+        { name = 'path',                    priority = 100 },
         {
           name = 'buffer',
           option = {
@@ -197,16 +196,16 @@ return {
     end, ]]
       },
       sorting = {
-      	priority_weight = 1, -- 2
-      	comparators = {
-            compare.recently_used,
-            compare.locality,
-            compare.score,
-      		compare.offset,
-            compare.order,
-      		compare.kind,
-            compare.exact,
-      	},
+        priority_weight = 1, -- 2
+        comparators = {
+          compare.recently_used,
+          compare.locality,
+          compare.score,
+          compare.offset,
+          compare.order,
+          compare.kind,
+          compare.exact,
+        },
       },
     })
 
@@ -226,7 +225,7 @@ return {
     cmp.setup.cmdline('/', {
       sources = sources({
         { name = 'nvim_lsp_signature_help' },
-        { name = 'buffer', keyword_pattern = [=[[^[:blank:]].*]=] },
+        { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
       }),
       mapping = cmp.mapping.preset.cmdline({}),
     })

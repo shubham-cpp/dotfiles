@@ -115,3 +115,6 @@ source "$ZDOTDIR"/mfunctions.zsh
 # bindkey -M viins -M viins '^[j' history-substring-search-up
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+
+# bun completions
+[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

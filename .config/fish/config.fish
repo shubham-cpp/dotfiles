@@ -1,9 +1,9 @@
-set fish_greeting                      # Suppresses fish's intro message
+set fish_greeting # Suppresses fish's intro message
 fish_add_path -aP $HOME/.local/bin $HOME/.local/bin/myscripts
 fish_add_path -aP $HOME/.local/share/npm/bin $HOME/.local/share/golib/bin $HOME/.local/share/luarocks/bin
 fish_add_path -aP $HOME/.config/emacs/bin
 
-set -x EDITOR "nvim"
+set -x EDITOR nvim
 
 # pyenv init --path | source
 # pyenv init - | source

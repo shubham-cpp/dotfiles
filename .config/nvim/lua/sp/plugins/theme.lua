@@ -1,7 +1,6 @@
 local config = {
   {
     'rmehri01/onenord.nvim',
-    event = 'VimEnter',
     enabled = true,
     opts = {
       fade_nc = true,
@@ -27,7 +26,6 @@ local config = {
   },
   {
     'navarasu/onedark.nvim',
-    event = 'VimEnter',
     enabled = false,
     config = function()
       require('onedark').setup({
@@ -38,22 +36,6 @@ local config = {
       require('onedark').load()
     end,
   },
-  -- {
-  --   'stevearc/dressing.nvim',
-  --   lazy = 'VeryLazy',
-  --   init = function()
-  --     ---@diagnostic disable-next-line: duplicate-set-field
-  --     vim.ui.select = function(...)
-  --       require('lazy').load({ plugins = { 'dressing.nvim' } })
-  --       return vim.ui.select(...)
-  --     end
-  --     ---@diagnostic disable-next-line: duplicate-set-field
-  --     vim.ui.input = function(...)
-  --       require('lazy').load({ plugins = { 'dressing.nvim' } })
-  --       return vim.ui.input(...)
-  --     end
-  --   end,
-  -- },
 
 }
 

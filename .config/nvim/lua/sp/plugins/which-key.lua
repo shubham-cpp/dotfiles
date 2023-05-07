@@ -51,6 +51,23 @@ return {
         name = 'Find',
         l = 'lsp',
       },
+      g = {
+        name = 'Git',
+      },
+      l = {
+        name = 'LSP',
+      },
+      n = {
+        name = 'Neogen',
+      },
+      s = {
+        name = 'Sessions',
+      },
+      t = {
+        name = 'Toggle',
+        f = '[T]erminal [F]ile manager',
+        g = '[T]erminal Lazy[g]it',
+      },
     }, { prefix = '<leader>' })
     wk.register({
       [']q'] = { '<cmd>cn<cr>', 'Quickfix Next ' },

@@ -25,11 +25,11 @@ vim.api.nvim_create_autocmd('TermOpen', {
   group = au_term,
   callback = function()
     vim.keymap.set('t', '<C-]>', '<C-\\><C-n>', { buffer = true })
-    vim.keymap.set('t', 'A', 'A<C-k>', { buffer = true })
-    vim.keymap.set('t', 'D', 'A<C-k><C-\\><C-n>', { buffer = true })
-    vim.keymap.set('t', 'cc', 'A<C-e><C-u>', { buffer = true })
-    vim.keymap.set('t', 'cc', 'A<C-e><C-u>', { buffer = true })
-    vim.keymap.set('t', 'dd', 'A<C-e><C-u><C-><C-n>', { buffer = true })
+    vim.keymap.set('n', 'A', 'A<C-k>', { buffer = true })
+    vim.keymap.set('n', 'D', 'A<C-k><C-\\><C-n>', { buffer = true })
+    vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
+    vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
+    vim.keymap.set('n', 'dd', 'A<C-e><C-u><C-><C-n>', { buffer = true })
     vim.opt_local.signcolumn = 'no'
     vim.opt_local.relativenumber = false
     vim.opt_local.number = false
@@ -50,23 +50,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight on yank',
 })
 
-vim.api.nvim_create_autocmd({ 'VimResized' }, {
-  group = augroup 'resize_splits',
-  callback = function()
-    vim.cmd 'tabdo wincmd ='
-  end,
-  desc = 'Resize splits if window got resized',
-})
+-- vim.api.nvim_create_autocmd({ 'VimResized' }, {
+--   group = augroup 'resize_splits',
+--   callback = function()
+--     vim.cmd 'tabdo wincmd ='
+--   end,
+--   desc = 'Resize splits if window got resized',
+-- })
 
-vim.api.nvim_create_autocmd('BufReadPost', {
-  group = augroup 'last_loc',
-  callback = function()
-    local mark = vim.api.nvim_buf_get_mark(0, '"')
-    local lcount = vim.api.nvim_buf_line_count(0)
-    if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
-  end,
-  desc = 'Go to last loc when opening a buffer',
-})
+-- vim.api.nvim_create_autocmd('BufReadPost', {
+--   group = augroup 'last_loc',
+--   callback = function()
+--     local mark = vim.api.nvim_buf_get_mark(0, '"')
+--     local lcount = vim.api.nvim_buf_line_count(0)
+--     if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
+--   end,
+--   desc = 'Go to last loc when opening a buffer',
+-- })
 
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup 'close_with_q',
