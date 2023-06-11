@@ -58,7 +58,8 @@ bspwm | awesome | qtile | dk)
 	;;
 dwm)
 	basic
-	run dwmblocks
+	# run dwmblocks
+	run goblocks
 	run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
 	;;
 esac

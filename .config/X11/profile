@@ -19,7 +19,7 @@ export TERMINAL="alacritty"
 
 export FILE_BROWSER="thunar"
 
-# export BROWSER="firefox"
+export BROWSER="firefox"
 
 [ -x /bin/brave ] && export BROWSER="brave"
 [ -x /bin/brave-browser ] && export BROWSER="brave-browser"
@@ -47,13 +47,17 @@ export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
 export MOZ_USE_XINPUT2="1"
 export ASDF_CONFIG_FILE="${XDG_CONFIG_HOME}/asdf/asdfrc"
 export ASDF_DATA_DIR="${XDG_DATA_HOME}/asdf"
-export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
-export ADB_VENDOR_KEY="$XDG_CONFIG_HOME"/android
-export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME"/android/
+# export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
+# export ADB_VENDOR_KEY="$XDG_CONFIG_HOME"/android
+# export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME"/android/
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 export MYSQL_HISTFILE="$XDG_DATA_HOME"/mysql_history
 export RLWRAP_HOME="$XDG_DATA_HOME"/rlwrap
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
-export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
+# export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 [ -x "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
@@ -61,7 +65,7 @@ export GOPATH="$XDG_DATA_HOME"/golib
 export GOPATH="$GOPATH:$HOME/Documents/Programming/GoLang"
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/npm/npmrc"
 export NODE_REPL_HISTORY="$XDG_DATA_HOME"/node_repl_history
-export PATH="$PATH:$XDG_DATA_HOME/fnm"
+export PATH="$PATH:$XDG_DATA_HOME/fnm:$HOME/Documents/Programming/Flutter/flutter/bin"
 # export NVM_DIR="$HOME/.config/nvm"
 # [ -s "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh" ] && . "${NVM_DIR:-$HOME/.config/nvm}/nvm.sh"
 export ICEAUTHORITY="${XDG_CACHE_HOME:-$HOME/.cache}/ICEauthority"
@@ -93,7 +97,7 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # export LESSOPEN="| /usr/bin/highlight -O xterm256 --style=leo %s 2>/dev/null"
 # export LESS='-q -F -i -J -M -W -x4 -z-4 -R --use-color'
 export LESS='-R --use-color -Dd+r$Du+b'
-export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+# export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export _JAVA_AWT_WM_NONREPARENTING=1
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export _ZL_DATA="$XDG_CACHE_HOME/zlua"
