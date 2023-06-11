@@ -41,6 +41,8 @@ vim.fn.stdpath = function(val)
     return xdg_config .. nvim_name
   elseif val == 'cache' then
     return xdg_cache .. nvim_name
+  elseif val == 'log' or val == 'state' then
+    return os.getenv 'HOME' .. '/.local/state' .. nvim_name
   else
     return old_path(val)
   end

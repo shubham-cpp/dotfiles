@@ -30,6 +30,8 @@ vim.api.nvim_set_keymap('n', 'j', "v:count ? 'j' : 'gj'", { noremap = true, expr
 vim.api.nvim_set_keymap('n', 'k', "v:count ? 'k' : 'gk'", { noremap = true, expr = true })
 
 if vim.g.vscode then
+  map('n', 'j', "<Cmd>call VSCodeNotify('cursorDown')<cr>")
+  map('n', 'k', "<Cmd>call VSCodeNotify('cursorUp')<cr>")
   map('n', ',w', "<Cmd>call VSCodeNotify('workbench.action.files.save')<cr>")
   map('n', ',W', "<Cmd>call VSCodeNotify('workbench.action.files.saveWithoutFormatting')<cr>")
   map('n', 'gh', "<Cmd>call VSCodeNotify('editor.action.showHover')<cr>")
@@ -37,6 +39,13 @@ if vim.g.vscode then
   map('', 'gr', "<Cmd>call VSCodeNotify('editor.action.goToReferences')<CR>")
   map('', '\\s', "<Cmd>call VSCodeNotify('editor.action.toggleStickyScroll')<CR>")
 
+  map('n', '<leader>=', "<Cmd>call VSCodeNotify('editor.action.formatDocument')<cr>")
+  map('n', ']q', "<Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<cr>")
+  map('n', '[q', "<Cmd>call VSCodeNotify('search.action.focusPreviousSearchResult')<cr>")
+  map('n', '<leader>j', "<Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<cr>")
+  map('n', '<leader>k', "<Cmd>call VSCodeNotify('search.action.focusPreviousSearchResult')<cr>")
+  map('n', ']d', "<Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<cr>")
+  map('n', '[d', "<Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<cr>")
   map(
     'x',
     '<leader>f',
