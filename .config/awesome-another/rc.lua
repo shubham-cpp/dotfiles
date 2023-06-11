@@ -518,8 +518,8 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell 'brave || brave-browser || firefox'
   end, { description = 'open a ' .. browser, group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'w', function()
-    -- local cmd = browser ~= "firefox" and "firefox" or "brave || brave-browser || chromium"
-    local cmd = 'chromium || chromium-browser || brave || brave-browser'
+    local cmd = browser ~= "firefox" and "firefox" or "brave || brave-browser || chromium || chromium-browser || flatpak run com.github.Eloston.UngoogledChromium"
+    -- local cmd = 'chromium || chromium-browser || brave || brave-browser'
     awful.spawn.easy_async_with_shell(cmd, function(_, err)
       if (err ~= '' or err ~= nil) and string.find(err, 'brave-browser') ~= nil then
         naughty.notify({

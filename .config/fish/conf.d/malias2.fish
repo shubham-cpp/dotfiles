@@ -14,6 +14,7 @@ alias ls="exa -l --color=auto --group-directories-first --icons"
 alias ll="exa -al --color=auto --group-directories-first --icons --no-user"
 alias la="exa -a --color=auto --group-directories-first --icons"
 alias lt="exa -aT --color=auto --group-directories-first --icons"
+alias l="ll --no-filesize --no-permissions --no-time"
 # alias lr="exa -aGR --color=auto"
 
 alias rr="/bin/rm -rf"
