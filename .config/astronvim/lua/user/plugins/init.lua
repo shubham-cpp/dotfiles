@@ -77,16 +77,10 @@ local init = {
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
-      {
-        'andymass/vim-matchup',
-        init = function()
-          vim.g.matchup_matchparen_deferred = 1
-        end,
-      },
+      'andymass/vim-matchup',
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     opts = {
-      auto_install = vim.fn.executable 'tree-sitter' == 1,
       highlight = { disable = { 'help' } },
       matchup = { enable = true },
       textobjects = {
