@@ -1,7 +1,7 @@
 return {
   'akinsho/nvim-toggleterm.lua',
   version = '*',
-  keys = { '<leader>tf', '<leader>tg', '<C-\\>' },
+  keys = { '<leader>tf', '<leader>tl', '<C-\\>' },
   opts = {
     direction = 'float',
     open_mapping = [[<c-\>]],
@@ -31,7 +31,7 @@ return {
     end
 
     toggleterm.setup(opts)
-    vim.keymap.set('n', '<Space>tg', lazygit_toggle, { desc = '[T]erminal Lazy[g]it' })
+    vim.keymap.set('n', '<Space>tl', lazygit_toggle, { desc = '[T]erminal Lazy[g]it' })
     vim.keymap.set('n', '<Space>tF', file_manager_toggle, { desc = '[T]erminal [F]ile manager' })
   end,
 }

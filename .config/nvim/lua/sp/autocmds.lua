@@ -87,6 +87,36 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  group = augroup 'webdev',
+  pattern = {
+    'jsonc',
+    'json',
+    'json5',
+    'typescriptreact',
+    'typescript',
+    'typescript.tsx',
+    'typescript.jsx',
+    'javascriptreact',
+    'javascript',
+    'javascript.jsx',
+    'vue',
+    'html',
+    'css',
+    'less',
+    'scss',
+  },
+  callback = function(event)
+    vim.opt_local.tabstop = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.expandtab = true
+    vim.opt_local.smartindent = true
+    vim.opt_local.autoindent = true
+    vim.opt_local.smarttab = true
+  end,
+})
+
 -- wrap and check for spell in text filetypes
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup 'wrap_spell',

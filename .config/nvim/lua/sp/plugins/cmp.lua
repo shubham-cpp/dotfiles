@@ -196,15 +196,11 @@ return {
     end, ]]
       },
       sorting = {
-        priority_weight = 1, -- 2
+        priority_weight = 2,
         comparators = {
-          compare.recently_used,
-          compare.locality,
-          compare.score,
-          compare.offset,
-          compare.order,
-          compare.kind,
           compare.exact,
+          compare.recently_used,
+          compare.score,
         },
       },
     })

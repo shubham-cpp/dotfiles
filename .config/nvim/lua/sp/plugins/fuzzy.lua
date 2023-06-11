@@ -23,10 +23,10 @@ return {
     { '<leader>fls', '<cmd>FzfLua lsp_document_symbols<cr>', desc = '[F]ind [L]sp [S]ymbols' },
     {
       '<leader>fs',
-      '<cmd>FzfLua live_grep_native<cr>',
-      -- function()
-      --   require('fzf-lua').grep_visual(opts)
-      -- end,
+      -- '<cmd>FzfLua live_grep_native<cr>',
+      function()
+        require('fzf-lua').live_grep_native(opts)
+      end,
       desc = '[F]ind [s]earch Project',
     },
     {
@@ -36,7 +36,25 @@ return {
       end,
       desc = '[F]ind [S]earch Current File',
     },
-    { '<leader>fn', '<cmd>FzfLua files cwd=~/.config/nvim-temp<cr>', desc = '[F]ind [n]eovim config' },
+    {
+      '<leader>fw',
+      '<cmd>FzfLua grep_cWORD<cr>',
+      desc = '[F]ind Whole [W]ord',
+    },
+    {
+      '<leader>fW',
+      '<cmd>FzfLua grep_cword<cr>',
+      desc = '[F]ind [W]ord',
+    },
+    {
+      '<leader>fn',
+      function()
+        require('fzf-lua').files({
+          cwd = vim.fn.stdpath 'config',
+        })
+      end,
+      desc = '[F]ind [n]eovim config',
+    },
     { '<leader>fd', '<cmd>FzfLua files cwd=~/Documents/dotfiles<cr>', desc = '[F]ind [d]otfiles' },
   },
   config = function()
@@ -48,7 +66,9 @@ return {
     }
     local map = function(mode, lhs, rhs, mopts)
       local options = { noremap = true, silent = true }
-      if next(mopts) then options = vim.tbl_extend('force', options, mopts) end
+      if next(mopts) then
+        options = vim.tbl_extend('force', options, mopts)
+      end
       vim.keymap.set(mode, lhs, rhs, options)
     end
     fzf.setup({

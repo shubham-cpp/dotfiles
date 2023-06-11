@@ -30,17 +30,17 @@ return {
         end,
         prettierd = function()
           null_ls.register(null_ls.builtins.formatting.prettierd.with({
-            disabled_filetypes = { 'json', 'markdown' },
+            disabled_filetypes = {'markdown' },
           }))
         end,
-        fixjson = function()
-          null_ls.register(null_ls.builtins.formatting.fixjson.with({
-            filetypes = { 'jsonc', 'json' },
-            extra_args = { '-i', '2' },
-          }))
-        end,
+        -- fixjson = function()
+        --   null_ls.register(null_ls.builtins.formatting.fixjson.with({
+        --     filetypes = { 'jsonc', 'json' },
+        --     extra_args = { '-i', '2' },
+        --   }))
+        -- end,
         shfmt = function()
-          null_ls.register(null_ls.builtins.formatting.fixjson.with({
+          null_ls.register(null_ls.builtins.formatting.shfmt.with({
             extra_args = { '-i', '2', '-ci' },
           }))
         end,
@@ -51,7 +51,7 @@ return {
         end,
       }
       mason_null_ls.setup({
-        ensure_installed = { 'stylua', 'prettierd', 'fixjson', 'jsonlint' },
+        ensure_installed = { 'stylua', 'prettierd', 'jsonlint' },
         handlers = handlers,
       })
       local my_sources = {

@@ -1,14 +1,9 @@
 local o = vim.opt
 local g = vim.g
-local cmd = vim.cmd
-local old_path = vim.fn.stdpath
-
-local xdg_data = os.getenv 'XDG_DATA_HOME' or os.getenv 'HOME' .. '/.local/share'
-local xdg_config = os.getenv 'XDG_CONFIG_HOME' or os.getenv 'HOME' .. '/.config'
-local xdg_cache = os.getenv 'XDG_CACHE_HOME' or os.getenv 'HOME' .. '/.cache'
 
 g.mapleader = ' '
 o.clipboard:append 'unnamedplus'
+o.iskeyword:append('-')
 o.number = true
 o.relativenumber = true
 o.expandtab = true

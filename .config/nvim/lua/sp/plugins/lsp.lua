@@ -1,6 +1,6 @@
 return {
   'neovim/nvim-lspconfig',
-  event = {'BufReadPost', 'BufNewFile'},
+  event = { 'BufReadPost', 'BufNewFile' },
   dependencies = {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
@@ -42,22 +42,23 @@ return {
     end
 
     local function on_attach(client, bufnr) -- {{{
-      map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = "Lsp Definition" })
-      map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = "Lsp Declaration" })
+      map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Lsp Definition' })
+      map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Lsp Declaration' })
       map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
       map('i', '<C-h>', vim.lsp.buf.signature_help, { buffer = bufnr })
       map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr })
-      map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc="Lsp Organize Imports" })
-      map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc="Lsp References" })
-      map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc="Lsp Type Definition" })
+      map('n', 'gS', lsp_organize_imports, { buffer = bufnr, desc = 'Lsp Organize Imports' })
+      map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Lsp Organize Imports' })
+      map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
+      map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Lsp Type Definition' })
       map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr })
       map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr })
-      map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc="Lsp Code Actions" })
+      map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
       map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr })
-      map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr,desc="Lsp Code Actions" })
-      map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr , desc="Lsp Rename" })
-      map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr,desc="Format Buffer(LSP)" })
-      map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr, desc = "diagnostic open" })
+      map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
+      map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
+      -- map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr,desc="Format Buffer(LSP)" })
+      map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr, desc = 'diagnostic open' })
       map('n', '[d', vim.diagnostic.goto_prev, { buffer = bufnr })
       map('n', ']d', vim.diagnostic.goto_next, { buffer = bufnr })
       if client.server_capabilities.documentHighlightProvider then
@@ -104,7 +105,7 @@ return {
       },
     })
     mason_lspconfig.setup({
-      ensure_installed = { 'lua_ls', 'rust_analyzer', 'gopls', 'golangci_lint_ls' },
+      ensure_installed = { 'lua_ls', 'gopls' },
     })
     local opts = {}
     opts.capabilities = cmp_capabilities
@@ -112,41 +113,106 @@ return {
     -- opts.flags = { debounce_text_changes = 150, }
     mason_lspconfig.setup_handlers({
       function(server_name)
-        if server_name == 'gopls' then
-          opts.settings = {
-            gopls = {
-              experimentalPostfixCompletions = true,
-              analyses = { unusedparams = true, shadow = true, nilness = true, unusedwrite = true },
-              hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                constantValues = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-              },
-              staticcheck = true,
-              codelenses = {
-                usePlaceholders = true,
-              },
-            },
-          }
-          -- elseif server_name == "cssls" then
-          --   opts.cmd = { require('sp.util').bun_path() .. '/vscode-css-language-server', '--stdio' }
-          -- elseif server_name == "html" then
-          --   opts.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
-          -- elseif server_name == "eslint" then
-          --   opts.cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' }
-          -- elseif server_name == "bashls" then
-          --   opts.cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' }
-          --   opts.settings = { bashIde = { highlightParsingErrors = true }, }
-        end
         if server_name ~= 'zk' then
           lspconfig[server_name].setup(opts)
         end
       end,
+      emmet_ls = function()
+        lspconfig.emmet_ls.setup(opts)
+      end,
+      gopls = function()
+        local opt = vim.deepcopy(opts)
+        opt.settings = {
+          gopls = {
+            experimentalPostfixCompletions = true,
+            analyses = { unusedparams = true, shadow = true, nilness = true, unusedwrite = true },
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              constantValues = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+            staticcheck = true,
+            codelenses = {
+              usePlaceholders = true,
+            },
+          },
+        }
+        lspconfig.gopls.setup(opt)
+      end,
+      bashls = function()
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/bash-language-server', 'start' }
+        opt.settings = { bashIde = { highlightParsingErrors = true } }
+        lspconfig.bashls.setup(opt)
+      end,
+      html = function()
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
+        lspconfig.html.setup(opt)
+      end,
+      cssls = function()
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-css-language-server', '--stdio' }
+        opt.settings = {
+          css = {
+            validate = true,
+            completion = {
+              triggerPropertyValueCompletion = true,
+              completePropertyWithSemicolon = true,
+            },
+            lint = {
+              compatibleVendorPrefixes = 'warn',
+              duplicateProperties = 'warn',
+              boxModel = 'warn',
+              unknownVendorSpecificProperties = 'warn',
+              float = 'error',
+            },
+          },
+          scss = {
+            validate = true,
+            completion = {
+              triggerPropertyValueCompletion = true,
+              completePropertyWithSemicolon = true,
+            },
+            lint = {
+              compatibleVendorPrefixes = 'warn',
+              duplicateProperties = 'warn',
+              boxModel = 'warn',
+              unknownVendorSpecificProperties = 'warn',
+              float = 'error',
+            },
+          },
+        }
+        lspconfig.cssls.setup(opt)
+      end,
+      eslint = function()
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' }
+        lspconfig.eslint.setup(opt)
+      end,
+      pylyzer = function()
+        local opt = vim.deepcopy(opts)
+        lspconfig.pylyzer.setup(opt)
+      end,
+      pylsp = function()
+        local opt = vim.deepcopy(opts)
+        opt.settings = {
+          pylsp = {
+            plugins = {
+              flake8 = { enabled = true },
+              pycodestyle = { enabled = true },
+              rope_autoimport = { enabled = true, memory = true },
+              rope_completion = { enabled = true },
+            },
+          },
+        }
+        lspconfig.pylsp.setup(opt)
+      end,
       pyright = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/pyright-langserver', '--stdio' }
+        -- opt.cmd = { require('sp.util').bun_path() .. '/pyright-langserver', '--stdio' }
         opt.settings = {
           python = {
             analysis = {
@@ -160,7 +226,7 @@ return {
       end,
       jsonls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vscode-json-language-server', '--stdio' }
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-json-language-server', '--stdio' }
         opt.settings = {
           json = {
             schemas = vim.list_extend({
@@ -171,13 +237,15 @@ return {
                 url = 'https://raw.githubusercontent.com/Yash-Singh1/vscode-snippets-json-schema/main/schema.json',
               },
             }, require('schemastore').json.schemas()),
+            validate = { enable = true },
+            format = { enable = false },
           },
         }
         lspconfig.jsonls.setup(opt)
       end,
       yamlls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/yaml-language-server', '--stdio' }
+        -- opt.cmd = { require('sp.util').bun_path() .. '/yaml-language-server', '--stdio' }
         opt.settings = {
           redhat = { telemetry = { enabled = false } },
           yaml = {
@@ -223,7 +291,7 @@ return {
       end,
       tailwindcss = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/tailwindcss-language-server', '--stdio' }
+        -- opt.cmd = { require('sp.util').bun_path() .. '/tailwindcss-language-server', '--stdio' }
         opt.root_dir = util.root_pattern(
           'tailwind.config.js',
           'tailwind.config.cjs',
@@ -244,10 +312,11 @@ return {
       tsserver = function()
         require('typescript').setup({
           disable_commands = false, -- prevent the plugin from creating Vim commands
-          debug = false,            -- enable debug logging for commands
+          debug = false, -- enable debug logging for commands
           go_to_source_definition = { fallback = true },
           server = {
-            cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
+            -- cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
+            filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
             root_dir = util.root_pattern('package.json', 'tsconfig.json'),
             on_attach = on_attach,
             capabilities = cmp_capabilities,
@@ -314,6 +383,30 @@ return {
         }
 
         lspconfig.denols.setup(opt)
+      end,
+      volar = function()
+        local function get_typescript_server_path(root_dir)
+          local global_ts = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib'
+          local found_ts = ''
+          local function check_dir(path)
+            found_ts = util.path.join(path, 'node_modules', 'typescript', 'lib')
+            if util.path.exists(found_ts) then
+              return path
+            end
+          end
+          if util.search_ancestors(root_dir, check_dir) then
+            return found_ts
+          else
+            return global_ts
+          end
+        end
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
+        opt.on_new_config = function(new_config, new_root_dir)
+          new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+        end
+        opt.filetypes = { 'typescript', 'javascript', 'vue' }
+        lspconfig.volar.setup(opt)
       end,
     })
   end,
