@@ -5,10 +5,10 @@ diff -up a/config.def.h b/config.def.h
  	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
  	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
  	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-+	{ MODKEY,                       XK_Right,  viewnext_skip,       {0} },
-+	{ MODKEY,                       XK_Left,   viewprev_skip,       {0} },
-+	{ MODKEY|ShiftMask,             XK_Right,  tagtonext_skip,      {0} },
-+	{ MODKEY|ShiftMask,             XK_Left,   tagtoprev_skip,      {0} },
++	{ MODKEY,                       XK_Right,  viewnextskip,       {0} },
++	{ MODKEY,                       XK_Left,   viewprevskip,       {0} },
++	{ MODKEY|ShiftMask,             XK_Right,  tagtonextskip,      {0} },
++	{ MODKEY|ShiftMask,             XK_Left,   tagtoprevskip,      {0} },
  	TAGKEYS(                        XK_1,                      0)
  	TAGKEYS(                        XK_2,                      1)
  	TAGKEYS(                        XK_3,                      2)
@@ -19,10 +19,10 @@ diff -up a/dwm.c b/dwm.c
  static void monocle(Monitor *m);
  static void motionnotify(XEvent *e);
  static void movemouse(const Arg *arg);
-+static unsigned int nexttag_skip(void);
++static unsigned int nexttagskip(void);
  static Client *nexttiled(Client *c);
  static void pop(Client *);
-+static unsigned int prevtag_skip(void);
++static unsigned int prevtagskip(void);
  static void propertynotify(XEvent *e);
  static void quit(const Arg *arg);
  static Monitor *recttomon(int x, int y, int w, int h);
@@ -30,8 +30,8 @@ diff -up a/dwm.c b/dwm.c
  static void spawn(const Arg *arg);
  static void tag(const Arg *arg);
  static void tagmon(const Arg *arg);
-+static void tagtonext_skip(const Arg *arg);
-+static void tagtoprev_skip(const Arg *arg);
++static void tagtonextskip(const Arg *arg);
++static void tagtoprevskip(const Arg *arg);
  static void tile(Monitor *);
  static void togglebar(const Arg *arg);
  static void togglefloating(const Arg *arg);
@@ -39,17 +39,17 @@ diff -up a/dwm.c b/dwm.c
  static void updatewindowtype(Client *c);
  static void updatewmhints(Client *c);
  static void view(const Arg *arg);
-+static void viewnext_skip(const Arg *arg);
-+static void viewprev_skip(const Arg *arg);
++static void viewnextskip(const Arg *arg);
++static void viewprevskip(const Arg *arg);
  static Client *wintoclient(Window w);
  static Monitor *wintomon(Window w);
  static int xerror(Display *dpy, XErrorEvent *ee);
 @@ -1192,6 +1198,29 @@ movemouse(const Arg *arg)
  	}
  }
-
+ 
 +unsigned int
-+nexttag_skip(void)
++nexttagskip(void)
 +{
 +	unsigned int seltag = selmon->tagset[selmon->seltags];
 +	unsigned int usedtags = 0;
@@ -77,9 +77,9 @@ diff -up a/dwm.c b/dwm.c
 @@ -1208,6 +1237,28 @@ pop(Client *c)
  	arrange(c->mon);
  }
-
+ 
 +unsigned int
-+prevtag_skip(void)
++prevtagskip(void)
 +{
 +	unsigned int seltag = selmon->tagset[selmon->seltags];
 +	unsigned int usedtags = 0;
@@ -105,16 +105,16 @@ diff -up a/dwm.c b/dwm.c
  {
 @@ -1671,6 +1722,36 @@ tagmon(const Arg *arg)
  }
-
+ 
  void
-+tagtonext_skip(const Arg *arg)
++tagtonextskip(const Arg *arg)
 +{
 +	unsigned int tmp;
 +
 +	if (selmon->sel == NULL)
 +		return;
 +
-+	if ((tmp = nexttag()) == selmon->tagset[selmon->seltags])
++	if ((tmp = nexttagskip()) == selmon->tagset[selmon->seltags])
 +		return;
 +
 +	tag(&(const Arg){.ui = tmp });
@@ -122,14 +122,14 @@ diff -up a/dwm.c b/dwm.c
 +}
 +
 +void
-+tagtoprev_skip(const Arg *arg)
++tagtoprevskip(const Arg *arg)
 +{
 +	unsigned int tmp;
 +
 +	if (selmon->sel == NULL)
 +		return;
 +
-+	if ((tmp = prevtag()) == selmon->tagset[selmon->seltags])
++	if ((tmp = prevtagskip()) == selmon->tagset[selmon->seltags])
 +		return;
 +
 +	tag(&(const Arg){.ui = tmp });
@@ -143,19 +143,19 @@ diff -up a/dwm.c b/dwm.c
 @@ -2044,6 +2125,18 @@ view(const Arg *arg)
  	arrange(selmon);
  }
-
+ 
 +void
-+viewnext_skip(const Arg *arg)
++viewnextskip(const Arg *arg)
 +{
-+	view(&(const Arg){.ui = nexttag()});
++	view(&(const Arg){.ui = nexttagskip()});
 +}
 +
 +void
-+viewprev_skip(const Arg *arg)
++viewprevskip(const Arg *arg)
 +{
-+	view(&(const Arg){.ui = prevtag()});
++	view(&(const Arg){.ui = prevtagskip()});
 +}
-+
++ 
  Client *
  wintoclient(Window w)
  {
