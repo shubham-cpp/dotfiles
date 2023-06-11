@@ -1,13 +1,6 @@
-#define CMDLENGTH 45
-#define DELIMITER " | "
-// #define CLICKABLE_BLOCKS
+#pragma once
 
-const Block blocks[] = {
-    //       cmd      time signal
-    BLOCK("sb-date",   60, 23),
-    BLOCK("sb-memory", 5, 20),
-    BLOCK("sb-load",   5, 21),
-    BLOCK("sb-volume", 0, 18),
-    BLOCK("sb-bright", 0, 19),
-    BLOCK("sb-battery",5, 24),
-};
+#define CLICKABLE_BLOCKS  1     // Enable clickability for blocks
+#define CMDLENGTH         45    // Trim block output to this length
+#define DELIMITER         " | "  // Delimiter string used to separate blocks
+#define LEADING_DELIMITER 0     // Whether a leading separator should be used

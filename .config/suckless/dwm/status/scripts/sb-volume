@@ -2,18 +2,19 @@
 
 case $BLOCK_BUTTON in
 	1) setsid -f "$TERMINAL" -e pulsemixer ;;
-	2) pactl set-sink-mute @DEFAULT_SINK@ toggle ;;
-	4) pactl set-sink-volume @DEFAULT_SINK@ +5% ;;
-	5) pactl set-sink-volume @DEFAULT_SINK@ -5% ;;
+	2) wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+	4) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ ;;
+	5) wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%- ;;
 	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
+# if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
+if wpctl get-volume @DEFAULT_AUDIO_SINK@ | /bin/grep -q "[MUTED]"; then
 	echo "婢 Muted"
 	exit
 fi
 
-vol="$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:]')"
+vol="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)"
 [ $? -ne 0 ] && exit $?
 
 if [ "$vol" -gt 70 ]; then
@@ -26,4 +27,4 @@ else
 	icon="奄"
 fi
 
-echo "$icon  $vol%"
+echo "$icon $vol%"

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+case $BLOCK_BUTTON in
+  1) setsid -f "$TERMINAL" -e pulsemixer ;;
+  2) wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
+  4) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+ ;;
+  5) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%- ;;
+  6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | /bin/grep -q "[MUTED]"; then
+  echo ""
+else
+  echo ""
+fi
