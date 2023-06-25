@@ -1,4 +1,4 @@
-# vim: setl ft=sxhkdrc
+# vim:ft=sxhkdrc:fileencoding=utf-8
 super + {KP_Enter,KP_End}
     {alacritty,xterm}
 
@@ -14,7 +14,7 @@ super +{_,shift + } e
     {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
 
 super +{_,shift +} w
-    {  $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) ||  brave-browser || brave || chromium ||flatpak run com.github.Eloston.UngoogledChromium}
+    {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
