@@ -208,13 +208,13 @@ keys = [
     Key("M-C-S-r", lazy.restart(), desc="Reload the config"),
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
-        "M-d",
+        "M-S-d",
         lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'", shell=True),
         desc="Spawn Run Prompt",
     ),
     Key(
-        "M-S-d",
-        lazy.spawn("rofi -show run -async-read 10"),
+        "M-d",
+        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(

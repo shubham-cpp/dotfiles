@@ -515,7 +515,7 @@ globalkeys = gears.table.join(
   --}}}
   -- Standard program {{{
   awful.key({ modkey }, 'w', function()
-    awful.spawn.with_shell 'brave || brave-browser || firefox'
+    awful.spawn.with_shell 'brave || brave-browser || flatpak run com.brave.Browser || firefox'
   end, { description = 'open a ' .. browser, group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'w', function()
     local cmd = browser ~= "firefox" and "firefox" or "brave || brave-browser || chromium || chromium-browser || flatpak run com.github.Eloston.UngoogledChromium"
@@ -566,9 +566,12 @@ globalkeys = gears.table.join(
     end
   end, { description = 'go back', group = 'client' }),
 
-  awful.key({ modkey }, 'd', function()
+  awful.key({ modkey, 'Shift' }, 'd', function()
     awful.spawn 'dmenu_run_history -i'
   end, { description = 'Launch Dmenu', group = 'launcher' }),
+  awful.key({ modkey }, 'd', function()
+    awful.spawn 'rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi'
+  end, { description = 'Launch Rofi with dmenu theme', group = 'launcher' }),
 
   awful.key({ 'altkey' }, 'Print', function()
     awful.spawn.with_shell 'flameshot gui'

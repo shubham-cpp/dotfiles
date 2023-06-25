@@ -1,4 +1,5 @@
 # vim:ft=sxhkdrc:fileencoding=utf-8
+
 super + {KP_Enter,KP_End}
     {alacritty,xterm}
 
@@ -19,7 +20,7 @@ super +{_,shift +} w
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
 super + {shift+d,r,v,y,p}
-    {rofi -show run -async-pre-read,rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+    {rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 
 super + alt + {c,g}
     {open-rcs,open-games}

@@ -1,12 +1,15 @@
 configuration {
   display-run: " ";
-  display-drun: "  ";
+  display-drun: "  ";
   display-window: "  ";
-  display-emoji: "🕵  ";
+  /* display-emoji: "🔎  "; */
   drun-display-format: "{icon} {name}";
-  font: "RobotoMono Nerd Font 11";
+  matching: "regex";
+  font: "FuraCode Nerd Font 12";
   modi: "window,run,drun";
   show-icons: true;
+  sorting-method: "fzf";
+  sort: true;
 }
 
 * {

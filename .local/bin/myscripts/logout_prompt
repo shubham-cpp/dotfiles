@@ -1,13 +1,8 @@
 #!/usr/bin/env sh
 
 # options="logout\npoweroff\nreboot"
-program=""
-if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-    program="dmenu"
-else
-    program="/bin/rofi -dmenu"
-fi
-operation=$(printf "logout\npoweroff\nreboot" | $program -i -p "Logout Prompt:")
+program="rofi -dmenu -i -config ~/.config/rofi/dmenu.rasi"
+operation=$(printf "logout\npoweroff\nreboot" | $program -i -p "Logout Prompt")
 
 case "$operation" in
   logout)

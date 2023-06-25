@@ -1,3 +1,5 @@
+# vim:ft=sxhkdrc:fileencoding=utf-8
+
 # terminal
 super {_, + shift } + Return
 	{ $TERMINAL || xterm,kitty }
@@ -16,8 +18,8 @@ super {_, + shift } + e
 super + control + s
     logout_prompt
 
-super + {_,shift + } d
-    {dmenu_run_history -i,rofi -show run -async-pre-read}
+super + {shift + ,_} d
+    {dmenu_run_history -i,rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi}
 
 super + @g
     qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical

@@ -90,11 +90,12 @@ import qualified Codec.Binary.UTF8.String as UTF8
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "polybar --reload xmonad"
-  -- spawnOnce "xwallpaper --stretch ~/.config/wall.png"
-  spawnOnce "feh --bg-fill --no-fehbg -q ~/.config/wall.png"
-  -- spawnOnce "picom -b --experimental-backends"
-  spawnOnce "xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8"
-  spawnOnce "kitty"
+  spawnOnce "xwallpaper --stretch ~/.config/wall.png"
+  -- spawnOnce "feh --bg-fill --no-fehbg -q ~/.config/wall.png"
+  spawnOnce "picom -b"
+  -- spawnOnce "xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8"
+  -- spawnOnce "kitty"
+  spawnOnce "alacritty -e tmux"
   spawnOnce "udiskie -q -t --no-terminal"
   -- spawnOnce "/usr/lib/polkit-kde-authentication-agent-1" -- for arch
   spawnOnce "/usr/libexec/kf5/polkit-kde-authentication-agent-1" -- for fedora
@@ -263,8 +264,8 @@ main = do
     , ("M-S-<Return>", spawn  "kitty -d ~/")
     , ("M-e",          spawn  "thunar || pcmanfm")
     , ("M-S-e",        spawn  "alacritty -e lfv")
-    , ("M-d",          spawn  "dmenu_run_history -i")
-    , ("M-S-d",        spawn  "rofi -show run -async-pre-read")
+    , ("M-S-d",        spawn  "dmenu_run_history -i")
+    , ("M-d",          spawn  "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi")
     -- , ("M-w",          spawn  "firefox")
     , ("M-w",          spawn  "brave || brave-browser")
     , ("M-S-w",        spawn  "chromium || chromium-browser")
