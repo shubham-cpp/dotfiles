@@ -3,13 +3,13 @@ local g = vim.g
 
 g.mapleader = ' '
 o.clipboard:append 'unnamedplus'
-o.iskeyword:append('-')
+o.iskeyword:append '-'
 o.number = true
 o.relativenumber = true
 o.expandtab = true
-o.tabstop = 4
+o.tabstop = 2
 o.shiftround = true
-o.shiftwidth = 4
+o.shiftwidth = 2
 o.smarttab = true
 o.autoindent = true
 o.smartindent = true
@@ -28,7 +28,9 @@ o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
 o.formatoptions = 'jcroqlnt'
 o.grepformat = '%f:%l:%c:%m'
-if vim.fn.has 'rg' == 1 then o.grepprg = 'rg --vimgrep' end
+if vim.fn.has 'rg' == 1 then
+  o.grepprg = 'rg --vimgrep --no-heading --smart-case'
+end
 o.timeoutlen = 300
 o.undofile = true
 o.undolevels = 10000

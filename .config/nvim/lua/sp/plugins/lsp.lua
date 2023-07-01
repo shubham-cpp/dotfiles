@@ -7,6 +7,7 @@ return {
     'b0o/schemastore.nvim',
     'jose-elias-alvarez/typescript.nvim',
     'lvimuser/lsp-inlayhints.nvim',
+    -- 'simrat39/rust-tools.nvim'
   },
   config = function()
     local lspconfig = require 'lspconfig'
@@ -42,25 +43,30 @@ return {
     end
 
     local function on_attach(client, bufnr) -- {{{
-      map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Lsp Definition' })
-      map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Lsp Declaration' })
+      map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Goto Definition' })
+      map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Goto Declaration' })
       map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
       map('i', '<C-h>', vim.lsp.buf.signature_help, { buffer = bufnr })
-      map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr })
-      map('n', 'gS', lsp_organize_imports, { buffer = bufnr, desc = 'Lsp Organize Imports' })
-      map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Lsp Organize Imports' })
+      map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Goto Implementation' })
+      map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Organize Imports' })
       map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
-      map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Lsp Type Definition' })
-      map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr })
-      map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr })
-      map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
-      map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr })
+      map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Type Definition' })
+      map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols' })
+      map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
+      map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
+      map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
       map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
       map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
       -- map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr,desc="Format Buffer(LSP)" })
       map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr, desc = 'diagnostic open' })
-      map('n', '[d', vim.diagnostic.goto_prev, { buffer = bufnr })
-      map('n', ']d', vim.diagnostic.goto_next, { buffer = bufnr })
+      map('n', '[d', vim.diagnostic.goto_prev, { buffer = bufnr, desc = 'Goto Prev Diagnostic' })
+      map('n', ']d', vim.diagnostic.goto_next, { buffer = bufnr, desc = 'Goto Next Diagnostic' })
+      map('n', '[e', function()
+        vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
+      end, { buffer = bufnr, desc = 'Goto Prev Error' })
+      map('n', ']e', function()
+        vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+      end, { buffer = bufnr, desc = 'Goto Next Error' })
       if client.server_capabilities.documentHighlightProvider then
         vim.api.nvim_exec(
           [[
@@ -188,9 +194,15 @@ return {
         lspconfig.cssls.setup(opt)
       end,
       eslint = function()
-        local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' }
-        lspconfig.eslint.setup(opt)
+        lspconfig.eslint.setup({
+          on_attach = function(_, bufnr)
+            -- vim.api.nvim_create_autocmd('BufWritePre', {
+            --   buffer = bufnr,
+            --   command = 'EslintFixAll',
+            -- })
+            vim.keymap.set('n', 'g=', '<cmd>EslintFixAll<CR>', { buffer = bufnr, desc = 'Eslint Fix' })
+          end,
+        })
       end,
       pylyzer = function()
         local opt = vim.deepcopy(opts)
@@ -312,7 +324,7 @@ return {
       tsserver = function()
         require('typescript').setup({
           disable_commands = false, -- prevent the plugin from creating Vim commands
-          debug = false, -- enable debug logging for commands
+          debug = false,            -- enable debug logging for commands
           go_to_source_definition = { fallback = true },
           server = {
             -- cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },

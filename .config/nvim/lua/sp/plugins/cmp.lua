@@ -195,14 +195,14 @@ return {
       return vim_item
     end, ]]
       },
-      sorting = {
-        priority_weight = 2,
-        comparators = {
-          compare.exact,
-          compare.recently_used,
-          compare.score,
-        },
-      },
+      -- sorting = {
+      --   priority_weight = 2,
+      --   comparators = {
+      --     compare.exact,
+      --     compare.recently_used,
+      --     compare.score,
+      --   },
+      -- },
     })
 
     cmp.setup.cmdline(':', {

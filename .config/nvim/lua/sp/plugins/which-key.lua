@@ -78,7 +78,6 @@ return {
     wk.register({
       g = {
         name = 'Lsp',
-        s = 'Switch',
         e = 'Line Diagnostics',
         t = 'Goto type definition',
         d = 'Goto definition',

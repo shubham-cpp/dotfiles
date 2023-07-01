@@ -64,7 +64,7 @@ return {
         lualine_z = { 'location' },
       },
       inactive_sections = {
-        lualine_a = { { 'buffers', cond = conditions.hide_in_width } },
+        -- lualine_a = { { 'buffers', cond = conditions.hide_in_width } },
         lualine_b = {
           { 'filename', path = conditions.hide_in_width and 1 or 4, cond = conditions.hide_in_width },
         },
