@@ -9,6 +9,7 @@ alias ls="exa -l --color=auto --group-directories-first --icons"  # long format
 alias ll="exa -al --color=auto --group-directories-first --icons --no-user" # my preferred listing
 alias la="exa -a --color=auto --group-directories-first --icons"  # all files and dirs
 alias lt="exa -aT --color=auto --group-directories-first --icons" # tree listing
+alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
 alias rm="trash-put"
