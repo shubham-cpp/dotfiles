@@ -16,6 +16,7 @@ configuration {
     display-run:                "";
     display-filebrowser:        "";
     display-window:             "";
+    display-clipboard:          "󰆏";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
     matching:                   "regex";
