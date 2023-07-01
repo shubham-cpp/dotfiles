@@ -8,6 +8,7 @@ from .lazy_functions import (
     move_win_to_immediate_group,
     smart_window_kill,
     toggle_layout_max,
+    toggle_sticky_windows,
     update_brightness,
     update_volume,
 )
@@ -22,6 +23,7 @@ browser = getenv("BROWSER", "firefox")
 keys = [
     # Toggles {{{
     Key("M-s", lazy.window.toggle_floating(), desc="Toggle Floating"),
+    Key("M-S-s", toggle_sticky_windows(), desc="Toggle Floating"),
     Key("M-f", lazy.window.toggle_fullscreen(), desc="Toggle Fullscreen"),
     Key("M-m", toggle_layout_max(), desc="Toggle Maximize"),
     Key("M-b", lazy.hide_show_bar(), desc="Toggle Bar"),
@@ -74,17 +76,50 @@ keys = [
     Key("M-n", lazy.layout.normalize(), desc="Reset all window sizes"),
     # }}}
     # Change focus among windows {{{
-    Key("M-h", lazy.layout.left(), desc="Move focus to left"),
-    Key("M-l", lazy.layout.right(), desc="Move focus to right"),
-    Key("M-j", lazy.layout.down(), desc="Move focus down"),
-    Key("M-k", lazy.layout.up(), desc="Move focus up"),
+    Key(
+        "M-h",
+        lazy.layout.left(),
+        lazy.window.bring_to_front(),
+        desc="Move focus to left",
+    ),
+    Key(
+        "M-l",
+        lazy.layout.right(),
+        lazy.window.bring_to_front(),
+        desc="Move focus to right",
+    ),
+    Key(
+        "M-j",
+        lazy.group.next_window(),
+        lazy.window.bring_to_front(),
+        desc="Move focus down",
+    ),
+    Key(
+        "M-k",
+        lazy.group.prev_window(),
+        lazy.window.bring_to_front(),
+        desc="Move focus up",
+    ),
     Key("M-<Left>", lazy.layout.left(), desc="Move focus to left"),
     Key("M-<Right>", lazy.layout.right(), desc="Move focus to right"),
-    Key("M-<Down>", lazy.layout.down(), desc="Move focus down"),
-    Key("M-<Up>", lazy.layout.up(), desc="Move focus up"),
+    # Key("M-<Down>", lazy.layout.down(), desc="Move focus down"),
+    # Key("M-<Up>", lazy.layout.up(), desc="Move focus up"),
+    Key(
+        "M-<Down>",
+        lazy.group.next_window(),
+        lazy.window.bring_to_front(),
+        desc="Move focus down",
+    ),
+    Key(
+        "M-<Up>",
+        lazy.group.prev_window(),
+        lazy.window.bring_to_front(),
+        desc="Move focus up",
+    ),
     Key(
         "A-<Tab>",
         lazy.group.next_window(),
+        lazy.window.bring_to_front(),
         desc="Switch window focus to next window in group",
     ),
     # }}}
@@ -184,11 +219,11 @@ keys = [
         "M-S-w",
         lazy.spawn(
             "firefox"
-            if browser != "firefox"
+            if browser != "firefox" and isfile("/usr/bin/firefox")
             else "brave"
-            if isfile("/usr/bin/brave")
+            if isfile("/usr/bin/brave") and browser != "brave"
             else "brave-browser"
-            if isfile("/usr/bin/brave-browser")
+            if isfile("/usr/bin/brave-browser") and browser != "brave-browser"
             else "chromium"
             if isfile("/usr/bin/chromium")
             else "chromium-browser"

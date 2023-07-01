@@ -7,6 +7,7 @@ from libqtile.log_utils import logger
 #     logger.debug("Run urgent")
 #     qtile.next_urgent()
 
+sticky_windows: list = []
 
 @lz.function
 def toggle_layout_max(qtile):
@@ -17,7 +18,7 @@ def toggle_layout_max(qtile):
     """
     lname = qtile.current_group.layout.name
     # indices = [i for i, _ in enumerate(qtile.current_group.layouts)]
-    qtile.current_group.use_layout(index=1 if lname != "max" else 0)
+    qtile.current_group.use_layout(index=2 if lname != "max" else 0)
     # logger.warn("Current Layout:: " + lname)
 
 
@@ -88,5 +89,13 @@ def update_brightness(qtile):
     w.force_update()
     icon.force_update()
 
-
+@lz.function
+def toggle_sticky_windows(qtile, window=None):
+    if window is None:
+        window = qtile.current_screen.group.current_window
+    if window in sticky_windows:
+        sticky_windows.remove(window)
+    else:
+        sticky_windows.append(window)
+    return window
 # }}}

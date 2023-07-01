@@ -9,10 +9,12 @@ from libqtile.layout.spiral import Spiral
 from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from modules.bar import extension_defaults, layout_theme, screens, widget_defaults
+from modules.bar import (extension_defaults, layout_theme, screens,
+                         widget_defaults)
 from modules.colors import backgroundColor, colors, foregroundColor
 from modules.groups import groups
 from modules.keys import browser, keys, mod, terminal
+from modules.lazy_functions import sticky_windows
 
 layouts: List[Layout] = [
     MonadTall(
@@ -22,7 +24,9 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
+    MonadWide(
+        change_size=10, single_border_width=0, single_margin=0, **layout_theme
+    ),
     Max(**layout_theme),
     Floating(border_focus="#d75f5f"),
     Spiral(**layout_theme),
@@ -38,7 +42,10 @@ mouse: List[Union[Drag, Click]] = [
         start=lazy.window.get_position(),
     ),
     Drag(
-        [mod], "Button3", lazy.window.set_size_floating(), start=lazy.window.get_size()
+        [mod],
+        "Button3",
+        lazy.window.set_size_floating(),
+        start=lazy.window.get_size(),
     ),
     Click([mod], "Button2", lazy.window.bring_to_front()),
 ]
@@ -122,3 +129,15 @@ def assign_app_group(client):
         client.togroup(groups[5].name)
     elif wm_class in ["Steam", "Lutris", "lutris", "steam"]:
         client.togroup(groups[2].name, switch_group=True)
+
+@hook.subscribe.setgroup
+def move_sticky_windows():
+    for window in sticky_windows:
+        window.togroup()
+    return
+
+@hook.subscribe.client_killed
+def remove_sticky_windows(window):
+    if window in sticky_windows:
+        sticky_windows.remove(window)
+

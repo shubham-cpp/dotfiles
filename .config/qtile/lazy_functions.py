@@ -1,12 +1,13 @@
 from libqtile.command import lazy as lz
 from libqtile.log_utils import logger
+from libqtile import hook
 
 # Custom Lazy Functions {{{
 # @hook.subscribe.client_urgent_hint_changed
 # def go_to(window):
 #     logger.debug("Run urgent")
 #     qtile.next_urgent()
-
+sticky_windows: list = []
 
 @lz.function
 def toggle_layout_max(qtile):
@@ -88,5 +89,24 @@ def update_brightness(qtile):
     w.force_update()
     icon.force_update()
 
+@lz.function
+def toggle_sticky_windows(qtile, window=None):
+    if window is None:
+        window = qtile.current_screen.group.current_window
+    if window in sticky_windows:
+        sticky_windows.remove(window)
+    else:
+        sticky_windows.append(window)
+    return window
+@hook.subscribe.setgroup
+def move_sticky_windows():
+    for window in sticky_windows:
+        window.togroup()
+    return
+
+@hook.subscribe.client_killed
+def remove_sticky_windows(window):
+    if window in sticky_windows:
+        sticky_windows.remove(window)
 
 # }}}
