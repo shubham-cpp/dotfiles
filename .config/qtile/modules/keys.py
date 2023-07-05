@@ -79,25 +79,21 @@ keys = [
     Key(
         "M-h",
         lazy.layout.left(),
-        lazy.window.bring_to_front(),
         desc="Move focus to left",
     ),
     Key(
         "M-l",
         lazy.layout.right(),
-        lazy.window.bring_to_front(),
         desc="Move focus to right",
     ),
     Key(
         "M-j",
         lazy.group.next_window(),
-        lazy.window.bring_to_front(),
         desc="Move focus down",
     ),
     Key(
         "M-k",
         lazy.group.prev_window(),
-        lazy.window.bring_to_front(),
         desc="Move focus up",
     ),
     Key("M-<Left>", lazy.layout.left(), desc="Move focus to left"),
@@ -107,19 +103,16 @@ keys = [
     Key(
         "M-<Down>",
         lazy.group.next_window(),
-        lazy.window.bring_to_front(),
         desc="Move focus down",
     ),
     Key(
         "M-<Up>",
         lazy.group.prev_window(),
-        lazy.window.bring_to_front(),
         desc="Move focus up",
     ),
     Key(
         "A-<Tab>",
         lazy.group.next_window(),
-        lazy.window.bring_to_front(),
         desc="Switch window focus to next window in group",
     ),
     # }}}
@@ -237,7 +230,7 @@ keys = [
         lazy.spawn("bash -c 'thunar || pcmanfm'", shell=True),
         desc="Launch File Manager",
     ),
-    Key("M-S-e", lazy.spawn("alacritty -e lfv"), desc="Launch lf"),
+    Key("M-S-e", lazy.spawn("kitty -e lfv",shell=True), desc="Launch lf"),
     Key("M-S-q", smart_window_kill(), desc="Kill focused window"),
     Key("M-C-r", lazy.reload_config(), desc="Reload the config"),
     Key("M-C-S-r", lazy.restart(), desc="Reload the config"),
