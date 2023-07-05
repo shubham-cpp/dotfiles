@@ -1,3 +1,4 @@
+local util = require 'sp.util'
 return {
   'folke/which-key.nvim',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -43,7 +44,23 @@ return {
       b = {
         name = 'Buffers',
         a = { ':badd<space>', 'Add', silent = false },
-        d = { '<cmd>bd<cr>', 'Delete' },
+        d = {
+          name = 'Delete',
+          l = { util.close_left, 'Close Left' },
+          r = { util.close_right, 'Close Right' },
+        },
+        c = {
+          function()
+            util.close_all(true, true)
+          end,
+          'Close All',
+        },
+        C = {
+          function()
+            util.close_all(false, true)
+          end,
+          'Close All(ALL)',
+        },
         n = { '<cmd>bn<cr>', 'Next' },
         p = { '<cmd>bp<cr>', 'Prev' },
       },

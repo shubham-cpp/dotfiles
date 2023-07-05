@@ -14,7 +14,7 @@ local config = {
       vim.g.matchup_matchparen_offscreen = { method = 'popup' }
     end,
     opts = {
-      highlight = { enable = true, additional_vim_regex_highlighting = { 'markdown' } },
+      highlight = { enable = true, additional_vim_regex_highlighting = { 'markdown' ,'xml'} },
       context_commentstring = { enable = true, enable_autocmd = false },
       autotag = { enable = true },
       matchup = { enable = true },

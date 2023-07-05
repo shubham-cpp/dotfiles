@@ -25,6 +25,32 @@ local config = {
     },
   },
   {
+    'ellisonleao/gruvbox.nvim',
+    enabled = false,
+    config = function()
+      require('gruvbox').setup({
+        contrast = 'hard', -- can be "hard", "soft" or empty string
+        dim_inactive = false,
+        transparent_mode = false,
+        overrides = {
+          QuickScopePrimary = {
+            fg = '#dfbb78',
+            bg = '#505050',
+            bold = true,
+            italic = true,
+          },
+          QuickScopeSecondary = {
+            fg = '#61afef',
+            bg = '#505050',
+            bold = true,
+            italic = true,
+          },
+        },
+      })
+      vim.cmd("colorscheme gruvbox")
+    end,
+  },
+  {
     'navarasu/onedark.nvim',
     enabled = false,
     config = function()
@@ -36,7 +62,6 @@ local config = {
       require('onedark').load()
     end,
   },
-
 }
 
 return config

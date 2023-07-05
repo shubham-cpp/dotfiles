@@ -126,3 +126,55 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.spell = true
   end,
 })
+
+vim.api.nvim_create_autocmd({ 'BufAdd', 'BufEnter', 'TabNewEntered' }, {
+  desc = 'Update buffers when adding new buffers',
+  group = au_buffer,
+  callback = function(args)
+    if not vim.t.bufs then
+      vim.t.bufs = {}
+    end
+    local bufs = vim.t.bufs
+    if not vim.tbl_contains(bufs, args.buf) then
+      table.insert(bufs, args.buf)
+      vim.t.bufs = bufs
+    end
+    vim.t.bufs = vim.tbl_filter(require('sp.util').is_valid, vim.t.bufs)
+  end,
+})
+
+vim.api.nvim_create_autocmd('BufDelete', {
+  desc = 'Update buffers when deleting buffers',
+  group = au_buffer,
+  callback = function(args)
+    for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+      local bufs = vim.t[tab].bufs
+      if bufs then
+        for i, bufnr in ipairs(bufs) do
+          if bufnr == args.buf then
+            table.remove(bufs, i)
+            vim.t[tab].bufs = bufs
+            break
+          end
+        end
+      end
+    end
+    vim.t.bufs = vim.tbl_filter(require('sp.util').is_valid, vim.t.bufs)
+    vim.cmd.redrawtabline()
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Unlist quickfist buffers',
+  group = au_buffer,
+  pattern = 'qf',
+  callback = function()
+    vim.opt_local.buflisted = false
+  end,
+})
+
+-- vim.filetype.add({
+--   pattern = {
+--     ['*.xml'] = 'xml',
+--   }
+-- })
