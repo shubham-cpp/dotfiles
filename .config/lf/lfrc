@@ -1,7 +1,7 @@
 # Basic Settings
 
-set previewer ~/Downloads/GitClones/lfimg/preview
-set cleaner ~/Downloads/GitClones/lfimg/cleaner
+set previewer ~/.config/lf/mpreview
+set cleaner ~/.config/lf/mclean
 
 set shell bash
 set shellopts '-eu'
@@ -30,7 +30,7 @@ cmd open ${{
     case $(file --mime-type "$f" -bL) in
         text/*|application/json) $EDITOR -p "$fx";;
         video/*) setsid -f xdg-open "$fx" ;;
-        application/pdf) zathura --fork "$fx" ;;
+        # application/pdf) zathura --fork "$fx" ;;
         image/gif) setsif -f viewnior "$fx" ;;
         image/*) setsif -f sxiv "$fx" ;;
         *) setsid -f xdg-open "$fx" ;;
@@ -111,7 +111,11 @@ cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboar
 
 cmd setwallpaper ${{
     cp "$f" ~/.config/wall.png
-    xwallpaper --stretch ~/.config/wall.png
+    if [ -x /bin/feh ]; then
+      feh --bg-fill --no-fehbg ~/.config/wall.png
+    elif [ -x /bin/xwallpaper ]; then
+      xwallpaper --stretch ~/.config/wall.png
+    fi
 }}
 
 cmd fzf_jump ${{

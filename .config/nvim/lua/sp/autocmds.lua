@@ -178,3 +178,17 @@ vim.api.nvim_create_autocmd('FileType', {
 --     ['*.xml'] = 'xml',
 --   }
 -- })
+vim.filetype.add({
+  extension = {
+    fish = 'fish',
+    rasi = 'rasi',
+  },
+  filename = {
+    vimfrc = 'vim',
+    dwm_sxhkdrc = 'sxhkdrc',
+  },
+  pattern = {
+    ['*profile'] = 'sh',
+    ['*.kbd'] = 'lisp',
+  },
+})

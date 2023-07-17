@@ -264,7 +264,7 @@ jspm_packages/*
 
 latex.out/*
 lerna-debug.log*
-lib/*
+# lib/*
 lib64/*
 local_settings.py
 logs

@@ -10,6 +10,7 @@ from .lazy_functions import (
     toggle_layout_max,
     toggle_sticky_windows,
     update_brightness,
+    update_mic_icon,
     update_volume,
 )
 
@@ -292,6 +293,12 @@ keys = [
         "<XF86AudioMute>",
         lazy.spawn("audio toggle"),
         update_volume(),
+        desc="Audio Toggle Mute",
+    ),
+    Key(
+        "S-<XF86AudioMute>",
+        lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
+        update_mic_icon(),
         desc="Audio Toggle Mute",
     ),
     # }}}

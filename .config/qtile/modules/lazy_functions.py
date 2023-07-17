@@ -71,6 +71,17 @@ def update_volume(qtile):
     w.force_update()
     icon.force_update()
 
+@lz.function
+def update_mic_icon(qtile):
+    """Update the volume_mic widget on keypress
+
+    Args:
+        qtile (libqtile.qtile): By default passed by lz.function
+    """
+    icon = qtile.widgets_map["volume_mic_icon"]
+    icon.poll()
+    icon.force_update()
+
 
 @lz.function
 def update_brightness(qtile):

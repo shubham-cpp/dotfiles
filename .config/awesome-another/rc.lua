@@ -413,7 +413,7 @@ end
 -- }}}
 
 globalkeys = gears.table.join(
--- Tag Browsing {{{
+  -- Tag Browsing {{{
   awful.key({ modkey }, '[', awful.tag.viewprev, { description = 'view previous', group = 'tag' }),
   awful.key({ modkey }, ']', awful.tag.viewnext, { description = 'view next', group = 'tag' }),
   awful.key({ modkey, 'Shift' }, '[', function()
@@ -518,7 +518,8 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell 'brave || brave-browser || flatpak run com.brave.Browser || firefox'
   end, { description = 'open a ' .. browser, group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'w', function()
-    local cmd = browser ~= "firefox" and "firefox" or "brave || brave-browser || chromium || chromium-browser || flatpak run com.github.Eloston.UngoogledChromium"
+    local cmd = browser ~= 'firefox' and 'firefox'
+      or 'brave || brave-browser || chromium || chromium-browser || flatpak run com.github.Eloston.UngoogledChromium'
     -- local cmd = 'chromium || chromium-browser || brave || brave-browser'
     awful.spawn.easy_async_with_shell(cmd, function(_, err)
       if (err ~= '' or err ~= nil) and string.find(err, 'brave-browser') ~= nil then
@@ -534,7 +535,7 @@ globalkeys = gears.table.join(
     awful.spawn.with_shell 'thunar || pcmanfm-qt || pcmanfm'
   end, { description = 'open a file manager', group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'e', function()
-    awful.spawn 'alacritty -e lfrun'
+    awful.spawn 'kitty -e vif'
   end, { description = 'open a lfrun', group = 'launcher' }),
   -- Standard program
   awful.key({ modkey }, 'Return', function()
@@ -764,23 +765,23 @@ clientkeys = gears.table.join(
     -- c.floating = false
     awful.layout.set(awful.layout.suit.tile)
   end, { description = 'Change to tile layout', group = 'client' })
--- awful.key({ modkey }, "n", function(c)
---     -- The client currently has the input focus, so it cannot be
---     -- minimized, since minimized clients can't have the focus.
---     c.minimized = true
--- end, { description = "minimize", group = "client" }),
--- awful.key({ modkey }, "m", function(c)
---     c.maximized = not c.maximized
---     c:raise()
--- end, { description = "(un)maximize", group = "client" }),
--- awful.key({ modkey, "Control" }, "m", function(c)
---     c.maximized_vertical = not c.maximized_vertical
---     c:raise()
--- end, { description = "(un)maximize vertically", group = "client" }),
--- awful.key({ modkey, "Shift" }, "m", function(c)
---     c.maximized_horizontal = not c.maximized_horizontal
---     c:raise()
--- end, { description = "(un)maximize horizontally", group = "client" })
+  -- awful.key({ modkey }, "n", function(c)
+  --     -- The client currently has the input focus, so it cannot be
+  --     -- minimized, since minimized clients can't have the focus.
+  --     c.minimized = true
+  -- end, { description = "minimize", group = "client" }),
+  -- awful.key({ modkey }, "m", function(c)
+  --     c.maximized = not c.maximized
+  --     c:raise()
+  -- end, { description = "(un)maximize", group = "client" }),
+  -- awful.key({ modkey, "Control" }, "m", function(c)
+  --     c.maximized_vertical = not c.maximized_vertical
+  --     c:raise()
+  -- end, { description = "(un)maximize vertically", group = "client" }),
+  -- awful.key({ modkey, "Shift" }, "m", function(c)
+  --     c.maximized_horizontal = not c.maximized_horizontal
+  --     c:raise()
+  -- end, { description = "(un)maximize horizontally", group = "client" })
 )
 
 -- Bind all key numbers to tags.
@@ -871,7 +872,7 @@ awful.rules.rules = {
   {
     rule_any = {
       instance = {
-        'DTA',   -- Firefox addon DownThemAll.
+        'DTA', -- Firefox addon DownThemAll.
         'copyq', -- Includes session name in class.
         'pinentry',
       },
@@ -880,7 +881,7 @@ awful.rules.rules = {
         'Blueman-manager',
         'Gpick',
         'Kruler',
-        'MessageWin',  -- kalarm.
+        'MessageWin', -- kalarm.
         'Sxiv',
         'Tor Browser', -- Needs a fixed window size to avoid fingerprinting by screen size.
         'Wpa_gui',
@@ -907,9 +908,9 @@ awful.rules.rules = {
         'Event Tester', -- xev.
       },
       role = {
-        'AlarmWindow',   -- Thunderbird's calendar.
+        'AlarmWindow', -- Thunderbird's calendar.
         'ConfigManager', -- Thunderbird's about:config.
-        'pop-up',        -- e.g. Google Chrome's (detached) Developer Tools.
+        'pop-up', -- e.g. Google Chrome's (detached) Developer Tools.
       },
     },
     properties = { floating = true },

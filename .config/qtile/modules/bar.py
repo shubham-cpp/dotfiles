@@ -14,7 +14,7 @@ layout_theme: dict[str, Union[str, int, list[str]]] = {
 }
 
 widget_defaults = dict(
-    font="FiraCode Nerd Font",
+    font="JetBrainsMono Nerd Font",
     fontsize=12,
     padding=3,
 )
@@ -84,6 +84,7 @@ screens = [
                 ),
                 widget.Net(
                     format="\uf1eb {down} \uf175\uf176 {up}",
+                    fontsize=13,
                     padding=10,
                 ),
                 widget.TextBox(
@@ -94,7 +95,7 @@ screens = [
                 ),
                 widget.CPU(
                     font="JetBrainsMono Nerd Font",
-                    update_interval=1.0,
+                    update_interval=1.5,
                     format="{load_percent}%",
                     foreground=foregroundColor,
                     padding=5,
@@ -115,6 +116,21 @@ screens = [
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.GenPollText(
+                    name="volume_mic_icon",
+                    func=lambda: subprocess.run(
+                        'wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | command grep -iq mute && echo " " || echo ""',
+                        stdout=subprocess.PIPE,
+                        shell=True,
+                    )
+                    .stdout.decode("UTF-8")
+                    .strip(),
+                    font="JetBrainsMonoNerdFont",
+                    fontsize=16,
+                    foreground=colors[2],
+                    update_interval=300,
+                ),
+                widget.Sep(linewidth=0, padding=10),
+                widget.GenPollText(
                     name="volume_icon",
                     func=lambda: subprocess.run(
                         ["sb-volume"],
@@ -125,7 +141,7 @@ screens = [
                     font="JetBrainsMonoNerdFont",
                     fontsize=16,
                     foreground=colors[9],
-                    update_interval=60,
+                    update_interval=300,
                     padding=3,
                 ),
                 widget.GenPollText(
@@ -138,7 +154,7 @@ screens = [
                     .split()[1],
                     padding=4,
                     foreground=foregroundColor,
-                    update_interval=10,
+                    update_interval=300,
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.TextBox(
@@ -167,13 +183,13 @@ screens = [
                 widget.CurrentLayoutIcon(
                     scale=0.7, foreground=colors[6], background=backgroundColor
                 ),
-                widget.Sep(
-                    linewidth=1,
-                    padding=10,
-                    foreground=colors[5],
-                    background=backgroundColor,
-                ),
-                widget.QuickExit(),
+                # widget.Sep(
+                #     linewidth=1,
+                #     padding=10,
+                #     foreground=colors[5],
+                #     background=backgroundColor,
+                # ),
+                # widget.QuickExit(),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders

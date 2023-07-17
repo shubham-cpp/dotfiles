@@ -1,7 +1,11 @@
 #!/usr/bin/env sh
 
 amount=${2:-10}
-vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)
+
+get_vol() {
+	vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)
+	echo "$vol"
+}
 
 case "$1" in
 inc)
@@ -10,18 +14,18 @@ inc)
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%+
 	# vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
 	# vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '{} * 100' | bc)
-	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$vol" -r 100001
+	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -r 10001
 	;;
 dec)
 	# pactl set-sink-volume @DEFAULT_SINK@ -"$amount"%
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%-
 	# vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
-	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$vol" -r 100001
+	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -r 10001
 	;;
 toggle)
 	# pactl set-sink-mute @DEFAULT_SINK@ toggle
-	wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	# wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 	;;
 *)

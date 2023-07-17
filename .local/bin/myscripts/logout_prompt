@@ -6,12 +6,13 @@ operation=$(printf "logout\npoweroff\nreboot" | $program -i -p "Logout Prompt")
 
 case "$operation" in
   logout)
-    notify-send "In Progress" "Still some work left todo"
+    # notify-send "In Progress" "Still some work left todo"
+    pkill "$DESKTOP_SESSION"
     ;;
   poweroff)
-    poweroff || loginctl poweroff
+    poweroff || systemctl poweroff || loginctl poweroff
     ;;
   reboot)
-    reboot || loginctl reboot
+    reboot || systemctl reboot || loginctl reboot
     ;;
 esac

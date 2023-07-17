@@ -1,6 +1,6 @@
 return {
   'hrsh7th/nvim-cmp',
-  event = {'BufReadPost', 'BufNewFile'},
+  event = { 'BufReadPost', 'BufNewFile' },
   dependencies = {
     'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
@@ -55,8 +55,11 @@ return {
   },
   config = function()
     local cmp = require 'cmp'
+    local types = require 'cmp.types'
+    local context = require 'cmp.config.context'
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
+    local defaults = require("cmp.config.default")()
     -- local window = require 'cmp.config.window'
     vim.opt.completeopt = 'menu,menuone,noselect'
     vim.g.vsnip_snippet_dir = vim.fn.stdpath 'config' .. '/vsnip'
@@ -158,11 +161,14 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lsp',                priority = 1000 },
-        { name = 'nvim_lsp_signature_help', priority = 700 },
-        { name = 'nvim_lua',                priority = 900 },
-        { name = 'vsnip',                   priority = 600 },
-        { name = 'path',                    priority = 100 },
+        { name = 'nvim_lua'},
+        { name = 'nvim_lsp'},
+        { name = 'nvim_lsp_signature_help'},
+        { name = 'vsnip'},
+        -- { name = 'buffer-lines' },
+        -- { name = 'cmp_tabnine' },
+      }, {
+        { name = 'path'},
         {
           name = 'buffer',
           option = {
@@ -171,10 +177,7 @@ return {
               return vim.api.nvim_list_bufs()
             end,
           },
-          priority = 300,
         },
-        -- { name = 'buffer-lines' },
-        -- { name = 'cmp_tabnine' },
       }),
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
@@ -199,10 +202,26 @@ return {
       --   priority_weight = 2,
       --   comparators = {
       --     compare.exact,
+      --     compare.scopes,
       --     compare.recently_used,
-      --     compare.score,
+      --     -- function (entry1,entry2)
+      --     --   local kind1 = types.lsp.CompletionItemKind[entry1:get_kind()]
+      --     --   local kind2 = types.lsp.CompletionItemKind[entry2:get_kind()]
+      --     --   if kind1 == 'Snippet' or kind2 == 'Snippet' then
+      --     --     local name1 = vim.split(entry1.source:get_debug_name(), ':')[2]
+      --     --     local name2 = vim.split(entry2.source:get_debug_name(), ':')[2]
+      --     --     if name1 == 'emmet_ls' then
+      --     --       return false
+      --     --     end
+      --     --     if name2 == 'emmet_ls' then
+      --     --       return false
+      --     --     end
+      --     --   end
+      --     --   return true
+      --     -- end
       --   },
       -- },
+      sorting = defaults.sorting
     })
 
     cmp.setup.cmdline(':', {
@@ -221,7 +240,7 @@ return {
     cmp.setup.cmdline('/', {
       sources = sources({
         { name = 'nvim_lsp_signature_help' },
-        { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
+        { name = 'buffer', keyword_pattern = [=[[^[:blank:]].*]=] },
       }),
       mapping = cmp.mapping.preset.cmdline({}),
     })

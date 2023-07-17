@@ -1,7 +1,7 @@
 return {
   {
     'utilyre/barbecue.nvim',
-  event = {'BufReadPost', 'BufNewFile'},
+    event = { 'BufReadPost', 'BufNewFile' },
     name = 'barbecue',
     version = '*',
     dependencies = {
@@ -15,7 +15,7 @@ return {
   },
   {
     'jay-babu/mason-null-ls.nvim',
-  event = {'BufReadPost', 'BufNewFile'},
+    event = { 'BufReadPost', 'BufNewFile' },
     dependencies = {
       'williamboman/mason.nvim',
       'jose-elias-alvarez/null-ls.nvim',
@@ -26,11 +26,12 @@ return {
       local mason_null_ls = require 'mason-null-ls'
       local handlers = {
         function(source_name, methods)
-          require 'mason-null-ls.automatic_setup'(source_name, methods)
+          require 'mason-null-ls.automatic_setup' (source_name, methods)
         end,
         prettierd = function()
           null_ls.register(null_ls.builtins.formatting.prettierd.with({
-            disabled_filetypes = {'markdown' },
+            disabled_filetypes = { 'markdown' },
+            extra_filetypes = { 'svelte' },
           }))
         end,
         -- fixjson = function()
@@ -65,7 +66,7 @@ return {
       null_ls.setup({
         sources = my_sources,
         on_attach = function(_, bufnr)
-          vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = "Format Buffer(null_ls)" })
+          vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format Buffer(null_ls)' })
           vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = '[D]iagnostic [N]ext', buffer = bufnr })
           vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = '[D]iagnostic [P]rev', buffer = bufnr })
           print 'LSP attached (null-ls)'

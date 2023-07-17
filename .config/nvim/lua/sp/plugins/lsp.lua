@@ -43,16 +43,19 @@ return {
     end
 
     local function on_attach(client, bufnr) -- {{{
+      local ok_fzf,fzf = pcall(require, 'fzf-lua')
       map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Goto Definition' })
       map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Goto Declaration' })
       map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
       map('i', '<C-h>', vim.lsp.buf.signature_help, { buffer = bufnr })
       map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Goto Implementation' })
       map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Organize Imports' })
-      map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
+      if not ok_fzf then
+        map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
+        map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols' })
+        map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
+      end
       map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Type Definition' })
-      map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols' })
-      map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
       map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
       map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
       map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
@@ -280,6 +283,11 @@ return {
         local runtime_path = vim.split(package.path, ';')
         table.insert(runtime_path, 'lua/?.lua')
         table.insert(runtime_path, 'lua/?/init.lua')
+        table.insert(runtime_path, '/usr/share/awesome/lib/?.lua')
+        table.insert(runtime_path, '/usr/share/awesome/lib/?/?.lua')
+        table.insert(runtime_path, '/usr/share/awesome/themes/?/?.lua')
+        -- table.insert(runtime_path, '/usr/share/awesome/lib/awful/?.lua')
+        -- table.insert(runtime_path, '/usr/share/awesome/lib/wibox/?.lua')
         opt.settings = {
           Lua = {
             diagnostics = {

@@ -263,14 +263,16 @@ awful.screen.connect_for_each_screen(function(s)
   -- Add widgets to the wibox
   s.mywibox:setup({
     layout = wibox.layout.align.horizontal,
-    { -- Left widgets
+    {
+      -- Left widgets
       layout = wibox.layout.fixed.horizontal,
       mylauncher,
       s.mytaglist,
       s.mypromptbox,
     },
     s.mytasklist, -- Middle widget
-    { -- Right widgets
+    {
+      -- Right widgets
       layout = wibox.layout.fixed.horizontal,
       -- spr,
       -- awful.widget.watch('bash -c "dwm_bat"', 10),
@@ -431,31 +433,44 @@ local resize_window = function(direction)
     resize_window_tiled(direction)
   end
 end
+
+local launch_calculator = function()
+  local cmd = 'qalculate-gtk ||gnome-calculator || galculator'
+  awful.spawn.easy_async_with_shell(cmd, function(_, err)
+    if err ~= '' or err ~= nil then
+      naughty.notify({
+        preset = naughty.config.presets.critical,
+        title = 'Calculator Not Found',
+        text = 'Qalculate-gtk, Gnome-calculator or Galculator is not installed in the system ' .. err,
+      })
+    end
+  end)
+end
 -- }}}
 
 globalkeys = gears.table.join(
 
--- Tag browsing {{{
+  -- Tag browsing {{{
 
--- This is for testing something or anything
--- awful.key({ modkey,           }, "backslash",
---         function ()
--- local c = client.focus
--- local layout_name = awful.layout.get().name
--- naughty.notify({ preset = naughty.config.presets.normal,
---                 title = "Current Layout",
---                 timeout = 2,
---                 text = tostring(c.floating) })
--- end, {description = "Testing purpose", group = "tag"}),
+  -- This is for testing something or anything
+  -- awful.key({ modkey,           }, "backslash",
+  --         function ()
+  -- local c = client.focus
+  -- local layout_name = awful.layout.get().name
+  -- naughty.notify({ preset = naughty.config.presets.normal,
+  --                 title = "Current Layout",
+  --                 timeout = 2,
+  --                 text = tostring(c.floating) })
+  -- end, {description = "Testing purpose", group = "tag"}),
 
   awful.key({ modkey }, '[', awful.tag.viewprev, { description = 'view previous', group = 'tag' }),
   awful.key({ modkey }, ']', awful.tag.viewnext, { description = 'view next', group = 'tag' }),
-  awful.key({ modkey, 'Shift' }, '[', function()
-    move_to_tag(-1)
-  end, { description = 'move the focused client to previous tag', group = 'tag' }),
-  awful.key({ modkey, 'Shift' }, ']', function()
-    move_to_tag(1)
-  end, { description = 'move the focused client to next tag', group = 'tag' }),
+  -- awful.key({ modkey, 'Shift' }, '[', function()
+  -- 	move_to_tag( -1)
+  -- end, { description = 'move the focused client to previous tag', group = 'tag' }),
+  -- awful.key({ modkey, 'Shift' }, ']', function()
+  -- 	move_to_tag(1)
+  -- end, { description = 'move the focused client to next tag', group = 'tag' }),
   awful.key({ modkey }, 'Tab', function()
     awful.tag.history.restore()
     if client.focus then
@@ -585,16 +600,8 @@ globalkeys = gears.table.join(
     awful.spawn(browser)
   end, { description = 'open a ' .. browser, group = 'launcher' }),
   awful.key({ modkey, 'Shift' }, 'w', function()
-    local cmd = browser ~= 'firefox' and 'firefox' or 'brave || brave-browser || chromium'
-    awful.spawn.easy_async_with_shell(cmd, function(_, err)
-      -- if err ~= '' or err ~= nil then
-      --   naughty.notify({
-      --     preset = naughty.config.presets.critical,
-      --     title = 'Browser Not Found',
-      --     text = 'Brave or Chromium is not installed in the system ' .. err,
-      --   })
-      -- end
-    end)
+    -- local cmd = browser ~= 'firefox' and 'firefox' or 'brave || brave-browser || chromium'
+    awful.spawn 'firefox'
   end, { description = 'open a firefox', group = 'launcher' }),
   awful.key({ modkey }, 'e', function()
     awful.spawn 'thunar'
@@ -626,18 +633,7 @@ globalkeys = gears.table.join(
   awful.key({ modkey }, 'v', function()
     awful.spawn 'virt-manager'
   end, { description = 'Launch VirtualBox', group = 'launcher' }),
-  awful.key({ modkey }, 'g', function()
-    local cmd = 'qalculate-gtk ||gnome-calculator || galculator'
-    awful.spawn.easy_async_with_shell(cmd, function(_, err)
-      if err ~= '' or err ~= nil then
-        naughty.notify({
-          preset = naughty.config.presets.critical,
-          title = 'Calculator Not Found',
-          text = 'Qalculate-gtk, Gnome-calculator or Galculator is not installed in the system ' .. err,
-        })
-      end
-    end)
-  end, { description = 'Launch Calculator', group = 'launcher' }),
+  awful.key({ modkey }, 'g', launch_calculator, { description = 'Launch Calculator', group = 'launcher' }),
   --- }}}
 
   -- Custom Scripts {{{
@@ -652,7 +648,6 @@ globalkeys = gears.table.join(
   awful.key({ modkey, 'Control' }, 's', function()
     awful.spawn.with_shell 'logout_prompt'
   end, { description = 'Ask For Logout(ie shutdown,reboot or logout)', group = 'scripts' }),
-
   awful.key({ modkey, altkey }, 'c', function()
     awful.spawn 'open-rcs'
   end, { description = 'Edit RC files', group = 'scripts' }),
@@ -693,14 +688,12 @@ globalkeys = gears.table.join(
 
   -- Standard program {{{
   awful.key({ modkey }, 'F1', hotkeys_popup.show_help, { description = 'show help', group = 'awesome' }),
-
   awful.key({ modkey, 'Control' }, 'r', awesome.restart, { description = 'reload awesome', group = 'awesome' }),
   awful.key({ modkey, 'Control' }, 'x', awesome.quit, { description = 'quit awesome', group = 'awesome' }),
   awful.key({ modkey, 'Control' }, 'l', function()
     awful.spawn(
       string.format(
-        'i3lock -k --time-pos "100:1000" --greeter-text="Welcome Back" --wrong-text="Incorrect password!" -i %s/Pictures/Wallpapers/canvas.jpg'
-        ,
+        'i3lock -k --time-pos "100:1000" --greeter-text="Welcome Back" --wrong-text="Incorrect password!" -i %s/Pictures/Wallpapers/canvas.jpg',
         os.getenv 'HOME'
       )
     )
@@ -766,16 +759,22 @@ globalkeys = gears.table.join(
     -- beautiful.volume.update()
   end, { description = 'toggle mute', group = 'hotkeys' })
 
----  }}}
+  ---  }}}
 )
 
 -- Handle Windows(Like toggle floating,move to another tag,etc) {{{
 clientkeys = gears.table.join(
+  awful.key({ modkey, 'Shift' }, '[', function(c)
+    c:move_to_tag(awful.tag.viewprev())
+  end, { description = 'move the focused client to previous tag', group = 'tag' }),
+  awful.key({ modkey, 'Shift' }, ']', function(c)
+    c:move_to_tag(awful.tag.viewnext())
+  end, { description = 'move the focused client to next tag', group = 'tag' }),
   awful.key({ modkey }, 'f', function(c)
     c.fullscreen = not c.fullscreen
     local cur_tag = client.focus and client.focus.first_tag or nil
     if not cur_tag then
-      naughty.notify({
+      return naughty.notify({
         preset = naughty.config.presets.critical,
         title = 'Not Found',
         text = 'Current tag returned nil',
@@ -815,7 +814,6 @@ clientkeys = gears.table.join(
     c.maximized = not c.maximized
     c:raise()
   end, { description = 'maximize focused window', group = 'client' }),
-
   awful.key({ modkey, 'Control' }, 'Return', function(c)
     c:swap(awful.client.getmaster())
   end, { description = 'move to master', group = 'client' }),
@@ -826,7 +824,6 @@ clientkeys = gears.table.join(
       c:relative_move(0, -move, 0, 0)
     end
   end, { description = 'Move Floating Window towards up', group = 'client' }),
-
   awful.key({ modkey, 'Control' }, 'Down', function(c)
     local move = 20
     if c.floating then
@@ -961,7 +958,6 @@ awful.rules.rules = {
         'Connman-gtk',
         'QuakeDD',
       },
-
       -- Note that the name property shown in xprop might be set slightly after creation of the client
       -- and the name shown there might not match defined rules here.
       name = {
@@ -1047,20 +1043,24 @@ client.connect_signal('request::titlebars', function(c)
   )
 
   awful.titlebar(c):setup({
-    { -- Left
+    {
+      -- Left
       awful.titlebar.widget.iconwidget(c),
       buttons = buttons,
       layout = wibox.layout.fixed.horizontal,
     },
-    { -- Middle
-      { -- Title
+    {
+      -- Middle
+      {
+        -- Title
         align = 'center',
         widget = awful.titlebar.widget.titlewidget(c),
       },
       buttons = buttons,
       layout = wibox.layout.flex.horizontal,
     },
-    { -- Right
+    {
+      -- Right
       awful.titlebar.widget.floatingbutton(c),
       awful.titlebar.widget.stickybutton(c),
       awful.titlebar.widget.ontopbutton(c),
@@ -1129,3 +1129,9 @@ end)
 client.connect_signal('manage', dynamic_title)
 client.connect_signal('tagged', dynamic_title)
 -- }}}
+--[[
+write me awesomewm widget for volume. Requirements:
+ - Only update on keypress(like XF86AudioRaiseVolume,XF86AudioLowerVolume,XF86AudioMute)
+- Ability to toggle mute.
+- Show different icons for volume levels and a separate icon for mute with the volume level itself.
+--]]

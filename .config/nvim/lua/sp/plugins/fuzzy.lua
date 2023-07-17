@@ -56,6 +56,27 @@ return {
       desc = '[F]ind [n]eovim config',
     },
     { '<leader>fd', '<cmd>FzfLua files cwd=~/Documents/dotfiles<cr>', desc = '[F]ind [d]otfiles' },
+    {
+      'gr',
+      function()
+        require('fzf-lua').lsp_references(opts)
+      end,
+      desc = '[G]oto [R]eferences(FzfLua)',
+    },
+    {
+      'gw',
+      function()
+        require('fzf-lua').lsp_document_symbols(opts)
+      end,
+      desc = 'Documents Symbols (FzfLua)',
+    },
+    {
+      'gW',
+      function()
+        require('fzf-lua').lsp_workspace_symbols(opts)
+      end,
+      desc = 'Workspace Symbols (FzfLua)',
+    },
   },
   config = function()
     local fzf = require 'fzf-lua'
@@ -63,6 +84,7 @@ return {
     local m_keys = {
       ['alt-enter'] = actions.file_tabedit,
       ['ctrl-x'] = actions.file_split,
+      ['ctrl-q'] = actions.file_edit_or_qf,
     }
     local map = function(mode, lhs, rhs, mopts)
       local options = { noremap = true, silent = true }
@@ -109,8 +131,16 @@ return {
         },
         bcommits = { actions = m_keys },
       },
-      buffers = { actions = m_keys },
+      buffers = {
+        actions = vim.tbl_extend('force', m_keys, {
+          ['ctrl-d'] = actions.buf_delete,
+          ['ctrl-x'] = actions.buf_vsplit,
+          ['ctrl-q'] = actions.buf_edit_or_qf,
+        }),
+      },
       blines = { actions = m_keys },
+      lines = { actions = m_keys },
+      grep = { actions = m_keys },
     })
   end,
 }

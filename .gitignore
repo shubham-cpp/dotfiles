@@ -43,3 +43,4 @@ npm
 .config/xmonad/dbus-git
 .config/xmonad/xmonad-contrib-git
 .config/xmonad/xmonad-git
+.config/vifm/colors

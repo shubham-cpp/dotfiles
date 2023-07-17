@@ -273,6 +273,7 @@ end
 vim.filetype.add({
   extension = {
     fish = 'fish',
+    rasi = 'rasi',
   },
   filename = {
     vimfrc = 'vim',

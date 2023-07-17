@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from libqtile import hook, layout
-from libqtile.config import Click, Drag, Match
+from libqtile.config import Click, Drag, Match, Rule
 from libqtile.layout.base import Layout
 from libqtile.layout.floating import Floating
 from libqtile.layout.max import Max
@@ -9,12 +9,12 @@ from libqtile.layout.spiral import Spiral
 from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
-from modules.bar import (extension_defaults, layout_theme, screens,
-                         widget_defaults)
+from modules.bar import extension_defaults, layout_theme, screens, widget_defaults
 from modules.colors import backgroundColor, colors, foregroundColor
 from modules.groups import groups
 from modules.keys import browser, keys, mod, terminal
 from modules.lazy_functions import sticky_windows
+from libqtile.log_utils import logger
 
 layouts: List[Layout] = [
     MonadTall(
@@ -24,11 +24,9 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(
-        change_size=10, single_border_width=0, single_margin=0, **layout_theme
-    ),
+    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
     Max(**layout_theme),
-    Floating(border_focus="#d75f5f"),
+    Floating(),
     Spiral(**layout_theme),
 ]
 
@@ -51,11 +49,17 @@ mouse: List[Union[Drag, Click]] = [
 ]
 
 dgroups_key_binder = None
-dgroups_app_rules = []  # type: list
+dgroups_app_rules = [
+    # Rule(Match(wm_class="firefox"), group="2"),
+    # Rule(Match(wm_class="Brave-browser"), group=groups[1].name),
+]  # type: list
 follow_mouse_focus = True
 bring_front_click = True
 cursor_warp = False
 floating_layout = Floating(
+    border_normal=layout_theme["border_normal"],
+    border_focus=layout_theme["border_focus"],
+    border_width=layout_theme["border_width"],
     float_rules=[
         # Run the utility of `xprop` to see the wm class and name of an X client.
         *Floating.default_float_rules,
@@ -77,7 +81,7 @@ floating_layout = Floating(
         Match(wm_class="Gnome-disks"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="Virt-manager"),
-    ]
+    ],
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
@@ -106,7 +110,7 @@ def assign_app_group(client):
         "Brave-browser",
         "vieb",
     ]:
-        client.togroup(groups[1].name, switch_group=True)
+        client.togroup("2", switch_group=True)
     elif wm_class in [
         "Vlc",
         "vlc",
@@ -117,7 +121,7 @@ def assign_app_group(client):
         "io.github.celluloid_player.Celluloid",
         "Io.github.celluloid_player.Celluloid",
     ]:
-        client.togroup(groups[3].name, switch_group=True)
+        client.togroup("4", switch_group=True)
     elif wm_class in [
         "VirtualBox Manager",
         "VirtualBox Machine",
@@ -126,9 +130,10 @@ def assign_app_group(client):
         "virtualbox machine",
         "vmplayer",
     ]:
-        client.togroup(groups[5].name)
+        client.togroup("5", switch_group=True)
     elif wm_class in ["Steam", "Lutris", "lutris", "steam"]:
-        client.togroup(groups[2].name, switch_group=True)
+        client.togroup("3", switch_group=True)
+
 
 @hook.subscribe.setgroup
 def move_sticky_windows():
@@ -136,8 +141,8 @@ def move_sticky_windows():
         window.togroup()
     return
 
+
 @hook.subscribe.client_killed
 def remove_sticky_windows(window):
     if window in sticky_windows:
         sticky_windows.remove(window)
-

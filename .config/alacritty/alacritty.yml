@@ -1,5 +1,3 @@
-env:
-  TERM: xterm-256color
 window:
   # decorations: full
   opacity: 0.9
@@ -20,7 +18,7 @@ font:
   bold_italic:
     family: CaskaydiaCove Nerd Font
     style: Bold Italic
-  size: 11
+  size: 12
   # use_thin_strokes: false
 draw_bold_text_with_bright_colors: true
 schemes:
@@ -51,7 +49,7 @@ schemes:
       magenta: "#bb9af7"
       cyan: "#7dcfff"
       white: "#c0caf5"
-  gruvbox:
+  gruvbox: &gruvbox
     primary:
       # hard contrast:
       background: "0x1d2021"
@@ -77,9 +75,9 @@ schemes:
         magenta: "#d3869b"
         cyan: "#8ec07c"
         white: "#ebdbb2"
-  gruvboxMaterial:
+  gruvboxMaterial: &gruvboxMaterial
     primary:
-      background: "0x1d2021"
+      background: "0x1a1b26"
       foreground: "0xd4be98"
     normal:
       black: "0x32302f"
@@ -99,52 +97,37 @@ schemes:
       magenta: "0xd3869b"
       cyan: "0x89b482"
       white: "0xd4be98"
-  mcustom:
+  tokyoNight: &tokyoNight
     primary:
-      background: "#090e13"
-      foreground: "#fffacd"
-    cursor:
-      text: CellBackground
-      cursor: CellForeground
-    vi_mode_cursor:
-      text: CellBackground
-      cursor: CellForeground
-    selection:
-      text: CellBackground
-      background: CellForeground
-    search:
-      matches:
-        foreground: "#000000"
-        background: "#ffffff"
+      background: '#0f111a'
+      foreground: '0xc0caf5'
+
+  # Normal colors
     normal:
-      black: "#000000"
-      red: "#cc0403"
-      green: "#19cb00"
-      yellow: "#cecb00"
-      blue: "#0d73cc"
-      magenta: "#cb1ed1"
-      cyan: "#0dcdcd"
-      white: "#dddddd"
+      black:   '0x15161e'
+      red:     '0xf7768e'
+      green:   '0x9ece6a'
+      yellow:  '0xe0af68'
+      blue:    '0x7aa2f7'
+      magenta: '0xbb9af7'
+      cyan:    '0x7dcfff'
+      white:   '0xa9b1d6'
+
     # Bright colors
     bright:
-      black: "#767676"
-      red: "#f2201f"
-      green: "#23fd00"
-      yellow: "#fffd00"
-      blue: "#1a8fff"
-      magenta: "#fd28ff"
-      cyan: "#14ffff"
-      white: "#ffffff"
-    dim:
-      black: "#131415"
-      red: "#864343"
-      green: "#777c44"
-      yellow: "#9e824c"
-      blue: "#556a7d"
-      magenta: "#75617b"
-      cyan: "#5b7d78"
-      white: "#828482"
-colors: *SpaceDuck
+      black:   '0x414868'
+      red:     '0xf7768e'
+      green:   '0x9ece6a'
+      yellow:  '0xe0af68'
+      blue:    '0x7aa2f7'
+      magenta: '0xbb9af7'
+      cyan:    '0x7dcfff'
+      white:   '0xc0caf5'
+
+    indexed_colors:
+      - { index: 16, color: '0xff9e64' }
+      - { index: 17, color: '0xdb4b4b' }
+colors: *tokyoNight
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
   # When set to `true`, selected text will be copied to the primary clipboard.

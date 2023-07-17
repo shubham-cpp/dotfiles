@@ -20,15 +20,33 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 ### End of Zinit's installer chunk
-
-# Load powerlevel10k theme
-# zinit ice depth"1" # git clone depth
-# zinit light romkatv/powerlevel10k
-# eval "$(starship init zsh)"
+# Plugin history-search-multi-word loaded with investigating.
+zinit load zdharma-continuum/history-search-multi-word
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+# Two regular plugins loaded without investigating.
+zinit light zsh-users/zsh-autosuggestions
+zinit light zdharma-continuum/fast-syntax-highlighting
+zinit light zsh-users/zsh-history-substring-search
+# zinit light skywind3000/z.lua
+zinit light lukechilds/zsh-better-npm-completion
+zinit light buonomo/yarn-completion
+# Load starship theme
+# line 1: `starship` binary as command, from github release
+# line 2: starship setup at clone(create init.zsh, completion)
+# line 3: pull behavior same as clone, source init.zsh
 zinit ice as"command" from"gh-r" \
           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
+zinit ice as"command" from"gh-r" mv"rtx-v* -> rtx" \
+          atclone"./rtx activate zsh > rtx_init.sh" \
+          atpull"%atclone" src"rtx_init.sh"
+zinit light jdxcode/rtx
+zinit ice as"command" from"gh-r" \
+          atclone"./zoxide init zsh > zo_init.sh" \
+          atpull"%atclone" src"zo_init.sh"
+zinit light ajeetdsouza/zoxide
+
 setopt correctall complete_in_word auto_param_keys auto_param_slash
 setopt extendedglob
 setopt autolist
@@ -44,33 +62,14 @@ setopt local_options
 
 fpath=(~/.local/share/zsh/site-functions $fpath)
 
-# zstyle ':autocomplete:*' default-context ''
-# zstyle ':autocomplete:*' min-delay 0.0  # number of seconds (float)
-# zstyle ':autocomplete:*' min-input 0  # number of characters (integer)
-# zstyle ':autocomplete:tab:*' fzf-completion no
-# # When completions don't fit on screen, show up to this many lines:
-# zstyle ':autocomplete:*' list-lines 16  # (integer)
-# # If any of the following are shown at the same time, list them in the order given:
-# zstyle ':completion:*:' group-order \
-#   expansions history-words options \
-#   aliases functions builtins reserved-words \
-#   executables local-directories directories suffix-aliases
-# # NOTE: This is NOT the order in which they are generated.
-
-# # Zstyles
-# zstyle ':autocomplete:tab:*' insert-unambiguous no
-# zstyle ':autocomplete:tab:*' widget-style complete-word
-# # Add a space after these completions:
-# zstyle ':autocomplete:*' add-space executables aliases functions builtins reserved-words commands
-
-zstyle ':completion:*:*:*:*:*' menu select
+# zstyle ':completion:*:*:*:*:*' menu select
 # This is my old
-# zstyle ':completion:*' menu yes select
+zstyle ':completion:*' menu yes select
 zstyle ':completion:*' verbose yes
 # zstyle ':completion:*:*:kill:*:*' verbose no
 zstyle ':completion:*:*:kill:*:jobs' verbose no
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive completion
+# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'  # partial words completion
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' rehash true
 zstyle ':autocomplete:*' add-space \
@@ -92,65 +91,6 @@ HISTDUP=erase
 
 WORDCHARS=${WORDCHARS//\/[&.;]}
 
-# Download Znap, if it's not there yet.
-# [[ -f $HOME/.cache/zsh-znap/znap.zsh ]] ||
-#     git clone --depth 1 -- \
-#         https://github.com/marlonrichert/zsh-snap.git $HOME/.cache/zsh-znap
-
-# source $HOME/.cache/zsh-znap/znap.zsh  # Start Znap
-
-# # znap eval starship 'starship init zsh --print-full-init'
-# znap prompt "romkatv/powerlevel10k"
-
-# # `znap source` automatically downloads and starts your plugins.
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-# znap source zsh-users/zsh-autosuggestions
-# znap source zsh-users/zsh-history-substring-search
-# znap source zdharma-continuum/fast-syntax-highlighting
-# znap source zsh-users/zsh-completions zsh-completions.plugin.zsh
-# znap source lukechilds/zsh-better-npm-completion
-# znap source buonomo/yarn-completion
-# znap source skywind3000/z.lua z.lua.plugin.zsh
-# # znap source jeffreytse/zsh-vi-mode
-
-# znap eval zlua 'luajit $HOME/Downloads/GitClones/z.lua/z.lua --init zsh enhanced once fzf'
-# bindings
-
-# zle -N edit-command-line
-# bindkey -M viins "^X^E" edit-command-line
-# bindkey -M viins "^y" yank
-# # Alt+u to undo
-# bindkey -M viins '^[u' undo
-
-# bindkey -M viins '^H' backward-delete-word
-# bindkey -M viins "^w" backward-kill-word
-# bindkey -M viins "\e\[3\;5~" kill-word
-# bindkey -M viins "^[[1;5D" backward-word
-# bindkey -M viins "^[[1;5C" forward-word
-
-# bindkey -M viins '^p' history-beginning-search-backward
-# bindkey -M viins '^n' history-beginning-search-forward
-# # bind UP and DOWN arrow keys to history substring search
-# zmodload zsh/terminfo
-# bindkey -M viins -M viins '^[[A' history-substring-search-up
-# bindkey -M viins -M viins '^[[B' history-substring-search-down
-# # Up down in debian
-# bindkey -M viins -M viins '^[OA' history-substring-search-up
-# bindkey -M viins -M viins '^[OB' history-substring-search-down
-# bindkey -M viins -M viins '^[k' autosuggest-accept
-# bindkey -M viins -M viins '^[j' history-substring-search-up
-
-zinit light zsh-users/zsh-autosuggestions
-zinit light zsh-users/zsh-completions
-zinit light zdharma-continuum/fast-syntax-highlighting
-zinit light zsh-users/zsh-history-substring-search
-zinit light lukechilds/zsh-better-npm-completion
-zinit light buonomo/yarn-completion
-zinit light skywind3000/z.lua
-zinit light mroth/evalcache
-
 autoload -Uz compinit
 autoload -Uz colors edit-command-line
 autoload -Uz bashcompinit && bashcompinit
@@ -158,6 +98,12 @@ zmodload -i zsh/complist
 
 compinit -d "$HOME/.cache/zcompdump"
 colors
+
 source "$ZDOTDIR"/alias.zsh
 source "$ZDOTDIR"/bindings.zsh
 source "$ZDOTDIR"/mfunctions.zsh
+
+# eval "$(starship init zsh)"
+
+# bun completions
+# [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
