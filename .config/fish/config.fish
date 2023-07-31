@@ -2,6 +2,7 @@ set fish_greeting # Suppresses fish's intro message
 fish_add_path -aP $HOME/.local/bin $HOME/.local/bin/myscripts
 fish_add_path -aP $HOME/.local/share/npm/bin $HOME/.local/share/golib/bin $HOME/.local/share/luarocks/bin
 fish_add_path -aP $HOME/.config/emacs/bin $HOME/Programming/Flutter/flutter/bin
+fish_add_path -aP $HOME/.local/share/zinit/plugins/ajeetdsouza---zoxide/
 
 set -x EDITOR nvim
 
@@ -16,7 +17,7 @@ set fish_prompt_pwd_full_dirs 2
 
 set -U SXHKD_SHELL /usr/bin/sh
 starship init fish | source
-~/.local/share/zinit/plugins/ajeetdsouza---zoxide/zoxide init fish | source
+zoxide init fish | source
 fnm env --use-on-cd | source
 # Keybindings
 # Refer: https://fishshell.com/docs/3.2/cmds/bind.html
