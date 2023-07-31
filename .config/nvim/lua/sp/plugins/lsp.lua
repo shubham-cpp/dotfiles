@@ -41,9 +41,10 @@ return {
       vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
       vim.lsp.buf.code_action({ context = { only = { 'source.removeUnused' } }, apply = true })
     end
+    local au_lsp = vim.api.nvim_create_augroup('sp_lsp', { clear = true })
 
     local function on_attach(client, bufnr) -- {{{
-      local ok_fzf,fzf = pcall(require, 'fzf-lua')
+      local ok_fzf, _ = pcall(require, 'fzf-lua')
       map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Goto Definition' })
       map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Goto Declaration' })
       map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
@@ -70,6 +71,20 @@ return {
       map('n', ']e', function()
         vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
       end, { buffer = bufnr, desc = 'Goto Next Error' })
+      if client.name == 'svelte' then
+        vim.api.nvim_create_autocmd('BufWritePost', {
+          pattern = { '*.js', '*.ts' },
+          group = au_lsp,
+          callback = function(ctx)
+            client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.file })
+          end,
+        })
+      end
+      -- vim.api.nvim_create_autocmd({ 'BufWrite' }, {
+      --   pattern = { '+page.server.ts', '+page.ts', '+layout.server.ts', '+layout.ts' },
+      --   group = au_lsp,
+      --   command = 'LspRestart svelte',
+      -- })
       if client.server_capabilities.documentHighlightProvider then
         vim.api.nvim_exec(
           [[
@@ -216,12 +231,25 @@ return {
         opt.settings = {
           pylsp = {
             plugins = {
+              -- formatter options
+              black = { enabled = true },
+              autopep8 = { enabled = false },
+              yapf = { enabled = false },
               flake8 = { enabled = true },
-              pycodestyle = { enabled = true },
-              rope_autoimport = { enabled = true, memory = true },
-              rope_completion = { enabled = true },
+              pycodestyle = { enabled = false },
+              -- type checker
+              pylsp_mypy = { enabled = true },
+              -- auto-completion options
+              jedi_completion = { fuzzy = true },
+              -- import sorting
+              pyls_isort = { enabled = true },
+              -- rope_autoimport = { enabled = true, memory = true },
+              -- rope_completion = { enabled = true },
             },
           },
+        }
+        opt.flags = {
+          debounce_text_changes = 200,
         }
         lspconfig.pylsp.setup(opt)
       end,
@@ -336,8 +364,8 @@ return {
           go_to_source_definition = { fallback = true },
           server = {
             -- cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
-            filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-            root_dir = util.root_pattern('package.json', 'tsconfig.json'),
+            -- filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+            root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
             on_attach = on_attach,
             capabilities = cmp_capabilities,
             settings = {
@@ -425,9 +453,67 @@ return {
         opt.on_new_config = function(new_config, new_root_dir)
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
         end
-        opt.filetypes = { 'typescript', 'javascript', 'vue' }
+        opt.settings = {
+          vue = {
+            inlayHints = {
+              inlineHandlerLeading = true,
+              missingProps = true,
+              optionsWrapper = true,
+            },
+            updateImportsOnFileMove = { enabled = true },
+          },
+        }
+        -- opt.filetypes = { 'typescript', 'javascript', 'vue' }
         lspconfig.volar.setup(opt)
       end,
+      svelte = function()
+        local opt = vim.deepcopy(opts)
+        -- opt.cmd = { require('sp.util').bun_path() .. '/svelteserver', '--stdio' }
+        opt.settings = {
+          svelte = {
+            ['enable-ts-plugin'] = true,
+            plugin = { svelte = { defaultScriptLanguage = 'typescript' } },
+          },
+        }
+        lspconfig.svelte.setup(opt)
+      end,
     })
+    lspconfig.nim_langserver.setup({
+      on_attach = on_attach,
+      capabilities = cmp_capabilities,
+    })
+
+    lspconfig.pylsp.setup({
+      capabilities = cmp_capabilities,
+      on_attach = on_attach,
+      settings = {
+        pylsp = {
+          plugins = {
+            -- formatter options
+            black = { enabled = true },
+            autopep8 = { enabled = false },
+            yapf = { enabled = false },
+            flake8 = { enabled = true },
+            pycodestyle = { enabled = false },
+            -- type checker
+            pylsp_mypy = { enabled = true },
+            -- auto-completion options
+            jedi_completion = { fuzzy = true },
+            -- import sorting
+            pyls_isort = { enabled = true },
+            -- rope_autoimport = { enabled = true, memory = true },
+            -- rope_completion = { enabled = true },
+          },
+        },
+      },
+      flags = {
+        debounce_text_changes = 200,
+      },
+    })
+
+    -- lspconfig.nimls.setup({
+    --   on_attach = on_attach,
+    --   capabilities = cmp_capabilities,
+    -- })
   end,
 }

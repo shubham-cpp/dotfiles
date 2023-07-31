@@ -49,6 +49,7 @@ return {
           l = { util.close_left, 'Close Left' },
           r = { util.close_right, 'Close Right' },
         },
+        D = {"<cmd>bd<cr>", 'Delete'},
         c = {
           function()
             util.close_all(true, true)

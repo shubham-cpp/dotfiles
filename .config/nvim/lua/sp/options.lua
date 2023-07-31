@@ -27,13 +27,17 @@ o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
 o.formatoptions = 'jcroqlnt'
-o.grepformat = '%f:%l:%c:%m'
 if vim.fn.has 'rg' == 1 then
+  o.grepformat = '%f:%l:%c:%m'
   o.grepprg = 'rg --vimgrep --no-heading --smart-case'
 end
 o.timeoutlen = 300
+o.swapfile = true
 o.undofile = true
 o.undolevels = 10000
+o.undodir = vim.fn.stdpath 'state' .. '/undodir//'
+o.directory = vim.fn.stdpath 'state' .. '/swap//'
+o.backupdir = vim.fn.stdpath 'state' .. '/backup//'
 o.updatetime = 200
 o.wildmode = 'longest:full,full'
 o.wildignorecase = true

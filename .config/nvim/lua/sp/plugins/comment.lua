@@ -35,5 +35,6 @@ return {
       { '<leader>nf', '<cmd>Neogen file<cr>', desc="File" },
       { '<leader>nc', '<cmd>Neogen class<cr>',desc="Class" },
     },
+    config = true,
   },
 }

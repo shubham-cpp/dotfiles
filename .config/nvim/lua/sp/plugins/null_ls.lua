@@ -59,6 +59,7 @@ return {
         null_ls.builtins.diagnostics.mypy,
         null_ls.builtins.diagnostics.fish,
         null_ls.builtins.formatting.fish_indent,
+        null_ls.builtins.formatting.nimpretty,
         null_ls.builtins.completion.spell.with({
           filetypes = { 'markdown', 'html' },
         }),

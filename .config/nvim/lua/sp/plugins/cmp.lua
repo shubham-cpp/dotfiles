@@ -14,6 +14,7 @@ return {
     'onsails/lspkind.nvim',
     {
       'Exafunction/codeium.vim',
+      event = "InsertEnter",
       init = function()
         vim.g.codeium_disable_bindings = 1
       end,
