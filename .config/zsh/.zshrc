@@ -62,9 +62,9 @@ setopt local_options
 
 fpath=(~/.local/share/zsh/site-functions $fpath)
 
-# zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*:*:*:*:*' menu select
 # This is my old
-zstyle ':completion:*' menu yes select
+# zstyle ':completion:*' menu yes
 zstyle ':completion:*' verbose yes
 # zstyle ':completion:*:*:kill:*:*' verbose no
 zstyle ':completion:*:*:kill:*:jobs' verbose no
