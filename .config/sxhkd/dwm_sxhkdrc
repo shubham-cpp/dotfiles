@@ -14,12 +14,13 @@ super + Escape
 super +{_,shift + } e
     {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
 
+# {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
-    {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
+    { $BROWSER || flatpak run com.brave.Browser || firefox, flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium || firefox}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
-super + {shift+d,r,v,y,p}
+super + {d,r,v,y,p}
     {rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 
 super + alt + {c,g}

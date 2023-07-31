@@ -120,7 +120,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     /* Programs */
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = dmenucmd } },
 	// { MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("rofi -show run") },
 	{ MODKEY,                       XK_Return, spawn,          SHCMD("$TERMINAL || xterm") },
 	// { MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("kitty") },
