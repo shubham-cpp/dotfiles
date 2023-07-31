@@ -30,6 +30,8 @@ vim.api.nvim_set_keymap('n', 'j', "v:count ? 'j' : 'gj'", { noremap = true, expr
 vim.api.nvim_set_keymap('n', 'k', "v:count ? 'k' : 'gk'", { noremap = true, expr = true })
 
 if vim.g.vscode then
+  map({ 'n', 'o', 'x' }, 'gc', '<Plug>VSCodeCommentary', { noremap = false, silent = false })
+  map('n', 'gcc', '<Plug>VSCodeCommentary', { noremap = false, silent = false })
   map('n', 'j', "<Cmd>call VSCodeNotify('cursorDown')<cr>")
   map('n', 'k', "<Cmd>call VSCodeNotify('cursorUp')<cr>")
   map('n', ',w', "<Cmd>call VSCodeNotify('workbench.action.files.save')<cr>")
@@ -57,8 +59,15 @@ if vim.g.vscode then
   map('n', '<leader>o', "<Cmd>call VSCodeNotify('workbench.action.openRecent')<cr>")
   map('', 'za', "<Cmd>call VSCodeNotify('editor.toggleFold')<CR>")
   map('', 'zC', "<Cmd>call VSCodeNotify('editor.foldAll')<CR>")
+  map('', 'zM', "<Cmd>call VSCodeNotify('editor.foldAll')<CR>")
+  map('', 'zm', "<Cmd>call VSCodeNotify('editor.unfoldAll')<CR>")
   map('', 'zO', "<Cmd>call VSCodeNotify('editor.unfoldAll')<CR>")
   map('', 'zp', "<Cmd>call VSCodeNotify('editor.gotoParentFold')<CR>")
+
+  map('n', 'g0', "<Cmd>call VSCodeNotify('cursorMove', { 'to': 'wrappedLineFirstNonWhitespaceCharacter' })<cr>")
+  map('n', '<leader>?', "<cmd>call VSCodeNotify('workbench.action.findInFiles', { 'query': expand('<cword>')})<cr>")
+  -- nnoremap ? <Cmd>call VSCodeNotify('workbench.action.findInFiles', { 'query': expand('<cword>')})<CR>
+  -- map('n','g$',)
 else
   map('n', ',w', '<cmd>w!<cr>')
   map('n', ',W', '<Cmd>noautocmd w!<cr>')

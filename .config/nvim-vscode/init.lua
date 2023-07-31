@@ -25,10 +25,6 @@ local disabled_built_ins = {
   'matchit',
 }
 
-for _, plugin in pairs(disabled_built_ins) do
-  vim.g['loaded_' .. plugin] = 1
-end
-
 local xdg_data = os.getenv 'XDG_DATA_HOME' or os.getenv 'HOME' .. '/.local/share'
 local xdg_config = os.getenv 'XDG_CONFIG_HOME' or os.getenv 'HOME' .. '/.config'
 local xdg_cache = os.getenv 'XDG_CACHE_HOME' or os.getenv 'HOME' .. '/.cache'
@@ -77,89 +73,28 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup 'plugins'
-o.number = true
-o.relativenumber = true
-o.clipboard:append({ 'unnamedplus' })
-o.mouse = 'a'
-o.path:append({ '**' })
-o.splitbelow = true
-o.splitright = true
-o.fileignorecase = true
--- -- o.backupdir = vim.fn.stdpath 'cache' .. '/backups//'
--- -- o.backup = true
--- -- o.backupcopy = 'yes'
--- -- o.writebackup = true
--- -- o.swapfile = true
--- -- o.directory = vim.fn.stdpath 'cache' .. '/swaps//'
--- -- o.history = 500
--- -- o.cmdheight = 1
--- o.updatetime = 300
--- -- o.shortmess:append 'c'
--- -- o.signcolumn = 'yes'
--- o.iskeyword:append '-'
-o.wildignorecase = true
--- -- o.wildmode = 'list:lastused'
-o.wildignore:prepend({
-  '*.out,*.o,*.pyc,*~,*.class,*/.git/*,*/.hg/*,*/.svn/*,*/.DS_Store,*/venv/*,*/__pycache__/*,*.jpg,*.png,*.svg,*.jpeg,*.jpg',
-  '*.mp4',
-  '**/node_modules/*',
-  '**/build/*',
-  '**/coverage/*',
-  '*.mkv',
+require('options')
+require('lazy').setup('plugins',{
+  performance =  {
+    rtp = {
+      disabled_plugins = disabled_built_ins
+    }
+  }
 })
-o.ignorecase = true
-o.smartcase = true
--- -- o.tagcase = 'smart'
--- -- o.lazyredraw = true
--- -- o.showmatch = true
-o.whichwrap:append '<,>,[,]'
--- -- o.timeoutlen = 500
--- -- o.errorbells = false
--- -- o.visualbell = false
-o.scrolloff = 8
-o.expandtab = true
-o.shiftwidth = 4
-o.tabstop = 4
--- -- o.cursorline = true
--- -- o.wrap = true
--- -- o.breakindent = true
--- -- o.linebreak = true
--- -- o.showbreak = '>> '
--- -- o.numberwidth = 6
--- -- o.list = false
--- -- o.smartindent = true
--- -- o.showtabline = 2
--- -- o.showmode = false
-if vim.fn.has 'termguicolors' == 1 then
-  o.termguicolors = true
-end
--- -- o.tags:append({ './.git/tags' })
--- -- o.inccommand = 'nosplit'
--- -- o.undofile = true
--- -- o.laststatus = 3
-if vim.fn.executable 'rg' == 1 then
-  o.grepprg = 'rg --vimgrep --smart-case --hidden --follow'
-end
---
--- cmd.colorscheme 'everforest'
---
-cmd [[ command! Q :q! ]]
-cmd [[ cabbrev vf vert sf ]]
 -- map('n', 'j', 'gj', { noremap = false })
 -- map('n', 'k', 'gk', { noremap = false })
 -- map('i', ',', ',<C-g>u')
 -- map('i', '.', '.<C-g>u')
 -- map('i', '?', '?<C-g>u')
---
+
 -- map('n', '<M-->', ':exe "vertical resize -10"<CR>')
 -- map('n', '<M-=>', ':exe "vertical resize +10"<CR>')
+
+-- map('x', '<leader>y', '"+y')
+-- map('x', '<leader>p', '"+p')
 --
--- -- map('x', '<leader>y', '"+y')
--- -- map('x', '<leader>p', '"+p')
---
--- -- Plugin mappings
--- -- map('n', '<F7>', ':ColorizerToggle<cr>')
+-- Plugin mappings
+-- map('n', '<F7>', ':ColorizerToggle<cr>')
 --
 --
 -- if vim.g.vscode then

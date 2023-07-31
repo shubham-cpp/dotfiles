@@ -1,6 +1,6 @@
 local config = {
   'rmehri01/onenord.nvim',
-  enabled = not vim.g.vscode,
+  -- enabled = not vim.g.vscode,
   opts = {
     fade_nc = true,
     styles = {
