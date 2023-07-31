@@ -5,7 +5,7 @@
 
 PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
 PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
-PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/"
+PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/:$HOME/.nimble/bin"
 # Deduplicate entries in PATH
 PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 
