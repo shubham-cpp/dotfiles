@@ -71,17 +71,15 @@ return {
       vue = { 'html' },
     }
     local has_words_before = function()
+      unpack = unpack or table.unpack
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
+      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
     end
 
     local feedkey = function(key, mode)
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
     end
 
-    local t = function(str)
-      return vim.api.nvim_replace_termcodes(str, true, true, true)
-    end
     cmp.setup({
       snippet = {
         expand = function(args)
@@ -110,7 +108,8 @@ return {
             if cmp.visible() then
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             else
-              vim.api.nvim_feedkeys(t '<Down>', 'n', true)
+              -- vim.api.nvim_feedkeys(t '<Down>', 'n', true)
+              feedkey("<Down>", "n")
             end
           end,
           i = function(fallback)
@@ -122,11 +121,12 @@ return {
           end,
         }),
         ['<C-p>'] = cmp.mapping({
-          c = function()
+        c = function()
             if cmp.visible() then
               cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             else
-              vim.api.nvim_feedkeys(t '<Up>', 'n', true)
+              -- vim.api.nvim_feedkeys(t '<Up>', 'n', true)
+              feedkey("<Up>", "n")
             end
           end,
           i = function(fallback)
@@ -145,8 +145,8 @@ return {
         ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
-          elseif vim.fn['vsnip#available'](1) == 1 then
-            feedkey('<Plug>(vsnip-expand-or-jump)', '')
+          elseif vim.fn["vsnip#available"](1) == 1 then
+            feedkey("<Plug>(vsnip-expand-or-jump)", "")
           elseif has_words_before() then
             cmp.complete()
           else
@@ -156,26 +156,32 @@ return {
         ['<S-Tab>'] = cmp.mapping(function()
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-            feedkey('<Plug>(vsnip-jump-prev)', '')
+          elseif vim.fn["vsnip#jumpable"](-1) == 1 then
+            feedkey("<Plug>(vsnip-jump-prev)", "")
           end
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lua'},
-        { name = 'nvim_lsp'},
-        { name = 'nvim_lsp_signature_help'},
-        { name = 'vsnip'},
+        { name = 'nvim_lua' },
+        { name = 'nvim_lsp' },
+        { name = 'nvim_lsp_signature_help' },
+        { name = 'vsnip' },
         -- { name = 'buffer-lines' },
         -- { name = 'cmp_tabnine' },
       }, {
-        { name = 'path'},
+        { name = 'path' },
         {
           name = 'buffer',
           option = {
-            keyword_length = 2,
+            keyword_length = 3,
             get_bufnrs = function()
-              return vim.api.nvim_list_bufs()
+              local bufIsSmall = function(bufnr)
+                local max_filesize = 50 * 1024
+                local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                return ok and stats and stats.size < max_filesize
+              end
+
+              return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
             end,
           },
         },
@@ -222,7 +228,55 @@ return {
       --     -- end
       --   },
       -- },
-      sorting = defaults.sorting
+      -- sorting = defaults.sorting,
+      sorting = {
+        -- TODO: Would be cool to add stuff like "See variable names before method names" in rust, or something like that.
+        comparators = {
+          compare.offset,
+          compare.exact,
+          compare.score,
+          --[[
+cmp.config.compare.offset,
+			cmp.config.compare.exact,
+			cmp.config.compare.score,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.kind,
+          -- copied from cmp-under, but I don't think I need the plugin for this.
+          -- I might add some more of my own.
+          function(entry1, entry2)
+            local _, entry1_under = entry1.completion_item.label:find "^_+"
+            local _, entry2_under = entry2.completion_item.label:find "^_+"
+            entry1_under = entry1_under or 0
+            entry2_under = entry2_under or 0
+            if entry1_under > entry2_under then
+              return false
+            elseif entry1_under < entry2_under then
+              return true
+            end
+          end,
+--]]
+          -- copied from cmp-under, but I don't think I need the plugin for this.
+          -- I might add some more of my own.
+          function(entry1, entry2)
+            local _, entry1_under = entry1.completion_item.label:find "^_+"
+            local _, entry2_under = entry2.completion_item.label:find "^_+"
+            entry1_under = entry1_under or 0
+            entry2_under = entry2_under or 0
+            if entry1_under > entry2_under then
+              return false
+            elseif entry1_under < entry2_under then
+              return true
+            end
+          end,
+          compare.kind,
+          compare.sort_text,
+          compare.recently_used,
+        },
+      },
+      experimental = {
+        native_menu = false,
+        ghost_text = false,
+      },
     })
 
     cmp.setup.cmdline(':', {
@@ -235,15 +289,20 @@ return {
         },
         { name = 'path' },
       }),
-      mapping = cmp.mapping.preset.cmdline({}),
+      mapping = cmp.mapping.preset.cmdline(),
+      formatting = { fields = { "abbr" } },
+      window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },
     })
 
-    cmp.setup.cmdline('/', {
+    cmp.setup.cmdline({ '/', '?' }, {
       sources = sources({
-        { name = 'nvim_lsp_signature_help' },
-        { name = 'buffer', keyword_pattern = [=[[^[:blank:]].*]=] },
+        { name = "buffer" },
+        -- { name = 'nvim_lsp_signature_help' },
+        -- { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
       }),
-      mapping = cmp.mapping.preset.cmdline({}),
+      mapping = cmp.mapping.preset.cmdline(),
+      formatting = { fields = { "abbr" } },
+      window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },
     })
   end,
 }

@@ -15,20 +15,18 @@ return {
         return vim.fn.winwidth(0) > 80
       end,
       lsp_active = function()
-        return next(vim.lsp.get_active_clients()) ~= nil
+        return next(vim.lsp.buf_get_clients()) ~= nil
       end,
     }
     local function servers_attached()
       local msg = 'None'
-      local clients = vim.lsp.buf_get_clients()
-      if next(clients) == nil then
+      local clients = vim.tbl_map(
+        function(client) return client.name end,
+        vim.lsp.get_clients({ bufnr = 0 }))
+      if vim.tbl_isempty(clients) then
         return msg
       end
-      local active_servers = ''
-      for _, client in ipairs(clients) do
-        active_servers = string.format('%s, %s', client.name, active_servers)
-      end
-      return active_servers
+      return vim.fn.join(vim.tbl_flatten(clients), ",")
     end
     require('lualine').setup({
       sections = {
@@ -41,7 +39,7 @@ return {
           },
         },
         lualine_b = {
-          { 'filename', path = 1 },
+          { 'filename', path = conditions.hide_in_width and 0 or 1 },
           { 'branch', icon = ' ' },
           {
             'diff',
@@ -84,7 +82,20 @@ return {
         lualine_c = {},
         lualine_x = {},
         lualine_y = {},
-        lualine_z = { { 'tabs', mode = 2, use_mode_colors = false } },
+        lualine_z = { {
+          'tabs',
+          mode = 2,
+          use_mode_colors = false,
+          fmt = function(name, context)
+            -- Show + if buffer is modified in tab
+            local buflist = vim.fn.tabpagebuflist(context.tabnr)
+            local winnr = vim.fn.tabpagewinnr(context.tabnr)
+            local bufnr = buflist[winnr]
+            local mod = vim.fn.getbufvar(bufnr, '&mod')
+
+            return name .. (mod == 1 and ' +' or '')
+          end
+        } },
       },
       extensions = { 'neo-tree', 'toggleterm', 'quickfix' },
     })

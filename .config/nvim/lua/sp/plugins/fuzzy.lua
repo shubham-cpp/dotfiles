@@ -10,24 +10,37 @@ local opts = {
 return {
   'ibhagwan/fzf-lua',
   keys = {
-    { '<C-p>', '<cmd>FzfLua files<cr>', desc = 'Find Files' },
-    { '<leader>ff', '<cmd>FzfLua files<cr>', desc = '[F]ind [F]iles' },
-    { '<leader>fr', '<cmd>FzfLua resume<cr>', desc = '[F]ind [R]esume' },
-    { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = '[F]ind [B]uffers' },
-    { '<leader>fz', '<cmd>FzfLua spell_suggest<cr>', desc = '[F]ind Spellings' },
-    { '<leader>fg', '<cmd>FzfLua git_status<cr>', desc = '[F]ind [G]it Status' },
-    { '<leader>fB', '<cmd>FzfLua git_branches<cr>', desc = '[F]ind Git [B]ranches' },
-    { '<leader>fh', '<cmd>FzfLua help_tags<cr>', desc = '[F]ind [H]elp Tags' },
-    { '<leader>fk', '<cmd>FzfLua keymaps<cr>', desc = '[F]ind [K]eymaps' },
-    { '<leader>flr', '<cmd>FzfLua lsp_references<cr>', desc = '[F]ind [L]sp [R]eferences' },
+    { '<C-p>',       '<cmd>FzfLua files<cr>',                desc = 'Find Files' },
+    { '<leader>ff',  '<cmd>FzfLua files<cr>',                desc = '[F]ind [F]iles' },
+    { '<leader>fr',  '<cmd>FzfLua resume<cr>',               desc = '[F]ind [R]esume' },
+    { '<leader>fb',  '<cmd>FzfLua buffers<cr>',              desc = '[F]ind [B]uffers' },
+    { '<leader>fz',  '<cmd>FzfLua spell_suggest<cr>',        desc = '[F]ind Spellings' },
+    { '<leader>fg',  '<cmd>FzfLua git_status<cr>',           desc = '[F]ind [G]it Status' },
+    { '<leader>fB',  '<cmd>FzfLua git_branches<cr>',         desc = '[F]ind Git [B]ranches' },
+    { '<leader>fh',  '<cmd>FzfLua help_tags<cr>',            desc = '[F]ind [H]elp Tags' },
+    { '<leader>fk',  '<cmd>FzfLua keymaps<cr>',              desc = '[F]ind [K]eymaps' },
+    { '<leader>flr', '<cmd>FzfLua lsp_references<cr>',       desc = '[F]ind [L]sp [R]eferences' },
     { '<leader>fls', '<cmd>FzfLua lsp_document_symbols<cr>', desc = '[F]ind [L]sp [S]ymbols' },
     {
       '<leader>fs',
       -- '<cmd>FzfLua live_grep_native<cr>',
       function()
-        require('fzf-lua').live_grep_native(opts)
+        require('fzf-lua').live_grep_native({
+          winopts = { preview = { layout = 'vertical' } },
+        })
       end,
       desc = '[F]ind [s]earch Project',
+    },
+    {
+      '<leader>fs',
+      -- '<cmd>FzfLua live_grep_native<cr>',
+      function()
+        require('fzf-lua').grep_visual({
+          winopts = { preview = { layout = 'vertical' } },
+        })
+      end,
+      desc = '[F]ind [s]earch Visual',
+      mode = "x"
     },
     {
       '<leader>fS',
@@ -63,6 +76,13 @@ return {
       end,
       desc = '[G]oto [R]eferences(FzfLua)',
     },
+    -- {
+    --   'gd',
+    --   function()
+    --     require('fzf-lua').lsp_definitions(opts)
+    --   end,
+    --   desc = '[G]oto [R]eferences(FzfLua)',
+    -- },
     {
       'gw',
       function()
@@ -93,6 +113,7 @@ return {
       end
       vim.keymap.set(mode, lhs, rhs, options)
     end
+    fzf.register_ui_select()
     fzf.setup({
       fzf_opts = { ['--info'] = 'hidden' },
       winopts = {

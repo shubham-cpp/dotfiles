@@ -58,16 +58,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --   desc = 'Resize splits if window got resized',
 -- })
 
--- vim.api.nvim_create_autocmd('BufReadPost', {
---   group = augroup 'last_loc',
---   callback = function()
---     local mark = vim.api.nvim_buf_get_mark(0, '"')
---     local lcount = vim.api.nvim_buf_line_count(0)
---     if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
---   end,
---   desc = 'Go to last loc when opening a buffer',
--- })
-
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup 'close_with_q',
   pattern = {
@@ -90,6 +80,7 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup 'webdev',
   pattern = {
+    'lua',
     'jsonc',
     'json',
     'json5',
@@ -107,6 +98,16 @@ vim.api.nvim_create_autocmd('FileType', {
     'scss',
   },
   callback = function(event)
+    --[[
+    local bo = event.buf and vim.bo[event.buf] or vim.bo
+    bo.tabstop = 2
+    bo.softtabstop = 2
+    bo.shiftwidth = 2
+    bo.expandtab = true
+    bo.smartindent = true
+    bo.autoindent = true
+    bo.smarttab = true
+    --]]
     vim.opt_local.tabstop = 2
     vim.opt_local.softtabstop = 2
     vim.opt_local.shiftwidth = 2
@@ -131,6 +132,7 @@ vim.api.nvim_create_autocmd({ 'BufAdd', 'BufEnter', 'TabNewEntered' }, {
   desc = 'Update buffers when adding new buffers',
   group = au_buffer,
   callback = function(args)
+    vim.opt_local.formatoptions = 'jcrqlnt'
     if not vim.t.bufs then
       vim.t.bufs = {}
     end
@@ -169,6 +171,10 @@ vim.api.nvim_create_autocmd('FileType', {
   group = au_buffer,
   pattern = 'qf',
   callback = function()
+    vim.opt_local.list = false
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.hlsearch = false
     vim.opt_local.buflisted = false
   end,
 })
@@ -186,6 +192,8 @@ vim.filetype.add({
   filename = {
     vimfrc = 'vim',
     dwm_sxhkdrc = 'sxhkdrc',
+    ['.env'] = 'conf',
+    ['.env.*'] = 'conf',
   },
   pattern = {
     ['*profile'] = 'sh',

@@ -2,7 +2,7 @@
 draw() {
   path="$(printf '%s' "$1" | sed 's/\\/\\\\/g;s/"/\\"/g')"
   printf '{"action": "add", "identifier": "preview", "x": %d, "y": %d, "width": %d, "height": %d, "scaler": "contain", "scaling_position_x": 0.5, "scaling_position_y": 0.5, "path": "%s"}\n' \
-    "$x" "$y" "$width" "$height" "$path" >"$FIFO_UEBERZUG"
+    "$x" "$y" "$width" "$height" "$path" > "$FIFO_UEBERZUG"
   exit 1
 }
 
@@ -30,9 +30,9 @@ default_x="1366"
 default_y="768"
 
 case "$1" in
-  *.7z|*.a|*.ace|*.alz|*.arc|*.arj|*.bz|*.bz2|*.cab|*.cpio|*.gz|*.jar|\
-  *.lha|*.lrz|*.lz|*.lzh|*.lzma|*.lzo|*.rar|*.rpm|*.rz|*.t7z|*.tar|*.tbz|\
-  *.tbz2|*.tgz|*.tlz|*.txz|*.tZ|*.tzo|*.war|*.xz|*.Z|*.zip)
+  *.7z | *.a | *.ace | *.alz | *.arc | *.arj | *.bz | *.bz2 | *.cab | *.cpio | *.gz | *.jar | \
+    *.lha | *.lrz | *.lz | *.lzh | *.lzma | *.lzo | *.rar | *.rpm | *.rz | *.t7z | *.tar | *.tbz | \
+    *.tbz2 | *.tgz | *.tlz | *.txz | *.tZ | *.tzo | *.war | *.xz | *.Z | *.zip)
     als -- "$1"
     exit 0
     ;;
@@ -60,18 +60,18 @@ case "$1" in
     epub2txt "$1" -
     exit 0
     ;;
-  *.docx|*.odt)
+  *.docx | *.odt)
     docx2txt "$1" -
     exit 0
     ;;
-  *.htm|*.html|*.xhtml|*.css|*.scss|*.less|*.json)
+  *.htm | *.html | *.xhtml | *.css | *.scss | *.less | *.json)
         # if [ -f /usr/bin/highlight ]; then
         #     highlight -O xterm256 --style dante "$1"
-		if [ -f /bin/bat ]; then
-			bat  --style=plain --line-range :60 "$1"
-		else
-			cat "$1"
-		fi
+    if [ -f /bin/bat ]; then
+      bat --style=plain --line-range :60 "$1"
+    else
+      cat "$1"
+    fi
     exit 0
     ;;
   *.svg)
@@ -91,13 +91,13 @@ esac
 
 case "$(file -Lb --mime-type -- "$1")" in
   text/*)
-		if [ -f /usr/bin/bat ]; then
-			bat --style=plain --line-range :60 "$1"
-        elif [ -f /usr/bin/highlight ]; then
+    if [ -f /usr/bin/bat ]; then
+      bat --style=plain --line-range :60 "$1"
+    elif     [ -f /usr/bin/highlight ]; then
             highlight -O xterm256 --style dante "$1"
-		else
-			cat "$1"
-		fi
+    else
+      cat "$1"
+    fi
     exit 0
     ;;
   image/*)
@@ -125,7 +125,7 @@ esac
 
 header_text="File Type Classification"
 header=""
-len="$(( (width - (${#header_text} + 2)) / 2 ))"
+len="$(((width - (${#header_text} + 2)) / 2))"
 if [ "$len" -gt 0 ]; then
   for _ in $(seq "$len"); do
     header="-$header"

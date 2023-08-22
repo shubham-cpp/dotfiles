@@ -4,7 +4,6 @@ return {
     dependencies = {
       {
         'akinsho/git-conflict.nvim',
-
         version = '*',
         config = true,
         -- config = function()
@@ -51,9 +50,9 @@ return {
             gs.prev_hunk()
           end)
           return '<Ignore>'
-        end, { expr = true , desc = "Previous hunk([C]hange)" })
-        map('n', '<leader>gs', gs.stage_hunk,{desc = "Stage hunk"})
-        map('n', '<leader>gr', gs.reset_hunk,{desc = "Reset hunk"})
+        end, { expr = true, desc = "Previous hunk([C]hange)" })
+        map('n', '<leader>gs', gs.stage_hunk, { desc = "Stage hunk" })
+        map('n', '<leader>gr', gs.reset_hunk, { desc = "Reset hunk" })
         map('v', '<leader>gs', function()
           gs.stage_hunk({ vim.fn.line '.', vim.fn.line 'v' })
         end, { desc = "Stage hunk" })
@@ -61,7 +60,7 @@ return {
           gs.reset_hunk({ vim.fn.line '.', vim.fn.line 'v' })
         end, { desc = "Reset hunk" })
         map('n', '<leader>gS', gs.stage_buffer, { desc = "Stage buffer" })
-        map('n', '<leader>gu', gs.undo_stage_hunk , { desc = "Undo stage hunk" })
+        map('n', '<leader>gu', gs.undo_stage_hunk, { desc = "Undo stage hunk" })
         map('n', '<leader>gR', gs.reset_buffer, { desc = "Reset buffer" })
         map('n', '<leader>gp', gs.preview_hunk, { desc = "Preview hunk" })
         map('n', '<leader>gb', function()
@@ -77,14 +76,13 @@ return {
     },
   },
   {
-    'TimUntersberger/neogit',
+    "NeogitOrg/neogit",
     cmd = { 'Neogit' },
-    keys = { { '<leader>gg', '<cmd>Neogit<cr>', desc = 'Neogit' } },
-    opts = {
-      integrations = {
-        diffview = true,
-      },
+    keys = { { '<leader>og', '<cmd>Neogit<cr>', desc = 'Neogit' } },
+    dependencies = {
+      "nvim-lua/plenary.nvim",  -- required
+      "sindrets/diffview.nvim", -- optional
     },
-    dependencies = { { 'sindrets/diffview.nvim', config = true } },
+    config = true
   },
 }
