@@ -12,14 +12,14 @@ return {
   },
   dependencies = {
     'nvim-lua/plenary.nvim',
-    {
-      'stevearc/dressing.nvim',
-      opts = {
-        select = {
-          backend = { 'fzf_lua', 'telescope', 'builtin', 'nui' },
-        },
-      },
-    },
+    -- {
+    --   'stevearc/dressing.nvim',
+    --   opts = {
+    --     select = {
+    --       backend = { 'fzf_lua', 'telescope', 'builtin', 'nui' },
+    --     },
+    --   },
+    -- },
   },
   config = function()
     local session_manager = require 'session_manager'

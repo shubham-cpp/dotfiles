@@ -47,7 +47,7 @@ local config = {
           },
         },
       })
-      vim.cmd("colorscheme gruvbox")
+      vim.cmd 'colorscheme gruvbox'
     end,
   },
   {
