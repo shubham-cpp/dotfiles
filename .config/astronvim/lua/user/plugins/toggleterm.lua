@@ -1,8 +1,8 @@
 return {
-  'akinsho/nvim-toggleterm.lua',
+  'akinsho/toggleterm.nvim',
   version = '*',
-  opts = function(_, opts)
-    opts.open_mapping = [[<c-\>]]
-    return opts
-  end,
+  opts = {
+    open_mapping = [[<c-\>]],
+    winbar = { enabled = true },
+  },
 }
