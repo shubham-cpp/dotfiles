@@ -58,18 +58,18 @@ static const Rule rules[] = {
     { "Chromium-browser",  NULL,      NULL,       2,          1,            0,          -1 },
     { "waterfox-current",  NULL,      NULL,       2,          1,            0,          -1 },
 
-    { "Steam",             NULL,      NULL,       4,          0,            1,          -1 },
-    { "Lutris",            NULL,      NULL,       4,          0,            1,          -1 },
-    { "Timeshift-gtk",     NULL,      NULL,       4,          1,            1,          -1 },
+    { "Steam",             NULL,      NULL,       3,          0,            1,          -1 },
+    { "Lutris",            NULL,      NULL,       3,          0,            1,          -1 },
+    { "Timeshift-gtk",     NULL,      NULL,       3,          1,            1,          -1 },
 
-    { "Evolution",         NULL,      NULL,       5,          1,            0,          -1 },
-    { "mpv",               NULL,      NULL,       5,          1,            0,          -1 },
-    { "vlc",               NULL,      NULL,       5,          1,            0,          -1 },
-    { "parole",            NULL,      NULL,       5,          1,            0,          -1 },
-    { "smplayer",          NULL,      NULL,       5,          1,            0,          -1 },
+    { "Evolution",         NULL,      NULL,       4,          1,            0,          -1 },
+    { "mpv",               NULL,      NULL,       4,          1,            0,          -1 },
+    { "vlc",               NULL,      NULL,       4,          1,            0,          -1 },
+    { "parole",            NULL,      NULL,       4,          1,            0,          -1 },
+    { "smplayer",          NULL,      NULL,       4,          1,            0,          -1 },
 
-    { "Virt-manager",      NULL,      NULL,       7,          1,            1,          -1 },
-    { "VirtualBox Manager",NULL,      NULL,       7,          1,            1,          -1 },
+    { "Virt-manager",      NULL,      NULL,       5,          1,            1,          -1 },
+    { "VirtualBox Manager",NULL,      NULL,       5,          1,            1,          -1 },
 
     // Floating Rules
     {"Arandr",             NULL,      NULL,       0,          0,            1,          -1 },
