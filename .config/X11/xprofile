@@ -36,6 +36,7 @@ basic() {
 	fi
 	# run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+		setsid -f xset r rate 300 50
 		if [ -x /bin/picom ]; then
 			run picom -b #--experimental-backends
 		else
@@ -47,8 +48,8 @@ basic() {
 			run feh --bg-fill --no-fehbg -q ~/.config/wall.png
 		fi
 	fi
-	run kitty
-	# run alacritty -e "tmux"
+	# run kitty
+	run alacritty -e "tmux"
 }
 
 case "$DESKTOP_SESSION" in
