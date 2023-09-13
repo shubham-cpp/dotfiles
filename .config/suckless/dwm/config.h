@@ -26,7 +26,7 @@ static const char norm_border[] = "#75715e";
 
 static const char sel_fg[]      = "#A9DC76";
 static const char sel_bg[]      = "#444444";
-static const char sel_border[]  = "#f9f8f5";
+static const char sel_border[]  = "#32b6a0";
 
 static const char urg_fg[]      = "#e5c06b";
 static const char urg_bg[]      = "#FF6188";
@@ -58,9 +58,9 @@ static const Rule rules[] = {
     { "Chromium-browser",  NULL,      NULL,       2,          1,            0,          -1 },
     { "waterfox-current",  NULL,      NULL,       2,          1,            0,          -1 },
 
-    { "Steam",             NULL,      NULL,       3,          0,            1,          -1 },
-    { "Lutris",            NULL,      NULL,       3,          0,            1,          -1 },
-    { "Timeshift-gtk",     NULL,      NULL,       3,          1,            1,          -1 },
+    { "Steam",             NULL,      NULL,       4,          0,            0,          -1 },
+    { "Lutris",            NULL,      NULL,       4,          1,            0,          -1 },
+    { "Timeshift-gtk",     NULL,      NULL,       4,          1,            1,          -1 },
 
     { "Evolution",         NULL,      NULL,       4,          1,            0,          -1 },
     { "mpv",               NULL,      NULL,       4,          1,            0,          -1 },

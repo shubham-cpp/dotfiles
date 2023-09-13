@@ -10,7 +10,7 @@ esac
 
 # if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
 if wpctl get-volume @DEFAULT_AUDIO_SINK@ | /bin/grep -q "[MUTED]"; then
-	echo "婢 Muted"
+	echo "󰖁 Muted"
 	exit
 fi
 
@@ -20,9 +20,9 @@ vol="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} ech
 if [ "$vol" -gt 70 ]; then
 	icon=" "
 elif [ "$vol" -gt 40 ]; then
-	icon="墳"
+	icon="󰕾 "
 elif [ "$vol" -gt 10 ]; then
-	icon=""
+	icon=" "
 else
 	icon="奄"
 fi
