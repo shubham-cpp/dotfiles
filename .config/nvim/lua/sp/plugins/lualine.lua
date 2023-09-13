@@ -22,7 +22,8 @@ return {
       local msg = 'None'
       local clients = vim.tbl_map(
         function(client) return client.name end,
-        vim.lsp.get_clients({ bufnr = 0 }))
+        -- vim.lsp.get_clients({ bufnr = 0 }))
+        vim.lsp.buf_get_clients())
       if vim.tbl_isempty(clients) then
         return msg
       end
@@ -43,7 +44,7 @@ return {
           { 'branch', icon = ' ' },
           {
             'diff',
-            symbols = { added = ' ', modified = '柳 ', removed = ' ' },
+            symbols = { added = ' ', modified = ' ', removed = ' ' },
             cond = conditions.hide_in_width,
           },
           'diagnostics',

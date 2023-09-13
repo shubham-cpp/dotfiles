@@ -34,6 +34,17 @@ local cmp_kinds = {
   String = "󰀬",
   Unit = "",
 }
+local function deprio(kind)
+  return function(e1, e2)
+    if e1:get_kind() == kind then
+      return false
+    end
+    if e2:get_kind() == kind then
+      return true
+    end
+  end
+end
+
 return {
   'hrsh7th/nvim-cmp',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -49,6 +60,7 @@ return {
     'hrsh7th/cmp-cmdline',
     {
       'onsails/lspkind.nvim',
+      enabled = false,
       opts = {
         mode = "symbol",
         symbol_map = {
@@ -120,12 +132,12 @@ return {
   config = function()
     local cmp = require 'cmp'
     local types = require 'cmp.types'
-    local context = require 'cmp.config.context'
+    -- local context = require 'cmp.config.context'
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
-    local defaults = require("cmp.config.default")()
-    local lspkind = require('lspkind')
-    local str = require("cmp.utils.str")
+    -- local defaults = require("cmp.config.default")()
+    -- local lspkind = require('lspkind')
+    -- local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
 
     vim.opt.completeopt = 'menu,menuone,noselect'
@@ -228,16 +240,18 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lua' },
-        { name = 'nvim_lsp' },
-        { name = 'nvim_lsp_signature_help' },
-        { name = 'vsnip' },
+        { name = 'nvim_lua',                 priority = 100 },
+        { name = 'nvim_lsp',                 priority = 100 },
+        { name = 'nvim_lsp_signature_help',  priority = 90 },
+        { name = 'vsnip',                    priority = 50 },
         -- { name = 'buffer-lines' },
         -- { name = 'cmp_tabnine' },
       }, {
-        { name = 'path' },
+        { name = 'path', priority = 30 },
         {
-          name = 'buffer',
+          name = 'buffer'
+          ,
+          priority = 20,
           option = {
             keyword_length = 3,
             get_bufnrs = function()
@@ -257,13 +271,6 @@ return {
           vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
           return vim_item
         end,
-        --[[ format = function(entry, vim_item)
-      -- Kind icons
-      vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-      -- Source
-      vim_item.menu = source_mapping[entry.source.name]
-      return vim_item
-    end, ]]
       },
       -- sorting = {
       --   priority_weight = 2,
@@ -271,50 +278,17 @@ return {
       --     compare.exact,
       --     compare.scopes,
       --     compare.recently_used,
-      --     -- function (entry1,entry2)
-      --     --   local kind1 = types.lsp.CompletionItemKind[entry1:get_kind()]
-      --     --   local kind2 = types.lsp.CompletionItemKind[entry2:get_kind()]
-      --     --   if kind1 == 'Snippet' or kind2 == 'Snippet' then
-      --     --     local name1 = vim.split(entry1.source:get_debug_name(), ':')[2]
-      --     --     local name2 = vim.split(entry2.source:get_debug_name(), ':')[2]
-      --     --     if name1 == 'emmet_ls' then
-      --     --       return false
-      --     --     end
-      --     --     if name2 == 'emmet_ls' then
-      --     --       return false
-      --     --     end
-      --     --   end
-      --     --   return true
-      --     -- end
       --   },
       -- },
       -- sorting = defaults.sorting,
       sorting = {
-        -- TODO: Would be cool to add stuff like "See variable names before method names" in rust, or something like that.
+        priority_weight = 2,
         comparators = {
+          deprio(types.lsp.CompletionItemKind.Snippet),
+          deprio(types.lsp.CompletionItemKind.Text),
           compare.offset,
           compare.exact,
           compare.score,
-          --[[
-cmp.config.compare.offset,
-			cmp.config.compare.exact,
-			cmp.config.compare.score,
-			cmp.config.compare.recently_used,
-			cmp.config.compare.kind,
-          -- copied from cmp-under, but I don't think I need the plugin for this.
-          -- I might add some more of my own.
-          function(entry1, entry2)
-            local _, entry1_under = entry1.completion_item.label:find "^_+"
-            local _, entry2_under = entry2.completion_item.label:find "^_+"
-            entry1_under = entry1_under or 0
-            entry2_under = entry2_under or 0
-            if entry1_under > entry2_under then
-              return false
-            elseif entry1_under < entry2_under then
-              return true
-            end
-          end,
---]]
           -- copied from cmp-under, but I don't think I need the plugin for this.
           -- I might add some more of my own.
           function(entry1, entry2)
@@ -329,12 +303,11 @@ cmp.config.compare.offset,
             end
           end,
           compare.kind,
-          compare.sort_text,
+          -- compare.sort_text,
           compare.recently_used,
         },
       },
       experimental = {
-        native_menu = false,
         ghost_text = false,
       },
     })
