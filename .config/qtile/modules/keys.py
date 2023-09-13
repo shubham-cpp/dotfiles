@@ -211,19 +211,20 @@ keys = [
     Key("M-w", lazy.spawn(browser), desc=f"Launch {browser}"),
     Key(
         "M-S-w",
-        lazy.spawn(
-            "firefox"
-            if browser != "firefox" and isfile("/usr/bin/firefox")
-            else "brave"
-            if isfile("/usr/bin/brave") and browser != "brave"
-            else "brave-browser"
-            if isfile("/usr/bin/brave-browser") and browser != "brave-browser"
-            else "chromium"
-            if isfile("/usr/bin/chromium")
-            else "chromium-browser"
-            if isfile("/usr/bin/chromium-browser")
-            else "flatpak run com.github.Eloston.UngoogledChromium"
-        ),
+        lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
+        # lazy.spawn(
+        #     "firefox"
+        #     if browser != "firefox" and isfile("/usr/bin/firefox")
+        #     else "brave"
+        #     if isfile("/usr/bin/brave") and browser != "brave"
+        #     else "brave-browser"
+        #     if isfile("/usr/bin/brave-browser") and browser != "brave-browser"
+        #     else "chromium"
+        #     if isfile("/usr/bin/chromium")
+        #     else "chromium-browser"
+        #     if isfile("/usr/bin/chromium-browser")
+        #     else "flatpak run com.github.Eloston.UngoogledChromium"
+        # ),
         desc=f"Launch {browser}",
     ),
     Key(
