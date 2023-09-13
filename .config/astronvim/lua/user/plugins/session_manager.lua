@@ -1,6 +1,6 @@
 return {
   'Shatur/neovim-session-manager',
-  event = 'VimEnter',
+  event = 'BufWinEnter',
   config = function()
     local sm = require 'session_manager'
     local conf = require 'session_manager.config'
