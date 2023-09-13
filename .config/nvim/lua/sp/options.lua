@@ -46,6 +46,10 @@ o.foldcolumn = '1' -- '0' is not bad
 o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 o.foldlevelstart = 99
 o.foldenable = true
+o.numberwidth = 3
+-- credits - https://github.com/neovim/neovim/pull/17446
+-- o.statuscolumn='%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? " " : " ") : "") : " " }%=%l%s'
+o.statuscolumn='%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? "" : "") : "|") : " " }%=%{v:relnum?v:relnum:v:lnum}%s '
 
 if vim.fn.has 'nvim-0.9.0' == 1 then
   o.splitkeep = 'screen'

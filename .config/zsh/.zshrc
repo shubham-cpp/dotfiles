@@ -41,7 +41,7 @@ zinit light starship/starship
 zinit ice as"command" from"gh-r" mv"rtx-v* -> rtx" \
           atclone"./rtx activate zsh > rtx_init.sh" \
           atpull"%atclone" src"rtx_init.sh"
-zinit light jdxcode/rtx
+zinit light jdx/rtx
 zinit ice as"command" from"gh-r" \
           atclone"./zoxide init zsh > zo_init.sh" \
           atpull"%atclone" src"zo_init.sh"

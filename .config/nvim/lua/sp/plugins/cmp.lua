@@ -1,3 +1,39 @@
+local cmp_kinds = {
+  Text = '  ',
+  Method = '  ',
+  Function = '  ',
+  Field = '  ',
+  Variable = '  ',
+  Interface = '  ',
+  Module = '  ',
+  Property = '  ',
+  Value = '  ',
+  Enum = '  ',
+  Keyword = '  ',
+  Color = '  ',
+  File = '  ',
+  Folder = '  ',
+  EnumMember = '  ',
+  Constant = '  ',
+  Struct = '  ',
+  Event = '  ',
+  Operator = '  ',
+  TypeParameter = '  ',
+  Array = "󰅪",
+  Boolean = "⊨",
+  Class = "󰌗",
+  Constructor = "",
+  Key = "󰌆",
+  Namespace = "󰅪",
+  Null = "NULL",
+  Number = "#",
+  Object = "󰀚",
+  Package = "󰏗",
+  Reference = "",
+  Snippet = "",
+  String = "󰀬",
+  Unit = "",
+}
 return {
   'hrsh7th/nvim-cmp',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -11,7 +47,34 @@ return {
     'rafamadriz/friendly-snippets',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
-    'onsails/lspkind.nvim',
+    {
+      'onsails/lspkind.nvim',
+      opts = {
+        mode = "symbol",
+        symbol_map = {
+          Array = "󰅪",
+          Boolean = "⊨",
+          Class = "󰌗",
+          Constructor = "",
+          Key = "󰌆",
+          Namespace = "󰅪",
+          Null = "NULL",
+          Number = "#",
+          Object = "󰀚",
+          Package = "󰏗",
+          Property = "",
+          Reference = "",
+          Snippet = "",
+          String = "󰀬",
+          TypeParameter = "󰊄",
+          Unit = "",
+        },
+        menu = {},
+      },
+      config = function(_, opts)
+        require("lspkind").init(opts)
+      end
+    },
     {
       'Exafunction/codeium.vim',
       event = "InsertEnter",
@@ -61,7 +124,10 @@ return {
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
     local defaults = require("cmp.config.default")()
+    local lspkind = require('lspkind')
+    local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
+
     vim.opt.completeopt = 'menu,menuone,noselect'
     vim.g.vsnip_snippet_dir = vim.fn.stdpath 'config' .. '/vsnip'
     vim.g.vsnip_filetypes = {
@@ -89,8 +155,8 @@ return {
       window = {
         completion = {
           winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,Search:None',
-          col_offset = -3,
-          side_padding = 0,
+          -- col_offset = -3,
+          -- side_padding = 0,
         },
       },
       mapping = cmp.mapping.preset.insert({
@@ -121,7 +187,7 @@ return {
           end,
         }),
         ['<C-p>'] = cmp.mapping({
-        c = function()
+          c = function()
             if cmp.visible() then
               cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             else
@@ -177,7 +243,7 @@ return {
             get_bufnrs = function()
               local bufIsSmall = function(bufnr)
                 local max_filesize = 50 * 1024
-                local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
                 return ok and stats and stats.size < max_filesize
               end
 
@@ -187,16 +253,10 @@ return {
         },
       }),
       formatting = {
-        fields = { 'kind', 'abbr', 'menu' },
-        format = function(entry, vim_item)
-          local kind = require('lspkind').cmp_format({ mode = 'symbol_text', maxwidth = 50 })(entry, vim_item)
-          local strings = vim.split(kind.kind, '%s', { trimempty = true })
-          kind.kind = ' ' .. strings[1] .. ' '
-          kind.menu = '    (' .. strings[2] .. ')'
-
-          return kind
+        format = function(_, vim_item)
+          vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+          return vim_item
         end,
-        -- Without lspking
         --[[ format = function(entry, vim_item)
       -- Kind icons
       vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind

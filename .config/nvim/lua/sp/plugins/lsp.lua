@@ -157,6 +157,55 @@ return {
       emmet_ls = function()
         lspconfig.emmet_ls.setup(opts)
       end,
+      rust_analyzer = function()
+        local opt = vim.deepcopy(opts)
+        local function handler(err)
+          if err then
+            error(tostring(err))
+          end
+          vim.notify("Cargo workspace reloaded")
+        end
+        local function fly_check()
+          vim.lsp.buf_notify(0, "rust-analyzer/runFlycheck", {
+            textDocument = vim.lsp.util.make_text_document_params()
+          })
+        end
+        local function reload_workspace()
+          vim.notify("Reloading Cargo Workspace")
+          vim.lsp.buf_request(0, "rust-analyzer/reloadWorkspace", nil, handler)
+        end
+        opt.on_attach = function(client, bufnr)
+          on_attach(client, bufnr)
+          vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc="Format Buffer(LSP)" })
+        end
+        opt.settings = {
+          ['rust-analyzer'] = {
+            diagnostics = {
+              enable = true,
+            },
+            check = { features = "all" },
+            inlayHints = {
+              closureCaptureHints = {
+                enable = true,
+              }
+            },
+            lens = {
+              references = {
+                adt = { enable = true },
+                enumVariant = { enable = true },
+                method = { enable = true },
+                trait = { enable = true }
+              }
+            },
+            typing = { autoClosingAngleBrackets = { enable = true } }
+          }
+        }
+        opt.commands = {
+          RustFlyCheck = { fly_check },
+          RustReloadWorkspace = { reload_workspace }
+        }
+        lspconfig.rust_analyzer.setup(opt)
+      end,
       gopls = function()
         local opt = vim.deepcopy(opts)
         opt.settings = {
@@ -432,7 +481,7 @@ return {
         --       },
         --     },
         --   },
-      -- })
+        -- })
       end,
       denols = function()
         local opt = vim.deepcopy(opts)

@@ -2,7 +2,7 @@ return {
   'NvChad/nvim-colorizer.lua',
   event = 'BufReadPost',
   opts = {
-    filetypes = { '*' },
+    -- filetypes = { '*' },
     user_default_options = {
       -- RRGGBBAA = true,
       rgb_fn = true,
@@ -15,6 +15,7 @@ return {
       mode = 'background',
     },
     buftypes = {
+      "*",
       -- exclude prompt and popup buftypes from highlight
       '!prompt',
       '!popup',

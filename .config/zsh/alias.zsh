@@ -41,6 +41,8 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias v="nvim"
+alias vv="NVIM_APPNAME=nvim-my nvim"
+alias vl="NVIM_APPNAME=nvim-lazyvim nvim"
 alias se="sudo nvim"
 alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
 

@@ -27,7 +27,8 @@ return {
       },
     },
     keys = {
-      { '<leader>e', '<cmd>Neotree focus toggle<cr>', desc = 'Open File [E]xplorer' },
+      { '<leader>e', '<cmd>Neotree reveal toggle<cr>', desc = 'Open File [E]xplorer(Reveal)' },
+      { '<leader>E', '<cmd>Neotree focus toggle<cr>', desc = 'Open File [E]xplorer' },
     },
     init = function ()
         vim.g.neo_tree_remove_legacy_commands = 1
