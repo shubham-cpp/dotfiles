@@ -1,12 +1,5 @@
-local opts = {
-  winopts = {
-    preview = {
-      layout = 'vertical',
-      vertical = 'up:40%',
-      -- horizontal = 'right:60%',
-    },
-  },
-}
+local opts = { winopts = { preview = { layout = 'vertical', vertical = 'up:40%', }, }, }
+-- horizontal = 'right:60%',
 return {
   'ibhagwan/fzf-lua',
   keys = {
@@ -27,6 +20,7 @@ return {
       function()
         require('fzf-lua').live_grep_native({
           winopts = { preview = { layout = 'vertical' } },
+          multiprocess = true,
         })
       end,
       desc = '[F]ind [s]earch Project',
@@ -37,6 +31,7 @@ return {
       function()
         require('fzf-lua').grep_visual({
           winopts = { preview = { layout = 'vertical' } },
+          multiprocess = true,
         })
       end,
       desc = '[F]ind [s]earch Visual',
@@ -72,17 +67,47 @@ return {
     {
       'gr',
       function()
-        require('fzf-lua').lsp_references(opts)
+        require('fzf-lua').lsp_references(vim.tbl_extend("keep", opts, {
+          ignore_current_line = true,
+          multiprocess = true,
+          winopts = { preview = { "builtin" } }
+        }))
       end,
       desc = '[G]oto [R]eferences(FzfLua)',
     },
-    -- {
-    --   'gd',
-    --   function()
-    --     require('fzf-lua').lsp_definitions(opts)
-    --   end,
-    --   desc = '[G]oto [R]eferences(FzfLua)',
-    -- },
+    {
+      'gd',
+      function()
+        require('fzf-lua').lsp_definitions(vim.tbl_extend("keep", opts, {
+          jump_to_single_result = true,
+          multiprocess = true,
+          winopts = { preview = { "builtin" } }
+        }))
+      end,
+      desc = '[G]oto [D]efinition(FzfLua)',
+    },
+    {
+      'gD',
+      function()
+        require('fzf-lua').lsp_declarations(vim.tbl_extend("keep", opts, {
+          jump_to_single_result = true,
+          multiprocess = true,
+          winopts = { preview = { "builtin" } }
+        }))
+      end,
+      desc = '[G]oto [D]eclaration(FzfLua)',
+    },
+    {
+      'gt',
+      function()
+        require('fzf-lua').lsp_typedefs(vim.tbl_extend("keep", opts, {
+          jump_to_single_result = true,
+          multiprocess = true,
+          winopts = { preview = { "builtin" } }
+        }))
+      end,
+      desc = '[G]oto [T]ypedef(FzfLua)',
+    },
     {
       'gw',
       function()
@@ -97,6 +122,28 @@ return {
       end,
       desc = 'Workspace Symbols (FzfLua)',
     },
+    {
+      '<leader>gb',
+      function()
+        require('fzf-lua').git_branches(vim.tbl_deep_extend("force", opts, {
+          multiprocess = true,
+        }))
+      end,
+      desc = '[G]oto [B]ranches(FzfLua)',
+    },
+    {
+      '<leader>gc',
+      function()
+        require('fzf-lua').git_commits()
+      end,
+      desc = '[G]it [C]ommits(FzfLua)',
+    }, {
+    '<leader>gC',
+    function()
+      require('fzf-lua').git_bcommits()
+    end,
+    desc = '[G]it Buffer [C]ommits(FzfLua)',
+  }
   },
   config = function()
     local fzf = require 'fzf-lua'
@@ -106,23 +153,20 @@ return {
       ['ctrl-x'] = actions.file_split,
       ['ctrl-q'] = actions.file_edit_or_qf,
     }
-    local map = function(mode, lhs, rhs, mopts)
-      local options = { noremap = true, silent = true }
-      if next(mopts) then
-        options = vim.tbl_extend('force', options, mopts)
-      end
-      vim.keymap.set(mode, lhs, rhs, options)
-    end
-    fzf.register_ui_select()
     fzf.setup({
-      fzf_opts = { ['--info'] = 'hidden' },
+      fzf_opts = {
+        ['--info'] = 'hidden',
+        --[[ ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-history',  ]]
+      },
       winopts = {
         preview = { default = 'bat_native' },
       },
-      on_create = function()
-        map('t', '<C-j>', '<Down>', { buffer = true })
-        map('t', '<C-k>', '<Up>', { buffer = true })
-      end,
+      keymap = {
+        fzf = {
+          ['ctrl-j'] = 'down',
+          ['ctrl-k'] = 'up',
+        }
+      },
       previewers = {
         bat = {
           cmd = 'bat',
@@ -136,6 +180,9 @@ return {
         ['A'] = { icon = '+', color = 'green' },
       },
       files = {
+        fzf_opts = {
+          ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-files-history',
+        },
         winopts = {
           height = 0.55,
           width = 0.65,
@@ -150,18 +197,37 @@ return {
           actions = m_keys,
           prompt = ' ❯ ',
         },
-        bcommits = { actions = m_keys },
+        bcommits = {
+          actions = m_keys,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        },
+        commits = {
+          actions = m_keys,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        },
       },
       buffers = {
-        actions = vim.tbl_extend('force', m_keys, {
+        ignore_current_buffer = true,
+        actions               = vim.tbl_extend('force', m_keys, {
           ['ctrl-d'] = actions.buf_delete,
           ['ctrl-x'] = actions.buf_vsplit,
           ['ctrl-q'] = actions.buf_edit_or_qf,
         }),
       },
-      blines = { actions = m_keys },
+      blines = {
+        actions         = m_keys,
+        no_term_buffers = false,
+        winopts         = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+      },
       lines = { actions = m_keys },
-      grep = { actions = m_keys },
+      grep = {
+        winopts = { preview = { layout = 'vertical', vertical = 'up:40%' } },
+        actions = m_keys,
+        fzf_opts = {
+          ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-grep-history',
+        },
+      },
     })
+    fzf.register_ui_select()
   end,
 }

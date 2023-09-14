@@ -7,6 +7,11 @@ M.bun_path = function()
   return bun .. '/bin'
 end
 
+--- A wrapper around `vim.keymap.set`
+---@param mode string|table 'n'|'v'|'o'
+---@param lhs string|function
+---@param rhs string|function
+---@param opts table<string,boolean>? (default is `{noremap = true, silent = true}`)
 M.map = function(mode, lhs, rhs, opts)
   local options = { noremap = true, silent = true }
   if opts and next(opts) ~= nil then vim.tbl_extend('force', options, opts) end

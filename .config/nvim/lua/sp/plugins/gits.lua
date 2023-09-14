@@ -6,19 +6,6 @@ return {
         'akinsho/git-conflict.nvim',
         version = '*',
         config = true,
-        -- config = function()
-        --   vim.api.nvim_create_autocommand('User', {
-        --     group = vim.api.nvim_create_augroup('sp_git', { clear = true }),
-        --     pattern = 'GitConflictDetected',
-        --     callback = function()
-        --       vim.notify('Conflict detected in ' .. vim.fn.expand '<afile>')
-        --       vim.keymap.set('n', 'cww', function()
-        --         engage.conflict_buster()
-        --         create_buffer_local_mappings()
-        --       end)
-        --     end,
-        --   })
-        -- end
       },
     },
     event = 'BufReadPost',
@@ -63,7 +50,7 @@ return {
         map('n', '<leader>gu', gs.undo_stage_hunk, { desc = "Undo stage hunk" })
         map('n', '<leader>gR', gs.reset_buffer, { desc = "Reset buffer" })
         map('n', '<leader>gp', gs.preview_hunk, { desc = "Preview hunk" })
-        map('n', '<leader>gb', function()
+        map('n', '<leader>gB', function()
           gs.blame_line({ full = true })
         end, { desc = "Blame line" })
         map('n', '<leader>gd', gs.diffthis, { desc = "Diff this" })
