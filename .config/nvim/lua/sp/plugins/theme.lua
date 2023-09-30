@@ -30,7 +30,7 @@ local config = {
     config = function()
       require('gruvbox').setup({
         contrast = 'hard', -- can be "hard", "soft" or empty string
-        dim_inactive = false,
+        dim_inactive = true,
         transparent_mode = false,
         overrides = {
           QuickScopePrimary = {
@@ -56,12 +56,38 @@ local config = {
     config = function()
       require('onedark').setup({
         style = 'deep', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-        transparent = true,
+        transparent = false,
         -- cmp_itemkind_reverse = false
       })
       require('onedark').load()
     end,
   },
+  {
+    'projekt0n/caret.nvim',
+    enabled = false,
+    config = function()
+      require('caret').setup({
+        options = {
+          transparent = false,   -- Set to true to disable background setting
+          -- inverted_signs = false,    -- Controls inverted Signcolumn highlighting
+          -- styles = {                 -- Define styles for various syntax groups
+          --   bold = true,
+          --   italic = true,
+          --   strikethrough = true,
+          --   undercurl = true,
+          --   underline = true,
+          -- },
+          inverse = {   -- Determines inverse highlights for different types
+            match_paren = true,
+            visual = true,
+            search = true,
+          },
+        },
+        groups = {},   -- Override default highlight groups here
+      })
+      vim.cmd('colorscheme caret')
+    end,
+  }
 }
 
 return config

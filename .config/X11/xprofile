@@ -10,10 +10,10 @@ run() {
 }
 
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-	bash ~/.local/bin/myscripts/default_mouse_settings &
+	# bash ~/.local/bin/myscripts/default_mouse_settings &
 	# setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
 	# xcape -e 'Control_L=Escape'
-	numlockx on
+	# numlockx on
 	xset -b
 	xset r rate 300 50
 	xsetroot -cursor_name left_ptr
@@ -31,6 +31,8 @@ basic() {
 		run lxpolkit
 	elif [ -x /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 ]; then
 		run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+	elif [ -x /usr/libexec/polkit-gnome-authentication-agent-1 ]; then # polkit-gnome kde
+		run /usr/libexec/polkit-gnome-authentication-agent-1
 	else
 		run polkit-gnome-authentication-agent-1
 	fi
@@ -56,12 +58,15 @@ case "$DESKTOP_SESSION" in
 bspwm | awesome | qtile | dk | Qtile)
 	basic
 	xset -b
+	xset r rate 300 50
 	;;
 dwm)
 	basic
 	# run dwmblocks
 	run goblocks
 	run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
+	xset -b
+	xset r rate 300 50
 	;;
 esac
 

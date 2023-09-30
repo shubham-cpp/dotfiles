@@ -26,7 +26,7 @@ static const char norm_border[] = "#75715e";
 
 static const char sel_fg[]      = "#A9DC76";
 static const char sel_bg[]      = "#444444";
-static const char sel_border[]  = "#32b6a0";
+static const char sel_border[]  = "#7aa2f7";
 
 static const char urg_fg[]      = "#e5c06b";
 static const char urg_bg[]      = "#FF6188";

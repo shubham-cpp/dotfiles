@@ -5,13 +5,13 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'b0o/schemastore.nvim',
-    -- 'jose-elias-alvarez/typescript.nvim',
-    {
-      'pmizio/typescript-tools.nvim',
-      dependencies = {
-        "nvim-lua/plenary.nvim",
-      }
-    },
+    'jose-elias-alvarez/typescript.nvim',
+    -- {
+    --   'pmizio/typescript-tools.nvim',
+    --   dependencies = {
+    --     "nvim-lua/plenary.nvim",
+    --   }
+    -- },
     'lvimuser/lsp-inlayhints.nvim',
     -- 'simrat39/rust-tools.nvim'
   },
@@ -231,18 +231,18 @@ return {
       end,
       bashls = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/bash-language-server', 'start' }
+        opt.cmd = { require('sp.util').bun_path() .. '/bash-language-server', 'start' }
         opt.settings = { bashIde = { highlightParsingErrors = true } }
         lspconfig.bashls.setup(opt)
       end,
       html = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
         lspconfig.html.setup(opt)
       end,
       cssls = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-css-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/vscode-css-language-server', '--stdio' }
         opt.settings = {
           css = {
             validate = true,
@@ -277,6 +277,7 @@ return {
       end,
       eslint = function()
         lspconfig.eslint.setup({
+          cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' },
           on_attach = function(_, bufnr)
             -- vim.api.nvim_create_autocmd('BufWritePre', {
             --   buffer = bufnr,
@@ -333,7 +334,7 @@ return {
       end,
       jsonls = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/vscode-json-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/vscode-json-language-server', '--stdio' }
         opt.settings = {
           json = {
             schemas = vim.list_extend({
@@ -352,7 +353,7 @@ return {
       end,
       yamlls = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/yaml-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/yaml-language-server', '--stdio' }
         opt.settings = {
           redhat = { telemetry = { enabled = false } },
           yaml = {
@@ -403,7 +404,7 @@ return {
       end,
       tailwindcss = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/tailwindcss-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/tailwindcss-language-server', '--stdio' }
         opt.root_dir = util.root_pattern(
           'tailwind.config.js',
           'tailwind.config.cjs',
@@ -424,64 +425,64 @@ return {
         lspconfig.tailwindcss.setup(opt)
       end,
       tsserver = function()
-        require("typescript-tools").setup {
-          on_attach = on_attach,
-          root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-          filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-          settings = {
-            tsserver_file_preferences = {
-              includeInlayParameterNameHints = "literals",
-              includeCompletionsForModuleExports = true,
-              includeCompletionsForImportStatements = true,
-              includeAutomaticOptionalChainCompletions = true,
-              includeCompletionsWithClassMemberSnippets = true,
-              allowIncompleteCompletions = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-              includeInlayVariableTypeHints = true,
-              includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeCompletionsWithSnippetText = true,
-            },
-          }
-        }
-        -- require('typescript').setup({
-        --   disable_commands = false, -- prevent the plugin from creating Vim commands
-        --   debug = false,            -- enable debug logging for commands
-        --   go_to_source_definition = { fallback = true },
-        --   server = {
-        --     cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
-        --     filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-        --     root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-        --     on_attach = on_attach,
-        --     capabilities = cmp_capabilities,
-        --     settings = {
-        --       javascript = {
-        --         inlayHints = {
-        --           includeInlayEnumMemberValueHints = true,
-        --           includeInlayFunctionLikeReturnTypeHints = true,
-        --           includeInlayFunctionParameterTypeHints = true,
-        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        --           includeInlayPropertyDeclarationTypeHints = true,
-        --           includeInlayVariableTypeHints = true,
-        --         },
-        --       },
-        --       typescript = {
-        --         inlayHints = {
-        --           includeInlayEnumMemberValueHints = true,
-        --           includeInlayFunctionLikeReturnTypeHints = true,
-        --           includeInlayFunctionParameterTypeHints = true,
-        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        --           includeInlayPropertyDeclarationTypeHints = true,
-        --           includeInlayVariableTypeHints = true,
-        --         },
-        --       },
+        -- require("typescript-tools").setup {
+        --   on_attach = on_attach,
+        --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+        --   -- filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+        --   settings = {
+        --     tsserver_file_preferences = {
+        --       includeInlayParameterNameHints = "literals",
+        --       includeCompletionsForModuleExports = true,
+        --       includeCompletionsForImportStatements = true,
+        --       includeAutomaticOptionalChainCompletions = true,
+        --       includeCompletionsWithClassMemberSnippets = true,
+        --       allowIncompleteCompletions = true,
+        --       includeInlayFunctionParameterTypeHints = true,
+        --       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+        --       includeInlayVariableTypeHints = true,
+        --       includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+        --       includeInlayPropertyDeclarationTypeHints = true,
+        --       includeInlayFunctionLikeReturnTypeHints = true,
+        --       includeCompletionsWithSnippetText = true,
         --     },
-        --   },
-        -- })
+        --   }
+        -- }
+        require('typescript').setup({
+          disable_commands = false, -- prevent the plugin from creating Vim commands
+          debug = false,            -- enable debug logging for commands
+          go_to_source_definition = { fallback = true },
+          server = {
+            cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
+            filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+            root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+            on_attach = on_attach,
+            capabilities = cmp_capabilities,
+            settings = {
+              javascript = {
+                inlayHints = {
+                  includeInlayEnumMemberValueHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                },
+              },
+              typescript = {
+                inlayHints = {
+                  includeInlayEnumMemberValueHints = true,
+                  includeInlayFunctionLikeReturnTypeHints = true,
+                  includeInlayFunctionParameterTypeHints = true,
+                  includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+                  includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                  includeInlayPropertyDeclarationTypeHints = true,
+                  includeInlayVariableTypeHints = true,
+                },
+              },
+            },
+          },
+        })
       end,
       denols = function()
         local opt = vim.deepcopy(opts)
@@ -522,8 +523,8 @@ return {
       end,
       volar = function()
         local function get_typescript_server_path(root_dir)
-          -- local global_ts = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib'
-          local global_ts = string.format("%s/install/global/node_modules/typescript/lib", os.getenv("BUN_INSTALL"))
+          local global_ts = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib'
+          -- local global_ts = string.format("%s/install/global/node_modules/typescript/lib", os.getenv("BUN_INSTALL"))
           local found_ts = ''
           local function check_dir(path)
             found_ts = util.path.join(path, 'node_modules', 'typescript', 'lib')
@@ -538,21 +539,21 @@ return {
           end
         end
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
+        -- opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
         opt.filetypes = { 'typescript', 'javascript', 'vue' }
         opt.on_new_config = function(new_config, new_root_dir)
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
         end
-        opt.settings = {
-          vue = {
-            inlayHints = {
-              inlineHandlerLeading = true,
-              missingProps = true,
-              optionsWrapper = true,
-            },
-            updateImportsOnFileMove = { enabled = true },
-          },
-        }
+        -- opt.settings = {
+        --   vue = {
+        --     inlayHints = {
+        --       inlineHandlerLeading = true,
+        --       missingProps = true,
+        --       optionsWrapper = true,
+        --     },
+        --     updateImportsOnFileMove = { enabled = true },
+        --   },
+        -- }
         lspconfig.volar.setup(opt)
       end,
       svelte = function()
@@ -646,6 +647,18 @@ return {
       },
     })
 
+    lspconfig.ocamllsp.setup({
+      on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        vim.keymap.set(
+          'n',
+          '<leader>=',
+          '<cmd>lua vim.lsp.buf.format{async=true}<CR>',
+          { buffer = bufnr, desc = 'LspFormat' }
+        )
+      end,
+      capabilities = cmp_capabilities,
+    })
     -- lspconfig.nimls.setup({
     --   on_attach = on_attach,
     --   capabilities = cmp_capabilities,

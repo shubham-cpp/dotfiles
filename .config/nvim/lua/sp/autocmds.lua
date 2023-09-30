@@ -187,6 +187,7 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.filetype.add({
   extension = {
     fish = 'fish',
+    ocaml = 'ocaml',
     rasi = 'rasi',
   },
   filename = {

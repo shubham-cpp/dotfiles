@@ -53,11 +53,24 @@ return {
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-buffer',
-    'hrsh7th/vim-vsnip',
-    'hrsh7th/cmp-vsnip',
-    'rafamadriz/friendly-snippets',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
+    -- 'hrsh7th/vim-vsnip',
+    -- 'hrsh7th/cmp-vsnip',
+    {
+      'L3MON4D3/LuaSnip',
+      version = "2.*",
+      build = "make install_jsregexp",
+      dependencies = { 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
+      config = function()
+        local ls = require 'luasnip'
+        ls.setup()
+        vim.keymap.set({ "i" }, "<C-K>", function() ls.expand() end, { silent = true })
+        vim.keymap.set({ "i", "s" }, "<C-L>", function() ls.jump(1) end, { silent = true })
+        vim.keymap.set({ "i", "s" }, "<C-J>", function() ls.jump(-1) end, { silent = true })
+        require("luasnip.loaders.from_vscode").lazy_load()
+      end
+    },
     {
       'onsails/lspkind.nvim',
       enabled = false,
@@ -139,29 +152,22 @@ return {
     -- local lspkind = require('lspkind')
     -- local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
+    local luasnip = require("luasnip")
 
     vim.opt.completeopt = 'menu,menuone,noselect'
-    vim.g.vsnip_snippet_dir = vim.fn.stdpath 'config' .. '/vsnip'
-    vim.g.vsnip_filetypes = {
-      javascriptreact = { 'javascript' }, --, 'html' },
-      typescriptreact = { 'typescript' }, --, 'html' },
-      svelte = { 'javascript' },
-      vue = { 'html' },
-    }
     local has_words_before = function()
       unpack = unpack or table.unpack
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
     end
-
     local feedkey = function(key, mode)
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
     end
-
     cmp.setup({
       snippet = {
         expand = function(args)
-          vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
+          -- vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
+          luasnip.lsp_expand(args.body) -- For `luasnip` user.
         end,
       },
       window = {
@@ -186,7 +192,6 @@ return {
             if cmp.visible() then
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             else
-              -- vim.api.nvim_feedkeys(t '<Down>', 'n', true)
               feedkey("<Down>", "n")
             end
           end,
@@ -203,7 +208,6 @@ return {
             if cmp.visible() then
               cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             else
-              -- vim.api.nvim_feedkeys(t '<Up>', 'n', true)
               feedkey("<Up>", "n")
             end
           end,
@@ -223,34 +227,34 @@ return {
         ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
-          elseif vim.fn["vsnip#available"](1) == 1 then
-            feedkey("<Plug>(vsnip-expand-or-jump)", "")
+            -- elseif luasnip.expand_or_jumpable() then
+          elseif luasnip.expand_or_locally_jumpable() then
+            luasnip.expand_or_jump()
           elseif has_words_before() then
             cmp.complete()
           else
-            fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+            fallback()
           end
         end, { 'i', 's' }),
-        ['<S-Tab>'] = cmp.mapping(function()
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_prev_item()
-          elseif vim.fn["vsnip#jumpable"](-1) == 1 then
-            feedkey("<Plug>(vsnip-jump-prev)", "")
+          elseif luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
           end
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lua',                 priority = 100 },
-        { name = 'nvim_lsp',                 priority = 100 },
-        { name = 'nvim_lsp_signature_help',  priority = 90 },
-        { name = 'vsnip',                    priority = 50 },
-        -- { name = 'buffer-lines' },
-        -- { name = 'cmp_tabnine' },
+        { name = 'nvim_lua',                priority = 100 },
+        { name = 'nvim_lsp',                priority = 100 },
+        { name = 'nvim_lsp_signature_help', priority = 90 },
+        { name = 'luasnip',                 priority = 50 },
       }, {
         { name = 'path', priority = 30 },
         {
-          name = 'buffer'
-          ,
+          name = 'buffer',
           priority = 20,
           option = {
             keyword_length = 3,

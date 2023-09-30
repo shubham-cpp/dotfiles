@@ -107,3 +107,6 @@ source "$ZDOTDIR"/mfunctions.zsh
 
 # bun completions
 # [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
+
+# opam configuration
+[[ ! -r /home/shubham/.local/share/opam/opam-init/init.zsh ]] || source /home/shubham/.local/share/opam/opam-init/init.zsh  > /dev/null 2> /dev/null

@@ -3,6 +3,17 @@ local g = vim.g
 local cmd = vim.cmd
 local old_path = vim.fn.stdpath
 g.mapleader = ' '
+--[[
+-- keybindings.json
+[
+  {
+    // "command": "-vscode-neovim.send",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorTextFocus && neovim.mode == insert",
+    "key": "ctrl+d"
+  }
+]
+--]]
 
 local disabled_built_ins = {
   'netrw',

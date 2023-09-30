@@ -30,6 +30,10 @@ return {
       return vim.fn.join(vim.tbl_flatten(clients), ",")
     end
     require('lualine').setup({
+      options = {
+        component_separators = '|',
+        section_separators = { left = '', right = '' },
+      },
       sections = {
         lualine_a = {
           {
@@ -37,6 +41,7 @@ return {
             fmt = function(str)
               return str:sub(1, 1)
             end,
+            separator = { left = '' },
           },
         },
         lualine_b = {
@@ -60,7 +65,7 @@ return {
         },
         lualine_x = { 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
-        lualine_z = { 'location' },
+        lualine_z = { { 'location', separator = { right = '' } } },
       },
       inactive_sections = {
         -- lualine_a = { { 'buffers', cond = conditions.hide_in_width } },
@@ -79,7 +84,17 @@ return {
       },
       tabline = {
         lualine_a = {},
-        lualine_b = { 'buffers' },
+        lualine_b = { {
+          'buffers',
+          filetype_names = {
+            lazy = 'Lazy.nvim',
+          },
+          -- buffers_color = {
+          --   -- Same values as the general color option can be used here.
+          --   active = '#3f4758',     -- Color for active buffer.
+          --   inactive = '#1d1915', -- Color for inactive buffer.
+          -- },
+        } },
         lualine_c = {},
         lualine_x = {},
         lualine_y = {},

@@ -23,6 +23,7 @@ export BROWSER="firefox"
 
 [ -x /bin/brave ] && export BROWSER="brave"
 [ -x /bin/brave-browser ] && export BROWSER="brave-browser"
+[ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
 export READER="zathura"
 
 export QT_QPA_PLATFORMTHEME="qt5ct"
@@ -64,6 +65,7 @@ export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 # export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
 export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
+export OPAMROOT="$XDG_DATA_HOME/opam"
 [ -x "$CARGO_HOME/env" ] && . "$CARGO_HOME/env"
 export GOPATH="$XDG_DATA_HOME"/golib
 export GOPATH="$GOPATH:$HOME/Documents/Programming/GoLang"

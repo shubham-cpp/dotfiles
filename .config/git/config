@@ -17,21 +17,21 @@
     light = false
 
 [diff]
-    tool = nvimdiff
+    tool = mnvimdiff
 [difftool]
     prompt = false
 # [difftool "meld"]
 #     cmd = meld "$LOCAL" "$REMOTE"
 
 [merge]
-    tool = nvimdiff
+    tool = mnvimdiff
     conflictstyle=diff3
 
 [mergetool]
     prompt = false
 
-# [mergetool "vimdiff"]
-# 	cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[mergetool "mnvimdiff"]
+	cmd = NVIM_APP=nvim-my nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [maintenance]
 	repo = /home/shubham/.cache/fast-syntax-highlighting
 	repo = /home/shubham/.cache/powerlevel10k

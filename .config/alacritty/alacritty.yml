@@ -140,11 +140,11 @@ cursor:
   # style:
   #   blinking: "On"
 live_config_reload: true
-Default:
-shell:
-  program: /bin/fish
-  args:
-    - --login
+# Default:
+# shell:
+#   program: /bin/fish
+#   args:
+#     - --login
 mouse:
   hide_when_typing: true
 hints:
