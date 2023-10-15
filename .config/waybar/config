@@ -3,7 +3,7 @@
   "height": 26,
   "spacing": 4,
   "modules-left": [
-    "wlr/workspaces",
+    "hyprland/workspaces",
   ],
   "modules-center": [
     "hyprland/window"
@@ -13,15 +13,16 @@
     "network",
     "cpu",
     "memory",
-    "backlight",
-    "pulseaudio",
-    "battery",
+    // "backlight",
+    // "pulseaudio",
+    "wireplumber",
+    // "battery",
     "tray"
   ],
   "clock": {
     "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
     "format-alt": "{:%a %d %b, %I:%M %p }",
-    "format": " {:%I:%M %p}",
+    "format": "  {:%I:%M %p}",
     "timezone": "Asia/Kolkata"
   },
   "cpu": {
@@ -30,6 +31,14 @@
   },
   "memory": {
     "format": " {}%"
+  },
+  "wireplumber": {
+    "format": " {icon} {volume}%",
+    "format-muted": "󰝟 ",
+    "format-icons": ["", " ", " "],
+    "on-click": "helvum",
+    "max-volume": 150,
+    "scroll-step": 0.2
   },
   "backlight": {
     "format": "{icon} {percent}%",
@@ -87,9 +96,9 @@
       "portable": "",
       "car": "",
       "default": [
-        "",
-        "",
-        ""
+        " ",
+        " ",
+        " "
       ]
     },
     "on-click": "pavucontrol"
@@ -99,8 +108,8 @@
     "return-type": "json",
     "max-length": 40,
     "format-icons": {
-      "spotify": "",
-      "default": "🎜"
+      "spotify": " ",
+      "default": "🎜 "
     },
     "escape": true,
     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
@@ -109,13 +118,21 @@
     "format": "{name}",
     "on-click": "activate",
     "format-icons": {
-      "urgent": "",
-      "active": "",
-      "default": ""
+      "urgent": " ",
+      "active": " ",
+      "default": " "
     },
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1",
     "sort-by-number": true
+  },
+  "hyprland/workspaces":{
+    "active-only": true,
+    "format-icons": {
+      "urgent": " ",
+      "active": " ",
+      "default": " "
+    },
   },
   "tray": {
     "icon-size": 21,

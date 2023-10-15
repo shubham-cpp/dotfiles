@@ -162,7 +162,7 @@ filetype *.torrent
         \ setsid -f qbittorrent %f > /dev/null 2>&1
 " Office files
 filextype *.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx
-        \ setsid -f libreoffice %f > /dev/null 2>&1
+        \ setsid -f xdg-open %f > /dev/null 2>&1
 
 " }}}
 
@@ -175,7 +175,7 @@ fileviewer *.[1-8]
             \ man -- %c | col -b
 
 fileviewer *.docx
-            \ docx2txt < %c
+            \ docx2txt %c
 
 " view contents of archive files on opening them
 fileviewer *.7z,*.bz2,*.cab,*.cpio,*.deb,*.gz,

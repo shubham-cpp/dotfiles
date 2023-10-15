@@ -21,13 +21,16 @@ return {
     local function servers_attached()
       local msg = 'None'
       local clients = vim.tbl_map(
-        function(client) return client.name end,
+        function(client)
+          return client.name
+        end,
         -- vim.lsp.get_clients({ bufnr = 0 }))
-        vim.lsp.buf_get_clients())
+        vim.lsp.buf_get_clients()
+      )
       if vim.tbl_isempty(clients) then
         return msg
       end
-      return vim.fn.join(vim.tbl_flatten(clients), ",")
+      return vim.fn.join(vim.tbl_flatten(clients), ',')
     end
     require('lualine').setup({
       options = {
@@ -83,35 +86,10 @@ return {
         },
       },
       tabline = {
-        lualine_a = {},
-        lualine_b = { {
-          'buffers',
-          filetype_names = {
-            lazy = 'Lazy.nvim',
-          },
-          -- buffers_color = {
-          --   -- Same values as the general color option can be used here.
-          --   active = '#3f4758',     -- Color for active buffer.
-          --   inactive = '#1d1915', -- Color for inactive buffer.
-          -- },
-        } },
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = { {
+        lualine_a = {
           'tabs',
-          mode = 2,
-          use_mode_colors = false,
-          fmt = function(name, context)
-            -- Show + if buffer is modified in tab
-            local buflist = vim.fn.tabpagebuflist(context.tabnr)
-            local winnr = vim.fn.tabpagewinnr(context.tabnr)
-            local bufnr = buflist[winnr]
-            local mod = vim.fn.getbufvar(bufnr, '&mod')
-
-            return name .. (mod == 1 and ' +' or '')
-          end
-        } },
+          { 'windows', mode = 2, disabled_buftypes = { 'quickfix', 'prompt', 'help' } },
+        },
       },
       extensions = { 'neo-tree', 'toggleterm', 'quickfix' },
     })

@@ -1,39 +1,3 @@
-local cmp_kinds = {
-  Text = '  ',
-  Method = '  ',
-  Function = '  ',
-  Field = '  ',
-  Variable = '  ',
-  Interface = '  ',
-  Module = '  ',
-  Property = '  ',
-  Value = '  ',
-  Enum = '  ',
-  Keyword = '  ',
-  Color = '  ',
-  File = '  ',
-  Folder = '  ',
-  EnumMember = '  ',
-  Constant = '  ',
-  Struct = '  ',
-  Event = '  ',
-  Operator = '  ',
-  TypeParameter = '  ',
-  Array = "󰅪",
-  Boolean = "⊨",
-  Class = "󰌗",
-  Constructor = "",
-  Key = "󰌆",
-  Namespace = "󰅪",
-  Null = "NULL",
-  Number = "#",
-  Object = "󰀚",
-  Package = "󰏗",
-  Reference = "",
-  Snippet = "",
-  String = "󰀬",
-  Unit = "",
-}
 local function deprio(kind)
   return function(e1, e2)
     if e1:get_kind() == kind then
@@ -59,50 +23,35 @@ return {
     -- 'hrsh7th/cmp-vsnip',
     {
       'L3MON4D3/LuaSnip',
-      version = "2.*",
-      build = "make install_jsregexp",
+      version = '2.*',
+      build = 'make install_jsregexp',
       dependencies = { 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
       config = function()
         local ls = require 'luasnip'
         ls.setup()
-        vim.keymap.set({ "i" }, "<C-K>", function() ls.expand() end, { silent = true })
-        vim.keymap.set({ "i", "s" }, "<C-L>", function() ls.jump(1) end, { silent = true })
-        vim.keymap.set({ "i", "s" }, "<C-J>", function() ls.jump(-1) end, { silent = true })
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end
+        vim.keymap.set({ 'i' }, '<C-K>', function()
+          ls.expand()
+        end, { silent = true })
+        vim.keymap.set({ 'i', 's' }, '<C-L>', function()
+          ls.jump(1)
+        end, { silent = true })
+        vim.keymap.set({ 'i', 's' }, '<C-J>', function()
+          ls.jump(-1)
+        end, { silent = true })
+        require('luasnip.loaders.from_vscode').lazy_load()
+      end,
     },
     {
       'onsails/lspkind.nvim',
       enabled = false,
-      opts = {
-        mode = "symbol",
-        symbol_map = {
-          Array = "󰅪",
-          Boolean = "⊨",
-          Class = "󰌗",
-          Constructor = "",
-          Key = "󰌆",
-          Namespace = "󰅪",
-          Null = "NULL",
-          Number = "#",
-          Object = "󰀚",
-          Package = "󰏗",
-          Property = "",
-          Reference = "",
-          Snippet = "",
-          String = "󰀬",
-          TypeParameter = "󰊄",
-          Unit = "",
-        },
-        menu = {},
-      },
+      opts = require('sp.util').symbols.lsp_kinds,
       config = function(_, opts)
-        require("lspkind").init(opts)
-      end
+        require('lspkind').init(opts)
+      end,
     },
     {
       'Exafunction/codeium.vim',
-      event = "InsertEnter",
+      event = 'InsertEnter',
       init = function()
         vim.g.codeium_disable_bindings = 1
       end,
@@ -152,13 +101,13 @@ return {
     -- local lspkind = require('lspkind')
     -- local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
-    local luasnip = require("luasnip")
+    local luasnip = require 'luasnip'
 
     vim.opt.completeopt = 'menu,menuone,noselect'
     local has_words_before = function()
       unpack = unpack or table.unpack
       local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
+      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
     end
     local feedkey = function(key, mode)
       vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
@@ -192,7 +141,7 @@ return {
             if cmp.visible() then
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             else
-              feedkey("<Down>", "n")
+              feedkey('<Down>', 'n')
             end
           end,
           i = function(fallback)
@@ -208,7 +157,7 @@ return {
             if cmp.visible() then
               cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             else
-              feedkey("<Up>", "n")
+              feedkey('<Up>', 'n')
             end
           end,
           i = function(fallback)
@@ -247,10 +196,10 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lua',                priority = 100 },
-        { name = 'nvim_lsp',                priority = 100 },
+        { name = 'nvim_lua', priority = 100 },
+        { name = 'nvim_lsp', priority = 100 },
         { name = 'nvim_lsp_signature_help', priority = 90 },
-        { name = 'luasnip',                 priority = 50 },
+        { name = 'luasnip', priority = 50 },
       }, {
         { name = 'path', priority = 30 },
         {
@@ -272,7 +221,7 @@ return {
       }),
       formatting = {
         format = function(_, vim_item)
-          vim_item.kind = (cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+          vim_item.kind = (require('sp.util').symbols.cmp_kinds[vim_item.kind] or '') .. vim_item.kind
           return vim_item
         end,
       },
@@ -296,8 +245,8 @@ return {
           -- copied from cmp-under, but I don't think I need the plugin for this.
           -- I might add some more of my own.
           function(entry1, entry2)
-            local _, entry1_under = entry1.completion_item.label:find "^_+"
-            local _, entry2_under = entry2.completion_item.label:find "^_+"
+            local _, entry1_under = entry1.completion_item.label:find '^_+'
+            local _, entry2_under = entry2.completion_item.label:find '^_+'
             entry1_under = entry1_under or 0
             entry2_under = entry2_under or 0
             if entry1_under > entry2_under then
@@ -307,6 +256,7 @@ return {
             end
           end,
           compare.kind,
+          -- compare.locality,
           -- compare.sort_text,
           compare.recently_used,
         },
@@ -327,18 +277,18 @@ return {
         { name = 'path' },
       }),
       mapping = cmp.mapping.preset.cmdline(),
-      formatting = { fields = { "abbr" } },
+      formatting = { fields = { 'abbr' } },
       window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },
     })
 
     cmp.setup.cmdline({ '/', '?' }, {
       sources = sources({
-        { name = "buffer" },
+        { name = 'buffer' },
         -- { name = 'nvim_lsp_signature_help' },
         -- { name = 'buffer',                 keyword_pattern = [=[[^[:blank:]].*]=] },
       }),
       mapping = cmp.mapping.preset.cmdline(),
-      formatting = { fields = { "abbr" } },
+      formatting = { fields = { 'abbr' } },
       window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },
     })
   end,

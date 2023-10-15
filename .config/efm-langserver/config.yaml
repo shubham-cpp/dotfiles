@@ -1,5 +1,5 @@
----
 version: 2
+lint-debounce: 1s
 root-markers:
   - RCS/
   - SCCS/
@@ -18,78 +18,78 @@ commands:
     os: windows
     command: notepad
     arguments:
-      - '${FILENAME}'
+      - "${FILENAME}"
   - title: Editor (gedit)
     os: linux
     command: xdg-open
     # Linux no method generic GUI editor open
     arguments:
-      - '${FILENAME}'
+      - "${FILENAME}"
   - title: Editor (default)
     os: darwin
     command: open
     arguments:
-      - '-e'
-      - '${FILENAME}'
+      - "-e"
+      - "${FILENAME}"
 # linter,formatter setting
 tools:
   cppcheck-lint: &cppcheck-lint
     prefix: cppcheck
-    lint-command: 'cppcheck --quiet --force --enable=style --error-exitcode=1 ${INPUT}'
+    lint-command: "cppcheck --quiet --force --enable=style --error-exitcode=1 ${INPUT}"
     lint-stdin: false
     lint-formats:
-      - '%f:%l:%c: %m'
+      - "%f:%l:%c: %m"
     root-markers:
       - compile_commands.json
   clang-format: &clang-format
-    format-command: 'clang-format ${INPUT}'
+    format-command: "clang-format ${INPUT}"
     format-stdin: true
   clang-tidy: &clang-tidy
     prefix: clang-tidy
-    lint-command: 'clang-tidy ${INPUT}'
+    lint-command: "clang-tidy ${INPUT}"
     lint-stdin: false
     lint-formats:
-      - '%f:%l:%c: %trror: %m'
-      - '%f:%l:%c: %tarning: %m'
-      - '%f:%l:%c: %tote: %m'
+      - "%f:%l:%c: %trror: %m"
+      - "%f:%l:%c: %tarning: %m"
+      - "%f:%l:%c: %tote: %m"
 
   vint-lint: &vint-lint
     prefix: vint
-    lint-command: 'vint --enable-neovim --style-problem ${INPUT}'
+    lint-command: "vint --enable-neovim --style-problem ${INPUT}"
     lint-formats:
-      - '%f:%l:%c: %m'
+      - "%f:%l:%c: %m"
 
   markdownlint-lint: &markdownlint-lint
     prefix: markdownlint
-    lint-command: 'markdownlint --stdin'
+    lint-command: "markdownlint --stdin"
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c MD%n/%*[^ ] %m'
-      - '%f:%l MD%n/%*[^ ] %m'
+      - "%f:%l:%c MD%n/%*[^ ] %m"
+      - "%f:%l MD%n/%*[^ ] %m"
     commands:
-      - title: 'markdownlint fix'
+      - title: "markdownlint fix"
         command: markdownlint
         arguments:
-          - '--fix'
-          - '${INPUT}'
+          - "--fix"
+          - "${INPUT}"
 
   jsonlint-lint: &jsonlint-lint
     prefix: jsonlint
-    lint-command: 'jsonlint -c'
+    lint-command: "jsonlint -c"
     lint-stdin: true
     lint-formats:
-      - 'line %l, col %c, found: %m'
+      - "line %l, col %c, found: %m"
 
   fixjson-format: &fixjson-format
-    format-command: 'fixjson -i 2'
+    format-command: "fixjson -i 2"
     format-stdin: true
 
   shellcheck-lint: &shellcheck-lint
     prefix: shellcheck
-    lint-command: 'shellcheck -f gcc -x -'
+    lint-command: "shellcheck -f gcc -x -"
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %t%*[^:]: %m [SC%n]'
+      - "%f:%l:%c: %t%*[^:]: %m [SC%n]"
 
   shfmt-format: &shfmt-format
     format-command: shfmt -ln bash -i 2 -bn -ci -sr -kp
@@ -100,7 +100,7 @@ tools:
     lint-command: flake8 --stdin-display-name ${INPUT} -
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %m'
+      - "%f:%l:%c: %m"
     root-markers:
       - setup.cfg
       - tox.ini
@@ -108,10 +108,10 @@ tools:
 
   pylint-lint: &pylint-lint
     prefix: pylint
-    lint-command: 'pylint --output-format=text --score=no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}'
+    lint-command: "pylint --output-format=text --score=no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}"
     lint-stdin: false
     lint-formats:
-      - '%f:%l:%c:%t:%m'
+      - "%f:%l:%c:%t:%m"
     lint-offset-columns: 1
     lint-category-map:
       I: H
@@ -126,60 +126,60 @@ tools:
 
   mypy-lint: &mypy-lint
     prefix: mypy
-    lint-command: 'mypy --show-column-numbers --strict --strict-equality'
+    lint-command: "mypy --show-column-numbers --strict --strict-equality"
     lint-formats:
-      - '%f:%l:%c: %t%*[^:]: %m'
+      - "%f:%l:%c: %t%*[^:]: %m"
     root-markers:
       - setup.cfg
       - mypy.ini
 
   black-action-format: &black-action-format
     commands:
-      - title: 'black format'
+      - title: "black format"
         command: black
         arguments:
-          - '--quiet'
-          - '--safe'
-          - '${INPUT}'
+          - "--quiet"
+          - "--safe"
+          - "${INPUT}"
 
   yapf-action-format: &yapf-action-format
     commands:
-      - title: 'yapf format'
+      - title: "yapf format"
         command: yapf
         arguments:
-          - '-i'
-          - '${INPUT}'
+          - "-i"
+          - "${INPUT}"
 
   pydocstyle-lint: &pydocstyle-lint
     prefix: pydocstyle
-    lint-command: 'pydocstyle ${INPUT}'
+    lint-command: "pydocstyle ${INPUT}"
     lint-stdin: false
     lint-ignore-exit-code: true
     lint-formats:
-      - '%I%f:%l %.%#:'
+      - "%I%f:%l %.%#:"
       - '%Z%*\sD%n: %m'
 
   yamllint-lint: &yamllint-lint
     prefix: yamllint
-    lint-command: 'yamllint --strict --format parsable ${INPUT}'
+    lint-command: "yamllint --strict --format parsable ${INPUT}"
     lint-stdin: false
     lint-formats:
-      - '%f:%l:%c: [%t%*[a-z]] %m'
+      - "%f:%l:%c: [%t%*[a-z]] %m"
     env:
-      - 'PYTHONIOENCODING=UTF-8'
+      - "PYTHONIOENCODING=UTF-8"
 
   actionlint-lint: &actionlint-lint
     prefix: actionlint
     lint-command: "bash -c \"[[ '${INPUT}' =~ \\\\.github/workflows/ ]]\" && actionlint -oneline -no-color -"
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %m'
+      - "%f:%l:%c: %m"
     root-markers:
       - .github
 
   eslint-lint: &eslint-lint
     prefix: eslint
-    lint-command: 'npx --no-install eslint -f unix --stdin --stdin-filename ${INPUT}'
+    lint-command: "npx --no-install eslint -f unix --stdin --stdin-filename ${INPUT}"
     lint-ignore-exit-code: true
     lint-stdin: true
     root-markers:
@@ -191,16 +191,16 @@ tools:
       - .eslintrc.json
       - .eslintrc
     commands:
-      - title: 'eslint fix'
+      - title: "eslint fix"
         command: npx
         arguments:
-          - '--no-install'
-          - 'eslint'
-          - '--fix'
-          - '${INPUT}'
+          - "--no-install"
+          - "eslint"
+          - "--fix"
+          - "${INPUT}"
   eslintd: &eslintd
     prefix: eslint_d
-    lint-command: 'eslint_d --no-color --format unix --stdin --stdin-filename ${INPUT}'
+    lint-command: "eslint_d --no-color --format unix --stdin --stdin-filename ${INPUT}"
     # lint-formats: %f(%l,%c): %trror %m', '%f(%l,%c): %tarning %m
     lint-ignore-exit-code: true
     lint-stdin: true
@@ -217,11 +217,11 @@ tools:
     format-command: eslint_d --fix-to-stdout --stdin --stdin-filename ${INPUT}
     format-stdin: true
     commands:
-      - title: 'eslint_d fix'
+      - title: "eslint_d fix"
         command: eslint_d
         arguments:
-          - '--fix'
-          - '${INPUT}'
+          - "--fix"
+          - "${INPUT}"
     root-markers:
       # - package.json
       - .eslintrc
@@ -233,40 +233,55 @@ tools:
 
   stylelint-lint: &stylelint-lint
     prefix: stylelint
-    lint-command: 'npx --no-install stylelint --formatter unix --stdin --stdin-filename ${INPUT}'
+    lint-command: "npx --no-install stylelint --formatter unix --stdin --stdin-filename ${INPUT}"
     lint-ignore-exit-code: false
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %m [%t%*[a-z]]'
+      - "%f:%l:%c: %m [%t%*[a-z]]"
     root-markers:
       - package.json
       - .stylelintrc.json
     commands:
-      - title: 'stylelint fix'
+      - title: "stylelint fix"
         command: npx
         arguments:
-          - '--no-install'
-          - 'stylelint'
-          - '--fix'
-          - '${INPUT}'
+          - "--no-install"
+          - "stylelint"
+          - "--fix"
+          - "${INPUT}"
 
   htmllint-lint: &htmllint-lint
     prefix: htmllint
-    lint-command: 'npx --no-install htmllint ${INPUT}'
+    lint-command: "npx --no-install htmllint ${INPUT}"
     lint-stdin: false
     lint-formats:
-      - '%f: line %l, col %c, %m'
+      - "%f: line %l, col %c, %m"
     root-markers:
       - package.json
       - .htmllintrc
 
-  prettierd: &prettierd
-    format-command: >
-      prettierd ${INPUT} ${--range-start=charStart} ${--range-end=charEnd} \
-        ${--tab-width=tabSize} ${--use-tabs=!insertSpaces}
+  prettier-action-fix: &prettier-action-fix
+    format-command: prettier --stdin --stdin-filepath '${INPUT}' ${--range-start:charStart} ${--range-end:charEnd} ${--tab-width:tabSize} ${--use-tabs:!insertSpaces}
     format-stdin: true
     format-can-range: true
     root-markers:
+      - package.json
+      - .prettierrc
+      - .prettierrc.json
+      - .prettierrc.js
+      - .prettierrc.yml
+      - .prettierrc.yaml
+      - .prettierrc.json5
+      - .prettierrc.mjs
+      - .prettierrc.cjs
+      - .prettierrc.toml
+
+  prettierd: &prettierd
+    format-command: prettierd ${INPUT} ${--range-start=charStart} ${--range-end=charEnd} ${--tab-width:tabSize} ${--use-tabs:!insertSpaces}
+    format-stdin: true
+    format-can-range: true
+    root-markers:
+      - package.json
       - .prettierrc
       - .prettierrc.json
       - .prettierrc.js
@@ -285,7 +300,7 @@ tools:
       - deno.json
   denolint: &denolint
     prefix: denolint
-    lint-command: 'deno lint ${INPUT}'
+    lint-command: "deno lint ${INPUT}"
     lint-stdin: false
     root-markers:
       - deno.json
@@ -297,7 +312,7 @@ tools:
     lint-command: fish --no-execute ${INPUT}
     lint-ignore-exit-code: true
     lint-formats:
-      - '%.%#(line %l): %m'
+      - "%.%#(line %l): %m"
 
   goimports: &goimports
     format-command: goimports
@@ -310,7 +325,7 @@ tools:
     lint-command: golangci-lint run --color never --out-format tab ${INPUT}
     lint-stdin: false
     lint-formats:
-      - '%.%#:%l:%c %m'
+      - "%.%#:%l:%c %m"
 
   stylua: &stylua
     format-command: stylua ${--indent-width:tabSize} ${--range-start:charStart} ${--range-end:charEnd} --color Never -
@@ -336,23 +351,24 @@ languages:
   python:
     - <<: *flake8-lint
     - <<: *black-action-format
-
+  lua:
+    - <<: *stylua
   markdown:
     - <<: *markdownlint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   html:
     - <<: *htmllint-lint
     - <<: *stylelint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   css:
     - <<: *stylelint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   scss:
     - <<: *stylelint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   less:
     - <<: *stylelint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   json:
     - <<: *jsonlint-lint
     - <<: *fixjson-format
@@ -364,34 +380,35 @@ languages:
     - <<: *fixjson-format
   yaml:
     - <<: *yamllint-lint
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   javascript:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
     - <<: *eslintd-fix
     - <<: *eslintd
   typescript:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
     - <<: *eslintd-fix
     - <<: *eslintd
   javascriptreact:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
     - <<: *eslintd-fix
     - <<: *eslintd
   typescriptreact:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
     - <<: *eslintd-fix
     - <<: *eslintd
   vue:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
     - <<: *eslintd-fix
     - <<: *eslintd
   svelte:
-    - <<: *prettierd
-    - <<: *eslintd-fix
-    - <<: *eslintd
+    - <<: *prettier-action-fix
+    # - <<: *prettierd
+    # - <<: *eslintd-fix
+    # - <<: *eslintd
 
   graphql:
-    - <<: *prettierd
+    - <<: *prettier-action-fix
   go:
     - <<: *golangci-lint
     - <<: *goimports

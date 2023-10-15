@@ -17,7 +17,7 @@ return {
   },
   config = function()
     local lspconfig = require 'lspconfig'
-    require("lspconfig.ui.windows").default_options.border = "rounded"
+    require('lspconfig.ui.windows').default_options.border = 'rounded'
     local util = lspconfig.util
     vim.diagnostic.config({
       --- {{{
@@ -155,7 +155,7 @@ return {
         end
       end,
       emmet_ls = function()
-        lspconfig.emmet_ls.setup(opts)
+        lspconfig['emmet_ls'].setup(opts)
       end,
       rust_analyzer = function()
         local opt = vim.deepcopy(opts)
@@ -163,48 +163,48 @@ return {
           if err then
             error(tostring(err))
           end
-          vim.notify("Cargo workspace reloaded")
+          vim.notify 'Cargo workspace reloaded'
         end
         local function fly_check()
-          vim.lsp.buf_notify(0, "rust-analyzer/runFlycheck", {
-            textDocument = vim.lsp.util.make_text_document_params()
+          vim.lsp.buf_notify(0, 'rust-analyzer/runFlycheck', {
+            textDocument = vim.lsp.util.make_text_document_params(),
           })
         end
         local function reload_workspace()
-          vim.notify("Reloading Cargo Workspace")
-          vim.lsp.buf_request(0, "rust-analyzer/reloadWorkspace", nil, handler)
+          vim.notify 'Reloading Cargo Workspace'
+          vim.lsp.buf_request(0, 'rust-analyzer/reloadWorkspace', nil, handler)
         end
         opt.on_attach = function(client, bufnr)
           on_attach(client, bufnr)
-          vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = "Format Buffer(LSP)" })
+          vim.keymap.set('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format Buffer(LSP)' })
         end
         opt.settings = {
           ['rust-analyzer'] = {
             diagnostics = {
               enable = true,
             },
-            check = { features = "all" },
+            check = { features = 'all' },
             inlayHints = {
               closureCaptureHints = {
                 enable = true,
-              }
+              },
             },
             lens = {
               references = {
                 adt = { enable = true },
                 enumVariant = { enable = true },
                 method = { enable = true },
-                trait = { enable = true }
-              }
+                trait = { enable = true },
+              },
             },
-            typing = { autoClosingAngleBrackets = { enable = true } }
-          }
+            typing = { autoClosingAngleBrackets = { enable = true } },
+          },
         }
         opt.commands = {
           RustFlyCheck = { fly_check },
-          RustReloadWorkspace = { reload_workspace }
+          RustReloadWorkspace = { reload_workspace },
         }
-        lspconfig.rust_analyzer.setup(opt)
+        lspconfig['rust_analyzer'].setup(opt)
       end,
       gopls = function()
         local opt = vim.deepcopy(opts)
@@ -227,18 +227,18 @@ return {
             },
           },
         }
-        lspconfig.gopls.setup(opt)
+        lspconfig['gopls'].setup(opt)
       end,
       bashls = function()
         local opt = vim.deepcopy(opts)
         opt.cmd = { require('sp.util').bun_path() .. '/bash-language-server', 'start' }
         opt.settings = { bashIde = { highlightParsingErrors = true } }
-        lspconfig.bashls.setup(opt)
+        lspconfig['bashls'].setup(opt)
       end,
       html = function()
         local opt = vim.deepcopy(opts)
         opt.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
-        lspconfig.html.setup(opt)
+        lspconfig['html'].setup(opt)
       end,
       cssls = function()
         local opt = vim.deepcopy(opts)
@@ -273,10 +273,10 @@ return {
             },
           },
         }
-        lspconfig.cssls.setup(opt)
+        lspconfig['cssls'].setup(opt)
       end,
       eslint = function()
-        lspconfig.eslint.setup({
+        lspconfig['eslint'].setup({
           cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' },
           on_attach = function(_, bufnr)
             -- vim.api.nvim_create_autocmd('BufWritePre', {
@@ -289,7 +289,7 @@ return {
       end,
       pylyzer = function()
         local opt = vim.deepcopy(opts)
-        lspconfig.pylyzer.setup(opt)
+        lspconfig['pylyzer'].setup(opt)
       end,
       pylsp = function()
         local opt = vim.deepcopy(opts)
@@ -316,7 +316,7 @@ return {
         opt.flags = {
           debounce_text_changes = 200,
         }
-        lspconfig.pylsp.setup(opt)
+        lspconfig['pylsp'].setup(opt)
       end,
       pyright = function()
         local opt = vim.deepcopy(opts)
@@ -330,7 +330,7 @@ return {
             exclude = { '**/node_modules', '**/__pycache__' },
           },
         }
-        lspconfig.pyright.setup(opt)
+        lspconfig['pyright'].setup(opt)
       end,
       jsonls = function()
         local opt = vim.deepcopy(opts)
@@ -349,7 +349,7 @@ return {
             format = { enable = false },
           },
         }
-        lspconfig.jsonls.setup(opt)
+        lspconfig['jsonls'].setup(opt)
       end,
       yamlls = function()
         local opt = vim.deepcopy(opts)
@@ -369,7 +369,7 @@ return {
             }),
           },
         }
-        lspconfig.yamlls.setup(opt)
+        lspconfig['yamlls'].setup(opt)
       end,
       ['lua_ls'] = function()
         local opt = vim.deepcopy(opts)
@@ -400,7 +400,7 @@ return {
             },
           },
         }
-        lspconfig.lua_ls.setup(opt)
+        lspconfig['lua_ls'].setup(opt)
       end,
       tailwindcss = function()
         local opt = vim.deepcopy(opts)
@@ -422,7 +422,7 @@ return {
           },
         }
         -- opt.single_file_support = false
-        lspconfig.tailwindcss.setup(opt)
+        lspconfig['tailwindcss'].setup(opt)
       end,
       tsserver = function()
         -- require("typescript-tools").setup {
@@ -449,7 +449,7 @@ return {
         -- }
         require('typescript').setup({
           disable_commands = false, -- prevent the plugin from creating Vim commands
-          debug = false,            -- enable debug logging for commands
+          debug = false, -- enable debug logging for commands
           go_to_source_definition = { fallback = true },
           server = {
             cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
@@ -519,7 +519,7 @@ return {
           },
         }
 
-        lspconfig.denols.setup(opt)
+        lspconfig['denols'].setup(opt)
       end,
       volar = function()
         local function get_typescript_server_path(root_dir)
@@ -554,7 +554,7 @@ return {
         --     updateImportsOnFileMove = { enabled = true },
         --   },
         -- }
-        lspconfig.volar.setup(opt)
+        lspconfig['volar'].setup(opt)
       end,
       svelte = function()
         local opt = vim.deepcopy(opts)
@@ -565,18 +565,23 @@ return {
             plugin = { svelte = { defaultScriptLanguage = 'typescript' } },
           },
         }
-        lspconfig.svelte.setup(opt)
+        lspconfig['svelte'].setup(opt)
       end,
       efm = function()
-        lspconfig.efm.setup({
-          settings = {
+        lspconfig['efm'].setup({
+          init_options = {
             documentFormatting = true,
             documentRangeFormatting = true,
-            hover = false,
-            documentSymbol = false,
-            codeAction = false,
-            completion = false
           },
+          cmd = { "efm-langserver", "-c", vim.fn.expand "~/.config/efm-langserver/config.yaml", "-logfile",
+            "/tmp/efm-langserver-logs.log" },
+          -- settings = {
+          --   rootMarkers = {
+          --     '.git/',
+          --     'package.json',
+          --   },
+          --   languages = { typescript = { prettier }, svelte = { prettier }, lua = { stylua } },
+          -- },
           filetypes = {
             'javascript',
             'javascriptreact',
@@ -601,25 +606,27 @@ return {
             'vim',
             'python',
             'lua',
-            'markdown'
+            'markdown',
           },
           on_attach = function(_, buf)
-            vim.keymap.set(
-              'n',
-              '<leader>=',
-              '<cmd>lua vim.lsp.buf.format{async=true}<CR>',
-              { buffer = buf, desc = 'Efm Fix' }
-            )
+            vim.keymap.set({ 'n', 'v' }, '<leader>=', function()
+              vim.lsp.buf.format({
+                async = true,
+                filter = function(client)
+                  return client.name == 'efm'
+                end,
+              })
+            end, { buffer = buf, desc = 'Efm Fix' })
           end,
         })
       end,
     })
-    lspconfig.nim_langserver.setup({
+    lspconfig['nim_langserver'].setup({
       on_attach = on_attach,
       capabilities = cmp_capabilities,
     })
 
-    lspconfig.pylsp.setup({
+    lspconfig['pylsp'].setup({
       capabilities = cmp_capabilities,
       on_attach = on_attach,
       settings = {
@@ -647,7 +654,7 @@ return {
       },
     })
 
-    lspconfig.ocamllsp.setup({
+    lspconfig['ocamllsp'].setup({
       on_attach = function(client, bufnr)
         on_attach(client, bufnr)
         vim.keymap.set(
