@@ -19,8 +19,6 @@ return {
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
-    -- 'hrsh7th/vim-vsnip',
-    -- 'hrsh7th/cmp-vsnip',
     {
       'L3MON4D3/LuaSnip',
       version = '2.*',
@@ -128,7 +126,7 @@ return {
       },
       mapping = cmp.mapping.preset.insert({
         ['<C-x><C-s>'] = cmp.mapping.complete({
-          config = { sources = { { name = 'vsnip' } } },
+          config = { sources = { { name = 'luasnip' } } },
         }),
         ['<C-x><C-f>'] = cmp.mapping.complete({
           config = { sources = { { name = 'path' } } },
@@ -136,6 +134,24 @@ return {
         ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
         ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
         ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<C-j>'] = cmp.mapping({
+          i = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end,
+        }),
+        ['<C-k>'] = cmp.mapping({
+          i = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+            else
+              fallback()
+            end
+          end,
+        }),
         ['<C-n>'] = cmp.mapping({
           c = function()
             if cmp.visible() then
@@ -225,26 +241,40 @@ return {
           return vim_item
         end,
       },
-      -- sorting = {
-      --   priority_weight = 2,
-      --   comparators = {
-      --     compare.exact,
-      --     compare.scopes,
-      --     compare.recently_used,
-      --   },
-      -- },
       -- sorting = defaults.sorting,
       sorting = {
         priority_weight = 2,
         comparators = {
-          deprio(types.lsp.CompletionItemKind.Snippet),
+          -- deprio(types.lsp.CompletionItemKind.Snippet),
           deprio(types.lsp.CompletionItemKind.Text),
           compare.offset,
           compare.exact,
           compare.score,
+          -- Try to put emmet towards the bottom
+          function (entry1, entry2)
+            local source_name = entry1.source 
+            and entry1.source.source 
+            and entry1.source.source.config
+            and entry1.source.source.config.name
+            or 'unknown'
+            local target_name = entry2.source 
+            and entry2.source.source 
+            and entry2.source.source.config
+            and entry2.source.source.config.name
+            or 'unknown'
+            if source_name == "emmet_language_server" or  source_name == "emmet_ls" then
+              return false
+            end
+            if target_name == "emmet_language_server" or  target_name == "emmet_ls" then
+              return true
+            end
+            return nil
+          end,
           -- copied from cmp-under, but I don't think I need the plugin for this.
           -- I might add some more of my own.
           function(entry1, entry2)
+            vim.print("entry1: " )
+           _G.entry_inspect = entry1
             local _, entry1_under = entry1.completion_item.label:find '^_+'
             local _, entry2_under = entry2.completion_item.label:find '^_+'
             entry1_under = entry1_under or 0
