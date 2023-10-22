@@ -1,18 +1,63 @@
-local opts = { winopts = { preview = { layout = 'vertical', vertical = 'up:40%', }, }, }
+local opts = { winopts = { preview = { layout = 'vertical', vertical = 'up:40%' } } }
+
+local function fzf_mru(opts)
+  local fzf = require 'fzf-lua'
+  opts = fzf.config.normalize_opts(opts, fzf.config.globals.files)
+  opts.fzf_opts = vim.tbl_extend('force', opts.fzf_opts, {
+    ['--tiebreak'] = 'index',
+  })
+  local hash = require('sp.util').get_hash()
+  local cmd = string.format("command cat <(fre --sorted --store_name %s) <(fd -t f) | awk '!x[$0]++'", hash)
+  opts.cmd = cmd
+
+
+  opts.actions = vim.tbl_extend('force', opts.actions or {}, {
+    ['ctrl-d'] = {
+      function(sel)
+        if #sel < 1 then
+          return
+        end
+        vim.fn.system('fre --delete ' .. sel[1] .. ' --store_name ' .. hash)
+      end,
+      fzf.actions.resume,
+    },
+    -- ["default"] = {
+    --   fn = function(selected)
+    --     if #selected < 2 then
+    --       return
+    --     end
+    --     print('exec:', selected[2])
+    --     vim.cmd('!fre --add ' .. selected[2])
+    --     fzf.actions.file_edit_or_qf(selected)
+    --   end,
+    --   exec_silent = true,
+    -- },
+  })
+
+  fzf.core.fzf_wrap(opts, opts.cmd, function(selected)
+    if not selected or #selected < 2 then
+      return
+    end
+
+    vim.fn.system('fre --add ' .. selected[2] .. ' --store_name ' .. hash)
+    fzf.actions.act(opts.actions, selected, opts)
+  end)()
+end
 -- horizontal = 'right:60%',
 return {
   'ibhagwan/fzf-lua',
   keys = {
-    { '<C-p>',       '<cmd>FzfLua files<cr>',                desc = 'Find Files' },
-    { '<leader>ff',  '<cmd>FzfLua files<cr>',                desc = '[F]ind [F]iles' },
-    { '<leader>fr',  '<cmd>FzfLua resume<cr>',               desc = '[F]ind [R]esume' },
-    { '<leader>fb',  '<cmd>FzfLua buffers<cr>',              desc = '[F]ind [B]uffers' },
-    { '<leader>fz',  '<cmd>FzfLua spell_suggest<cr>',        desc = '[F]ind Spellings' },
-    { '<leader>fg',  '<cmd>FzfLua git_status<cr>',           desc = '[F]ind [G]it Status' },
-    { '<leader>fB',  '<cmd>FzfLua git_branches<cr>',         desc = '[F]ind Git [B]ranches' },
-    { '<leader>fh',  '<cmd>FzfLua help_tags<cr>',            desc = '[F]ind [H]elp Tags' },
-    { '<leader>fk',  '<cmd>FzfLua keymaps<cr>',              desc = '[F]ind [K]eymaps' },
-    { '<leader>flr', '<cmd>FzfLua lsp_references<cr>',       desc = '[F]ind [L]sp [R]eferences' },
+    -- { '<C-p>',       '<cmd>FzfLua files<cr>',                desc = 'Find Files' },
+    { '<C-p>', fzf_mru, desc = 'Find Files' },
+    { '<leader>ff', '<cmd>FzfLua files<cr>', desc = '[F]ind [F]iles' },
+    { '<leader>fr', '<cmd>FzfLua resume<cr>', desc = '[F]ind [R]esume' },
+    { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = '[F]ind [B]uffers' },
+    { '<leader>fz', '<cmd>FzfLua spell_suggest<cr>', desc = '[F]ind Spellings' },
+    { '<leader>fg', '<cmd>FzfLua git_status<cr>', desc = '[F]ind [G]it Status' },
+    { '<leader>fB', '<cmd>FzfLua git_branches<cr>', desc = '[F]ind Git [B]ranches' },
+    { '<leader>fh', '<cmd>FzfLua help_tags<cr>', desc = '[F]ind [H]elp Tags' },
+    { '<leader>fk', '<cmd>FzfLua keymaps<cr>', desc = '[F]ind [K]eymaps' },
+    { '<leader>flr', '<cmd>FzfLua lsp_references<cr>', desc = '[F]ind [L]sp [R]eferences' },
     { '<leader>fls', '<cmd>FzfLua lsp_document_symbols<cr>', desc = '[F]ind [L]sp [S]ymbols' },
     {
       '<leader>fs',
@@ -35,7 +80,7 @@ return {
         })
       end,
       desc = '[F]ind [s]earch Visual',
-      mode = "x"
+      mode = 'x',
     },
     {
       '<leader>fS',
@@ -67,10 +112,10 @@ return {
     {
       'gr',
       function()
-        require('fzf-lua').lsp_references(vim.tbl_extend("keep", opts, {
+        require('fzf-lua').lsp_references(vim.tbl_extend('keep', opts, {
           ignore_current_line = true,
           multiprocess = true,
-          winopts = { preview = { "builtin" } }
+          winopts = { preview = { 'builtin' } },
         }))
       end,
       desc = '[G]oto [R]eferences(FzfLua)',
@@ -78,10 +123,10 @@ return {
     {
       'gd',
       function()
-        require('fzf-lua').lsp_definitions(vim.tbl_extend("keep", opts, {
+        require('fzf-lua').lsp_definitions(vim.tbl_extend('keep', opts, {
           jump_to_single_result = true,
           multiprocess = true,
-          winopts = { preview = { "builtin" } }
+          winopts = { preview = { 'builtin' } },
         }))
       end,
       desc = '[G]oto [D]efinition(FzfLua)',
@@ -89,10 +134,10 @@ return {
     {
       'gD',
       function()
-        require('fzf-lua').lsp_declarations(vim.tbl_extend("keep", opts, {
+        require('fzf-lua').lsp_declarations(vim.tbl_extend('keep', opts, {
           jump_to_single_result = true,
           multiprocess = true,
-          winopts = { preview = { "builtin" } }
+          winopts = { preview = { 'builtin' } },
         }))
       end,
       desc = '[G]oto [D]eclaration(FzfLua)',
@@ -100,10 +145,10 @@ return {
     {
       'gt',
       function()
-        require('fzf-lua').lsp_typedefs(vim.tbl_extend("keep", opts, {
+        require('fzf-lua').lsp_typedefs(vim.tbl_extend('keep', opts, {
           jump_to_single_result = true,
           multiprocess = true,
-          winopts = { preview = { "builtin" } }
+          winopts = { preview = { 'builtin' } },
         }))
       end,
       desc = '[G]oto [T]ypedef(FzfLua)',
@@ -125,7 +170,7 @@ return {
     {
       '<leader>gb',
       function()
-        require('fzf-lua').git_branches(vim.tbl_deep_extend("force", opts, {
+        require('fzf-lua').git_branches(vim.tbl_deep_extend('force', opts, {
           multiprocess = true,
         }))
       end,
@@ -137,13 +182,14 @@ return {
         require('fzf-lua').git_commits()
       end,
       desc = '[G]it [C]ommits(FzfLua)',
-    }, {
-    '<leader>gC',
-    function()
-      require('fzf-lua').git_bcommits()
-    end,
-    desc = '[G]it Buffer [C]ommits(FzfLua)',
-  }
+    },
+    {
+      '<leader>gC',
+      function()
+        require('fzf-lua').git_bcommits()
+      end,
+      desc = '[G]it Buffer [C]ommits(FzfLua)',
+    },
   },
   config = function()
     local fzf = require 'fzf-lua'
@@ -165,7 +211,7 @@ return {
         fzf = {
           ['ctrl-j'] = 'down',
           ['ctrl-k'] = 'up',
-        }
+        },
       },
       previewers = {
         bat = {
@@ -181,7 +227,7 @@ return {
       },
       files = {
         fzf_opts = {
-          ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-files-history',
+          ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-files-history',
         },
         winopts = {
           height = 0.55,
@@ -208,23 +254,23 @@ return {
       },
       buffers = {
         ignore_current_buffer = true,
-        actions               = vim.tbl_extend('force', m_keys, {
+        actions = vim.tbl_extend('force', m_keys, {
           ['ctrl-d'] = actions.buf_delete,
           ['ctrl-x'] = actions.buf_vsplit,
           ['ctrl-q'] = actions.buf_edit_or_qf,
         }),
       },
       blines = {
-        actions         = m_keys,
+        actions = m_keys,
         no_term_buffers = false,
-        winopts         = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
       },
       lines = { actions = m_keys },
       grep = {
         winopts = { preview = { layout = 'vertical', vertical = 'up:40%' } },
         actions = m_keys,
         fzf_opts = {
-          ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-grep-history',
+          ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-grep-history',
         },
       },
     })

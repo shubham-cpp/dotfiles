@@ -52,6 +52,8 @@ static const Rule rules[] = {
     { "Firefox",           NULL,      NULL,       2,          1,            0,          -1 },
     { "LibreWolf",         NULL,      NULL,       2,          1,            0,          -1 },
     { "Brave-browser",     NULL,      NULL,       2,          1,            0,          -1 },
+    { "Thorium-browser",   NULL,      NULL,       2,          1,            0,          -1 },
+    { "thorium-browser",   NULL,      NULL,       2,          1,            0,          -1 },
     { "qutebrowser",       NULL,      NULL,       2,          1,            0,          -1 },
     { "Nyxt",              NULL,      NULL,       2,          1,            0,          -1 },
     { "Chromium",          NULL,      NULL,       2,          1,            0,          -1 },

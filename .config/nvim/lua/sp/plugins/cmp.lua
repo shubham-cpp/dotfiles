@@ -250,31 +250,10 @@ return {
           compare.offset,
           compare.exact,
           compare.score,
-          -- Try to put emmet towards the bottom
-          function (entry1, entry2)
-            local source_name = entry1.source 
-            and entry1.source.source 
-            and entry1.source.source.config
-            and entry1.source.source.config.name
-            or 'unknown'
-            local target_name = entry2.source 
-            and entry2.source.source 
-            and entry2.source.source.config
-            and entry2.source.source.config.name
-            or 'unknown'
-            if source_name == "emmet_language_server" or  source_name == "emmet_ls" then
-              return false
-            end
-            if target_name == "emmet_language_server" or  target_name == "emmet_ls" then
-              return true
-            end
-            return nil
-          end,
           -- copied from cmp-under, but I don't think I need the plugin for this.
           -- I might add some more of my own.
           function(entry1, entry2)
-            vim.print("entry1: " )
-           _G.entry_inspect = entry1
+            _G.entry_inspect = entry1
             local _, entry1_under = entry1.completion_item.label:find '^_+'
             local _, entry2_under = entry2.completion_item.label:find '^_+'
             entry1_under = entry1_under or 0
@@ -289,6 +268,26 @@ return {
           -- compare.locality,
           -- compare.sort_text,
           compare.recently_used,
+          -- Try to put emmet towards the bottom
+          function(entry1, entry2)
+            local source_name = entry1.source
+                and entry1.source.source
+                and entry1.source.source.config
+                and entry1.source.source.config.name
+              or 'unknown'
+            local target_name = entry2.source
+                and entry2.source.source
+                and entry2.source.source.config
+                and entry2.source.source.config.name
+              or 'unknown'
+            if source_name == 'emmet_language_server' or source_name == 'emmet_ls' then
+              return false
+            end
+            if target_name == 'emmet_language_server' or target_name == 'emmet_ls' then
+              return true
+            end
+            return nil
+          end,
         },
       },
       experimental = {

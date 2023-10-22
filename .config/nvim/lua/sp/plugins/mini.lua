@@ -10,35 +10,6 @@ local function win_config()
   }
 end
 
-local function pick_references(bufnr, winnr)
-  local bufnr = bufnr or 0
-  local winnr = winnr or 0
-  local params = vim.lsp.util.make_position_params(winnr)
-  params.context = { includeDeclaration = false }
-  local MiniPick = require 'mini.pick'
-
-  vim.lsp.buf_request(bufnr, 'textDocument/references', params, function(err, result)
-    if err then
-      vim.print 'err\n'
-      vim.print(err)
-      return
-    end
-    if result == nil or vim.tbl_isempty(result) then
-      vim.print 'empty result'
-      return
-    end
-    local items = {}
-    local locations = vim.lsp.util.locations_to_items(result, 'utf-8')
-    vim.print(locations)
-    for _, location in ipairs(locations) do
-      local path = vim.fn.fnamemodify(location.filename, ':p:.')
-      table.insert(items, string.format('%s:%d:%d:%s', path, location.lnum, location.col, location.text))
-    end
-    MiniPick.start({ source = { items = items, name = 'LSP References' } })
-    -- vim.lsp.util.jump_to_location(result[1], 'utf-8', true)
-  end)
-end
-
 -- https://github.com/echasnovski/nvim/raw/7ae7e0007fbd82c802bf1fc02164079034da3bd7/lua/mini-dev/extra.lua
 local function p()
   local MiniPick = require 'mini.pick'
@@ -122,7 +93,7 @@ local function p()
         for i, item in ipairs(items_to_show) do
           local s = vim.fn.split(item.text, ' ')
           local kind_symbol = require('sp.util').symbols.cmp_kinds[string.sub(s[1], 2, -2)]
-          vim.print(s[1] .. ' ' ..  kind_symbol)
+          vim.print(s[1] .. ' ' .. kind_symbol)
           item.text = kind_symbol .. ' ' .. item.text
           -- Highlight using '@...' style highlight group with similar name
           local hl_group = string.format('@%s', string.lower(item.kind or 'unknown'))
@@ -156,24 +127,54 @@ local function pick_document_symbol()
   vim.lsp.buf.document_symbol({ on_list = p() 'document_symbol' })
 end
 
-vim.api.nvim_create_user_command('PickReferences', function()
-  pick_references()
-end, {})
+local function mini_mru()
+  local MiniPick = require 'mini.pick'
+  local hash = require('sp.util').get_hash()
+  local cmd = string.format("command cat <(fre --sorted --store_name %s) <(fd -t f) | awk '!x[$0]++'", hash)
+
+  local show_with_icons = function(buf_id, items, query)
+    MiniPick.default_show(buf_id, items, query, { show_icons = true })
+  end
+  vim.fn.jobstart(cmd, {
+    stdout_buffered = true,
+    on_stdout = function(_, data)
+      table.remove(data, #data)
+      MiniPick.start({
+        source = {
+          items = data,
+          name = 'MRU',
+          choose = function(item)
+            if vim.fn.filereadable(item) == 0 then
+              return
+            end
+            vim.fn.system('fre --add ' .. item .. ' --store_name ' .. hash)
+            MiniPick.default_choose(item)
+          end,
+          show = show_with_icons,
+        },
+      })
+    end,
+    on_stderr = function(...)
+      vim.print(...)
+    end,
+  })
+  -- local items = vim.fn.system(cmd)
+end
 
 local config = {
   {
     'echasnovski/mini.pick',
     version = false,
     keys = {
-      { '<leader>pp', "<cmd>Pick files tool='fd'<cr>", desc = '[P]ick [F]ile' },
-      { '<leader>pf', "<cmd>Pick files tool='rg'<cr>", desc = '[P]ick [F]ile' },
+      { '<leader>pp', "<cmd>Pick files tool='rg'<cr>", desc = '[P]ick [F]ile' },
+      { '<leader>pf', mini_mru, desc = '[P]ick [F]ile' },
       { '<leader>pP', "<cmd>Pick files tool='git'<cr>", desc = '[P]ick [F]ile(Git)' },
       { '<leader>ps', '<cmd>Pick grep<cr>', desc = '[P]ick [S]earch' },
       { '<leader>pb', '<cmd>Pick buffers<cr>', desc = '[P]ick [B]uffers' },
       { '<leader>pr', '<cmd>Pick resume<cr>', desc = '[P]ick [R]esume' },
       { '<leader>pld', pick_definition, desc = '[P]ick [L]SP [D]efinition' },
       { '<leader>pls', pick_document_symbol, desc = '[P]ick [L]SP [S]ymbols' },
-      { '<leader>plr', pick_references, desc = '[P]ick [L]SP [R]eferences' },
+      -- { '<leader>plr', pick_references, desc = '[P]ick [L]SP [R]eferences' },
     },
     config = function()
       require('mini.pick').setup({

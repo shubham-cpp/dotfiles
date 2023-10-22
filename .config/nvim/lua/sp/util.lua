@@ -144,4 +144,16 @@ M.symbols = {
   },
 }
 
+--- Get a hash of the current directory + git branch
+---@return string
+function M.get_hash()
+  local str = 'echo "dir:' .. vim.fn.getcwd()
+  if vim.b.gitsigns_head then
+    str = str .. ';git:' .. vim.b.gitsigns_head .. '"'
+  end
+  -- vim.print(str)
+  local hash = vim.fn.system(str .. " | md5sum | awk '{print $1}'")
+  return hash
+end
+
 return M

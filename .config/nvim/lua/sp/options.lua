@@ -27,7 +27,7 @@ o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
 o.formatoptions = 'jcrqlnt'
-if vim.fn.has 'rg' == 1 then
+if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'
   o.grepprg = 'rg --vimgrep --no-heading --smart-case'
 end
