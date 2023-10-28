@@ -7,9 +7,10 @@ local function fzf_mru(opts)
     ['--tiebreak'] = 'index',
   })
   local hash = require('sp.util').get_hash()
-  local cmd = string.format("command cat <(fre --sorted --store_name %s) <(fd -t f) | awk '!x[$0]++'", hash)
-  opts.cmd = cmd
+  local cmd =
+    string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash)
 
+  opts.cmd = cmd
 
   opts.actions = vim.tbl_extend('force', opts.actions or {}, {
     ['ctrl-d'] = {

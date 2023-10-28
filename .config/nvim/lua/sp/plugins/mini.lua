@@ -130,15 +130,29 @@ end
 local function mini_mru()
   local MiniPick = require 'mini.pick'
   local hash = require('sp.util').get_hash()
-  local cmd = string.format("command cat <(fre --sorted --store_name %s) <(fd -t f) | awk '!x[$0]++'", hash)
-
-  local show_with_icons = function(buf_id, items, query)
+  local cmd = string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash)
+  local function show_with_icons(buf_id, items, query)
     MiniPick.default_show(buf_id, items, query, { show_icons = true })
+  end
+  local function wipe_out()
+    -- local picker_items = MiniPick.get_picker_items()
+    local items = MiniPick.get_picker_matches().all
+    local sel = MiniPick.get_picker_matches().current
+    local sel_index = MiniPick.get_picker_matches().current_ind
+    vim.print(items)
+    -- local bufnr = picker_items[sel_index].bufnr
+
+    vim.fn.system('fre --delete ' .. sel .. ' --store_name ' .. hash)
+    -- vim.api.nvim_buf_delete(bufnr, {})
+    table.remove(items, sel_index)
+
+    MiniPick.set_picker_items(items)
   end
   vim.fn.jobstart(cmd, {
     stdout_buffered = true,
     on_stdout = function(_, data)
       table.remove(data, #data)
+
       MiniPick.start({
         source = {
           items = data,
@@ -151,6 +165,12 @@ local function mini_mru()
             MiniPick.default_choose(item)
           end,
           show = show_with_icons,
+          mappings = {
+            wipe_out = {
+              char = '<C-d>',
+              func = wipe_out,
+            },
+          },
         },
       })
     end,
@@ -189,6 +209,17 @@ local config = {
           use_cache = true,
         },
         window = { config = win_config },
+      })
+    end,
+  },
+  {
+    'echasnovski/mini.indentscope',
+    version = false,
+    enabled = false,
+    event = 'BufWinEnter',
+    config = function()
+      require('mini.indentscope').setup({
+        delay = 50,
       })
     end,
   },

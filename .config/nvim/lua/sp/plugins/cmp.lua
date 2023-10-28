@@ -250,6 +250,12 @@ return {
           compare.offset,
           compare.exact,
           compare.score,
+          compare.recently_used,
+          compare.locality,
+          compare.kind,
+          compare.sort_text,
+          compare.length,
+          compare.order,
           -- copied from cmp-under, but I don't think I need the plugin for this.
           -- I might add some more of my own.
           function(entry1, entry2)
@@ -264,10 +270,6 @@ return {
               return true
             end
           end,
-          compare.kind,
-          -- compare.locality,
-          -- compare.sort_text,
-          compare.recently_used,
           -- Try to put emmet towards the bottom
           function(entry1, entry2)
             local source_name = entry1.source
@@ -288,6 +290,18 @@ return {
             end
             return nil
           end,
+          --[[
+          deprio(types.lsp.CompletionItemKind.Text),
+          cmp.config.compare.offset,
+          cmp.config.compare.exact,
+          cmp.config.compare.score,
+          cmp.config.compare.recently_used,
+          cmp.config.compare.locality,
+          cmp.config.compare.kind,
+          cmp.config.compare.sort_text,
+          cmp.config.compare.length,
+          cmp.config.compare.order,
+          --]]
         },
       },
       experimental = {

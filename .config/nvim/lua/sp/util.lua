@@ -149,10 +149,19 @@ M.symbols = {
 function M.get_hash()
   local str = 'echo "dir:' .. vim.fn.getcwd()
   if vim.b.gitsigns_head then
-    str = str .. ';git:' .. vim.b.gitsigns_head .. '"'
+    str = str .. ';git:' .. vim.b.gitsigns_head
   end
-  -- vim.print(str)
-  local hash = vim.fn.system(str .. " | md5sum | awk '{print $1}'")
+  vim.print(str)
+  local hash = vim.fn.system(str .. "\" | md5sum | awk '{print $1}'")
+  --[[ Without awk
+  local hash = vim.fn.system(str .. "\" | md5sum")
+  local first_space_index = string.find(hash, " ")
+  if first_space_index then
+    return string.sub(hash, 1, first_space_index - 1)
+  else
+    return hash
+  end
+  --]]
   return hash
 end
 

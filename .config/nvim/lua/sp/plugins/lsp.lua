@@ -166,9 +166,8 @@ return {
           vim.notify 'Cargo workspace reloaded'
         end
         local function fly_check()
-          vim.lsp.buf_notify(0, 'rust-analyzer/runFlycheck', {
-            textDocument = vim.lsp.util.make_text_document_params(),
-          })
+          local params = vim.lsp.util.make_text_document_params()
+          vim.lsp.buf_notify(0, 'rust-analyzer/runFlyCheck', params)
         end
         local function reload_workspace()
           vim.notify 'Reloading Cargo Workspace'
@@ -198,6 +197,17 @@ return {
               },
             },
             typing = { autoClosingAngleBrackets = { enable = true } },
+          },
+        }
+        opt.checkOnSave = {
+          allFeatures = true,
+          overrideCommand = {
+            'cargo',
+            'clippy',
+            '--workspace',
+            '--message-format=json',
+            '--all-targets',
+            '--all-features',
           },
         }
         opt.commands = {
@@ -573,8 +583,13 @@ return {
             documentFormatting = true,
             documentRangeFormatting = true,
           },
-          cmd = { "efm-langserver", "-c", vim.fn.expand "~/.config/efm-langserver/config.yaml", "-logfile",
-            "/tmp/efm-langserver-logs.log" },
+          cmd = {
+            'efm-langserver',
+            '-c',
+            vim.fn.expand '~/.config/efm-langserver/config.yaml',
+            '-logfile',
+            '/tmp/efm-langserver-logs.log',
+          },
           -- settings = {
           --   rootMarkers = {
           --     '.git/',
