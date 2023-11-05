@@ -43,14 +43,14 @@ local config = {
     },
     ['<leader>C'] = { '<cmd>cd %:p:h<cr>:pwd<cr>', desc = 'Change directory to file' },
     ['<leader>fs'] = { '<cmd>Telescope live_grep<cr>', desc = '[F]ind [S]earch Project' },
-    ['<leader>fn'] = {
+    ['<leader>fN'] = {
       function()
         local builtin = require 'telescope.builtin'
         builtin.find_files({ cwd = vim.fn.stdpath 'config' })
       end,
       desc = 'Open Astro Configs',
     },
-    ['<leader>fN'] = {
+    ['<leader>fn'] = {
       function()
         local builtin = require 'telescope.builtin'
         local my_config = vim.fn.getenv 'XDG_CONFIG_HOME'

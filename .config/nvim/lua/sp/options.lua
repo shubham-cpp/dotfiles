@@ -30,6 +30,7 @@ o.formatoptions = 'jcrqlnt'
 if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'
   o.grepprg = 'rg --vimgrep --no-heading --smart-case'
+  -- o.grepprg = 'rg --vimgrep --no-heading --smart-case --type-add vue:*.vue --type-add svelte:*.svelte --type-add prisma:*.prisma'
 end
 o.timeoutlen = 300
 o.swapfile = true
@@ -41,6 +42,34 @@ o.backupdir = vim.fn.stdpath 'state' .. '/backup//'
 o.updatetime = 200
 o.wildmode = 'longest:full,full'
 o.wildignorecase = true
+o.wildignore:append({
+  '**/node_modules/*',
+  '**/.git/*',
+  '**/dist/*',
+  '**/build/*',
+  '**/static/*',
+  '**/.next/*',
+  '*.o',
+  '*.out',
+  '*.obj',
+  '*.exe',
+  '*.dll',
+  '*.jar',
+  '*.pyc',
+  '*.rbc',
+  '*.class',
+  '*.gif',
+  '*.ico',
+  '*.jpg',
+  '*.jpeg',
+  '*.png',
+  '*.mov',
+  '*.mht',
+  '*.swp',
+  '*.zip',
+  '*.tar.gz',
+  '*.tar.bz2',
+})
 o.winminwidth = 5
 o.foldcolumn = '1' -- '0' is not bad
 o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value

@@ -49,3 +49,6 @@ map('x', '<leader>p', '"+p')
 
 map('o', 'ie', ':exec "normal! ggVG"<cr>')
 map('o', 'iv', ':exec "normal! HVL"<cr>')
+map('n',',e', ':e <C-R>=expand("%:p:h") . "/" <CR>', {desc="Edit in same dir"})
+map('n',',t', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', {desc="Edit in same dir(Tab)"})
+map('n',',s', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>', {desc="Edit in same dir(Split)"})

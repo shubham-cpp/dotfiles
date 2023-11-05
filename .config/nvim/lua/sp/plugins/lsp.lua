@@ -1,3 +1,86 @@
+local function map(mode, lhs, rhs, opts)
+  opts.buffer = opts.buffer == nil and true or opts.buffer
+  opts.noremap = opts.noremap == nil and true or opts.noremap
+  opts.silent = opts.silent == nil and true or opts.silent
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
+
+local function lsp_organize_imports()
+  vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
+  vim.lsp.buf.code_action({ context = { only = { 'source.removeUnused' } }, apply = true })
+end
+local au_lsp = vim.api.nvim_create_augroup('sp_lsp', { clear = true })
+
+local function on_attach(client, bufnr)
+  local ok_fzf, _ = pcall(require, 'fzf-lua')
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+  map('i', '<C-h>', vim.lsp.buf.signature_help, { buffer = bufnr })
+  map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Goto Implementation' })
+  map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Organize Imports' })
+  if not ok_fzf then
+    map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Goto Definition' })
+    map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Goto Declaration' })
+    map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
+    map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols' })
+    map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
+    map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Type Definition' })
+  end
+  map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
+  map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
+  map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
+  map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
+  -- map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr,desc="Format Buffer(LSP)" })
+  map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr, desc = 'diagnostic open' })
+  map('n', '[d', vim.diagnostic.goto_prev, { buffer = bufnr, desc = 'Goto Prev Diagnostic' })
+  map('n', ']d', vim.diagnostic.goto_next, { buffer = bufnr, desc = 'Goto Next Diagnostic' })
+  map('n', '[e', function()
+    vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
+  end, { buffer = bufnr, desc = 'Goto Prev Error' })
+  map('n', ']e', function()
+    vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
+  end, { buffer = bufnr, desc = 'Goto Next Error' })
+
+  if client.name == 'prismals' then
+    map('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format Buffer(LSP)' })
+  end
+
+  if client.name == 'svelte' then
+    vim.api.nvim_create_autocmd('BufWritePost', {
+      pattern = { '*.js', '*.ts' },
+      group = au_lsp,
+      callback = function(ctx)
+        client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.file })
+      end,
+    })
+  end
+  -- vim.api.nvim_create_autocmd({ 'BufWrite' }, {
+  --   pattern = { '+page.server.ts', '+page.ts', '+layout.server.ts', '+layout.ts' },
+  --   group = au_lsp,
+  --   command = 'LspRestart svelte',
+  -- })
+  if client.server_capabilities.documentHighlightProvider then
+    vim.api.nvim_exec(
+      [[
+		        hi LspReferenceWrite cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
+		        hi LspReferenceRead cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
+		        hi LspReferenceText cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
+		        hi LspDiagnosticsDefaultError cterm=bold ctermbg=red guifg=#ff3333
+		        hi LspDiagnosticsDefaultWarning cterm=bold ctermbg=red guifg=#e7ae05
+		        augroup lsp_document_highlight
+		        autocmd! * <buffer>
+		        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
+		        " autocmd CursorHold <buffer> lua vim.diagnostic.open_float(0, {scope='line'})
+		        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
+		        " autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.signature_help()
+		        augroup END
+		    ]],
+      false
+    )
+  end
+  -- require('lsp-inlayhints').on_attach(client, bufnr)
+end
+
 return {
   'neovim/nvim-lspconfig',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -5,14 +88,51 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'b0o/schemastore.nvim',
-    'jose-elias-alvarez/typescript.nvim',
-    -- {
-    --   'pmizio/typescript-tools.nvim',
-    --   dependencies = {
-    --     "nvim-lua/plenary.nvim",
-    --   }
-    -- },
-    'lvimuser/lsp-inlayhints.nvim',
+    -- 'jose-elias-alvarez/typescript.nvim',
+    {
+      'pmizio/typescript-tools.nvim',
+      dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+      opts = {
+        on_attach = on_attach,
+        --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+        filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+        settings = {
+          tsserver_file_preferences = {
+            includeInlayParameterNameHints = 'all',
+            includeCompletionsForModuleExports = true,
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+      },
+    },
+    {
+      'lvimuser/lsp-inlayhints.nvim',
+      config = function()
+        require('lsp-inlayhints').setup()
+        vim.api.nvim_create_autocmd('LspAttach', {
+          group = au_lsp,
+          callback = function(args)
+            if not (args.data and args.data.client_id) then
+              return
+            end
+
+            local bufnr = args.buf
+            local client = vim.lsp.get_client_by_id(args.data.client_id)
+            require('lsp-inlayhints').on_attach(client, bufnr)
+          end,
+        })
+      end,
+    },
+    {
+      'folke/neodev.nvim',
+      opts = {},
+    },
     -- 'simrat39/rust-tools.nvim'
   },
   config = function()
@@ -37,89 +157,6 @@ return {
     vim.fn.sign_define('DiagnosticSignWarn', { text = ' ', texthl = 'DiagnosticSignWarn' })
     vim.fn.sign_define('DiagnosticSignInfo', { text = '', texthl = 'DiagnosticSignInfo' })
     vim.fn.sign_define('DiagnosticSignHint', { text = ' ', texthl = 'DiagnosticSignHint' })
-    local function map(mode, lhs, rhs, opts) -- {{{
-      opts.buffer = opts.buffer == nil and true or opts.buffer
-      opts.noremap = opts.noremap == nil and true or opts.noremap
-      opts.silent = opts.silent == nil and true or opts.silent
-      vim.keymap.set(mode, lhs, rhs, opts)
-    end --- }}}
-
-    local function lsp_organize_imports()
-      vim.lsp.buf.code_action({ context = { only = { 'source.organizeImports' } }, apply = true })
-      vim.lsp.buf.code_action({ context = { only = { 'source.removeUnused' } }, apply = true })
-    end
-    local au_lsp = vim.api.nvim_create_augroup('sp_lsp', { clear = true })
-
-    local function on_attach(client, bufnr) -- {{{
-      local ok_fzf, _ = pcall(require, 'fzf-lua')
-      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-      map('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
-      map('i', '<C-h>', vim.lsp.buf.signature_help, { buffer = bufnr })
-      map('n', 'gi', vim.lsp.buf.implementation, { buffer = bufnr, desc = 'Goto Implementation' })
-      map('n', 'gs', lsp_organize_imports, { buffer = bufnr, desc = 'Organize Imports' })
-      if not ok_fzf then
-        map('n', 'gd', vim.lsp.buf.definition, { buffer = bufnr, desc = 'Goto Definition' })
-        map('n', 'gD', vim.lsp.buf.declaration, { buffer = bufnr, desc = 'Goto Declaration' })
-        map('n', 'gr', vim.lsp.buf.references, { buffer = bufnr, desc = 'Lsp References' })
-        map('n', 'gw', vim.lsp.buf.document_symbol, { buffer = bufnr, desc = 'Document Symbols' })
-        map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
-        map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Type Definition' })
-      end
-      map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
-      map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
-      map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
-      map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
-      -- map('n', '<Space>=', vim.lsp.buf.format, { buffer = bufnr,desc="Format Buffer(LSP)" })
-      map('n', 'gl', vim.diagnostic.open_float, { buffer = bufnr, desc = 'diagnostic open' })
-      map('n', '[d', vim.diagnostic.goto_prev, { buffer = bufnr, desc = 'Goto Prev Diagnostic' })
-      map('n', ']d', vim.diagnostic.goto_next, { buffer = bufnr, desc = 'Goto Next Diagnostic' })
-      map('n', '[e', function()
-        vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR })
-      end, { buffer = bufnr, desc = 'Goto Prev Error' })
-      map('n', ']e', function()
-        vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR })
-      end, { buffer = bufnr, desc = 'Goto Next Error' })
-
-      if client.name == 'prismals' then
-        map('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format Buffer(LSP)' })
-      end
-
-      if client.name == 'svelte' then
-        vim.api.nvim_create_autocmd('BufWritePost', {
-          pattern = { '*.js', '*.ts' },
-          group = au_lsp,
-          callback = function(ctx)
-            client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.file })
-          end,
-        })
-      end
-      -- vim.api.nvim_create_autocmd({ 'BufWrite' }, {
-      --   pattern = { '+page.server.ts', '+page.ts', '+layout.server.ts', '+layout.ts' },
-      --   group = au_lsp,
-      --   command = 'LspRestart svelte',
-      -- })
-      if client.server_capabilities.documentHighlightProvider then
-        vim.api.nvim_exec(
-          [[
-		        hi LspReferenceWrite cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
-		        hi LspReferenceRead cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
-		        hi LspReferenceText cterm=bold ctermfg=red gui=bold guisp= guifg=#7bcbfa guibg=#565575
-		        hi LspDiagnosticsDefaultError cterm=bold ctermbg=red guifg=#ff3333
-		        hi LspDiagnosticsDefaultWarning cterm=bold ctermbg=red guifg=#e7ae05
-		        augroup lsp_document_highlight
-		        autocmd! * <buffer>
-		        autocmd CursorHold <buffer> lua vim.lsp.buf.document_highlight()
-		        " autocmd CursorHold <buffer> lua vim.diagnostic.open_float(0, {scope='line'})
-		        autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()
-		        " autocmd CursorHoldI <buffer> silent! lua vim.lsp.buf.signature_help()
-		        augroup END
-		    ]],
-          false
-        )
-      end
-      require('lsp-inlayhints').on_attach(client, bufnr)
-    end -- }}}
-
     local cmp_capabilities = vim.lsp.protocol.make_client_capabilities()
     cmp_capabilities.textDocument.completion.completionItem.snippetSupport = true
     cmp_capabilities.textDocument.completion.completionItem.resolveSupport = {
@@ -142,7 +179,7 @@ return {
       },
     })
     mason_lspconfig.setup({
-      ensure_installed = { 'lua_ls', 'gopls' },
+      ensure_installed = { 'lua_ls' },
     })
     local opts = {}
     opts.capabilities = cmp_capabilities
@@ -382,6 +419,10 @@ return {
         lspconfig['yamlls'].setup(opt)
       end,
       ['lua_ls'] = function()
+        -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+        require('neodev').setup({
+          -- add any options here, or leave empty to use the default settings
+        })
         local opt = vim.deepcopy(opts)
         local runtime_path = vim.split(package.path, ';')
         table.insert(runtime_path, 'lua/?.lua')
@@ -398,6 +439,7 @@ return {
               globals = { 'vim', 'describe' },
               disable = { 'lowercase-global' },
             },
+            workspace = { checkThirdParty = false },
             runtime = { version = 'LuaJIT', path = runtime_path },
             telemetry = { enable = false },
             hint = {
@@ -457,42 +499,42 @@ return {
         --     },
         --   }
         -- }
-        require('typescript').setup({
-          disable_commands = false, -- prevent the plugin from creating Vim commands
-          debug = false, -- enable debug logging for commands
-          go_to_source_definition = { fallback = true },
-          server = {
-            cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
-            filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-            root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-            on_attach = on_attach,
-            capabilities = cmp_capabilities,
-            settings = {
-              javascript = {
-                inlayHints = {
-                  includeInlayEnumMemberValueHints = true,
-                  includeInlayFunctionLikeReturnTypeHints = true,
-                  includeInlayFunctionParameterTypeHints = true,
-                  includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                  includeInlayPropertyDeclarationTypeHints = true,
-                  includeInlayVariableTypeHints = true,
-                },
-              },
-              typescript = {
-                inlayHints = {
-                  includeInlayEnumMemberValueHints = true,
-                  includeInlayFunctionLikeReturnTypeHints = true,
-                  includeInlayFunctionParameterTypeHints = true,
-                  includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                  includeInlayPropertyDeclarationTypeHints = true,
-                  includeInlayVariableTypeHints = true,
-                },
-              },
-            },
-          },
-        })
+        -- require('typescript').setup({
+        --   disable_commands = false, -- prevent the plugin from creating Vim commands
+        --   debug = false, -- enable debug logging for commands
+        --   go_to_source_definition = { fallback = true },
+        --   server = {
+        --     cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
+        --     filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+        --     root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+        --     on_attach = on_attach,
+        --     capabilities = cmp_capabilities,
+        --     settings = {
+        --       javascript = {
+        --         inlayHints = {
+        --           includeInlayEnumMemberValueHints = true,
+        --           includeInlayFunctionLikeReturnTypeHints = true,
+        --           includeInlayFunctionParameterTypeHints = true,
+        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        --           includeInlayPropertyDeclarationTypeHints = true,
+        --           includeInlayVariableTypeHints = true,
+        --         },
+        --       },
+        --       typescript = {
+        --         inlayHints = {
+        --           includeInlayEnumMemberValueHints = true,
+        --           includeInlayFunctionLikeReturnTypeHints = true,
+        --           includeInlayFunctionParameterTypeHints = true,
+        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+        --           includeInlayPropertyDeclarationTypeHints = true,
+        --           includeInlayVariableTypeHints = true,
+        --         },
+        --       },
+        --     },
+        --   },
+        -- })
       end,
       denols = function()
         local opt = vim.deepcopy(opts)

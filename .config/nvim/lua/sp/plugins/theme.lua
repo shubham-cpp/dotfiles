@@ -21,6 +21,7 @@ local config = {
           bg = '#505050',
           style = 'underline,bold',
         },
+        PmenuSel = {bg="#61afef", fg='#24253b'}
       },
     },
   },
@@ -55,7 +56,7 @@ local config = {
     enabled = false,
     config = function()
       require('onedark').setup({
-        style = 'deep', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+        style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
         transparent = false,
         -- cmp_itemkind_reverse = false
       })
@@ -68,7 +69,7 @@ local config = {
     config = function()
       require('caret').setup({
         options = {
-          transparent = false,   -- Set to true to disable background setting
+          transparent = false, -- Set to true to disable background setting
           -- inverted_signs = false,    -- Controls inverted Signcolumn highlighting
           -- styles = {                 -- Define styles for various syntax groups
           --   bold = true,
@@ -77,15 +78,15 @@ local config = {
           --   undercurl = true,
           --   underline = true,
           -- },
-          inverse = {   -- Determines inverse highlights for different types
+          inverse = { -- Determines inverse highlights for different types
             match_paren = true,
             visual = true,
             search = true,
           },
         },
-        groups = {},   -- Override default highlight groups here
+        groups = {}, -- Override default highlight groups here
       })
-      vim.cmd('colorscheme caret')
+      vim.cmd 'colorscheme caret'
     end,
   }
 }

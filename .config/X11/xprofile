@@ -42,8 +42,8 @@ basic() {
 	# run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
 		if [ -x /bin/picom ]; then
-			# run picom -b #--experimental-backends
-			run /usr/local/bin/picom --experimental-backends -b
+			run picom -b #--experimental-backends
+			# run /usr/local/bin/picom --experimental-backends -b
 		elif [ -x /bin/xcompmgr ]; then
 			run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
 		fi

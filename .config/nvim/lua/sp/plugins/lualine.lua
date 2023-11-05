@@ -34,6 +34,7 @@ return {
     end
     require('lualine').setup({
       options = {
+        -- theme = 'ayu_mirage',
         component_separators = '|',
         section_separators = { left = '', right = '' },
       },

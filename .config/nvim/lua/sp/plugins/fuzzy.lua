@@ -8,41 +8,45 @@ local function fzf_mru(opts)
   })
   local hash = require('sp.util').get_hash()
   local cmd =
-    string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash)
+    -- string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash) -- https://lib.rs/crates/fre
+    string.format("command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq", hash)
 
+     cmd = string.gsub(cmd, '[\n\r]+', ' ')
   opts.cmd = cmd
+  -- vim.print(cmd)
 
-  opts.actions = vim.tbl_extend('force', opts.actions or {}, {
-    ['ctrl-d'] = {
-      function(sel)
-        if #sel < 1 then
-          return
-        end
-        vim.fn.system('fre --delete ' .. sel[1] .. ' --store_name ' .. hash)
+  fzf.files({
+    cmd = opts.cmd,
+    actions = {
+      ['default'] = function(selected, opts)
+        local path = require 'fzf-lua.path'
+        local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
+        local cmd = string.format('mru_tracker --store %s --add %s', hash, filename)
+        cmd = string.gsub(cmd, '[\n\r]+', ' ')
+        vim.fn.jobstart(cmd, {
+          stdout_buffered = true,
+          on_stderr = function(...)
+            vim.print(...)
+          end,
+        })
+        fzf.actions.file_edit(selected, opts)
       end,
-      fzf.actions.resume,
+      ['ctrl-d'] = {
+        fn = function(selected)
+          if #selected < 1 then
+            return
+          end
+          local path = require 'fzf-lua.path'
+          local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
+          -- vim.fn.system('fre --delete ' .. sel[1] .. ' --store_name ' .. hash)
+          local c = string.format('mru_tracker --store %s --delete %s', hash, filename)
+          c = c:gsub('[\n\t]+', ' ')
+          vim.fn.system(c)
+        end,
+        reload = true,
+      },
     },
-    -- ["default"] = {
-    --   fn = function(selected)
-    --     if #selected < 2 then
-    --       return
-    --     end
-    --     print('exec:', selected[2])
-    --     vim.cmd('!fre --add ' .. selected[2])
-    --     fzf.actions.file_edit_or_qf(selected)
-    --   end,
-    --   exec_silent = true,
-    -- },
   })
-
-  fzf.core.fzf_wrap(opts, opts.cmd, function(selected)
-    if not selected or #selected < 2 then
-      return
-    end
-
-    vim.fn.system('fre --add ' .. selected[2] .. ' --store_name ' .. hash)
-    fzf.actions.act(opts.actions, selected, opts)
-  end)()
 end
 -- horizontal = 'right:60%',
 return {

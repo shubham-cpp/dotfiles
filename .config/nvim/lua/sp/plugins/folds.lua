@@ -19,6 +19,10 @@ return {
     },
   },
   config = function()
-    require('ufo').setup()
+    require('ufo').setup({
+      provider_selector = function()
+        return {'lsp','indent'}
+      end
+    })
   end,
 }

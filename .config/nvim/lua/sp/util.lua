@@ -13,7 +13,7 @@ end
 ---@param mode string|table 'n'|'v'|'o'
 ---@param lhs string|function
 ---@param rhs string|function
----@param opts table<string,boolean>? (default is `{noremap = true, silent = true}`)
+---@param opts table<string,boolean | string>? (default is `{noremap = true, silent = true}`)
 M.map = function(mode, lhs, rhs, opts)
   local options = { noremap = true, silent = true }
   if opts and next(opts) ~= nil then
@@ -151,7 +151,7 @@ function M.get_hash()
   if vim.b.gitsigns_head then
     str = str .. ';git:' .. vim.b.gitsigns_head
   end
-  vim.print(str)
+  -- vim.print(str)
   local hash = vim.fn.system(str .. "\" | md5sum | awk '{print $1}'")
   --[[ Without awk
   local hash = vim.fn.system(str .. "\" | md5sum")

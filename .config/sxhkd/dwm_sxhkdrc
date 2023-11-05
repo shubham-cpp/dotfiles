@@ -21,7 +21,7 @@ super +{_,shift +} w
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
 super + {d,r,v,y,p}
-    {rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+    {rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 
 super + alt + {c,g}
     {open-rcs,open-games}

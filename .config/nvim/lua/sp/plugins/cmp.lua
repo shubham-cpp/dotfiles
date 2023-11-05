@@ -119,7 +119,8 @@ return {
       },
       window = {
         completion = {
-          winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,Search:None',
+          winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+ -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
           -- col_offset = -3,
           -- side_padding = 0,
         },
@@ -216,7 +217,7 @@ return {
         { name = 'nvim_lsp', priority = 100 },
         { name = 'nvim_lsp_signature_help', priority = 90 },
         { name = 'luasnip', priority = 50 },
-      }, {
+        -- }, {
         { name = 'path', priority = 30 },
         {
           name = 'buffer',
@@ -334,5 +335,28 @@ return {
       formatting = { fields = { 'abbr' } },
       window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },
     })
+    -- -- gray
+    -- vim.api.nvim_set_hl(0, 'CmpItemAbbrDeprecated', { bg = 'NONE', strikethrough = true, fg = '#808080' })
+    -- -- blue
+    -- vim.api.nvim_set_hl(0, 'CmpItemAbbrMatch', { bg = 'NONE', fg = '#569CD6' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemAbbrMatchFuzzy', { link = 'CmpIntemAbbrMatch' })
+    -- -- light blue
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindVariable', { bg = 'NONE', fg = '#9CDCFE' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindInterface', { link = 'CmpItemKindVariable' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindText', { link = 'CmpItemKindVariable' })
+    -- -- pink
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindFunction', { bg = 'NONE', fg = '#C586C0' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindMethod', { link = 'CmpItemKindFunction' })
+    -- -- front
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindKeyword', { bg = 'NONE', fg = '#D4D4D4' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindProperty', { link = 'CmpItemKindKeyword' })
+    -- vim.api.nvim_set_hl(0, 'CmpItemKindUnit', { link = 'CmpItemKindKeyword' })
+    -- vim.api.nvim_set_hl(0, 'PmenuSel', { underline = true ,bold=true, bg="#434442" })
+    -- vim.api.nvim_set_hl(0, 'PmenuKindSel', { underline = true ,bold=true, bg="darkyellow"})
+    -- vim.api.nvim_set_hl(0, 'PmenuExtraSel', { underline = true ,bold=true, bg="darkyellow"})
+    --[[
+PmenuSel = { bg = "#282C34", fg = "NONE" },
+  Pmenu = { fg = "#C5CDD9", bg = "#22252A" },
+    --]]
   end,
 }
