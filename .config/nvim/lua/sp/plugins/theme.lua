@@ -27,15 +27,15 @@ local config = {
   },
   {
     'ellisonleao/gruvbox.nvim',
-    enabled = false,
+    enabled = true,
     config = function()
       require('gruvbox').setup({
         contrast = 'hard', -- can be "hard", "soft" or empty string
-        dim_inactive = true,
-        transparent_mode = false,
+        dim_inactive = false,
+        transparent_mode = true,
         overrides = {
           QuickScopePrimary = {
-            fg = '#dfbb78',
+            fg = '#d3869b',
             bg = '#505050',
             bold = true,
             italic = true,
@@ -64,34 +64,8 @@ local config = {
     end,
   },
   {
-    'projekt0n/caret.nvim',
-    enabled = false,
-    config = function()
-      require('caret').setup({
-        options = {
-          transparent = false, -- Set to true to disable background setting
-          -- inverted_signs = false,    -- Controls inverted Signcolumn highlighting
-          -- styles = {                 -- Define styles for various syntax groups
-          --   bold = true,
-          --   italic = true,
-          --   strikethrough = true,
-          --   undercurl = true,
-          --   underline = true,
-          -- },
-          inverse = { -- Determines inverse highlights for different types
-            match_paren = true,
-            visual = true,
-            search = true,
-          },
-        },
-        groups = {}, -- Override default highlight groups here
-      })
-      vim.cmd 'colorscheme caret'
-    end,
-  },
-  {
     'sainnhe/gruvbox-material',
-    enabled = true,
+    enabled = false,
     init = function()
       vim.g.gruvbox_material_better_performance = 1
       vim.g.gruvbox_material_background = 'hard' -- 'hard', 'medium'(default), 'soft'
