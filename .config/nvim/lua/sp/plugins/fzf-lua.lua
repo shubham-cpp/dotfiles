@@ -2,21 +2,16 @@ local opts = { winopts = { preview = { layout = 'vertical', vertical = 'up:40%' 
 
 local function fzf_mru(opts)
   local fzf = require 'fzf-lua'
-  opts = fzf.config.normalize_opts(opts, fzf.config.globals.files)
-  opts.fzf_opts = vim.tbl_extend('force', opts.fzf_opts, {
-    ['--tiebreak'] = 'index',
-  })
   local hash = require('sp.util').get_hash()
   local cmd =
     -- string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash) -- https://lib.rs/crates/fre
-    string.format("command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq", hash)
+    string.format('command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq', hash)
 
-     cmd = string.gsub(cmd, '[\n\r]+', ' ')
-  opts.cmd = cmd
-  -- vim.print(cmd)
+  cmd = string.gsub(cmd, '[\n\r]+', ' ')
 
   fzf.files({
-    cmd = opts.cmd,
+    cmd = cmd,
+    fzf_opts = { ['--tiebreak'] = 'index' },
     actions = {
       ['default'] = function(selected, opts)
         local path = require 'fzf-lua.path'

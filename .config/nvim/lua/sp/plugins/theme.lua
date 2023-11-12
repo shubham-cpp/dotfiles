@@ -1,7 +1,7 @@
 local config = {
   {
     'rmehri01/onenord.nvim',
-    enabled = true,
+    enabled = false,
     opts = {
       fade_nc = true,
       styles = {
@@ -21,7 +21,7 @@ local config = {
           bg = '#505050',
           style = 'underline,bold',
         },
-        PmenuSel = {bg="#61afef", fg='#24253b'}
+        PmenuSel = { bg = '#61afef', fg = '#24253b' },
       },
     },
   },
@@ -88,7 +88,25 @@ local config = {
       })
       vim.cmd 'colorscheme caret'
     end,
-  }
+  },
+  {
+    'sainnhe/gruvbox-material',
+    enabled = true,
+    init = function()
+      vim.g.gruvbox_material_better_performance = 1
+      vim.g.gruvbox_material_background = 'hard' -- 'hard', 'medium'(default), 'soft'
+      vim.g.gruvbox_material_foreground = 'material' -- 'material'(default), 'mix', 'original'
+      vim.g.gruvbox_material_enable_bold = 1
+      vim.g.gruvbox_material_enable_italic = 1
+      vim.g.gruvbox_material_transparent_background = 1 -- 0, 1, 2
+      vim.g.gruvbox_material_dim_inactive_windows = 1
+      vim.g.gruvbox_material_diagnostic_text_highlight = 1
+      vim.g.gruvbox_material_diagnostic_line_highlight = 1
+    end,
+    config = function()
+      vim.cmd 'colorscheme gruvbox-material'
+    end,
+  },
 }
 
 return config

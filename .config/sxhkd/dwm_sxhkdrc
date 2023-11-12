@@ -16,7 +16,7 @@ super +{_,shift + } e
 
 # {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
-    { $BROWSER || flatpak run com.brave.Browser || firefox, flatpak run com.github.Eloston.UngoogledChromium || firefox ||  brave-browser || brave || chromium}
+    { thorium-browser || $BROWSER || flatpak run com.brave.Browser || firefox, flatpak run com.github.Eloston.UngoogledChromium || firefox ||  brave-browser || brave || chromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
@@ -35,7 +35,7 @@ super + control + {s,l}
 # {_,shift +, alt + }@Print
 #     take_ss {clip,focus,full} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
 {_,shift +, alt + }@Print
-    flameshot {gui,full,launcher} || notify-send "Failed" "Maim is not installed." -u critical
+    flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 
 #Raises volume
 XF86Audio{Raise,Lower}Volume
