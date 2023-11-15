@@ -198,7 +198,6 @@ return {
       ['alt-enter'] = actions.file_tabedit,
       ['ctrl-x'] = actions.file_split,
       ['ctrl-q'] = actions.file_edit_or_qf,
-      -- ['alt-a'] = "toggle-all",
     }
     fzf.setup({
       fzf_opts = {
@@ -212,7 +211,11 @@ return {
         fzf = {
           ['ctrl-j'] = 'down',
           ['ctrl-k'] = 'up',
+          ['ctrl-f'] = 'half-page-down',
+          ['ctrl-b'] = 'half-page-up',
           ['alt-a'] = 'toggle-all',
+          ['shift-down'] = 'preview-page-down',
+          ['shift-up'] = 'preview-page-up',
         },
       },
       previewers = {

@@ -4,6 +4,9 @@ local config = {
     enabled = false,
     opts = {
       fade_nc = true,
+      disable = {
+        background = true,
+      },
       styles = {
         comments = 'italic',
         strings = 'NONE',
@@ -13,8 +16,8 @@ local config = {
         diagnostics = 'underline',
       },
       custom_highlights = {
-        Normal = { bg = '#1e222a' },
-        NormalNC = { bg = '#1d1915' },
+        -- Normal = { bg = '#1e222a' },
+        -- NormalNC = { bg = '#1d1915' },
         QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = 'underline,bold' },
         QuickScopeSecondary = {
           fg = '#61afef',
@@ -26,8 +29,20 @@ local config = {
     },
   },
   {
+    'navarasu/onedark.nvim',
+    enabled = false,
+    config = function()
+      require('onedark').setup({
+        style = 'cool', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
+        transparent = true,
+        -- cmp_itemkind_reverse = false
+      })
+      require('onedark').load()
+    end,
+  },
+  {
     'ellisonleao/gruvbox.nvim',
-    enabled = true,
+    enabled = false,
     config = function()
       require('gruvbox').setup({
         contrast = 'hard', -- can be "hard", "soft" or empty string
@@ -52,18 +67,6 @@ local config = {
     end,
   },
   {
-    'navarasu/onedark.nvim',
-    enabled = false,
-    config = function()
-      require('onedark').setup({
-        style = 'darker', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
-        transparent = false,
-        -- cmp_itemkind_reverse = false
-      })
-      require('onedark').load()
-    end,
-  },
-  {
     'sainnhe/gruvbox-material',
     enabled = false,
     init = function()
@@ -79,6 +82,44 @@ local config = {
     end,
     config = function()
       vim.cmd 'colorscheme gruvbox-material'
+    end,
+  },
+  {
+    'catppuccin/nvim',
+    name = 'catppuccin',
+    enabled = true,
+    opts = {
+      flavour = 'macchiato', -- latte, frappe, macchiato, mocha
+      transparent_background = true,
+      custom_highlights = function(colors)
+        return {
+          QuickScopePrimary = {
+            fg = '#d3869b',
+            bg = '#505050',
+            bold = true,
+            italic = true,
+          },
+          QuickScopeSecondary = {
+            fg = '#61afef',
+            bg = '#505050',
+            bold = true,
+            italic = true,
+          },
+        }
+      end,
+      integrations = {
+        flash = false,
+        leap = true,
+        neotree = true,
+        mason = true,
+        navic = { enabled = true },
+        window_picker = true,
+        which_key = true,
+      },
+    },
+    config = function(_, opts)
+      require('catppuccin').setup(opts)
+      vim.cmd.colorscheme 'catppuccin'
     end,
   },
 }

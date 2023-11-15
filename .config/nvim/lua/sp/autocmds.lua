@@ -132,28 +132,35 @@ vim.api.nvim_create_autocmd({ 'BufAdd', 'BufEnter', 'TabNewEntered' }, {
   desc = 'Update buffers when adding new buffers',
   group = au_buffer,
   callback = function(args)
+    local buf_utils = require 'sp.util'
     vim.opt_local.formatoptions = 'jcrqlnt'
     if not vim.t.bufs then
-      vim.t.bufs = {}
+      vim.t['bufs'] = {}
     end
-    local bufs = vim.t.bufs
+    if not buf_utils.is_valid(args.buf) then
+      return
+    end
+    local bufs = vim.t['bufs']
     if not vim.tbl_contains(bufs, args.buf) then
       table.insert(bufs, args.buf)
-      vim.t.bufs = bufs
+      vim.t['bufs'] = bufs
     end
-    vim.t.bufs = vim.tbl_filter(require('sp.util').is_valid, vim.t.bufs)
+    vim.t['bufs'] = vim.tbl_filter(buf_utils.is_valid, vim.t.bufs)
   end,
 })
 
-vim.api.nvim_create_autocmd('BufDelete', {
+vim.api.nvim_create_autocmd({ 'BufDelete', 'TermClose' }, {
   desc = 'Update buffers when deleting buffers',
   group = au_buffer,
   callback = function(args)
+    local removed
+    local buf_utils = require 'sp.util'
     for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
       local bufs = vim.t[tab].bufs
       if bufs then
         for i, bufnr in ipairs(bufs) do
           if bufnr == args.buf then
+            removed = true
             table.remove(bufs, i)
             vim.t[tab].bufs = bufs
             break
@@ -161,7 +168,7 @@ vim.api.nvim_create_autocmd('BufDelete', {
         end
       end
     end
-    vim.t.bufs = vim.tbl_filter(require('sp.util').is_valid, vim.t.bufs)
+    vim.t['bufs'] = vim.tbl_filter(buf_utils.is_valid, vim.t['bufs'])
     vim.cmd.redrawtabline()
   end,
 })

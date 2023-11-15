@@ -133,6 +133,10 @@ return {
       'folke/neodev.nvim',
       opts = {},
     },
+    {
+      'creativenull/efmls-configs-nvim',
+      version = 'v1.x.x',
+    },
     -- 'simrat39/rust-tools.nvim'
   },
   config = function()
@@ -186,13 +190,77 @@ return {
     opts.on_attach = on_attach
     -- opts.flags = { debounce_text_changes = 150, }
     mason_lspconfig.setup_handlers({
-      function(server_name)
-        if server_name ~= 'zk' then
-          lspconfig[server_name].setup(opts)
-        end
-      end,
       emmet_ls = function()
         lspconfig['emmet_ls'].setup(opts)
+      end,
+      efm = function()
+        print 'Inside efm function'
+        -- local eslint = require 'efmls-configs.linters.eslint_d'
+        local prettier = require 'efmls-configs.formatters.prettier_d'
+        local stylua = require 'efmls-configs.formatters.stylua'
+        local shfmt = require 'efmls-configs.formatters.shfmt'
+        local shellcheck = require 'efmls-configs.linters.shellcheck'
+        local go = {
+          require 'efmls-configs.linters.golangci_lint',
+          require 'efmls-configs.formatters.gofumpt',
+        }
+        local c = {
+          require 'efmls-configs.formatters.clang_format',
+          require 'efmls-configs.linters.clang_tidy',
+        }
+
+        local languages = {
+          c = c,
+          cpp = c,
+          go = go,
+          typescript = { prettier },
+          typescriptreact = { prettier },
+          javascript = { prettier },
+          javascriptreact = { prettier },
+          html = { prettier },
+          css = { prettier },
+          scss = { prettier },
+          less = { prettier },
+          graphql = { prettier },
+          json = { prettier },
+          jsonc = { prettier },
+          json5 = { prettier },
+          vue = { prettier },
+          svelte = { prettier },
+          markdown = { prettier },
+          lua = { stylua },
+          bash = { shfmt, shellcheck },
+          sh = { shfmt, shellcheck },
+          zsh = { shfmt, shellcheck },
+        }
+        lspconfig.efm.setup({
+          init_options = {
+            documentFormatting = true,
+            documentRangeFormatting = true,
+          },
+          filetypes = vim.tbl_keys(languages),
+          settings = {
+            rootMarkers = { '.git/' },
+            languages = languages,
+          },
+          -- cmd = {
+          --   'efm-langserver',
+          --   -- '-c',
+          --   -- vim.fn.expand '~/.config/efm-langserver/config.yaml',
+          --   '-logfile',
+          --   '/tmp/efm-langserver-logs.log',
+          -- },
+          on_attach = function(_, buf)
+            vim.keymap.set({ 'n', 'v' }, '<leader>=', function()
+              vim.lsp.buf.format({
+                async = true,
+                filter = function(client)
+                  return client.name == 'efm'
+                end,
+              })
+            end, { buffer = buf, desc = 'Efm Fix' })
+          end,
+        })
       end,
       rust_analyzer = function()
         local opt = vim.deepcopy(opts)
@@ -575,8 +643,8 @@ return {
       end,
       volar = function()
         local function get_typescript_server_path(root_dir)
-          local global_ts = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib'
-          -- local global_ts = string.format("%s/install/global/node_modules/typescript/lib", os.getenv("BUN_INSTALL"))
+          -- local global_ts = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/typescript/lib'
+          local global_ts = string.format('%s/install/global/node_modules/typescript/lib', os.getenv 'BUN_INSTALL')
           local found_ts = ''
           local function check_dir(path)
             found_ts = util.path.join(path, 'node_modules', 'typescript', 'lib')
@@ -591,7 +659,7 @@ return {
           end
         end
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
+        opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
         opt.filetypes = { 'typescript', 'javascript', 'vue' }
         opt.on_new_config = function(new_config, new_root_dir)
           new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
@@ -619,63 +687,10 @@ return {
         }
         lspconfig['svelte'].setup(opt)
       end,
-      efm = function()
-        lspconfig['efm'].setup({
-          init_options = {
-            documentFormatting = true,
-            documentRangeFormatting = true,
-          },
-          cmd = {
-            'efm-langserver',
-            '-c',
-            vim.fn.expand '~/.config/efm-langserver/config.yaml',
-            '-logfile',
-            '/tmp/efm-langserver-logs.log',
-          },
-          -- settings = {
-          --   rootMarkers = {
-          --     '.git/',
-          --     'package.json',
-          --   },
-          --   languages = { typescript = { prettier }, svelte = { prettier }, lua = { stylua } },
-          -- },
-          filetypes = {
-            'javascript',
-            'javascriptreact',
-            'typescript',
-            'typescriptreact',
-            'json',
-            'jsonc',
-            'html',
-            'css',
-            'scss',
-            'less',
-            'go',
-            'vue',
-            'svelte',
-            'graphql',
-            'yaml',
-            'sh',
-            'bash',
-            'fish',
-            'c',
-            'cpp',
-            'vim',
-            'python',
-            'lua',
-            'markdown',
-          },
-          on_attach = function(_, buf)
-            vim.keymap.set({ 'n', 'v' }, '<leader>=', function()
-              vim.lsp.buf.format({
-                async = true,
-                filter = function(client)
-                  return client.name == 'efm'
-                end,
-              })
-            end, { buffer = buf, desc = 'Efm Fix' })
-          end,
-        })
+      function(server_name)
+        if server_name ~= 'zk' then
+          lspconfig[server_name].setup(opts)
+        end
       end,
     })
     lspconfig['nim_langserver'].setup({

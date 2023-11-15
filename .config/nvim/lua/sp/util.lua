@@ -9,6 +9,8 @@ M.bun_path = function()
   return bun .. '/bin'
 end
 
+M.current_buf, M.last_buf = nil, nil
+
 --- A wrapper around `vim.keymap.set`
 ---@param mode string|table 'n'|'v'|'o'
 ---@param lhs string|function
@@ -28,7 +30,12 @@ end
 ---@param bufnr? number The buffer to close or the current buffer if not provided
 ---@param force? boolean Whether or not to foce close the buffers or confirm changes (default: false)
 function M.close(bufnr, force)
-  vim.cmd((force and 'bd!' or 'confirm bd') .. (bufnr == nil and '' or bufnr))
+  if not bufnr or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+
+  local buftype = vim.api.nvim_get_option_value('buftype', { buf = bufnr })
+  vim.cmd(('silent! %s %d'):format((force or buftype == 'terminal') and 'bdelete!' or 'confirm bdelete', bufnr))
 end
 
 --- Close all buffers
@@ -77,8 +84,8 @@ end
 ---@param bufnr number The buffer to check
 ---@return boolean # Whether the buffer is valid or not
 function M.is_valid(bufnr)
-  if not bufnr or bufnr < 1 then
-    return false
+  if not bufnr then
+    bufnr = 0
   end
   return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
 end
