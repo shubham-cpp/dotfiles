@@ -1,7 +1,7 @@
 local config = {
   {
     'rmehri01/onenord.nvim',
-    enabled = false,
+    enabled = true,
     opts = {
       fade_nc = true,
       disable = {
@@ -87,7 +87,7 @@ local config = {
   {
     'catppuccin/nvim',
     name = 'catppuccin',
-    enabled = true,
+    enabled = false,
     opts = {
       flavour = 'macchiato', -- latte, frappe, macchiato, mocha
       transparent_background = true,

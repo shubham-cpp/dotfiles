@@ -1,3 +1,4 @@
+local au_lsp = vim.api.nvim_create_augroup('sp_lsp', { clear = true })
 return function(client, bufnr)
   if require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc')(vim.fn.getcwd()) then
     if client.name == 'tsserver' or client.name == 'eslint' then
@@ -18,5 +19,14 @@ return function(client, bufnr)
         inlayhints.toggle()
       end, { desc = 'Toggle inlay hints' })
     end
+  end
+  if client.name == 'svelte' then
+    vim.api.nvim_create_autocmd('BufWritePost', {
+      pattern = { '*.js', '*.ts' },
+      group = au_lsp,
+      callback = function(ctx)
+        client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.file })
+      end,
+    })
   end
 end

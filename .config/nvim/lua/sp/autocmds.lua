@@ -206,5 +206,6 @@ vim.filetype.add({
   pattern = {
     ['*profile'] = 'sh',
     ['*.kbd'] = 'lisp',
+    ['*.postcss'] = 'css',
   },
 })

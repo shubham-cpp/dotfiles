@@ -1,3 +1,4 @@
+local au_bb = vim.api.nvim_create_augroup('barbecue.updater', {})
 return {
   {
     'utilyre/barbecue.nvim',
@@ -11,7 +12,24 @@ return {
     -- opts = {
     --   -- configurations go here
     -- },
-    config = true,
+    config = function()
+      require('barbecue').setup({
+        create_autocmd = false, -- prevent barbecue from updating itself automatically
+      })
+      vim.api.nvim_create_autocmd({
+        'WinResized', -- or WinResized on NVIM-v0.9 and higher
+        'BufWinEnter',
+        'CursorHold',
+        'InsertLeave',
+        -- include this if you have set `show_modified` to `true`
+        'BufModifiedSet',
+      }, {
+        group = au_bb,
+        callback = function()
+          require('barbecue.ui').update()
+        end,
+      })
+    end,
   },
   {
     'jay-babu/mason-null-ls.nvim',
@@ -27,7 +45,7 @@ return {
       local mason_null_ls = require 'mason-null-ls'
       local handlers = {
         function(source_name, methods)
-          require 'mason-null-ls.automatic_setup' (source_name, methods)
+          require 'mason-null-ls.automatic_setup'(source_name, methods)
         end,
         prettierd = function()
           null_ls.register(null_ls.builtins.formatting.prettierd.with({

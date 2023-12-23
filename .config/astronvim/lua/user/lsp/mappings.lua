@@ -17,5 +17,13 @@ return {
       end,
       desc = 'Organize Imports and Remove Unused',
     },
+    ['gw'] = {
+      '<cmd>Telescope lsp_document_symbols<cr>',
+      desc = 'Document Symbol(LSP)',
+    },
+    ['gW'] = {
+      '<cmd>Telescope lsp_workspace_symbols<cr>',
+      desc = 'Workspace Symbol(LSP)',
+    },
   },
 }

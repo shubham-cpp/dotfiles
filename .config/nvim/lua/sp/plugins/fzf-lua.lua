@@ -4,19 +4,21 @@ local function fzf_mru(opts)
   local fzf = require 'fzf-lua'
   local hash = require('sp.util').get_hash()
   local cmd =
-    -- string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash) -- https://lib.rs/crates/fre
-    string.format('command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq', hash)
+    string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash) -- https://lib.rs/crates/fre
+  -- string.format('command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq', hash)
 
   cmd = string.gsub(cmd, '[\n\r]+', ' ')
 
   fzf.files({
+    -- debug = true,
     cmd = cmd,
     fzf_opts = { ['--tiebreak'] = 'index' },
     actions = {
       ['default'] = function(selected, opts)
         local path = require 'fzf-lua.path'
         local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
-        local cmd = string.format('mru_tracker --store %s --add %s', hash, filename)
+        -- local cmd = string.format('mru_tracker --store %s --add %s', hash, filename)
+        local cmd = string.format('fre --add %s --store_name %s', filename, hash)
         cmd = string.gsub(cmd, '[\n\r]+', ' ')
         vim.fn.jobstart(cmd, {
           stdout_buffered = true,
@@ -34,7 +36,8 @@ local function fzf_mru(opts)
           local path = require 'fzf-lua.path'
           local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
           -- vim.fn.system('fre --delete ' .. sel[1] .. ' --store_name ' .. hash)
-          local c = string.format('mru_tracker --store %s --delete %s', hash, filename)
+          -- local c = string.format('mru_tracker --store %s --delete %s', hash, filename)
+          local c = string.format('fre --delete %s --store_name %s', filename, hash)
           c = c:gsub('[\n\t]+', ' ')
           vim.fn.system(c)
         end,
@@ -47,9 +50,16 @@ end
 return {
   'ibhagwan/fzf-lua',
   keys = {
-    -- { '<C-p>',       '<cmd>FzfLua files<cr>',                desc = 'Find Files' },
-    { '<C-p>', fzf_mru, desc = 'Find Files' },
-    { '<leader>ff', '<cmd>FzfLua files<cr>', desc = '[F]ind [F]iles' },
+    {
+      '<C-p>',
+      function()
+        require('fzf-lua').files(opts)
+      end,
+      desc = 'Find Files',
+    },
+    -- { '<C-p>', fzf_mru, desc = 'Find Files' },
+    { '<leader>ff', fzf_mru, desc = '[F]ind [F]iles' },
+    -- { '<leader>ff', '<cmd>FzfLua files<cr>', desc = '[F]ind [F]iles' },
     { '<leader>fr', '<cmd>FzfLua resume<cr>', desc = '[F]ind [R]esume' },
     { '<leader>fb', '<cmd>FzfLua buffers<cr>', desc = '[F]ind [B]uffers' },
     { '<leader>fz', '<cmd>FzfLua spell_suggest<cr>', desc = '[F]ind Spellings' },
@@ -123,56 +133,61 @@ return {
     {
       'gd',
       function()
-        require('fzf-lua').lsp_definitions(vim.tbl_extend('keep', opts, {
+        require('fzf-lua').lsp_definitions({
           jump_to_single_result = true,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
           multiprocess = true,
-          winopts = { preview = { 'builtin' } },
-        }))
+        })
       end,
       desc = '[G]oto [D]efinition(FzfLua)',
     },
     {
       'gD',
       function()
-        require('fzf-lua').lsp_declarations(vim.tbl_extend('keep', opts, {
+        require('fzf-lua').lsp_declarations({
           jump_to_single_result = true,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
           multiprocess = true,
-          winopts = { preview = { 'builtin' } },
-        }))
+        })
       end,
       desc = '[G]oto [D]eclaration(FzfLua)',
     },
     {
       'gt',
       function()
-        require('fzf-lua').lsp_typedefs(vim.tbl_extend('keep', opts, {
+        require('fzf-lua').lsp_typedefs({
           jump_to_single_result = true,
           multiprocess = true,
-          winopts = { preview = { 'builtin' } },
-        }))
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        })
       end,
       desc = '[G]oto [T]ypedef(FzfLua)',
     },
     {
       'gw',
       function()
-        require('fzf-lua').lsp_document_symbols(opts)
+        require('fzf-lua').lsp_document_symbols({
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        })
       end,
       desc = 'Documents Symbols (FzfLua)',
     },
     {
       'gW',
       function()
-        require('fzf-lua').lsp_workspace_symbols(opts)
+        require('fzf-lua').lsp_workspace_symbols({
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        })
       end,
       desc = 'Workspace Symbols (FzfLua)',
     },
     {
       '<leader>gb',
       function()
-        require('fzf-lua').git_branches(vim.tbl_deep_extend('force', opts, {
+        require('fzf-lua').git_branches({
+          { winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } } },
           multiprocess = true,
-        }))
+        })
       end,
       desc = '[G]oto [B]ranches(FzfLua)',
     },
@@ -231,9 +246,9 @@ return {
         ['A'] = { icon = '+', color = 'green' },
       },
       files = {
-        fzf_opts = {
-          ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-files-history',
-        },
+        -- fzf_opts = {
+        --   ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-files-history',
+        -- },
         winopts = {
           height = 0.55,
           width = 0.65,
@@ -259,6 +274,7 @@ return {
       },
       buffers = {
         ignore_current_buffer = true,
+        winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
         actions = vim.tbl_extend('force', m_keys, {
           ['ctrl-d'] = actions.buf_delete,
           ['ctrl-x'] = actions.buf_vsplit,

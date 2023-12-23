@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 arg=$(readlink -f ~/.config/bspwm/ | cut -d'.' -f1)
 
-rg --hidden --files "$arg" --files-without-match="$HOME"/.config/git/ignore -g '!.git*' -g '!*.bak' |
+rg --hidden --files "$arg" --ignore-file="$HOME"/.config/git/ignore -g '!.git*' -g '!*.bak' |
 	sed "s#$arg##g" |
 	fzf --reverse |
 	xargs -r -I {} nvim "$arg"{} ||

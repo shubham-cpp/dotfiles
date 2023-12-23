@@ -44,6 +44,12 @@ local function on_attach(client, bufnr)
   if client.name == 'prismals' then
     map('n', '<leader>=', vim.lsp.buf.format, { buffer = bufnr, desc = 'Format Buffer(LSP)' })
   end
+  if client.server_capabilities.documentSymbolProvider then
+    local ok_navic, navic = pcall(require, 'nvim-navic')
+    if ok_navic then
+      navic.attach(client, bufnr)
+    end
+  end
 
   if client.name == 'svelte' then
     vim.api.nvim_create_autocmd('BufWritePost', {
@@ -88,29 +94,38 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'b0o/schemastore.nvim',
-    -- 'jose-elias-alvarez/typescript.nvim',
-    {
-      'pmizio/typescript-tools.nvim',
-      dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-      opts = {
-        on_attach = on_attach,
-        --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-        filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-        settings = {
-          tsserver_file_preferences = {
-            includeInlayParameterNameHints = 'all',
-            includeCompletionsForModuleExports = true,
-            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayVariableTypeHints = true,
-            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayEnumMemberValueHints = true,
-          },
-        },
-      },
-    },
+    -- {
+    --   'pmizio/typescript-tools.nvim',
+    --   dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    --   ft = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx', 'javascript', 'typescript' },
+    --   opts = {
+    --     on_attach = on_attach,
+    --     --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+    --     -- filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
+    --     settings = {
+    --       tsserver_file_preferences = {
+    --         includeInlayParameterNameHints = 'all',
+    --         includeCompletionsForModuleExports = true,
+    --         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+    --         includeInlayFunctionParameterTypeHints = true,
+    --         includeInlayVariableTypeHints = true,
+    --         includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+    --         includeInlayPropertyDeclarationTypeHints = true,
+    --         includeInlayFunctionLikeReturnTypeHints = true,
+    --         includeInlayEnumMemberValueHints = true,
+    --       },
+    --       tsserver_plugins = {
+    --         -- for TypeScript v4.9+
+    --         -- '@styled/typescript-styled-plugin',
+    --         -- or for older TypeScript versions
+    --         'typescript-styled-plugin',
+    --       },
+    --     },
+    --   },
+    --   config = function(_, opts)
+    --     require('typescript-tools').setup(opts)
+    --   end,
+    -- },
     {
       'lvimuser/lsp-inlayhints.nvim',
       config = function()
@@ -166,11 +181,11 @@ return {
     cmp_capabilities.textDocument.completion.completionItem.resolveSupport = {
       properties = { 'documentation', 'detail', 'additionalTextEdits' },
     }
+    cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(cmp_capabilities)
     cmp_capabilities.textDocument.foldingRange = {
       dynamicRegistration = false,
       lineFoldingOnly = true,
     }
-    cmp_capabilities = require('cmp_nvim_lsp').default_capabilities(cmp_capabilities)
 
     local mason_lspconfig = require 'mason-lspconfig'
     require('mason').setup({
@@ -183,7 +198,37 @@ return {
       },
     })
     mason_lspconfig.setup({
-      ensure_installed = { 'lua_ls' },
+      ensure_installed = {
+        'lua_ls',
+        'efm',
+        'astro',
+        'bashls',
+        'clangd',
+        'cssls',
+        'docker_compose_language_service',
+        'dockerls',
+        'efm',
+        'emmet_language_server',
+        'eslint',
+        'golangci-lint',
+        'gopls',
+        'graphql',
+        'html',
+        'jsonls',
+        'lua_ls',
+        'prettierd',
+        'prismals',
+        'shellcheck',
+        'shfmt',
+        'stylua',
+        'svelte',
+        'tailwindcss',
+        'tsserver',
+        'vimls',
+        'volar',
+        'yamlls',
+        'zk',
+      },
     })
     local opts = {}
     opts.capabilities = cmp_capabilities
@@ -193,8 +238,28 @@ return {
       emmet_ls = function()
         lspconfig['emmet_ls'].setup(opts)
       end,
+      clangd = function()
+        local opt = vim.deepcopy(opts)
+        opt.capabilities.offsetEncoding = 'utf-8'
+        opt.cmd = {
+          'clangd',
+          '--background-index',
+          '--clang-tidy',
+          '--suggest-missing-includes',
+          '--header-insertion=iwyu',
+          '--completion-style=detailed',
+          '--function-arg-placeholders',
+          '--pch-storage=memory',
+          '--fallback-style=llvm',
+        }
+        opt.init_options = {
+          usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+        }
+        lspconfig.clangd.setup(opt)
+      end,
       efm = function()
-        print 'Inside efm function'
         -- local eslint = require 'efmls-configs.linters.eslint_d'
         local prettier = require 'efmls-configs.formatters.prettier_d'
         local stylua = require 'efmls-configs.formatters.stylua'
@@ -603,6 +668,44 @@ return {
         --     },
         --   },
         -- })
+        local opt = vim.deepcopy(opts)
+        opt.cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' }
+        -- opt.filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' }
+        opt.root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json')
+        opt.init_options = {
+          hostInfo = 'neovim',
+          plugins = {
+            -- for TypeScript v4.9+
+            -- '@styled/typescript-styled-plugin',
+            -- or for older TypeScript versions
+            'typescript-styled-plugin',
+          },
+        }
+        opt.settings = {
+          javascript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+            },
+          },
+          typescript = {
+            inlayHints = {
+              includeInlayEnumMemberValueHints = true,
+              includeInlayFunctionLikeReturnTypeHints = true,
+              includeInlayFunctionParameterTypeHints = true,
+              includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
+              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+              includeInlayPropertyDeclarationTypeHints = true,
+              includeInlayVariableTypeHints = true,
+            },
+          },
+        }
+        require('lspconfig').tsserver.setup(opt)
       end,
       denols = function()
         local opt = vim.deepcopy(opts)
@@ -660,21 +763,23 @@ return {
         end
         local opt = vim.deepcopy(opts)
         opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
-        opt.filetypes = { 'typescript', 'javascript', 'vue' }
-        opt.on_new_config = function(new_config, new_root_dir)
-          new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-        end
-        -- opt.settings = {
-        --   vue = {
-        --     inlayHints = {
-        --       inlineHandlerLeading = true,
-        --       missingProps = true,
-        --       optionsWrapper = true,
-        --     },
-        --     updateImportsOnFileMove = { enabled = true },
-        --   },
-        -- }
-        lspconfig['volar'].setup(opt)
+        -- opt.filetypes = { 'typescript', 'javascript', 'vue' }
+        opt.filetypes = { 'vue' }
+        on_new_config =
+          function(new_config, new_root_dir)
+            new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+          end,
+          -- opt.settings = {
+          --   vue = {
+          --     inlayHints = {
+          --       inlineHandlerLeading = true,
+          --       missingProps = true,
+          --       optionsWrapper = true,
+          --     },
+          --     updateImportsOnFileMove = { enabled = true },
+          --   },
+          -- }
+          lspconfig['volar'].setup(opt)
       end,
       svelte = function()
         local opt = vim.deepcopy(opts)
@@ -739,6 +844,10 @@ return {
       capabilities = cmp_capabilities,
     })
     -- lspconfig.nimls.setup({
+    --   on_attach = on_attach,
+    --   capabilities = cmp_capabilities,
+    -- })
+    -- lspconfig.zk.setup({
     --   on_attach = on_attach,
     --   capabilities = cmp_capabilities,
     -- })

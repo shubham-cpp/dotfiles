@@ -85,5 +85,7 @@ if vim.fn.has 'nvim-0.9.0' == 1 then
   o.shortmess:append({ C = true })
 end
 
+vim.cmd 'filetype plugin indent on'
+
 -- Fix markdown indentation settings
 g.markdown_recommended_style = 0

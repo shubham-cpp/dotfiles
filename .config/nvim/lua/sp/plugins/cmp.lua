@@ -120,7 +120,7 @@ return {
       window = {
         completion = {
           winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
- -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
+          -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
           -- col_offset = -3,
           -- side_padding = 0,
         },
@@ -213,28 +213,29 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
+        { name = 'nvim_lsp', priority = 130 },
         { name = 'nvim_lua', priority = 100 },
-        { name = 'nvim_lsp', priority = 100 },
         { name = 'nvim_lsp_signature_help', priority = 90 },
         { name = 'luasnip', priority = 50 },
         -- }, {
-        { name = 'path', priority = 30 },
         {
           name = 'buffer',
-          priority = 20,
+          priority = 30,
           option = {
-            keyword_length = 3,
+            keyword_length = 2,
             get_bufnrs = function()
-              local bufIsSmall = function(bufnr)
-                local max_filesize = 50 * 1024
-                local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-                return ok and stats and stats.size < max_filesize
-              end
+              -- local bufIsSmall = function(bufnr)
+              --   local max_filesize = 50 * 1024
+              --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+              --   return ok and stats and stats.size < max_filesize
+              -- end
 
-              return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
+              -- return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
+              return vim.api.nvim_list_bufs()
             end,
           },
         },
+        { name = 'path', priority = 20 },
       }),
       formatting = {
         format = function(_, vim_item)
@@ -247,30 +248,16 @@ return {
         priority_weight = 2,
         comparators = {
           -- deprio(types.lsp.CompletionItemKind.Snippet),
-          deprio(types.lsp.CompletionItemKind.Text),
-          compare.offset,
+          -- deprio(types.lsp.CompletionItemKind.Text),
           compare.exact,
-          compare.score,
-          compare.recently_used,
-          compare.locality,
           compare.kind,
-          compare.sort_text,
-          compare.length,
-          compare.order,
-          -- copied from cmp-under, but I don't think I need the plugin for this.
-          -- I might add some more of my own.
-          function(entry1, entry2)
-            _G.entry_inspect = entry1
-            local _, entry1_under = entry1.completion_item.label:find '^_+'
-            local _, entry2_under = entry2.completion_item.label:find '^_+'
-            entry1_under = entry1_under or 0
-            entry2_under = entry2_under or 0
-            if entry1_under > entry2_under then
-              return false
-            elseif entry1_under < entry2_under then
-              return true
-            end
-          end,
+          compare.score,
+          -- compare.offset,
+          compare.recently_used,
+          -- compare.locality,
+          -- compare.sort_text,
+          -- compare.length,
+          -- compare.order,
           -- Try to put emmet towards the bottom
           function(entry1, entry2)
             local source_name = entry1.source

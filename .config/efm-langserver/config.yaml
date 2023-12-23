@@ -361,14 +361,16 @@ languages:
     - <<: *stylelint-lint
     - <<: *prettier-action-fix
   css:
-    - <<: *stylelint-lint
-    - <<: *prettier-action-fix
+    - <<: *prettierd
   scss:
     - <<: *stylelint-lint
-    - <<: *prettier-action-fix
+    - <<: *prettierd
+  sass:
+    - <<: *stylelint-lint
+    - <<: *prettierd
   less:
     - <<: *stylelint-lint
-    - <<: *prettier-action-fix
+    - <<: *prettierd
   json:
     - <<: *jsonlint-lint
     - <<: *fixjson-format

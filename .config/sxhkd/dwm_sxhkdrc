@@ -16,12 +16,12 @@ super +{_,shift + } e
 
 # {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
-    { thorium-browser || $BROWSER || flatpak run com.brave.Browser || firefox, flatpak run com.github.Eloston.UngoogledChromium || firefox ||  brave-browser || brave || chromium}
+    { $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium || brave-browser || brave || chromium || firefox}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
 super + {d,r,v,y,p}
-    {rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read 10 -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 
 super + alt + {c,g}
     {open-rcs,open-games}
@@ -36,7 +36,8 @@ super + control + {s,l}
 #     take_ss {clip,focus,full} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical
 {_,shift +, alt + }@Print
     flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
-
+{_,shift+}@XF86HomePage
+    flameshot {gui,full} || notify-send "Failed" "Flameshot is not installed." -u critical
 #Raises volume
 XF86Audio{Raise,Lower}Volume
     audio {inc,dec}
