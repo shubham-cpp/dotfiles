@@ -9,6 +9,18 @@ local function deprio(kind)
   end
 end
 
+local function border(hl_name)
+  return {
+    { '╭', hl_name },
+    { '─', hl_name },
+    { '╮', hl_name },
+    { '│', hl_name },
+    { '╯', hl_name },
+    { '─', hl_name },
+    { '╰', hl_name },
+    { '│', hl_name },
+  }
+end
 return {
   'hrsh7th/nvim-cmp',
   event = { 'BufReadPost', 'BufNewFile' },
@@ -27,6 +39,11 @@ return {
       config = function()
         local ls = require 'luasnip'
         ls.setup()
+        ls.config.setup({
+          history = true,
+          delete_check_events = 'TextChanged',
+          region_check_events = 'CursorMoved',
+        })
         vim.keymap.set({ 'i' }, '<C-K>', function()
           ls.expand()
         end, { silent = true })
@@ -36,7 +53,10 @@ return {
         vim.keymap.set({ 'i', 's' }, '<C-J>', function()
           ls.jump(-1)
         end, { silent = true })
-        require('luasnip.loaders.from_vscode').lazy_load()
+        -- require('luasnip.loaders.from_vscode').lazy_load()
+        vim.tbl_map(function(type)
+          require('luasnip.loaders.from_' .. type).lazy_load()
+        end, { 'vscode', 'snipmate', 'lua' })
       end,
     },
     {
@@ -95,7 +115,7 @@ return {
     -- local context = require 'cmp.config.context'
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
-    -- local defaults = require("cmp.config.default")()
+    local defaults = require 'cmp.config.default'()
     -- local lspkind = require('lspkind')
     -- local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
@@ -118,6 +138,7 @@ return {
         end,
       },
       window = {
+        documentation = cmp.config.window.bordered({ winhighlight = 'FloatBorder:Todo', side_padding = 0 }),
         completion = {
           winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
           -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
@@ -128,6 +149,9 @@ return {
       mapping = cmp.mapping.preset.insert({
         ['<C-x><C-s>'] = cmp.mapping.complete({
           config = { sources = { { name = 'luasnip' } } },
+        }),
+        ['<C-x><C-b>'] = cmp.mapping.complete({
+          config = { sources = { { name = 'buffer' } } },
         }),
         ['<C-x><C-f>'] = cmp.mapping.complete({
           config = { sources = { { name = 'path' } } },
@@ -213,14 +237,14 @@ return {
         end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lsp', priority = 130 },
-        { name = 'nvim_lua', priority = 100 },
-        { name = 'nvim_lsp_signature_help', priority = 90 },
-        { name = 'luasnip', priority = 50 },
+        { name = 'nvim_lsp', priority = 1000 },
+        { name = 'nvim_lua', priority = 950 },
+        { name = 'nvim_lsp_signature_help', priority = 900 },
+        { name = 'luasnip', priority = 750 },
         -- }, {
         {
           name = 'buffer',
-          priority = 30,
+          priority = 500,
           option = {
             keyword_length = 2,
             get_bufnrs = function()
@@ -235,7 +259,7 @@ return {
             end,
           },
         },
-        { name = 'path', priority = 20 },
+        { name = 'path', priority = 200 },
       }),
       formatting = {
         format = function(_, vim_item)
@@ -245,19 +269,16 @@ return {
       },
       -- sorting = defaults.sorting,
       sorting = {
-        priority_weight = 2,
+        -- priority_weight = 2,
         comparators = {
           -- deprio(types.lsp.CompletionItemKind.Snippet),
           -- deprio(types.lsp.CompletionItemKind.Text),
-          compare.exact,
-          compare.kind,
-          compare.score,
-          -- compare.offset,
-          compare.recently_used,
-          -- compare.locality,
-          -- compare.sort_text,
-          -- compare.length,
-          -- compare.order,
+          cmp.config.compare.offset,
+          cmp.config.compare.exact,
+          cmp.config.compare.score,
+          cmp.config.compare.recently_used,
+          -- require("cmp-under-comparator").under,
+          cmp.config.compare.kind,
           -- Try to put emmet towards the bottom
           function(entry1, entry2)
             local source_name = entry1.source

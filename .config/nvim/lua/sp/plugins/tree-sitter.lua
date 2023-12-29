@@ -8,7 +8,18 @@ local config = {
     { 'nvim-treesitter/playground', cmd = 'TSPlaygroundToggle' },
     'andymass/vim-matchup',
     -- HACK: remove when https://github.com/windwp/nvim-ts-autotag/issues/125 closed.
-    { 'windwp/nvim-ts-autotag', opts = { autotag = { enable_close_on_slash = false } } },
+    -- { 'windwp/nvim-ts-autotag', opts = { autotag = { enable_close_on_slash = false } } },
+    {
+      'windwp/nvim-ts-autotag',
+      config = function()
+        require('nvim-ts-autotag').setup({
+          enable = true,
+          enable_rename = true,
+          enable_close = true,
+          enable_close_on_slash = false,
+        })
+      end,
+    },
   },
   init = function()
     vim.g.matchup_matchparen_offscreen = { method = 'popup' }
@@ -16,7 +27,7 @@ local config = {
   opts = {
     highlight = { enable = true, additional_vim_regex_highlighting = { 'markdown', 'xml' } },
     -- context_commentstring = { enable = true, enable_autocmd = false },
-    autotag = { enable = true , enable_close_on_slash = false},
+    -- autotag = { enable = true , enable_close_on_slash = false},
     matchup = { enable = true },
     ensure_installed = {
       'bash',
@@ -130,14 +141,14 @@ local config = {
       swap = {
         enable = true,
         swap_next = {
-          [">K"] = { query = "@block.outer", desc = "Swap next block" },
-          [">F"] = { query = "@function.outer", desc = "Swap next function" },
-          [">A"] = { query = "@parameter.inner", desc = "Swap next argument" },
+          ['>K'] = { query = '@block.outer', desc = 'Swap next block' },
+          ['>F'] = { query = '@function.outer', desc = 'Swap next function' },
+          ['>A'] = { query = '@parameter.inner', desc = 'Swap next argument' },
         },
         swap_previous = {
-          ["<K"] = { query = "@block.outer", desc = "Swap previous block" },
-          ["<F"] = { query = "@function.outer", desc = "Swap previous function" },
-          ["<A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+          ['<K'] = { query = '@block.outer', desc = 'Swap previous block' },
+          ['<F'] = { query = '@function.outer', desc = 'Swap previous function' },
+          ['<A'] = { query = '@parameter.inner', desc = 'Swap previous argument' },
         },
       },
     },

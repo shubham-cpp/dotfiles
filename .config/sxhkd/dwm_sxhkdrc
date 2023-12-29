@@ -37,7 +37,7 @@ super + control + {s,l}
 {_,shift +, alt + }@Print
     flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 {_,shift+}@XF86HomePage
-    flameshot {gui,full} || notify-send "Failed" "Flameshot is not installed." -u critical
+    flameshot {gui,screen} || notify-send "Failed" "Flameshot is not installed." -u critical
 #Raises volume
 XF86Audio{Raise,Lower}Volume
     audio {inc,dec}

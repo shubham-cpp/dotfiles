@@ -89,7 +89,7 @@ end
 
 return {
   'neovim/nvim-lspconfig',
-  event = { 'BufReadPost', 'BufNewFile' },
+  event = { 'BufWinEnter' },
   dependencies = {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
@@ -210,17 +210,12 @@ return {
         'efm',
         'emmet_language_server',
         'eslint',
-        'golangci-lint',
         'gopls',
         'graphql',
         'html',
         'jsonls',
         'lua_ls',
-        'prettierd',
         'prismals',
-        'shellcheck',
-        'shfmt',
-        'stylua',
         'svelte',
         'tailwindcss',
         'tsserver',
@@ -240,23 +235,24 @@ return {
       end,
       clangd = function()
         local opt = vim.deepcopy(opts)
-        opt.capabilities.offsetEncoding = 'utf-8'
-        opt.cmd = {
-          'clangd',
-          '--background-index',
-          '--clang-tidy',
-          '--suggest-missing-includes',
-          '--header-insertion=iwyu',
-          '--completion-style=detailed',
-          '--function-arg-placeholders',
-          '--pch-storage=memory',
-          '--fallback-style=llvm',
-        }
-        opt.init_options = {
-          usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-        }
+        opt.single_file_support = true
+        -- opt.capabilities.offsetEncoding = 'utf-8'
+        -- opt.cmd = {
+        --   'clangd',
+        --   '--background-index',
+        --   '--clang-tidy',
+        --   '--suggest-missing-includes',
+        --   '--header-insertion=iwyu',
+        --   '--completion-style=detailed',
+        --   '--function-arg-placeholders',
+        --   '--pch-storage=memory',
+        --   '--fallback-style=llvm',
+        -- }
+        -- opt.init_options = {
+        --   usePlaceholders = true,
+        --   completeUnimported = true,
+        --   clangdFileStatus = true,
+        -- }
         lspconfig.clangd.setup(opt)
       end,
       efm = function()

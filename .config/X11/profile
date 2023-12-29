@@ -26,7 +26,8 @@ export BROWSER="firefox"
 [ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
 export READER="zathura"
 
-export QT_QPA_PLATFORMTHEME="qt5ct"
+# $DESKTOP_SESSION not equal to plasma
+[ "$DESKTOP_SESSION" != "plasma" ] && export QT_QPA_PLATFORMTHEME="qt5ct"
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 # ~/ Clean-up:
@@ -132,6 +133,8 @@ export CABAL_DIR="$XDG_CACHE_HOME"/cabal
 # Ignore certain files while completing
 export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 # This is the list for lf icons:
 LF_ICONS=$(sed ~/.config/lf/dir_icons \
 	-e '/^[ \t]*#/d' \

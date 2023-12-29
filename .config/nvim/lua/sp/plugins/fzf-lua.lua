@@ -4,8 +4,8 @@ local function fzf_mru(opts)
   local fzf = require 'fzf-lua'
   local hash = require('sp.util').get_hash()
   local cmd =
-    string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash) -- https://lib.rs/crates/fre
-  -- string.format('command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq', hash)
+    string.format('bash -c "command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | my_uniq"', hash) -- https://lib.rs/crates/fre
+  -- string.format('bash -c "command cat <(mru_tracker --store %s --list) <(fd -t f --color never) | my_uniq"', hash)
 
   cmd = string.gsub(cmd, '[\n\r]+', ' ')
 
@@ -17,8 +17,8 @@ local function fzf_mru(opts)
       ['default'] = function(selected, opts)
         local path = require 'fzf-lua.path'
         local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
-        -- local cmd = string.format('mru_tracker --store %s --add %s', hash, filename)
-        local cmd = string.format('fre --add %s --store_name %s', filename, hash)
+        local cmd = string.format('mru_tracker --store %s --add %s', hash, filename)
+        -- local cmd = string.format('fre --add %s --store_name %s', filename, hash)
         cmd = string.gsub(cmd, '[\n\r]+', ' ')
         vim.fn.jobstart(cmd, {
           stdout_buffered = true,

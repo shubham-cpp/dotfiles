@@ -69,6 +69,7 @@ floating_layout = Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
+        Match(title="Bitwarden"),
         Match(wm_class="Pavucontrol"),
         Match(wm_class="Gnome-calculator"),
         Match(wm_class="Qalculate-gtk"),
@@ -95,6 +96,7 @@ wmname = "LG3D"
 @hook.subscribe.client_new
 def assign_app_group(client):
     wm_class: str = client.window.get_wm_class()[0]
+
     if wm_class in [
         "Navigator",
         "firefox",

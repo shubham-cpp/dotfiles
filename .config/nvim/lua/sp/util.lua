@@ -149,6 +149,15 @@ M.symbols = {
     },
     menu = {},
   },
+  cmp_sources = {
+    nvim_lsp = '✨',
+    nvim_lua = '✨',
+    nvim_lsp_signature_help = '✨',
+    luasnip = '🚀',
+    buffer = '📝',
+    path = '📁',
+    cmdline = '💻',
+  },
 }
 
 --- Get a hash of the current directory + git branch

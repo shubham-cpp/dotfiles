@@ -16,6 +16,7 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
+-- let g:opamshare = substitute(system('opam var share'),'\n$','','''')
+--      execute "set rtp+=" . g:opamshare . "/merlin/vim"
 require('lazy').setup 'sp.plugins'
 require 'sp.autocmds'
