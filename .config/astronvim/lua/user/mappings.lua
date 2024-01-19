@@ -20,7 +20,7 @@ local config = {
     ['k'] = { "v:count == 0 ? 'gk' : 'k'", expr = true, silent = true },
     ['j'] = { "v:count == 0 ? 'gj' : 'j'", expr = true, silent = true },
     [']q'] = { '<cmd>cn<cr>', desc = 'Quickfix Next ' },
-    ['[q'] = { '<cmd>cn<cr>', desc = 'Quickfix Prev ' },
+    ['[q'] = { '<cmd>cprev<cr>', desc = 'Quickfix Prev ' },
     ['<leader>v'] = { 'v$', desc = 'Select till end' },
     ['<leader>1'] = { '1gt', desc = 'Goto tab 1' },
     ['<leader>2'] = { '2gt', desc = 'Goto tab 2' },

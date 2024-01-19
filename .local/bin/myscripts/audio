@@ -28,6 +28,10 @@ toggle)
 	# wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 	;;
+get)
+	get_vol
+	exit 0
+	;;
 *)
 	echo "Program requires argument inc,dec,toggle"
 	exit 1

@@ -135,10 +135,11 @@ export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+[ -d "$HOME"/.local/kitty.app ] && export PATH=$PATH:$HOME/.local/kitty.app/bin
 # This is the list for lf icons:
-LF_ICONS=$(sed ~/.config/lf/dir_icons \
-	-e '/^[ \t]*#/d' \
-	-e '/^[ \t]*$/d' \
-	-e 's/[ \t]\+/=/g' \
-	-e 's/$/ /' | tr '\n' :)
-export LF_ICONS
+# LF_ICONS=$(sed ~/.config/lf/dir_icons \
+# 	-e '/^[ \t]*#/d' \
+# 	-e '/^[ \t]*$/d' \
+# 	-e 's/[ \t]\+/=/g' \
+# 	-e 's/$/ /' | tr '\n' :)
+# export LF_ICONS

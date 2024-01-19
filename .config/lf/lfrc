@@ -1,7 +1,7 @@
 # Basic Settings
 
-set previewer ~/.config/lf/mpreview
-set cleaner ~/.config/lf/mclean
+set cleaner ~/.config/lf/cleaner
+set previewer ~/.config/lf/preview
 
 set shell bash
 set shellopts '-eu'
@@ -18,21 +18,26 @@ set number
 set relativenumber
 set ratios 1:2:3
 
+
 cmd batch-rename ${{
   /bin/sh -c "vimv $(echo -e "$fx" | xargs -i echo "\\'{}\\'" | xargs echo)"
 }}
-cmd z-jump ${{
-  ZLUA_SCRIPT="$HOME/Downloads/GitClones/z.lua/z.lua"
-  lf -remote "send ${id} cd '$($ZLUA_SCRIPT -e $@)'"
+
+cmd z %{{
+	result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+cmd zi ${{
+	result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
 }}
 
 cmd open ${{
     case $(file --mime-type "$f" -bL) in
         text/*|application/json) $EDITOR -p "$fx";;
-        video/*) setsid -f xdg-open "$fx" ;;
-        # application/pdf) zathura --fork "$fx" ;;
-        image/gif) setsif -f viewnior "$fx" ;;
-        image/*) setsif -f sxiv "$fx" ;;
+        image/gif) setsid -f viewnior "$fx" ;;
+        image/*) setsid -f sxiv "$fx" ;;
         *) setsid -f xdg-open "$fx" ;;
     esac
 }}
@@ -105,10 +110,28 @@ cmd sudomkfile ${{
 }}
 
 ## Yanks
-cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
 cmd yank-dirname $dirname -- "$f" | head -c-1 | xclip -i -selection clipboard
+cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
 cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboard
+cmd yank-basename-without-extension ${{
+    echo "$fx" |
+      xargs -r -d '\n' basename -a |
+      awk -e '{
+        for (i=length($0); i > 0; i--) {
+          if (substr($0, i, 1) == ".") {
+            if (i == 1) print $0
+            else print substr($0, 0, i-1)
 
+            break
+          }
+        }
+
+        if (i == 0)
+          print $0
+      }' |
+      if [ -n "$fs" ]; then cat; else tr -d '\n'; fi |
+      xclip -i -selection clipboard
+}}
 cmd setwallpaper ${{
     cp "$f" ~/.config/wall.png
     if [ -x /bin/feh ]; then
@@ -120,65 +143,105 @@ cmd setwallpaper ${{
 
 cmd fzf_jump ${{
   res="$(fd --maxdepth 3 . | fzf --reverse --header='Jump to location')"
-  if [ -f "$res" ]; then
-    cmd="select"
-  elif [ -d "$res" ]; then
-    cmd="cd"
-  fi
+  if [ -n "$res" ]; then
+    if [ -d "$res" ]; then
+        cmd="cd"
+    else
+        cmd="select"
+    fi
+  res="$(printf '%s' "$res" | sed 's/\\/\\\\/g;s/"/\\"/g')"
   lf -remote "send $id $cmd \"$res\""
+  fi
+}}
+cmd quit-and-cd &{{
+  pwd > $LF_CD_FILE
+  notify-send "quit-and-cd" "$LF_CD_FILE\n$(cat $LF_CD_FILE)"
+  lf -remote "send $id quit"
 }}
 
 # Archive bindings
-cmd unarchive $aunpack -e "$f"
+cmd extract ${{
+  set -f
+  atool -x $f
+}}
+cmd edit-config ${{
+    $EDITOR ~/.config/lf/lfrc
+    lf -remote "send $id source ~/.config/lf/lfrc"
+}}
+cmd follow_link %{{
+  lf -remote "send ${id} select '$(readlink $f)'"
+}}
+# y (select for copy) and P to paste soft-link
+# d (select for cut) and P to paste hard-link
+cmd link %{{
+    set -- $(cat ~/.local/share/lf/files)
+    mode="$1"
+    shift
+    if [ "$#" -lt 1 ]; then
+        lf -remote "send $id echo no files to link"
+        exit 0
+    fi
+    case "$mode" in
+        # symbolically copy mode is indicating a soft link
+        copy) ln -sr -t . -- "$@";;
+        # while a move mode is indicating a hard link
+        move) ln -t . -- "$@";;
+    esac
+    rm ~/.local/share/lf/files
+    lf -remote "send clear"
+}}
 cmd bulkrename $vimv
 
 # File Openers
 map ee $$EDITOR "$f"
 map u $view "$f"
 #map , m
-map m
+map M
 map o
 map n
 map d
 map c
 map e
 map f
+map r
 
 # Broot Mapping
 map f fzf_jump
-map ex unarchive
+map ex extract
 # map X quitcd
 # Basic Functions
 map . set hidden!
-map i $~/.config/lf/pv.sh "$f"
+map gL follow_link
+map D trash
 map dd delete
 map p paste
-map D trash
 map P paste_async
+map <c-p> :link
 map x cut
 map y copy
 map <enter> open
-map mf mkfile
-map mr sudomkfile
-map md push :mkdir<space>
+map Mf mkfile
+map Mr sudomkfile
+map Md push :mkdir<space>
+map Ms $mkscript
 map <c-n> push :mkdir<space>
-map ms $mkscript
 map ch chmod
 map bg setwallpaper
-map rr rename
-map rb batch-rename
 map R reload
 map cl clear
-map A rename                  #  at the very end
-map I push   A<c-a>           #  at the very beginning
-# map c push   A<c-u>           #  new rename
 map cf yank-basename
+map cF yank-basename-without-extension
 map cp yank-path
 map cd yank-dirname
-map i push   A<a-b><a-b><a-f> #  before extention
-map a push   A<a-b>           #  after extention
+map i rename
+map I :rename; cmd-home
+map A :rename; cmd-end
+map c :rename; cmd-delete-home
+map C :rename; cmd-end; cmd-delete-home
 map U unselect
 map B bulkrename
-map ec push :open ~/.config/lf/lfrc<cr>
+map ec edit-config
+map zz push :z<space>
+map Q quit-and-cd
 
 source ~/.config/lf/lf_bindings

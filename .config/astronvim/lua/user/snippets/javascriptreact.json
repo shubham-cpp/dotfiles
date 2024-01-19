@@ -1,0 +1,28 @@
+{
+  "reactFunctionalServerComponent": {
+    "prefix": "rfcl",
+    "body": [
+      "import React from 'react';",
+      "/**\n * @typedef Props\n * @property {React.ReactNode} children\n */",
+      "\nconst ${1:${TM_FILENAME_BASE}}Layout = ({children}) => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t{children}\t</div>\n\t)\n}\n\nexport default ${1:${TM_FILENAME_BASE}}"
+    ],
+    "description": "React Functional Server Component(Const)"
+  },
+  "reactFunctionalComponent": {
+    "prefix": "rfc",
+    "body": [
+      "import React from 'react';",
+      "\nconst ${1:${TM_FILENAME_BASE}} = () => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}\n\nexport default ${1:${TM_FILENAME_BASE}}"
+    ],
+    "description": "React Functional Component(Const)"
+  },
+  "reactFunctionalComponentWithProps": {
+    "prefix": "rfcp",
+    "body": [
+      "import React from 'react'",
+      "/**\n * @typedef Props\n * @property {React.ReactNode} children\n */",
+      "\nconst ${1:${TM_FILENAME_BASE}} = ({}) => {\n\treturn (\n\t\t<div>\n\t\t\t$0\n\t\t</div>\n\t)\n}\n\nexport default ${1:${TM_FILENAME_BASE}}"
+    ],
+    "description": "React Functional Component(With Props)"
+  }
+}

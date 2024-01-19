@@ -25,7 +25,7 @@ layouts: List[Layout] = [
         **layout_theme,
     ),
     MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
-    Max(**layout_theme),
+    Max(),
     Floating(),
     Spiral(**layout_theme),
 ]
@@ -53,9 +53,6 @@ dgroups_app_rules = [
     # Rule(Match(wm_class="firefox"), group="2"),
     # Rule(Match(wm_class="Brave-browser"), group=groups[1].name),
 ]  # type: list
-follow_mouse_focus = True
-bring_front_click = True
-cursor_warp = False
 floating_layout = Floating(
     border_normal=layout_theme["border_normal"],
     border_focus=layout_theme["border_focus"],
@@ -82,12 +79,16 @@ floating_layout = Floating(
         Match(wm_class="Gnome-disks"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="Virt-manager"),
+        Match(wm_class="Xdg-desktop-portal-gtk")
     ],
 )
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 reconfigure_screens = True
 auto_minimize = True
+follow_mouse_focus = True
+bring_front_click = True
+cursor_warp = False
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
 wmname = "LG3D"

@@ -39,7 +39,7 @@ run_polkit() {
 basic() {
 	# bash ~/.local/bin/myscripts/if_void &
 	run_polkit
-	# run dunst
+	run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
 		if [ -x /bin/picom ]; then
 			run picom -b #--experimental-backends

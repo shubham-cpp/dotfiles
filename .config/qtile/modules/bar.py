@@ -88,7 +88,7 @@ screens = [
                     padding=10,
                 ),
                 widget.TextBox(
-                    text=" ",
+                    text=" ",
                     fontsize=16,
                     font="JetBrainsMono Nerd Font",
                     foreground=colors[7],
@@ -98,11 +98,11 @@ screens = [
                     update_interval=1.5,
                     format="{load_percent}%",
                     foreground=foregroundColor,
-                    padding=5,
+                    padding=2,
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.TextBox(
-                    text="",
+                    text="󰍛",
                     fontsize=16,
                     font="JetBrainsMono Nerd Font",
                     foreground=colors[3],

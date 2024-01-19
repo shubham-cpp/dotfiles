@@ -11,15 +11,6 @@ return function(client, bufnr)
       return
     end
   end
-  if client.server_capabilities.inlayHintProvider then
-    local inlayhints_avail, inlayhints = pcall(require, 'lsp-inlayhints')
-    if inlayhints_avail then
-      inlayhints.on_attach(client, bufnr)
-      vim.keymap.set('n', '<leader>uh', function()
-        inlayhints.toggle()
-      end, { desc = 'Toggle inlay hints' })
-    end
-  end
   if client.name == 'svelte' then
     vim.api.nvim_create_autocmd('BufWritePost', {
       pattern = { '*.js', '*.ts' },
@@ -28,5 +19,16 @@ return function(client, bufnr)
         client.notify('$/onDidChangeTsOrJsFile', { uri = ctx.file })
       end,
     })
+  elseif client.name == 'eslint' then
+    vim.keymap.set('n', 'g=', '<cmd>EslintFixAll<cr>', { buffer = bufnr, desc = 'Fix all eslint errors' })
+  end
+  if client.server_capabilities.inlayHintProvider then
+    local inlayhints_avail, inlayhints = pcall(require, 'lsp-inlayhints')
+    if inlayhints_avail then
+      inlayhints.on_attach(client, bufnr)
+      vim.keymap.set('n', '<leader>uh', function()
+        inlayhints.toggle()
+      end, { desc = 'Toggle inlay hints' })
+    end
   end
 end

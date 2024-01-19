@@ -9,23 +9,11 @@ local function deprio(kind)
   end
 end
 
-local function border(hl_name)
-  return {
-    { '╭', hl_name },
-    { '─', hl_name },
-    { '╮', hl_name },
-    { '│', hl_name },
-    { '╯', hl_name },
-    { '─', hl_name },
-    { '╰', hl_name },
-    { '│', hl_name },
-  }
-end
 return {
   'hrsh7th/nvim-cmp',
   event = { 'BufReadPost', 'BufNewFile' },
   dependencies = {
-    'hrsh7th/cmp-nvim-lua',
+    -- 'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-nvim-lsp-signature-help',
     'hrsh7th/cmp-buffer',
@@ -44,19 +32,23 @@ return {
           delete_check_events = 'TextChanged',
           region_check_events = 'CursorMoved',
         })
-        vim.keymap.set({ 'i' }, '<C-K>', function()
-          ls.expand()
-        end, { silent = true })
-        vim.keymap.set({ 'i', 's' }, '<C-L>', function()
-          ls.jump(1)
-        end, { silent = true })
-        vim.keymap.set({ 'i', 's' }, '<C-J>', function()
-          ls.jump(-1)
-        end, { silent = true })
+        -- vim.keymap.set({ 'i' }, '<C-K>', function()
+        --   ls.expand()
+        -- end, { silent = true })
+        -- vim.keymap.set({ 'i', 's' }, '<C-L>', function()
+        --   ls.jump(1)
+        -- end, { silent = true })
+        -- vim.keymap.set({ 'i', 's' }, '<C-J>', function()
+        --   ls.jump(-1)
+        -- end, { silent = true })
         -- require('luasnip.loaders.from_vscode').lazy_load()
         vim.tbl_map(function(type)
           require('luasnip.loaders.from_' .. type).lazy_load()
         end, { 'vscode', 'snipmate', 'lua' })
+
+        require('luasnip.loaders.from_vscode').lazy_load({
+          paths = { vim.fn.expand '~/Documents/dotfiles/.config/astronvim/lua/user/snippets' },
+        }) -- load snippets paths
       end,
     },
     {
@@ -69,6 +61,7 @@ return {
     },
     {
       'Exafunction/codeium.vim',
+      enabled = false,
       event = 'InsertEnter',
       init = function()
         vim.g.codeium_disable_bindings = 1
@@ -111,14 +104,9 @@ return {
   },
   config = function()
     local cmp = require 'cmp'
-    local types = require 'cmp.types'
-    -- local context = require 'cmp.config.context'
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
     local defaults = require 'cmp.config.default'()
-    -- local lspkind = require('lspkind')
-    -- local str = require("cmp.utils.str")
-    -- local window = require 'cmp.config.window'
     local luasnip = require 'luasnip'
 
     vim.opt.completeopt = 'menu,menuone,noselect'
@@ -133,17 +121,28 @@ return {
     cmp.setup({
       snippet = {
         expand = function(args)
-          -- vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
           luasnip.lsp_expand(args.body) -- For `luasnip` user.
         end,
       },
+      -- window = {
+      --   documentation = cmp.config.window.bordered({ winhighlight = 'FloatBorder:Todo', side_padding = 0 }),
+      --   completion = {
+      --     winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+      --     -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
+      --   },
+      -- },
       window = {
-        documentation = cmp.config.window.bordered({ winhighlight = 'FloatBorder:Todo', side_padding = 0 }),
         completion = {
-          winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
-          -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
-          -- col_offset = -3,
-          -- side_padding = 0,
+          border = 'rounded',
+          winhighlight = 'Normal:Pmenu,CursorLine:PmenuSel,FloatBorder:FloatBorder,Search:None',
+          col_offset = -3,
+          side_padding = 1,
+          scrollbar = false,
+          scrolloff = 8,
+        },
+        documentation = {
+          border = 'rounded',
+          winhighlight = 'Normal:Pmenu,FloatBorder:FloatBorder,Search:None',
         },
       },
       mapping = cmp.mapping.preset.insert({
@@ -187,7 +186,24 @@ return {
           end,
           i = function(fallback)
             if cmp.visible() then
-              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+              cmp.select_next_item()
+            -- elseif luasnip.expand_or_jumpable() then
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            elseif has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end,
+          s = function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            -- elseif luasnip.expand_or_jumpable() then
+            elseif luasnip.expand_or_locally_jumpable() then
+              luasnip.expand_or_jump()
+            elseif has_words_before() then
+              cmp.complete()
             else
               fallback()
             end
@@ -203,7 +219,18 @@ return {
           end,
           i = function(fallback)
             if cmp.visible() then
-              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end,
+          s = function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
             else
               fallback()
             end
@@ -217,7 +244,8 @@ return {
         ['<Tab>'] = cmp.mapping(function(fallback)
           if cmp.visible() then
             cmp.select_next_item()
-            -- elseif luasnip.expand_or_jumpable() then
+          elseif luasnip.expandable() then
+            luasnip.expand()
           elseif luasnip.expand_or_locally_jumpable() then
             luasnip.expand_or_jump()
           elseif has_words_before() then
@@ -238,7 +266,7 @@ return {
       }),
       sources = sources({
         { name = 'nvim_lsp', priority = 1000 },
-        { name = 'nvim_lua', priority = 950 },
+        -- { name = 'nvim_lua', priority = 950 },
         { name = 'nvim_lsp_signature_help', priority = 900 },
         { name = 'luasnip', priority = 750 },
         -- }, {
@@ -259,11 +287,20 @@ return {
             end,
           },
         },
-        { name = 'path', priority = 200 },
+        { name = 'path', priority = 700 },
       }),
       formatting = {
-        format = function(_, vim_item)
-          vim_item.kind = (require('sp.util').symbols.cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+        fields = { 'kind', 'abbr', 'menu' },
+        format = function(entry, vim_item)
+          vim_item.kind = require('sp.util').symbols.kind[vim_item.kind]
+          vim_item.menu = ({
+            nvim_lsp = '',
+            nvim_lua = '',
+            luasnip = '',
+            buffer = '',
+            path = '',
+            emoji = '',
+          })[entry.source.name]
           return vim_item
         end,
       },

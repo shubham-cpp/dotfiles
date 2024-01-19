@@ -94,38 +94,44 @@ return {
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'b0o/schemastore.nvim',
-    -- {
-    --   'pmizio/typescript-tools.nvim',
-    --   dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-    --   ft = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx', 'javascript', 'typescript' },
-    --   opts = {
-    --     on_attach = on_attach,
-    --     --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-    --     -- filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-    --     settings = {
-    --       tsserver_file_preferences = {
-    --         includeInlayParameterNameHints = 'all',
-    --         includeCompletionsForModuleExports = true,
-    --         includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-    --         includeInlayFunctionParameterTypeHints = true,
-    --         includeInlayVariableTypeHints = true,
-    --         includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-    --         includeInlayPropertyDeclarationTypeHints = true,
-    --         includeInlayFunctionLikeReturnTypeHints = true,
-    --         includeInlayEnumMemberValueHints = true,
-    --       },
-    --       tsserver_plugins = {
-    --         -- for TypeScript v4.9+
-    --         -- '@styled/typescript-styled-plugin',
-    --         -- or for older TypeScript versions
-    --         'typescript-styled-plugin',
-    --       },
-    --     },
-    --   },
-    --   config = function(_, opts)
-    --     require('typescript-tools').setup(opts)
-    --   end,
-    -- },
+    {
+      'pmizio/typescript-tools.nvim',
+      dependencies = { 'nvim-lua/plenary.nvim' },
+      ft = { 'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact', 'javascript.jsx' },
+      opts = {
+        on_attach = function(client, buffer)
+          on_attach(client, buffer)
+          vim.keymap.set('n', 'gs', '<cmd>TSToolsOrganizeImports<cr>', { buffer = buffer, desc = 'Organize Imports' })
+          vim.keymap.set(
+            'n',
+            'gD',
+            '<cmd>TSToolsGoToSourceDefinition<cr>',
+            { buffer = buffer, desc = 'Goto Source Def' }
+          )
+          vim.keymap.set('n', '<F2>', '<cmd>TSToolsRenameFile<cr>', { buffer = buffer, desc = 'TS Rename File' })
+          vim.keymap.set('n', 'gR', '<cmd>TSToolsFileReferences<cr>', { buffer = buffer, desc = 'File References' })
+        end,
+        -- root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
+        settings = {
+          tsserver_file_preferences = {
+            includeInlayParameterNameHints = 'literals',
+            includeCompletionsForModuleExports = true,
+            includeCompletionsForImportStatements = true,
+            includeAutomaticOptionalChainCompletions = true,
+            includeCompletionsWithClassMemberSnippets = true,
+            allowIncompleteCompletions = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+            includeInlayVariableTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeCompletionsWithSnippetText = true,
+          },
+          tsserver_plugins = { '@styled/typescript-styled-plugin' },
+        },
+      },
+    },
     {
       'lvimuser/lsp-inlayhints.nvim',
       config = function()
@@ -152,7 +158,6 @@ return {
       'creativenull/efmls-configs-nvim',
       version = 'v1.x.x',
     },
-    -- 'simrat39/rust-tools.nvim'
   },
   config = function()
     local lspconfig = require 'lspconfig'
@@ -454,11 +459,8 @@ return {
       eslint = function()
         lspconfig['eslint'].setup({
           cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' },
+          capabilities = cmp_capabilities,
           on_attach = function(_, bufnr)
-            -- vim.api.nvim_create_autocmd('BufWritePre', {
-            --   buffer = bufnr,
-            --   command = 'EslintFixAll',
-            -- })
             vim.keymap.set('n', 'g=', '<cmd>EslintFixAll<CR>', { buffer = bufnr, desc = 'Eslint Fix' })
           end,
         })
@@ -602,107 +604,10 @@ return {
             validate = 'error',
           },
         }
-        -- opt.single_file_support = false
+        opt.single_file_support = false
         lspconfig['tailwindcss'].setup(opt)
       end,
-      tsserver = function()
-        -- require("typescript-tools").setup {
-        --   on_attach = on_attach,
-        --   root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-        --   -- filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-        --   settings = {
-        --     tsserver_file_preferences = {
-        --       includeInlayParameterNameHints = "literals",
-        --       includeCompletionsForModuleExports = true,
-        --       includeCompletionsForImportStatements = true,
-        --       includeAutomaticOptionalChainCompletions = true,
-        --       includeCompletionsWithClassMemberSnippets = true,
-        --       allowIncompleteCompletions = true,
-        --       includeInlayFunctionParameterTypeHints = true,
-        --       includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-        --       includeInlayVariableTypeHints = true,
-        --       includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-        --       includeInlayPropertyDeclarationTypeHints = true,
-        --       includeInlayFunctionLikeReturnTypeHints = true,
-        --       includeCompletionsWithSnippetText = true,
-        --     },
-        --   }
-        -- }
-        -- require('typescript').setup({
-        --   disable_commands = false, -- prevent the plugin from creating Vim commands
-        --   debug = false, -- enable debug logging for commands
-        --   go_to_source_definition = { fallback = true },
-        --   server = {
-        --     cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' },
-        --     filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' },
-        --     root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json'),
-        --     on_attach = on_attach,
-        --     capabilities = cmp_capabilities,
-        --     settings = {
-        --       javascript = {
-        --         inlayHints = {
-        --           includeInlayEnumMemberValueHints = true,
-        --           includeInlayFunctionLikeReturnTypeHints = true,
-        --           includeInlayFunctionParameterTypeHints = true,
-        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        --           includeInlayPropertyDeclarationTypeHints = true,
-        --           includeInlayVariableTypeHints = true,
-        --         },
-        --       },
-        --       typescript = {
-        --         inlayHints = {
-        --           includeInlayEnumMemberValueHints = true,
-        --           includeInlayFunctionLikeReturnTypeHints = true,
-        --           includeInlayFunctionParameterTypeHints = true,
-        --           includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-        --           includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-        --           includeInlayPropertyDeclarationTypeHints = true,
-        --           includeInlayVariableTypeHints = true,
-        --         },
-        --       },
-        --     },
-        --   },
-        -- })
-        local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/typescript-language-server', '--stdio' }
-        -- opt.filetypes = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx' }
-        opt.root_dir = util.root_pattern('package.json', 'tsconfig.json', 'jsconfig.json')
-        opt.init_options = {
-          hostInfo = 'neovim',
-          plugins = {
-            -- for TypeScript v4.9+
-            -- '@styled/typescript-styled-plugin',
-            -- or for older TypeScript versions
-            'typescript-styled-plugin',
-          },
-        }
-        opt.settings = {
-          javascript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
-          typescript = {
-            inlayHints = {
-              includeInlayEnumMemberValueHints = true,
-              includeInlayFunctionLikeReturnTypeHints = true,
-              includeInlayFunctionParameterTypeHints = true,
-              includeInlayParameterNameHints = 'all', -- 'none' | 'literals' | 'all';
-              includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-              includeInlayPropertyDeclarationTypeHints = true,
-              includeInlayVariableTypeHints = true,
-            },
-          },
-        }
-        require('lspconfig').tsserver.setup(opt)
-      end,
+      tsserver = function() end,
       denols = function()
         local opt = vim.deepcopy(opts)
         opt.root_dir = util.root_pattern('deno.json', 'deno.jsonc')

@@ -12,7 +12,7 @@ super + Escape
 
 # Launch Filemanager
 super +{_,shift + } e
-    {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
+    {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e ~/.local/bin/lfv}
 
 # {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
@@ -52,9 +52,9 @@ XF86{Search,Calculator}
 
 #Brightness up
 XF86Audio{Next,Prev}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) && kill -53 $(pidof dwmblocks)
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) && kill -53 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
-    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) && kill -53 $(pidof dwmblocks)

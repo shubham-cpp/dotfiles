@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -38,10 +40,10 @@ zinit ice as"command" from"gh-r" \
           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
-zinit ice as"command" from"gh-r" mv"rtx-v* -> rtx" \
-          atclone"./rtx activate zsh > rtx_init.sh" \
-          atpull"%atclone" src"rtx_init.sh"
-zinit light jdx/rtx
+# zinit ice as"command" from"gh-r" mv"rtx-v* -> rtx" \
+#           atclone"./rtx activate zsh > rtx_init.sh" \
+#           atpull"%atclone" src"rtx_init.sh"
+# zinit light jdx/rtx
 zinit ice as"command" from"gh-r" \
           atclone"./zoxide init zsh > zo_init.sh" \
           atpull"%atclone" src"zo_init.sh"
@@ -53,9 +55,10 @@ setopt autolist
 setopt rcexpandparam
 setopt numericglobsort 
 setopt nocheckjobs nobeep nocaseglob
-setopt appendhistory incappendhistory extendedhistory sharehistory
-setopt hist_verify hist_save_no_dups hist_reduce_blanks hist_ignore_space hist_find_no_dups
-setopt histignorealldups histignoredups histignorespace histexpiredupsfirst
+setopt extendedhistory sharehistory
+# setopt appendhistory incappendhistory extendedhistory sharehistory
+setopt hist_verify hist_expire_dups_first hist_ignore_dups hist_ignore_space hist_save_no_dups hist_reduce_blanks hist_find_no_dups
+# setopt histignorealldups histignoredups histignorespace histexpiredupsfirst
 setopt autocd autopushd pushdignoredups
 setopt globdots
 setopt local_options

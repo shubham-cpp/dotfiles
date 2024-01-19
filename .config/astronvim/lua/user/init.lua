@@ -3,7 +3,7 @@ local util = require 'user.lsp.util'
 return {
   lsp = {
     config = {
-      hls = { cmd = { util.xdg_data_bin() .. '/haskell-language-server-9.2.5', '--lsp' } },
+      -- hls = { cmd = { util.xdg_data_bin() .. '/haskell-language-server-9.2.5', '--lsp' } },
       html = { cmd = { util.bun_path() .. '/vscode-html-language-server', '--stdio' } },
       cssls = { cmd = { util.bun_path() .. '/vscode-css-language-server', '--stdio' } },
       jsonls = { cmd = { util.bun_path() .. '/vscode-json-language-server', '--stdio' } },
@@ -20,37 +20,6 @@ return {
       prismals = { cmd = { util.bun_path() .. '/prisma-language-server', '--stdio' } },
       tailwindcss = { cmd = { util.bun_path() .. '/tailwindcss-language-server', '--stdio' } },
       -- docker_compose_language_service = { cmd = { util.bun_path() .. '/docker-compose-langserver', '--stdio' } },
-    },
-  },
-  plugins = {
-    {
-      'L3MON4D3/LuaSnip',
-      config = function(plugin, opts)
-        require 'plugins.configs.luasnip'(plugin, opts) -- include the default astronvim config that calls the setup call
-        require('luasnip.loaders.from_vscode').lazy_load({
-          paths = { '~/Documents/dotfiles/.config/astronvim/lua/user/snippets' },
-        }) -- load snippets paths
-      end,
-    },
-    {
-      'nvim-neo-tree/neo-tree.nvim',
-      version = '*',
-      opts = function(_, opts)
-        -- opts.default_component_configs.name.trailing_slash = true
-        -- opts.window.mappings['l'] = 'open'
-        -- opts.window.mappings['t'] = 'open_tabnew'
-        -- opts.window.mappings['?'] = 'show_help'
-        -- opts.window.mappings['<'] = 'prev_source'
-        -- opts.window.mappings['>'] = 'next_source'
-        opts.window.mappings = vim.tbl_extend('force', opts.window.mappings, {
-          ['?'] = 'show_help',
-          ['<'] = 'prev_source',
-          ['>'] = 'next_source',
-          ['l'] = 'open',
-          ['t'] = 'open_tabnew',
-        })
-        return opts
-      end,
     },
   },
 }

@@ -20,7 +20,7 @@ alias se="sudoedit"
 
 # Expand the history size
 export HISTFILESIZE=10000
-export HISTSIZE=500
+export HISTSIZE=5000
 export HISTCONTROL=erasedups:ignoredups:ignorespace
 
 shopt -s checkwinsize
@@ -28,14 +28,10 @@ shopt -s histappend
 shopt -s autocd dirspell interactive_comments
 shopt -s globstar extglob dotglob
 
-PROMPT_COMMAND='history -a'
+PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
 
 [[ "$(whoami)" = "root" ]] && return
 
 [[ -z "$FUNCNEST" ]] && export FUNCNEST=100
 
-source "$HOME"/.config/zsh/alias.zsh
-
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+[ -r "$HOME/.config/zsh/alias.zsh" ] && . "$HOME"/.config/zsh/alias.zsh
