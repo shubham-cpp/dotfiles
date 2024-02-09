@@ -21,7 +21,7 @@ super +{_,shift +} w
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
 super + {d,r,v,y,p}
-    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -async-pre-read 10 -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -drun-reload-desktop-cache -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 
 super + alt + {c,g}
     {open-rcs,open-games}
@@ -38,6 +38,8 @@ super + control + {s,l}
     flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 {_,shift+}@XF86HomePage
     flameshot {gui,full} || notify-send "Failed" "Flameshot is not installed." -u critical
+{_,shift +, alt + }@F1
+    flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 #Raises volume
 XF86Audio{Raise,Lower}Volume
     audio {inc,dec}
@@ -52,9 +54,9 @@ XF86{Search,Calculator}
 
 #Brightness up
 XF86Audio{Next,Prev}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) -h string:x-canonical-private-synchronous:backlight  -r 10001 && kill -53 $(pidof dwmblocks)
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g)  -h string:x-canonical-private-synchronous:backlight -r 10002 && kill -53 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
-    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(light) && kill -53 $(pidof dwmblocks)
+    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h string:x-canonical-private-synchronous:backlight -h int:value:$(light) && kill -53 $(pidof dwmblocks)

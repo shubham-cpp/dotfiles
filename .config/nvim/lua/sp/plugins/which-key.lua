@@ -1,7 +1,6 @@
 local util = require 'sp.util'
 return {
   'folke/which-key.nvim',
-  event = { 'BufReadPost', 'BufNewFile' },
   config = function()
     local wk = require 'which-key'
     wk.setup({
@@ -49,7 +48,7 @@ return {
           l = { util.close_left, 'Close Left' },
           r = { util.close_right, 'Close Right' },
         },
-        D = {"<cmd>bd<cr>", 'Delete'},
+        D = { '<cmd>bd<cr>', 'Delete' },
         c = {
           function()
             util.close_all(true, true)
@@ -65,26 +64,18 @@ return {
         n = { '<cmd>bn<cr>', 'Next' },
         p = { '<cmd>bp<cr>', 'Prev' },
       },
-      f = {
-        name = 'Find',
-        l = 'lsp',
-      },
-      g = {
-        name = 'Git',
-      },
-      l = {
-        name = 'LSP',
-      },
-      n = {
-        name = 'Neogen',
-      },
-      s = {
-        name = 'Sessions',
-      },
+      f = { name = 'Find', l = 'lsp' },
+      g = { name = 'Git' },
+      l = { name = 'LSP', r = 'Rename', a = 'Code Action' },
+      n = { name = 'Neogen' },
+      s = { name = 'Sessions' },
+      o = { name = 'Open' },
+      p = { name = 'Picker' },
+      z = { name = 'ZK(Notes)' },
       t = {
         name = 'Toggle',
         f = '[T]erminal [F]ile manager',
-        g = '[T]erminal Lazy[g]it',
+        l = '[T]erminal Lazy[g]it',
       },
     }, { prefix = '<leader>' })
     wk.register({

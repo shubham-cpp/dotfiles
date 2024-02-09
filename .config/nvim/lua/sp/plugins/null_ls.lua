@@ -2,7 +2,6 @@ local au_bb = vim.api.nvim_create_augroup('barbecue.updater', {})
 return {
   {
     'utilyre/barbecue.nvim',
-    event = { 'BufReadPost', 'BufNewFile' },
     name = 'barbecue',
     version = '*',
     dependencies = {
@@ -33,7 +32,6 @@ return {
   },
   {
     'jay-babu/mason-null-ls.nvim',
-    event = { 'BufReadPost', 'BufNewFile' },
     enabled = false,
     dependencies = {
       'williamboman/mason.nvim',

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-amount=${2:-10}
+amount=${2:-5}
 
 get_vol() {
 	vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)
@@ -13,20 +13,20 @@ inc)
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%+
 	# vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
-	# vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '{} * 100' | bc)
-	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -r 10001
+	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -h string:x-canonical-private-synchronous:volume -r 10001 
 	;;
 dec)
 	# pactl set-sink-volume @DEFAULT_SINK@ -"$amount"%
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
 	wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%-
 	# vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
-	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -r 10001
+	notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h string:x-canonical-private-synchronous:volume -h int:value:"$(get_vol)" -r 10001
 	;;
 toggle)
 	# pactl set-sink-mute @DEFAULT_SINK@ toggle
 	# wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+	pgrep goblocks && kill -40 "$(pidof goblocks)"
 	;;
 *)
 	echo "Program requires argument inc,dec,toggle"

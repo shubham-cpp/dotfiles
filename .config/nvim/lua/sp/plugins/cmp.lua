@@ -1,3 +1,33 @@
+local function serializeTable(val, name, skipnewlines, depth)
+  skipnewlines = skipnewlines or false
+  depth = depth or 0
+
+  local tmp = string.rep(' ', depth)
+
+  if name then
+    tmp = tmp .. name .. ' = '
+  end
+
+  if type(val) == 'table' then
+    tmp = tmp .. '{' .. (not skipnewlines and '\n' or '')
+
+    for k, v in pairs(val) do
+      tmp = tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. ',' .. (not skipnewlines and '\n' or '')
+    end
+
+    tmp = tmp .. string.rep(' ', depth) .. '}'
+  elseif type(val) == 'number' then
+    tmp = tmp .. tostring(val)
+  elseif type(val) == 'string' then
+    tmp = tmp .. string.format('%q', val)
+  elseif type(val) == 'boolean' then
+    tmp = tmp .. (val and 'true' or 'false')
+  else
+    tmp = tmp .. '"[inserializeable datatype:' .. type(val) .. ']"'
+  end
+
+  return tmp
+end
 local function deprio(kind)
   return function(e1, e2)
     if e1:get_kind() == kind then
@@ -11,7 +41,6 @@ end
 
 return {
   'hrsh7th/nvim-cmp',
-  event = { 'BufReadPost', 'BufNewFile' },
   dependencies = {
     'hrsh7th/cmp-nvim-lua',
     'hrsh7th/cmp-nvim-lsp',
@@ -49,6 +78,7 @@ return {
     },
     {
       'Exafunction/codeium.vim',
+      enabled = false,
       event = 'InsertEnter',
       init = function()
         vim.g.codeium_disable_bindings = 1
@@ -95,7 +125,7 @@ return {
     -- local context = require 'cmp.config.context'
     local compare = require 'cmp.config.compare'
     local sources = require 'cmp.config.sources'
-    -- local defaults = require("cmp.config.default")()
+    local defaults = require 'cmp.config.default'()
     -- local lspkind = require('lspkind')
     -- local str = require("cmp.utils.str")
     -- local window = require 'cmp.config.window'
@@ -113,28 +143,37 @@ return {
     cmp.setup({
       snippet = {
         expand = function(args)
-          -- vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` user.
           luasnip.lsp_expand(args.body) -- For `luasnip` user.
         end,
       },
       window = {
+        -- https://github.com/ChristianChiarulli/lvim/blob/master/lua/user/cmp.lua
         completion = {
-          winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
-          -- winhighlight = "Normal:Normal,FloatBorder:BorderBG,CursorLine:PmenuSel,Search:None",
-          -- col_offset = -3,
-          -- side_padding = 0,
+          border = 'rounded',
+          winhighlight = 'Normal:Pmenu,CursorLine:PmenuSel,FloatBorder:FloatBorder,Search:None',
+          col_offset = -3,
+          side_padding = 1,
+          scrollbar = false,
+          -- scrollbar = {
+          --   position = 'inside',
+          -- },
+          scrolloff = 8,
+        },
+        documentation = {
+          border = 'rounded',
+          winhighlight = 'Normal:Pmenu,FloatBorder:FloatBorder,Search:None',
         },
       },
       mapping = cmp.mapping.preset.insert({
-        ['<C-x><C-s>'] = cmp.mapping.complete({
+        ['<C-x><C-x>'] = cmp.mapping.complete({
           config = { sources = { { name = 'luasnip' } } },
         }),
         ['<C-x><C-f>'] = cmp.mapping.complete({
           config = { sources = { { name = 'path' } } },
         }),
-        ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-        ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+        ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i' }),
+        ['<C-u>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i' }),
+        ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i' }),
         ['<C-j>'] = cmp.mapping({
           i = function(fallback)
             if cmp.visible() then
@@ -211,16 +250,31 @@ return {
             fallback()
           end
         end, { 'i', 's' }),
+        ['<C-f>'] = cmp.mapping(function(fallback)
+          if luasnip.jumpable(1) then
+            luasnip.jump(1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+        ['<C-b>'] = cmp.mapping(function(fallback)
+          if luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
       }),
       sources = sources({
-        { name = 'nvim_lsp', priority = 130 },
-        { name = 'nvim_lua', priority = 100 },
-        { name = 'nvim_lsp_signature_help', priority = 90 },
-        { name = 'luasnip', priority = 50 },
+        { name = 'nvim_lsp', priority = 1000 },
+        { name = 'nvim_lua', priority = 900 },
+        { name = 'nvim_lsp_signature_help', priority = 800 },
+        { name = 'luasnip', priority = 750 },
         -- }, {
+        { name = 'path', priority = 500 },
         {
           name = 'buffer',
-          priority = 30,
+          priority = 300,
           option = {
             keyword_length = 2,
             get_bufnrs = function()
@@ -235,11 +289,33 @@ return {
             end,
           },
         },
-        { name = 'path', priority = 20 },
       }),
       formatting = {
-        format = function(_, vim_item)
-          vim_item.kind = (require('sp.util').symbols.cmp_kinds[vim_item.kind] or '') .. vim_item.kind
+        fields = { 'kind', 'abbr', 'menu' },
+        format = function(entry, vim_item)
+          vim_item.kind = require('sp.icons').kind[vim_item.kind]
+          vim_item.menu = ({
+            nvim_lsp = '',
+            nvim_lua = '',
+            luasnip = '',
+            buffer = '',
+            path = '',
+            emoji = '',
+            nvim_lsp_signature_help = '',
+          })[entry.source.name]
+
+          if vim.tbl_contains({ 'nvim_lsp' }, entry.source.name) then
+            local duplicates = {
+              buffer = 1,
+              path = 1,
+              nvim_lsp = 0,
+              luasnip = 1,
+            }
+
+            local duplicates_default = 0
+
+            vim_item.dup = duplicates[entry.source.name] or duplicates_default
+          end
           return vim_item
         end,
       },
@@ -250,48 +326,14 @@ return {
           -- deprio(types.lsp.CompletionItemKind.Snippet),
           -- deprio(types.lsp.CompletionItemKind.Text),
           compare.exact,
-          compare.kind,
           compare.score,
-          -- compare.offset,
+          compare.offset,
+          compare.kind,
           compare.recently_used,
-          -- compare.locality,
-          -- compare.sort_text,
-          -- compare.length,
-          -- compare.order,
-          -- Try to put emmet towards the bottom
-          function(entry1, entry2)
-            local source_name = entry1.source
-                and entry1.source.source
-                and entry1.source.source.config
-                and entry1.source.source.config.name
-              or 'unknown'
-            local target_name = entry2.source
-                and entry2.source.source
-                and entry2.source.source.config
-                and entry2.source.source.config.name
-              or 'unknown'
-            if source_name == 'emmet_language_server' or source_name == 'emmet_ls' then
-              return false
-            end
-            if target_name == 'emmet_language_server' or target_name == 'emmet_ls' then
-              return true
-            end
-            return nil
-          end,
-          --[[
-          deprio(types.lsp.CompletionItemKind.Text),
-          cmp.config.compare.offset,
-          cmp.config.compare.exact,
-          cmp.config.compare.score,
-          cmp.config.compare.recently_used,
-          cmp.config.compare.locality,
-          cmp.config.compare.kind,
-          cmp.config.compare.sort_text,
-          cmp.config.compare.length,
-          cmp.config.compare.order,
-          --]]
+          compare.sort_text,
         },
       },
+
       experimental = {
         ghost_text = false,
       },

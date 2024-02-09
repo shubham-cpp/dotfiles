@@ -216,7 +216,6 @@ local config = {
     'echasnovski/mini.indentscope',
     version = false,
     enabled = false,
-    event = 'BufWinEnter',
     config = function()
       require('mini.indentscope').setup({
         delay = 50,

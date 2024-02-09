@@ -48,6 +48,8 @@ static const Rule rules[] = {
      *  WM_NAME(STRING) = title
      */
     /* class              instance    title     tags mask   switchtotag    isfloating   monitor */
+    { "floorp",            NULL,      NULL,       2,          1,            0,          -1 },
+    { "Navigator",         NULL,      NULL,       2,          1,            0,          -1 },
     { "firefox",           NULL,      NULL,       2,          1,            0,          -1 },
     { "Firefox",           NULL,      NULL,       2,          1,            0,          -1 },
     { "LibreWolf",         NULL,      NULL,       2,          1,            0,          -1 },
@@ -60,6 +62,8 @@ static const Rule rules[] = {
     { "Chromium-browser",  NULL,      NULL,       2,          1,            0,          -1 },
     { "waterfox-current",  NULL,      NULL,       2,          1,            0,          -1 },
 
+    { "thunderbird",       NULL,      NULL,       4,          1,            0,          -1 },
+    { "slack",             NULL,      NULL,       4,          1,            0,          -1 },
     { "Steam",             NULL,      NULL,       4,          0,            0,          -1 },
     { "Lutris",            NULL,      NULL,       4,          1,            0,          -1 },
     { "Timeshift-gtk",     NULL,      NULL,       4,          1,            1,          -1 },
@@ -88,6 +92,8 @@ static const Rule rules[] = {
     {"Connman-gtk",        NULL,      NULL,       0,          0,            1,          -1 },
     {"Arcolinux-tweak-tool.py",NULL,NULL,         0,          0,            1,          -1 },
     {"Evolution-alarm-notify",NULL,NULL,          0,          0,            1,          -1 },
+    {"tauri-sveltekit-notes-app",NULL,NULL,       0,          0,            1,          -1 },
+    {"Tauri-sveltekit-notes-app",NULL,NULL,       0,          0,            1,          -1 },
 };
 
 /* layout(s) */
@@ -104,6 +110,13 @@ static const Layout layouts[] = {
 };
 
 #include "movestack.c"
+
+// Move the window to other monitor and switch the focus to it
+void 
+movemonfocus(const Arg *arg) {
+	 tagmon(arg);
+   focusmon(arg);
+}
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -120,68 +133,63 @@ static const char *dmenucmd[] = { "dmenu_run_history", "-i" , NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
-	/* modifier                     key        function        argument */
-    /* Programs */
-	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = dmenucmd } },
-	// { MODKEY|ShiftMask,             XK_d,      spawn,          SHCMD("rofi -show run") },
-	{ MODKEY,                       XK_Return, spawn,          SHCMD("$TERMINAL || xterm") },
-	// { MODKEY|ShiftMask,             XK_Return, spawn,          SHCMD("kitty") },
-	// { MODKEY,                       XK_w,      spawn,          SHCMD("$BROWSER || firefox") },
-	// { MODKEY|ShiftMask,             XK_w,      spawn,          SHCMD("chromium || chromium-browser || flatpak run com.github.Eloston.UngoogledChromium") },
-	// { MODKEY,                       XK_r,      spawn,          SHCMD("rofi -show drun") },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstackvis,  {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstackvis,  {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_j,      movestack,      {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_k,      movestack,      {.i = -1 } },
-	// { MODKEY|ShiftMask,             XK_j,      focusstackhid,  {.i = +1 } },
-	// { MODKEY|ShiftMask,             XK_k,      focusstackhid,  {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_bracketright,  viewnext,       {0} },
-	{ MODKEY,                       XK_bracketleft,   viewprev,       {0} },
-	{ MODKEY|ShiftMask,             XK_bracketright,  tagtonext,      {0} },
-	{ MODKEY|ShiftMask,             XK_bracketleft,   tagtoprev,      {0} },
-	{ MODKEY,                       XK_grave,  viewnextskip,       {0} },
-	{ MODKEY|ShiftMask,             XK_grave,  viewprevskip,       {0} },
-	{ MODKEY,                       XK_Right,  viewnextskip,       {0} },
-	{ MODKEY,                       XK_Left,   viewprevskip,       {0} },
-	{ MODKEY|ShiftMask,             XK_Right,  tagtonextskip,      {0} },
-	{ MODKEY|ShiftMask,             XK_Left,   tagtoprevskip,      {0} },
-	{ MODKEY,                       XK_z,      zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
-	{ MODKEY,												XK_s,  	   togglefloating, {0} },
-	{ MODKEY|ShiftMask,             XK_s,      togglesticky,   {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
-	{ MODKEY|ControlMask,           XK_s,      show,           {0} },
-	{ MODKEY|ControlMask|ShiftMask, XK_s,      showall,        {0} },
-	{ MODKEY|ControlMask,           XK_h,      hide,           {0} },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ControlMask,           XK_x,      quit,           {0} }, // quit dwm
-  { MODKEY|ControlMask,           XK_r,      quit,           {1} }, // restart
+	/* modifier                     key        function        argument */ /* Programs */
+	{ MODKEY|ShiftMask,             XK_d,            spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return,       spawn,          SHCMD("$TERMINAL || xterm") },
+	{ MODKEY,                       XK_b,            togglebar,      {0} },
+	{ Mod1Mask,                     XK_Tab,          focusstackvis,  {.i = +1 } },
+	{ MODKEY,                       XK_j,            focusstackvis,  {.i = +1 } },
+	{ MODKEY,                       XK_k,            focusstackvis,  {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_j,            movestack,      {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_k,            movestack,      {.i = -1 } },
+	{ MODKEY,                       XK_i,            incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_i,            incnmaster,     {.i = -1 } },
+	{ MODKEY,                       XK_h,            setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_l,            setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_bracketright, viewnext,       {0} },
+	{ MODKEY,                       XK_bracketleft,  viewprev,       {0} },
+	{ MODKEY|ShiftMask,             XK_bracketright, tagtonext,      {0} },
+	{ MODKEY|ShiftMask,             XK_bracketleft,  tagtoprev,      {0} },
+	{ MODKEY,                       XK_grave,        viewnextskip,   {0} },
+	{ MODKEY|ShiftMask,             XK_grave,        viewprevskip,   {0} },
+	{ MODKEY,                       XK_apostrophe,   viewnextskip,   {0} },
+	{ MODKEY,                       XK_semicolon,    viewprevskip,   {0} },
+	{ MODKEY,                       XK_Right,        viewnextskip,   {0} },
+	{ MODKEY,                       XK_Left,         viewprevskip,   {0} },
+	{ MODKEY|ShiftMask,             XK_Right,        tagtonextskip,  {0} },
+	{ MODKEY|ShiftMask,             XK_Left,         tagtoprevskip,  {0} },
+	{ MODKEY,                       XK_z,            zoom,           {0} },
+	{ MODKEY,                       XK_Tab,          view,           {0} },
+	{ MODKEY|ShiftMask,             XK_q,            killclient,     {0} },
+	{ MODKEY,                       XK_t,            setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_m,            setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                       XK_space,        setlayout,      {0} },
+	{ MODKEY,                       XK_s,            togglefloating, {0} },
+	{ MODKEY|ShiftMask,             XK_s,            togglesticky,   {0} },
+	{ MODKEY,                       XK_0,            view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,            tag,            {.ui = ~0 } },
+	{ MODKEY,                       XK_comma,        focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period,       focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             XK_comma,        movemonfocus,   {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_period,       movemonfocus,   {.i = +1 } },
+	{ MODKEY,                       XK_minus,        setgaps,        {.i = -5 } },
+	{ MODKEY,                       XK_equal,        setgaps,        {.i = +5 } },
+	{ MODKEY|ShiftMask,             XK_minus,        setgaps,        {.i = GAP_RESET } },
+	{ MODKEY|ShiftMask,             XK_equal,        setgaps,        {.i = GAP_TOGGLE} },
+	{ MODKEY|ControlMask,           XK_s,            show,           {0} },
+	{ MODKEY|ControlMask|ShiftMask, XK_s,            showall,        {0} },
+	{ MODKEY|ControlMask,           XK_h,            hide,           {0} },
+	{ MODKEY|ControlMask,           XK_x,            quit,           {0} }, // quit dwm
+  { MODKEY|ControlMask,           XK_r,            quit,           {1} }, // restart
+	  TAGKEYS(XK_1, 0)
+	  TAGKEYS(XK_2, 1)
+	  TAGKEYS(XK_3, 2)
+	  TAGKEYS(XK_4, 3)
+	  TAGKEYS(XK_5, 4)
+	  TAGKEYS(XK_6, 5)
+	  TAGKEYS(XK_7, 6)
+	  TAGKEYS(XK_8, 7)
+	  TAGKEYS(XK_9, 8)
 };
 
 /* button definitions */

@@ -9,7 +9,7 @@
     {
       "updateSignal": "40",
       "command": "sb-mic",
-      "timer": "0s"
+      "timer": "0"
     },
     {
       "updateSignal": "36",
@@ -29,6 +29,12 @@
       "suffix": "%",
       "format": "%.2f",
       "timer": "3s"
+    },
+    {
+      "prefix": "",
+      "updateSignal": "41",
+      "command": "sb-battery",
+      "timer": "10s"
     },
     {
       "prefix": "🗓 ",

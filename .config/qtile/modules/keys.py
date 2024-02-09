@@ -341,6 +341,10 @@ keys = [
         desc="Dec Brightness",
     ),
     # }}}
+    Key("M-.", lazy.next_screen(), desc="Move to next screen"),
+    Key("M-,", lazy.prev_screen(), desc="Move to prev screen"),
+    # Key("M-S-.", lazy.next_screen(), desc="Move to next screen"),
+    # Key("M-S-,", lazy.prev_screen(), desc="Move to prev screen"),
     # Custom Scripts {{{
     Key("C-A-e", lazy.spawn("rofie"), desc="Launch Emoji Selector"),
     Key("C-A-v", lazy.spawn("pavucontrol"), desc="Launch Pavucontrol"),

@@ -21,13 +21,15 @@ export FILE_BROWSER="thunar"
 
 export BROWSER="firefox"
 
-[ -x /bin/brave ] && export BROWSER="brave"
-[ -x /bin/brave-browser ] && export BROWSER="brave-browser"
-[ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
+# [ -x /bin/brave ] && export BROWSER="brave"
+# [ -x /bin/brave-browser ] && export BROWSER="brave-browser"
+# [ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
 export READER="zathura"
 
-export QT_QPA_PLATFORMTHEME="qt5ct"
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
+if [ $DESKTOP_SESSION != "plasma" ]; then
+	export QT_QPA_PLATFORMTHEME="qt5ct"
+	export QT_AUTO_SCREEN_SCALE_FACTOR=0
+fi
 
 # ~/ Clean-up:
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -51,10 +53,14 @@ export ASDF_DATA_DIR="${XDG_DATA_HOME}/asdf"
 # export ANDROID_SDK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/android"
 # export ADB_VENDOR_KEY="$XDG_CONFIG_HOME"/android
 # export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME"/android/
-export ANDROID_HOME=$HOME/Android/Sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
+# export ANDROID_HOME=$HOME/Android/Sdk
+# export ANDROID_EMULATOR_HOME="$HOME"/.android/
+# export ADB_VENDOR_KEY="$HOME"/.android/
+# export PATH=$PATH:$ANDROID_HOME/emulator
+# export PATH=$PATH:$ANDROID_HOME/platform-tools
+# export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
+export ANDROID_HOME="$HOME/Android"
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/cmdline-tools/latest:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 export MYSQL_HISTFILE="$XDG_DATA_HOME"/mysql_history
 export PSQLRC="$XDG_CONFIG_HOME/pg/psqlrc"
 export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
@@ -110,7 +116,7 @@ export _ZL_DATA="$XDG_CACHE_HOME/zlua"
 export _ZL_DATA_DIR="$XDG_CACHE_HOME/zlua"
 export RANGER_ZLUA="$HOME/Downloads/GitClones/z.lua/z.lua"
 export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
-export PATH="$PATH:$XDG_DATA_HOME/fnm:$HOME/Documents/Programming/Flutter/flutter/bin"
+export PATH="$PATH:$XDG_CACHE_HOME/fnm-install:$HOME/Documents/Programming/Flutter/flutter/bin"
 export FZF_DEFAULT_COMMAND="fd -t f --hidden --follow --ignore-file \"$HOME\"/.config/git/ignore"
 # export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!Git*' --iglob '!void-*' --iglob '!.git*' --iglob '!venv' --iglob '!__pycache__' --iglob '!*.out'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -132,10 +138,11 @@ export CABAL_DIR="$XDG_CACHE_HOME"/cabal
 # Ignore certain files while completing
 export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
+[ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh
 # This is the list for lf icons:
-LF_ICONS=$(sed ~/.config/lf/dir_icons \
-	-e '/^[ \t]*#/d' \
-	-e '/^[ \t]*$/d' \
-	-e 's/[ \t]\+/=/g' \
-	-e 's/$/ /' | tr '\n' :)
-export LF_ICONS
+# LF_ICONS=$(sed ~/.config/lf/dir_icons \
+# 	-e '/^[ \t]*#/d' \
+# 	-e '/^[ \t]*$/d' \
+# 	-e 's/[ \t]\+/=/g' \
+# 	-e 's/$/ /' | tr '\n' :)
+# export LF_ICONS

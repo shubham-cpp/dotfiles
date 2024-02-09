@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+TryExec=st
+Exec=/usr/local/bin/st
+Icon=Terminal
+Terminal=false
+Categories=System;TerminalEmulator;
+
+Name=Suckless Terminal(ST)
+GenericName=Terminal
+Comment=A fast, cross-platform, OpenGL terminal emulator
+StartupNotify=true
+Actions=New;
+X-Desktop-File-Install-Version=0.26
+
+[Desktop Action New]
+Name=New Terminal
+Exec=st

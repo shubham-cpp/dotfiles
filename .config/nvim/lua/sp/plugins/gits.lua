@@ -8,7 +8,6 @@ return {
         config = true,
       },
     },
-    event = 'BufReadPost',
     opts = {
       on_attach = function(bufnr)
         local gs = package.loaded.gitsigns

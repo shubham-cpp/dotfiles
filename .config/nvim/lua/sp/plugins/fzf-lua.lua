@@ -1,5 +1,6 @@
 local opts = { winopts = { preview = { layout = 'vertical', vertical = 'up:40%' } } }
 
+---@diagnostic disable-next-line: redefined-local
 local function fzf_mru(opts)
   local fzf = require 'fzf-lua'
   local hash = require('sp.util').get_hash()
@@ -14,6 +15,7 @@ local function fzf_mru(opts)
     cmd = cmd,
     fzf_opts = { ['--tiebreak'] = 'index' },
     actions = {
+      ---@diagnostic disable-next-line: redefined-local
       ['default'] = function(selected, opts)
         local path = require 'fzf-lua.path'
         local filename = path.entry_to_file(selected[1], opts, opts.force_uri).path
@@ -75,7 +77,6 @@ return {
       function()
         require('fzf-lua').live_grep_native({
           winopts = { preview = { layout = 'vertical' } },
-          multiprocess = true,
         })
       end,
       desc = '[F]ind [s]earch Project',
@@ -86,27 +87,24 @@ return {
       function()
         require('fzf-lua').grep_visual({
           winopts = { preview = { layout = 'vertical' } },
-          multiprocess = true,
         })
       end,
       desc = '[F]ind [s]earch Visual',
-      mode = 'x',
+      mode = 'v',
     },
     {
       '<leader>fS',
-      function()
-        require('fzf-lua').lgrep_curbuf(opts)
-      end,
+      '<cmd>FzfLua grep_curbuf<cr>',
       desc = '[F]ind [S]earch Current File',
     },
     {
       '<leader>fw',
-      '<cmd>FzfLua grep_cWORD<cr>',
+      '<cmd>FzfLua grep_cword<cr>',
       desc = '[F]ind Whole [W]ord',
     },
     {
       '<leader>fW',
-      '<cmd>FzfLua grep_cword<cr>',
+      '<cmd>FzfLua grep_cWORD<cr>',
       desc = '[F]ind [W]ord',
     },
     {
@@ -186,7 +184,6 @@ return {
       function()
         require('fzf-lua').git_branches({
           { winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } } },
-          multiprocess = true,
         })
       end,
       desc = '[G]oto [B]ranches(FzfLua)',
@@ -215,12 +212,12 @@ return {
       ['ctrl-q'] = actions.file_edit_or_qf,
     }
     fzf.setup({
+      'fzf-native',
       fzf_opts = {
         ['--info'] = 'hidden',
-        --[[ ['--history'] = vim.fn.stdpath("data") .. '/fzf-lua-history',  ]]
       },
       winopts = {
-        preview = { default = 'bat_native' },
+        preview = { default = 'bat' },
       },
       keymap = {
         fzf = {
@@ -229,16 +226,20 @@ return {
           ['ctrl-f'] = 'half-page-down',
           ['ctrl-b'] = 'half-page-up',
           ['alt-a'] = 'toggle-all',
+          ['pgdn'] = 'preview-page-down',
+          ['pgup'] = 'preview-page-up',
+          ['alt-j'] = 'preview-down',
+          ['alt-k'] = 'preview-up',
           ['shift-down'] = 'preview-page-down',
           ['shift-up'] = 'preview-page-up',
         },
       },
-      previewers = {
-        bat = {
-          cmd = 'bat',
-          args = '--style=changes',
-        },
-      },
+      -- previewers = {
+      --   bat = {
+      --     cmd = 'bat',
+      --     args = '--style=changes',
+      --   },
+      -- },
       icons = {
         ['?'] = { icon = '?', color = 'magenta' },
         ['M'] = { icon = '★', color = 'red' },
@@ -246,9 +247,6 @@ return {
         ['A'] = { icon = '+', color = 'green' },
       },
       files = {
-        -- fzf_opts = {
-        --   ['--history'] = vim.fn.stdpath 'data' .. '/fzf-lua-files-history',
-        -- },
         winopts = {
           height = 0.55,
           width = 0.65,
@@ -278,12 +276,27 @@ return {
         actions = vim.tbl_extend('force', m_keys, {
           ['ctrl-d'] = actions.buf_delete,
           ['ctrl-x'] = actions.buf_vsplit,
+          ['ctrl-v'] = actions.buf_split,
           ['ctrl-q'] = actions.buf_edit_or_qf,
         }),
       },
       blines = {
         actions = m_keys,
         no_term_buffers = false,
+        winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+      },
+      lsp = {
+        finder = {
+          actions = m_keys,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        },
+        code_actions = {
+          actions = m_keys,
+          winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        },
+      },
+      diagnostics = {
+        actions = m_keys,
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
       },
       lines = { actions = m_keys },

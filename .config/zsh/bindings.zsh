@@ -50,10 +50,10 @@ bindkey -M viins -M viins '^[OB' history-substring-search-down
 bindkey -M viins -M viins '^[k' autosuggest-accept
 bindkey -M viins -M viins '^[j' history-substring-search-up
 
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
+# bindkey -M menuselect 'h' vi-backward-char
+# bindkey -M menuselect 'k' vi-up-line-or-history
+# bindkey -M menuselect 'j' vi-down-line-or-history
+# bindkey -M menuselect 'l' vi-forward-char
 
 # bindkey -M vicmd "b" backward-word
 # bindkey -M vicmd "w" forward-word

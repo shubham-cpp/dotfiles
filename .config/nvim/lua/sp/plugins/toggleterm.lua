@@ -32,6 +32,6 @@ return {
 
     toggleterm.setup(opts)
     vim.keymap.set('n', '<Space>tl', lazygit_toggle, { desc = '[T]erminal Lazy[g]it' })
-    vim.keymap.set('n', '<Space>tF', file_manager_toggle, { desc = '[T]erminal [F]ile manager' })
+    vim.keymap.set('n', '<Space>tf', file_manager_toggle, { desc = '[T]erminal [F]ile manager' })
   end,
 }

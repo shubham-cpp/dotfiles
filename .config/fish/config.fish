@@ -34,3 +34,4 @@ bind \e\[1\;5C forward-bigword
 bind -M insert \ek accept-autosuggestion
 # C-backspace
 bind -M insert \b backward-kill-word
+complete -c dnf5 -w dnf

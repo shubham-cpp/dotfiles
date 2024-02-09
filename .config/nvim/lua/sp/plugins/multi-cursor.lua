@@ -1,6 +1,5 @@
 local config = {
   'mg979/vim-visual-multi',
-  event = 'BufReadPost',
   init = function()
     vim.g.VM_maps = {}
     vim.g.VM_mouse_mappings = 1

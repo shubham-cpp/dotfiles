@@ -22,7 +22,7 @@ o.splitbelow = true
 o.path:append '**'
 o.cursorline = true
 o.inccommand = 'nosplit'
-o.scrolloff = 8
+o.scrolloff = 16
 o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline

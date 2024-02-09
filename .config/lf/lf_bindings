@@ -38,6 +38,6 @@ map gm cd ~/Public/home-hdd/shubham
 map gM cd /run/media/shubham
 map gf2 cd "/home/shubham/.local/share/Steam/steamapps/compatdata/1100600/pfx/drive_c/users/steamuser/My Documents/Sports Interactive/Football Manager 2020"
 
-map Z push :z-jump<space>-I<space>
-map zb push :z-jump<space>-b<space>
-map zz push :z-jump<space>
+# map Z push :z-jump<space>-I<space>
+# map zb push :z-jump<space>-b<space>
+# map zz push :z-jump<space>
