@@ -44,3 +44,7 @@ npm
 .config/xmonad/xmonad-contrib-git
 .config/xmonad/xmonad-git
 .config/vifm/colors
+.config/zsh-omz/ohmyzsh
+.config/zsh-omz/.p10k.zsh
+.config/zsh-omz/.zcomp*
+.config/zsh-omz/.zsh_history

@@ -15,7 +15,7 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 # export TERM="xterm-256color"
-export TERMINAL="alacritty"
+export TERMINAL="st"
 
 export FILE_BROWSER="thunar"
 
