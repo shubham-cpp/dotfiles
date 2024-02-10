@@ -23,8 +23,8 @@ require 'awful.hotkeys_popup.keys'
 -- Awesome widgets {{{
 local brightness_widget = require 'widgets.brightness'
 local calendar_widget = require 'widgets.calendar'
-local volume = require 'widgets.vol'
-local battery_widget = require 'widgets.battery'
+local new_volume = require 'widgets.volume.volume'
+local gears = require("gears")
 --}}}
 
 -- {{{ Error handling
@@ -63,7 +63,7 @@ end
 if not beautiful.init(gfs.get_configuration_dir() .. 'utils/theme.lua') then
   local dpi = beautiful.xresources.apply_dpi
   beautiful.init({
-    font = 'Monospace Bold 10',
+    font = 'Ubuntu Bold 10',
     useless_gap = 3,
     gap_single_client = true,
     border_width = dpi(2),
@@ -284,6 +284,9 @@ awful.screen.connect_for_each_screen(function(s)
       --   -- path_to_icons = '/usr/share/icons/Qogir/symbolic/status/',
       --   -- path_to_icons = gfs.get_xdg_data_home() .. 'icons/Fluent-grey-dark/symbolic/status/',
       -- }),
+			-- net_speed_widget({
+			-- 	timeout = 5,
+			-- }),
       -- spr,
       big_icon ' ',
       awful.widget.watch('bash -c "printf %d%% $(expr 100 - $(vmstat 1 2 | tail -1 | awk \'{print $15}\'))"', 3),
@@ -291,7 +294,8 @@ awful.screen.connect_for_each_screen(function(s)
       big_icon ' ',
       awful.widget.watch('sh -c "free -h | awk \'/^Mem/ {print $3}\'"', 5),
       spr,
-      volume(),
+      -- volume(),
+			new_volume(),
       -- spr,
       -- brightness_widget({
       --   type = 'icon_and_text',
@@ -620,14 +624,14 @@ globalkeys = gears.table.join(
     awful.spawn 'dmenu_run_history -i'
   end, { description = 'Launch Dmenu', group = 'launcher' }),
 
-  awful.key({ 'altkey' }, 'Print', function()
-    awful.spawn.with_shell 'flameshot gui'
-  end, { description = 'Capture Screenshot(Fullscreen - flameshot)', group = 'launcher' }),
+  -- awful.key({ 'altkey' }, 'Print', function()
+  --   awful.spawn.with_shell 'take_ss focus'
+  -- end, { description = 'Capture Screenshot(Fullscreen - flameshot)', group = 'launcher' }),
   awful.key({}, 'Print', function()
-    awful.spawn.with_shell 'take_ss clip'
+    awful.spawn.with_shell 'flameshot gui'
   end, { description = 'Capture Screenshot(Fullscreen - Maim)', group = 'launcher' }),
   awful.key({ 'Shift' }, 'Print', function()
-    awful.spawn.with_shell 'take_ss focus'
+    awful.spawn.with_shell 'flameshot screen'
   end, { description = 'Capture Screenshot(focus)', group = 'launcher' }),
 
   awful.key({ modkey }, 'v', function()
@@ -741,22 +745,19 @@ globalkeys = gears.table.join(
   -- Volume Control {{{
 
   awful.key({}, 'XF86AudioRaiseVolume', function()
-    -- os.execute("pamixer -i 10 --allow-boost")
     -- os.execute('pactl set-sink-volume @DEFAULT_SINK@ +10%')
-    volume:inc()
-    -- beautiful.volume.update()
+    -- volume:inc()
+    new_volume:inc()
   end, { description = 'volume up', group = 'hotkeys' }),
   awful.key({}, 'XF86AudioLowerVolume', function()
-    -- os.execute("pamixer -d 10 --allow-boost")
     -- os.execute('pactl set-sink-volume @DEFAULT_SINK@ -10%')
-    volume:dec()
-    -- beautiful.volume.update()
+    -- volume:dec()
+    new_volume:dec()
   end, { description = 'volume down', group = 'hotkeys' }),
   awful.key({}, 'XF86AudioMute', function()
-    -- os.execute("pamixer --toggle-mute")
     -- os.execute('pactl set-sink-mute @DEFAULT_SINK@ toggle')
-    volume:toggle()
-    -- beautiful.volume.update()
+    -- volume:toggle()
+    new_volume:toggle()
   end, { description = 'toggle mute', group = 'hotkeys' })
 
   ---  }}}
@@ -1129,6 +1130,14 @@ end)
 client.connect_signal('manage', dynamic_title)
 client.connect_signal('tagged', dynamic_title)
 -- }}}
+gears.timer({
+	timeout = 5,
+	autostart = true,
+	call_now = true,
+	callback = function()
+		collectgarbage("collect")
+	end,
+})
 --[[
 write me awesomewm widget for volume. Requirements:
  - Only update on keypress(like XF86AudioRaiseVolume,XF86AudioLowerVolume,XF86AudioMute)

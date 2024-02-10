@@ -90,7 +90,8 @@ local function worker(user_args)
     dec_volume_cmd = 'pamixer -d ' .. step
     toggle_volume_cmd = 'pamixer -t'
   elseif program == 'pactl' then
-    get_volume_cmd = 'sb-volume' -- "pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ 'NR==1{print $2}' "
+    -- get_volume_cmd = 'sb-volume' -- "pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ 'NR==1{print $2}' "
+    get_volume_cmd = "pactl get-sink-volume @DEFAULT_SINK@ | awk -F/ 'NR==1{print $2}' "
     set_volume_cmd = 'pactl set-sink-volume @DEFAULT_SINK@ %s' -- <level>
     inc_volume_cmd = 'pactl set-sink-volume @DEFAULT_SINK@ +' .. step .. '%'
     dec_volume_cmd = 'pactl set-sink-volume @DEFAULT_SINK@ -' .. step .. '%'
@@ -127,7 +128,7 @@ local function worker(user_args)
       --       { '婢', '奄', ' ', '墳 ', '  ' }
       --     ) .. '  ' .. string.gsub(level, '[^0-9]', '')
       local display_text =
-          get_icon(tonumber(string.gsub(level, '[^0-9]', '')), { '婢', '奄', ' ', '󰕾 ', ' ' })
+          get_icon(tonumber(string.gsub(level, '[^0-9]', '')), { '婢', '奄', '', '󰕾', ' ' })
       self:get_children_by_id('vol_txt_icon')[1]:set_markup_silently(display_text)
       self:get_children_by_id('vol_txt')[1]:set_markup_silently(string.gsub(level, '[^0-9]', ''))
       -- show_popup(level)

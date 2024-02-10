@@ -49,7 +49,7 @@ return {
           l = { util.close_left, 'Close Left' },
           r = { util.close_right, 'Close Right' },
         },
-        D = {"<cmd>bd<cr>", 'Delete'},
+        D = { '<cmd>bd<cr>', 'Delete' },
         c = {
           function()
             util.close_all(true, true)
@@ -99,7 +99,7 @@ return {
         e = 'Line Diagnostics',
         t = 'Goto type definition',
         d = 'Goto definition',
-        a = { c = 'Code action' },
+        a = { name = 'EasyAlign' },
       },
     })
   end,

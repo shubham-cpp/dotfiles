@@ -1,0 +1,146 @@
+// vim:fileencoding=utf-8:ft=jsonc:foldmethod=expr
+{
+  "height": 26,
+  "spacing": 4,
+  "modules-left": [
+    "hyprland/workspaces",
+  ],
+  "modules-center": [
+    "hyprland/window"
+  ],
+  "modules-right": [
+    "clock",
+    "network",
+    "cpu",
+    "memory",
+    // "backlight",
+    // "pulseaudio",
+    "wireplumber",
+    // "battery",
+    "tray"
+  ],
+  "clock": {
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%a %d %b, %I:%M %p }",
+    "format": "  {:%I:%M %p}",
+    "timezone": "Asia/Kolkata"
+  },
+  "cpu": {
+    "format": " {usage}%",
+    "tooltip": true
+  },
+  "memory": {
+    "format": " {}%"
+  },
+  "wireplumber": {
+    "format": " {icon} {volume}%",
+    "format-muted": "󰝟 ",
+    "format-icons": ["", " ", " "],
+    "on-click": "helvum",
+    "max-volume": 150,
+    "scroll-step": 0.2
+  },
+  "backlight": {
+    "format": "{icon} {percent}%",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "on-scroll-up": "brightnessctl s 10+",
+    "on-scroll-down": "brightnessctl s 10-"
+  },
+  "battery": {
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{icon} {capacity}%",
+    "format-charging": " {capacity}%",
+    "format-plugged": " {capacity}%",
+    "format-alt": "{icon} {time}",
+    "format-icons": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "network": {
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ipaddr}/{cidr} ",
+    "tooltip-format": "{ifname} via {gwaddr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "format-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%  {format_source}",
+    "format-bluetooth": "{icon} {volume}%  {format_source}",
+    "format-bluetooth-muted": " {icon} muted {format_source}",
+    "format-muted": "  muted {format_source}",
+    "format-source": " {volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": [
+        " ",
+        " ",
+        " "
+      ]
+    },
+    "on-click": "pavucontrol"
+  },
+  "custom/media": {
+    "format": "{icon} {}",
+    "return-type": "json",
+    "max-length": 40,
+    "format-icons": {
+      "spotify": " ",
+      "default": "🎜 "
+    },
+    "escape": true,
+    "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null"
+  },
+  "wlr/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "format-icons": {
+      "urgent": " ",
+      "active": " ",
+      "default": " "
+    },
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "sort-by-number": true
+  },
+  "hyprland/workspaces":{
+    "active-only": true,
+    "format-icons": {
+      "urgent": " ",
+      "active": " ",
+      "default": " "
+    },
+  },
+  "tray": {
+    "icon-size": 21,
+    "spacing": 10,
+    "show-passive-items": true
+  },
+  "hyprland/window": {
+    "format": "👉 {}",
+    "separate-outputs": true
+  }
+}

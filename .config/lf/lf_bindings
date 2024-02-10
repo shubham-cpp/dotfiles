@@ -1,7 +1,8 @@
 # Movement
 map gD  cd ~/Downloads/
 map gV  cd ~/Videos
-map gp  cd ~/Pictures
+map gpp  cd ~/Pictures
+map gPa cd ~/Public/AppImages
 # map gpp  cd ~/Pictures
 
 map gdd cd ~/Documents/dotfiles

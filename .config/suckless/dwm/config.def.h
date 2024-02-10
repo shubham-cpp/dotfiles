@@ -48,6 +48,8 @@ static const Rule rules[] = {
      *  WM_NAME(STRING) = title
      */
     /* class              instance    title     tags mask   switchtotag    isfloating   monitor */
+    { "floorp",            NULL,      NULL,       2,          1,            0,          -1 },
+    { "Navigator",         NULL,      NULL,       2,          1,            0,          -1 },
     { "firefox",           NULL,      NULL,       2,          1,            0,          -1 },
     { "Firefox",           NULL,      NULL,       2,          1,            0,          -1 },
     { "LibreWolf",         NULL,      NULL,       2,          1,            0,          -1 },

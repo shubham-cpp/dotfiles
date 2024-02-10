@@ -54,8 +54,8 @@ basic() {
 			run feh --bg-fill --no-fehbg -q ~/.config/wall.png
 		fi
 	fi
-	run kitty
-	# TERM=xterm-256color alacritty -e "tmux" &
+	# run kitty
+	TERM=xterm-256color alacritty -e "tmux" &
 }
 
 case "$DESKTOP_SESSION" in

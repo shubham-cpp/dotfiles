@@ -26,7 +26,7 @@ local function on_attach(client, bufnr)
     map('n', 'gW', vim.lsp.buf.workspace_symbol, { buffer = bufnr, desc = 'Workspace Symbols' })
     map('n', 'gt', vim.lsp.buf.type_definition, { buffer = bufnr, desc = 'Type Definition' })
   end
-  map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
+  -- map('n', 'gac', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Code Actions' })
   map('n', '<F2>', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
   map('n', '<leader>la', vim.lsp.buf.code_action, { buffer = bufnr, desc = 'Lsp Code Actions' })
   map('n', '<leader>lr', vim.lsp.buf.rename, { buffer = bufnr, desc = 'Lsp Rename' })
@@ -101,7 +101,7 @@ return {
       opts = {
         on_attach = function(client, buffer)
           on_attach(client, buffer)
-          vim.keymap.set('n', 'gs', '<cmd>TSToolsOrganizeImports<cr>', { buffer = buffer, desc = 'Organize Imports' })
+          vim.keymap.set('n', 'go', '<cmd>TSToolsOrganizeImports<cr>', { buffer = buffer, desc = 'Organize Imports' })
           vim.keymap.set(
             'n',
             'gD',
@@ -158,6 +158,48 @@ return {
       'creativenull/efmls-configs-nvim',
       version = 'v1.x.x',
     },
+    {
+      'mrcjkb/rustaceanvim',
+      version = '^3', -- Recommended
+      init = function()
+        vim.g.rustaceanvim = {
+          -- Plugin configuration
+          tools = {},
+          -- LSP configuration
+          server = {
+            on_attach = function(client, bufnr)
+              on_attach(client, bufnr)
+              vim.keymap.set('n', '<leader>la', function()
+                vim.cmd.RustLsp 'codeAction' -- supports rust-analyzer's grouping
+              end, { silent = true, buffer = bufnr, desc = 'Code Actions(Rust)' })
+              vim.keymap.set('n', '<leader>=', function()
+                vim.lsp.buf.format({ async = true })
+              end, { silent = true, buffer = bufnr, desc = 'Format(Rust)' })
+              vim.keymap.set('n', '<leader>lj', function()
+                vim.cmd.RustLsp 'joinLines' -- supports rust-analyzer's grouping
+              end, { silent = true, buffer = bufnr, desc = 'Join Lines(Rust)' })
+            end,
+            settings = {
+              ['rust-analyzer'] = {
+                diagnostics = { enable = true },
+                check = { features = 'all' },
+                inlayHints = { closureCaptureHints = { enable = true } },
+                lens = {
+                  references = {
+                    adt = { enable = true },
+                    enumVariant = { enable = true },
+                    method = { enable = true },
+                    trait = { enable = true },
+                  },
+                },
+                typing = { autoClosingAngleBrackets = { enable = true } },
+              },
+            },
+          },
+        }
+      end,
+      ft = { 'rust' },
+    },
   },
   config = function()
     local lspconfig = require 'lspconfig'
@@ -194,6 +236,8 @@ return {
 
     local mason_lspconfig = require 'mason-lspconfig'
     require('mason').setup({
+      ---@type '"prepend"' | '"append"' | '"skip"'
+      PATH = 'append',
       ui = {
         icons = {
           package_installed = '✓',
@@ -235,9 +279,6 @@ return {
     opts.on_attach = on_attach
     -- opts.flags = { debounce_text_changes = 150, }
     mason_lspconfig.setup_handlers({
-      emmet_ls = function()
-        lspconfig['emmet_ls'].setup(opts)
-      end,
       clangd = function()
         local opt = vim.deepcopy(opts)
         opt.single_file_support = true
@@ -412,18 +453,11 @@ return {
       end,
       bashls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/bash-language-server', 'start' }
         opt.settings = { bashIde = { highlightParsingErrors = true } }
         lspconfig['bashls'].setup(opt)
       end,
-      html = function()
-        local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vscode-html-language-server', '--stdio' }
-        lspconfig['html'].setup(opt)
-      end,
       cssls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vscode-css-language-server', '--stdio' }
         opt.settings = {
           css = {
             validate = true,
@@ -458,7 +492,6 @@ return {
       end,
       eslint = function()
         lspconfig['eslint'].setup({
-          cmd = { require('sp.util').bun_path() .. '/vscode-eslint-language-server', '--stdio' },
           capabilities = cmp_capabilities,
           on_attach = function(_, bufnr)
             vim.keymap.set('n', 'g=', '<cmd>EslintFixAll<CR>', { buffer = bufnr, desc = 'Eslint Fix' })
@@ -498,7 +531,6 @@ return {
       end,
       pyright = function()
         local opt = vim.deepcopy(opts)
-        -- opt.cmd = { require('sp.util').bun_path() .. '/pyright-langserver', '--stdio' }
         opt.settings = {
           python = {
             analysis = {
@@ -512,7 +544,6 @@ return {
       end,
       jsonls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vscode-json-language-server', '--stdio' }
         opt.settings = {
           json = {
             schemas = vim.list_extend({
@@ -531,36 +562,31 @@ return {
       end,
       yamlls = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/yaml-language-server', '--stdio' }
         opt.settings = {
           redhat = { telemetry = { enabled = false } },
           yaml = {
-            schemas = require('schemastore').json.schemas({
-              select = {
-                'docker-compose.yml',
-                '.yarnrc.yml',
-                'GitHub Workflow',
-                'GitHub Workflow Template Properties',
-                'GitHub Action',
-                'Azure Pipelines',
-              },
-            }),
+            schemaStore = {
+              -- You must disable built-in schemaStore support if you want to use
+              -- this plugin and its advanced options like `ignore`.
+              enable = false,
+              -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+              url = '',
+            },
+            schemas = require('schemastore').yaml.schemas(),
           },
         }
         lspconfig['yamlls'].setup(opt)
       end,
       ['lua_ls'] = function()
         -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
-        require('neodev').setup({
-          -- add any options here, or leave empty to use the default settings
-        })
+        require('neodev').setup({})
         local opt = vim.deepcopy(opts)
-        local runtime_path = vim.split(package.path, ';')
-        table.insert(runtime_path, 'lua/?.lua')
-        table.insert(runtime_path, 'lua/?/init.lua')
-        table.insert(runtime_path, '/usr/share/awesome/lib/?.lua')
-        table.insert(runtime_path, '/usr/share/awesome/lib/?/?.lua')
-        table.insert(runtime_path, '/usr/share/awesome/themes/?/?.lua')
+        -- local runtime_path = vim.split(package.path, ';')
+        -- table.insert(runtime_path, 'lua/?.lua')
+        -- table.insert(runtime_path, 'lua/?/init.lua')
+        -- table.insert(runtime_path, '/usr/share/awesome/lib/?.lua')
+        -- table.insert(runtime_path, '/usr/share/awesome/lib/?/?.lua')
+        -- table.insert(runtime_path, '/usr/share/awesome/themes/?/?.lua')
         -- table.insert(runtime_path, '/usr/share/awesome/lib/awful/?.lua')
         -- table.insert(runtime_path, '/usr/share/awesome/lib/wibox/?.lua')
         opt.settings = {
@@ -571,7 +597,7 @@ return {
               disable = { 'lowercase-global' },
             },
             workspace = { checkThirdParty = false },
-            runtime = { version = 'LuaJIT', path = runtime_path },
+            -- runtime = { version = 'LuaJIT', path = runtime_path },
             telemetry = { enable = false },
             hint = {
               enable = true,
@@ -587,7 +613,6 @@ return {
       end,
       tailwindcss = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/tailwindcss-language-server', '--stdio' }
         opt.root_dir = util.root_pattern(
           'tailwind.config.js',
           'tailwind.config.cjs',
@@ -663,28 +688,15 @@ return {
           end
         end
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/vue-language-server', '--stdio' }
         -- opt.filetypes = { 'typescript', 'javascript', 'vue' }
         opt.filetypes = { 'vue' }
         on_new_config =
           function(new_config, new_root_dir)
             new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
-          end,
-          -- opt.settings = {
-          --   vue = {
-          --     inlayHints = {
-          --       inlineHandlerLeading = true,
-          --       missingProps = true,
-          --       optionsWrapper = true,
-          --     },
-          --     updateImportsOnFileMove = { enabled = true },
-          --   },
-          -- }
-          lspconfig['volar'].setup(opt)
+          end, lspconfig['volar'].setup(opt)
       end,
       svelte = function()
         local opt = vim.deepcopy(opts)
-        opt.cmd = { require('sp.util').bun_path() .. '/svelteserver', '--stdio' }
         opt.settings = {
           svelte = {
             ['enable-ts-plugin'] = true,
@@ -745,10 +757,6 @@ return {
       capabilities = cmp_capabilities,
     })
     -- lspconfig.nimls.setup({
-    --   on_attach = on_attach,
-    --   capabilities = cmp_capabilities,
-    -- })
-    -- lspconfig.zk.setup({
     --   on_attach = on_attach,
     --   capabilities = cmp_capabilities,
     -- })

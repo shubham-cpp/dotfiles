@@ -29,6 +29,7 @@ ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 zinit light zsh-users/zsh-autosuggestions
 zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zsh-users/zsh-history-substring-search
+zinit light zsh-users/zsh-completions
 # zinit light skywind3000/z.lua
 zinit light lukechilds/zsh-better-npm-completion
 zinit light buonomo/yarn-completion
@@ -99,17 +100,10 @@ autoload -Uz colors edit-command-line
 autoload -Uz bashcompinit && bashcompinit
 zmodload -i zsh/complist
 
-compinit -d "$HOME/.cache/zcompdump"
-colors
-
 source "$ZDOTDIR"/alias.zsh
 source "$ZDOTDIR"/bindings.zsh
 source "$ZDOTDIR"/mfunctions.zsh
 
-# eval "$(starship init zsh)"
-
-# bun completions
-# [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
-
-# opam configuration
-[[ ! -r /home/shubham/.local/share/opam/opam-init/init.zsh ]] || source /home/shubham/.local/share/opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+compinit -d "$HOME/.cache/zcompdump"
+colors
+[ -x /bin/dnf ] && compdef dnf5=dnf

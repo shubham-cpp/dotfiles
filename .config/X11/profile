@@ -15,15 +15,16 @@ export EDITOR=nvim
 export VISUAL=nvim
 
 # export TERM="xterm-256color"
-export TERMINAL="alacritty"
+export TERMINAL="st"
+# export TERMINAL="alacritty"
 
 export FILE_BROWSER="thunar"
 
 export BROWSER="firefox"
 
-[ -x /bin/brave ] && export BROWSER="brave"
-[ -x /bin/brave-browser ] && export BROWSER="brave-browser"
-[ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
+# [ -x /bin/brave ] && export BROWSER="brave"
+# [ -x /bin/brave-browser ] && export BROWSER="brave-browser"
+# [ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
 export READER="zathura"
 
 # $DESKTOP_SESSION not equal to plasma
@@ -135,7 +136,8 @@ export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
 export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
-[ -d "$HOME"/.local/kitty.app ] && export PATH=$PATH:$HOME/.local/kitty.app/bin
+export PATH="/home/shubham/.turso:$PATH"
+# [ -d "$HOME"/.local/kitty.app ] && export PATH=$PATH:$HOME/.local/kitty.app/bin
 # This is the list for lf icons:
 # LF_ICONS=$(sed ~/.config/lf/dir_icons \
 # 	-e '/^[ \t]*#/d' \
@@ -143,3 +145,5 @@ export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 # 	-e 's/[ \t]\+/=/g' \
 # 	-e 's/$/ /' | tr '\n' :)
 # export LF_ICONS
+
+[ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh

@@ -164,6 +164,9 @@ cmd extract ${{
   set -f
   atool -x $f
 }}
+cmd chmodx ${{
+  chmod +x $f
+}}
 cmd edit-config ${{
     $EDITOR ~/.config/lf/lfrc
     lf -remote "send $id source ~/.config/lf/lfrc"
@@ -208,6 +211,7 @@ map r
 # Broot Mapping
 map f fzf_jump
 map ex extract
+map eX chmodx
 # map X quitcd
 # Basic Functions
 map . set hidden!
@@ -233,10 +237,10 @@ map cf yank-basename
 map cF yank-basename-without-extension
 map cp yank-path
 map cd yank-dirname
-map i rename
-map I :rename; cmd-home
-map A :rename; cmd-end
-map c :rename; cmd-delete-home
+map ci rename
+map cI :rename; cmd-home
+map ca :rename; cmd-end
+map cc :rename; cmd-delete-home
 map C :rename; cmd-end; cmd-delete-home
 map U unselect
 map B bulkrename

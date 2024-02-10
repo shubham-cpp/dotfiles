@@ -5,10 +5,10 @@ alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
-alias ls="exa -l --color=auto --group-directories-first --icons"  # long format
-alias ll="exa -al --color=auto --group-directories-first --icons --no-user" # my preferred listing
-alias la="exa -a --color=auto --group-directories-first --icons"  # all files and dirs
-alias lt="exa -aT --color=auto --group-directories-first --icons" # tree listing
+alias ls="eza -l --color=auto --icons=auto --group-directories-first "  # long format
+alias ll="eza -al --color=auto --group-directories-first --icons --no-user" # my preferred listing
+alias la="eza -a --color=auto --icons --group-directories-first "  # all files and dirs
+alias lt="eza -aT --color=auto --icons --group-directories-first " # tree listing
 alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
@@ -17,16 +17,16 @@ alias rmd="trash-put -rf"
 alias tls="trash-list"
 
 # alias d="sudo dnf"
-# alias di="sudo dnf install"
-# alias dr="sudo dnf remove"
-# alias dU="sudo dnf upgrade"
-# alias dp="dnf provides"
-# alias ds="dnf search"
-# alias a="sudo nala"
-alias ai="sudo nala install"
-alias ar="sudo nala remove"
-alias au="sudo nala upgrade"
-alias as="nala search"
+alias di="sudo dnf install"
+alias dr="sudo dnf remove"
+alias dU="sudo dnf upgrade"
+alias dp="dnf provides"
+alias ds="dnf search"
+# # alias a="sudo nala"
+# alias ai="sudo nala install"
+# alias ar="sudo nala remove"
+# alias au="sudo nala upgrade"
+# alias as="nala search"
 # alias in="ai"
 # alias un="ar"
 # alias sea="nala search"

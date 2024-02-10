@@ -3,34 +3,22 @@ local config = {
     'nvim-treesitter/nvim-treesitter',
     version = false, -- last release is way too old and doesn't work on Windows
     build = ':TSUpdate',
+    -- event = 'VeryLazy',
     event = { 'BufReadPost', 'BufNewFile' },
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
       { 'nvim-treesitter/playground', cmd = 'TSPlaygroundToggle' },
       'andymass/vim-matchup',
+      'windwp/nvim-ts-autotag',
     },
     init = function()
       vim.g.matchup_matchparen_offscreen = { method = 'popup' }
     end,
-  },
-  {
-    'windwp/nvim-ts-autotag',
-    event = { 'BufReadPost', 'BufNewFile' },
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-    },
     config = function()
-      require('nvim-ts-autotag').setup({
-        enable = true,
-        enable_rename = true,
-        enable_close = true,
-        -- enable_close_on_slash = false,
-      })
-
       require('nvim-treesitter.configs').setup({
         highlight = { enable = true, additional_vim_regex_highlighting = { 'markdown', 'xml' } },
-        -- autotag = { enable = true , enable_close_on_slash = false},
         matchup = { enable = true },
+        autotag = { enable = true, filetypes = { 'html', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'svelte'} },
         ensure_installed = {
           'bash',
           'c',
@@ -157,5 +145,14 @@ local config = {
       })
     end,
   },
+  -- {
+  --   'windwp/nvim-ts-autotag',
+  --   version = false,
+  --   event = { 'BufReadPost', 'BufNewFile' },
+  --   dependencies = 'nvim-treesitter/nvim-treesitter',
+  --   config = function()
+  --     require('nvim-ts-autotag').setup({ filetypes = { 'html', 'javascript', 'javascriptreact', 'typescriptreact' } })
+  --   end,
+  -- },
 }
 return config

@@ -44,3 +44,6 @@ npm
 .config/xmonad/xmonad-contrib-git
 .config/xmonad/xmonad-git
 .config/vifm/colors
+.config/mpv/fonts
+.config/mpv/script-opts
+.config/mpv/scripts

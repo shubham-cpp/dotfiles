@@ -2,29 +2,29 @@
   "separator": " 󰿊 ",
   "actions": [
     {
-      "updateSignal": "39",
+      "updateSignal": "35",
       "command": "(sleep 5 ; curl \"wttr.in/Pune?format=3\")",
       "timer": "60m"
     },
     {
-      "updateSignal": "40",
+      "updateSignal": "36",
       "command": "sb-mic",
       "timer": "0s"
     },
     {
-      "updateSignal": "36",
+      "updateSignal": "37",
       "command": "sb-volume",
       "timer": "0"
     },
     {
       "prefix": "󰍛 ",
-      "updateSignal": "37",
+      "updateSignal": "38",
       "command": "sb-memory | cut -d' ' -f3",
       "timer": "3s"
     },
     {
       "prefix": "󱣖  ",
-      "updateSignal": "38",
+      "updateSignal": "39",
       "command": "#Cpu",
       "suffix": "%",
       "format": "%.2f",
@@ -32,9 +32,9 @@
     },
     {
       "prefix": "🗓 ",
-      "updateSignal": "35",
+      "updateSignal": "40",
       "command": "sb-date | cut -d' ' -f3-",
-      "timer": "60s"
+      "timer": "30s"
     }
   ]
 }

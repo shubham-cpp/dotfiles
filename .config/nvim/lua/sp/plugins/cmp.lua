@@ -32,16 +32,6 @@ return {
           delete_check_events = 'TextChanged',
           region_check_events = 'CursorMoved',
         })
-        -- vim.keymap.set({ 'i' }, '<C-K>', function()
-        --   ls.expand()
-        -- end, { silent = true })
-        -- vim.keymap.set({ 'i', 's' }, '<C-L>', function()
-        --   ls.jump(1)
-        -- end, { silent = true })
-        -- vim.keymap.set({ 'i', 's' }, '<C-J>', function()
-        --   ls.jump(-1)
-        -- end, { silent = true })
-        -- require('luasnip.loaders.from_vscode').lazy_load()
         vim.tbl_map(function(type)
           require('luasnip.loaders.from_' .. type).lazy_load()
         end, { 'vscode', 'snipmate', 'lua' })
@@ -58,48 +48,6 @@ return {
       config = function(_, opts)
         require('lspkind').init(opts)
       end,
-    },
-    {
-      'Exafunction/codeium.vim',
-      enabled = false,
-      event = 'InsertEnter',
-      init = function()
-        vim.g.codeium_disable_bindings = 1
-      end,
-      keys = {
-        {
-          '<A-g>',
-          function()
-            return vim.fn['codeium#Accept']()
-          end,
-          expr = true,
-          mode = 'i',
-        },
-        {
-          '<C-;>',
-          function()
-            return vim.fn['codeium#CycleCompletions'](1)
-          end,
-          expr = true,
-          mode = 'i',
-        },
-        {
-          '<C-,>',
-          function()
-            return vim.fn['codeium#CycleCompletions'](-1)
-          end,
-          expr = true,
-          mode = 'i',
-        },
-        {
-          '<A-x>',
-          function()
-            return vim.fn['codeium#Clear']()
-          end,
-          expr = true,
-          mode = 'i',
-        },
-      },
     },
   },
   config = function()
@@ -146,7 +94,7 @@ return {
         },
       },
       mapping = cmp.mapping.preset.insert({
-        ['<C-x><C-s>'] = cmp.mapping.complete({
+        ['<C-x><C-x>'] = cmp.mapping.complete({
           config = { sources = { { name = 'luasnip' } } },
         }),
         ['<C-x><C-b>'] = cmp.mapping.complete({
@@ -276,14 +224,15 @@ return {
           option = {
             keyword_length = 2,
             get_bufnrs = function()
-              -- local bufIsSmall = function(bufnr)
-              --   local max_filesize = 50 * 1024
-              --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-              --   return ok and stats and stats.size < max_filesize
-              -- end
+              local bufIsSmall = function(bufnr)
+                -- local max_filesize = 50 * 1024
+                -- local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                -- return ok and stats and stats.size < max_filesize
+                return vim.api.nvim_buf_line_count(bufnr) < 1500
+              end
 
-              -- return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
-              return vim.api.nvim_list_bufs()
+              return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
+              -- return vim.api.nvim_list_bufs()
             end,
           },
         },
@@ -314,8 +263,10 @@ return {
           cmp.config.compare.exact,
           cmp.config.compare.score,
           cmp.config.compare.recently_used,
+          cmp.config.compare.locality,
           -- require("cmp-under-comparator").under,
           cmp.config.compare.kind,
+          cmp.config.compare.sort_text,
           -- Try to put emmet towards the bottom
           function(entry1, entry2)
             local source_name = entry1.source
