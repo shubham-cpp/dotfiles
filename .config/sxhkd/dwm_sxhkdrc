@@ -45,7 +45,7 @@ shift + XF86Audio{Raise,Lower}Volume
     wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 10%{+,-}
 #Mute
 {_,shift + }XF86AudioMute
-    {audio toggle,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && pgrep goblocks && kill -40 "$(pidof goblocks)"}
+    {audio toggle, audio toggle_mic}
 
 XF86{Search,Calculator}
     {rofi -show drun -async-read 10,qalculate-gtk || gnome-calculator || galculator}

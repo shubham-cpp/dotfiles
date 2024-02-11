@@ -38,8 +38,13 @@ dec)
 	;;
 toggle)
 	# pactl set-sink-mute @DEFAULT_SINK@ toggle
-	# wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 	wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+	;;
+toggle_mic)
+	# pactl set-sink-mute @DEFAULT_SINK@ toggle
+	wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	kill -38 $(pidof dwm)
+	exit 0
 	;;
 get)
 	get_vol
@@ -55,3 +60,4 @@ pgrep polybar && polybar-msg action mvol hook 0
 pgrep dwmblocks && kill -37 "$(pidof dwmblocks)"
 pgrep goblocks && kill -36 "$(pidof goblocks)"
 pgrep goblocks && kill -37 "$(pidof goblocks)"
+kill -37 $(pidof dwm)

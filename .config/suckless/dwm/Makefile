@@ -9,7 +9,6 @@ OBJ = ${SRC:.c=.o}
 all: options dwm
 
 options:
-	cp -v config.def.h config.h
 	@echo dwm build options:
 	@echo "CFLAGS   = ${CFLAGS}"
 	@echo "LDFLAGS  = ${LDFLAGS}"
@@ -20,8 +19,8 @@ options:
 
 ${OBJ}: config.h config.mk
 
-config.h:
-	cp -v config.def.h $@
+config.h: config.def.h
+	cp config.def.h $@
 
 dwm: ${OBJ}
 	${CC} -o $@ ${OBJ} ${LDFLAGS}

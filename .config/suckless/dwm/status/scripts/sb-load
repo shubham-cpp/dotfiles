@@ -1,3 +1,11 @@
 #!/usr/bin/env sh
 
-printf "   %2.0f%%" $(expr 100 - $(vmstat 1 2|tail -1|awk '{print $15}'))
+printf "  %2.0f%%" $(expr 100 - $(vmstat 1 2|tail -1|awk '{print $15}'))
+# threshold=5
+# load=$(cut -d' ' -f1 /proc/loadavg)
+# load=$(echo $load | awk '{printf "%.0f\n", $1 * 10}')
+# echo "  $load%"
+# for i in {1..5}; do
+#     top -b -n 1 | grep "%Cpu" | awk '{print $2}' | cut -d. -f1
+#     sleep 1
+# done | awk '{sum+=$1} END {print sum/NR}'

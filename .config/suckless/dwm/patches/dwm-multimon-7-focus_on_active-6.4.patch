@@ -1,0 +1,61 @@
+From ef123521987ec72df95a05542f6558999b673863 Mon Sep 17 00:00:00 2001
+From: "Gary B. Genett" <me@garybgenett.net>
+Date: Sun, 19 Feb 2023 09:09:23 -0800
+Subject: patches/focusonnetactive: dwm-focusonnetactive-6.2.diff
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="------------2.37.4"
+
+This is a multi-part message in MIME format.
+--------------2.37.4
+Content-Type: text/plain; charset=UTF-8; format=fixed
+Content-Transfer-Encoding: 8bit
+
+
+	modified from sites: 38b351cf3689ff3fa4845d35ce9894fd9253dbb8
+	used old dwm code instead: bb3bd6fec37174e8d4bb9457ca815c00609e5157
+---
+ dwm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+
+--------------2.37.4
+Content-Type: text/x-patch; name="0007-patches-focusonnetactive-dwm-focusonnetactive-6.2.di.patch"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: attachment; filename="0007-patches-focusonnetactive-dwm-focusonnetactive-6.2.di.patch"
+
+diff --git a/dwm.c b/dwm.c
+index ac52b8c25991a073db15b55fae774e9c47a05708..3294c2fe53785473397b6e978c79a704cb7e8f25 100644
+--- a/dwm.c
++++ b/dwm.c
+@@ -530,22 +530,25 @@ clientmessage(XEvent *e)
+ 	Client *c = wintoclient(cme->window);
+ 
+ 	if (!c)
+ 		return;
+ 	if (cme->message_type == netatom[NetWMState]) {
+ 		if (cme->data.l[1] == netatom[NetWMFullscreen]
+ 		|| cme->data.l[2] == netatom[NetWMFullscreen])
+ 			setfullscreen(c, (cme->data.l[0] == 1 /* _NET_WM_STATE_ADD    */
+ 				|| (cme->data.l[0] == 2 /* _NET_WM_STATE_TOGGLE */ && !c->isfullscreen)));
+ 	} else if (cme->message_type == netatom[NetActiveWindow]) {
+-		if (c != selmon->sel && !c->isurgent)
+-			seturgent(c, 1);
++		if (!ISVISIBLE(c)) {
++			c->mon->seltags ^= 1;
++			c->mon->tagset[c->mon->seltags] = c->tags;
++		}
++		pop(c);
+ 	}
+ }
+ 
+ void
+ configure(Client *c)
+ {
+ 	XConfigureEvent ce;
+ 
+ 	ce.type = ConfigureNotify;
+ 	ce.display = dpy;
+
+--------------2.37.4--
+
+

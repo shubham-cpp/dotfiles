@@ -282,7 +282,7 @@ return {
       clangd = function()
         local opt = vim.deepcopy(opts)
         opt.single_file_support = true
-        -- opt.capabilities.offsetEncoding = 'utf-8'
+        opt.capabilities.offsetEncoding = 'utf-8'
         -- opt.cmd = {
         --   'clangd',
         --   '--background-index',
