@@ -1,6 +1,7 @@
 #!/bin/env sh
+
 run() {
-	if ! pgrep "$1"; then
+	if ! pgrep -f "$1"; then
 		if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
 			XDG_CURRENT_DESKTOP=Unity $@ &
 		else
@@ -9,19 +10,7 @@ run() {
 	fi
 }
 
-if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-	# bash ~/.local/bin/myscripts/default_mouse_settings &
-	# setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
-	# xcape -e 'Control_L=Escape'
-	# numlockx on
-	xset -b
-	xset r rate 300 50
-	xsetroot -cursor_name left_ptr
-	xrdb ~/.config/X11/Xresources
-fi
-
 run_polkit() {
-	# run lxpolkit
 	if [ -x /usr/lib/polkit-kde-authentication-agent-1 ]; then
 		run /usr/lib/polkit-kde-authentication-agent-1
 	elif [ -x /usr/libexec/kf5/polkit-kde-authentication-agent-1 ]; then
@@ -36,14 +25,13 @@ run_polkit() {
 		run polkit-gnome-authentication-agent-1
 	fi
 }
+
 basic() {
-	# bash ~/.local/bin/myscripts/if_void &
 	run_polkit
 	run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
 		if [ -x /bin/picom ]; then
-			run picom -b #--experimental-backends
-			# run /usr/local/bin/picom --experimental-backends -b
+			run picom -b
 		elif [ -x /bin/xcompmgr ]; then
 			run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
 		fi
@@ -53,39 +41,41 @@ basic() {
 		else
 			run feh --bg-fill --no-fehbg -q ~/.config/wall.png
 		fi
+
+		# bash ~/.local/bin/myscripts/default_mouse_settings &
+		# setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock' && xcape -e 'Control_L=Escape'
+		# numlockx on
+		xset -b
+		sleep 0.2
+		xset r rate 300 50
+		xsetroot -cursor_name left_ptr
+		xrdb ~/.config/X11/Xresources
+
 	fi
+	pgrep tmux && pkill -9 tmux
 	# run kitty
-	TERM=xterm-256color alacritty -e "tmux" &
+	TERM=xterm-256color $TERMINAL -e "tmux" &
 }
 
 case "$DESKTOP_SESSION" in
 bspwm | awesome | qtile | dk | Qtile)
 	basic
-	xset -b
-	xset r rate 300 50
 	;;
 dwm)
 	basic
-	# run dwmblocks
-	run goblocks
 	run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
-	xset -b
-	xset r rate 300 50
 	;;
 hyprland | Hyprland)
 	run_polkit
-	# if [ -x /bin/picom ]; then
-	# 	# run picom -b #--experimental-backends
-	# 	run /usr/local/bin/picom --experimental-backends -b
-	# fi
 	;;
 esac
 
-[ "$XDG_SESSION_TYPE" != "wayland" ] && run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '0.9:0.7'
+if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+	run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '0.9:0.7'
+	run flameshot
+	run imwheel
+fi
 run udiskie -q -t --no-terminal
 pgrep nm-applet || run nm-applet
 run greenclip daemon
-[ "$XDG_SESSION_TYPE" != "wayland" ] && run flameshot
-[ "$XDG_SESSION_TYPE" != "wayland" ] && run imwheel
 run kmonad ~/.config/kmonad/mkmonad.kbd
-run thunar --daemon
