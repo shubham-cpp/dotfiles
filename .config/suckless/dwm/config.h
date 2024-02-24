@@ -90,10 +90,28 @@ static const Rule rules[] = {
     {"Pavucontrol",        NULL,      NULL,       0,          0,            1,          -1 },
     {"Minipad",            NULL,      NULL,       0,          0,            1,          -1 },
     {"Connman-gtk",        NULL,      NULL,       0,          0,            1,          -1 },
-    {"Arcolinux-tweak-tool.py",NULL,NULL,         0,          0,            1,          -1 },
-    {"Evolution-alarm-notify",NULL,NULL,          0,          0,            1,          -1 },
-    {"tauri-sveltekit-notes-app",NULL,NULL,       0,          0,            1,          -1 },
-    {"Tauri-sveltekit-notes-app",NULL,NULL,       0,          0,            1,          -1 },
+
+    /* xprop(1):
+     *  WM_CLASS(STRING) = instance, class
+     *  WM_NAME(STRING) = title
+     */
+    /* class              instance    title     tags mask   switchtotag    isfloating   monitor */
+    {"Arcolinux-tweak-tool.py",   NULL, NULL,                                   0, 0, 1, -1 },
+    {"Evolution-alarm-notify",    NULL, NULL,                                   0, 0, 1, -1 },
+    {"tauri-sveltekit-notes-app", NULL, NULL,                                   0, 0, 1, -1 },
+    {"Tauri-sveltekit-notes-app", NULL, NULL,                                   0, 0, 1, -1 },
+    {"thorium-browser",           NULL, "Sign in - Google Accounts - Thorium",  0, 0, 1, -1 },
+    {"Chromium-browser",          NULL, "Sign in - Google Accounts - Chromium", 0, 0, 1, -1 },
+    {"firefox",                   NULL, "Sign in - Google Accounts - Firefox",  0, 0, 1, -1 },
+    {"floorp",                    NULL, "Sign in - Google Accounts - Floorp",   0, 0, 1, -1 },
+    {"Thorium-browser",           NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"thorium-browser",           NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"Chromium-browser",          NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"firefox",                   NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"floorp",                    NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"Firefox",                   NULL, "Bitwarden",                             0, 0, 1, -1 },
+    {"Floorp",                    NULL, "Bitwarden",                             0, 0, 1, -1 },
+
 };
 
 /* layout(s) */

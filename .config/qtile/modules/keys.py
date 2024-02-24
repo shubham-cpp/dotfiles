@@ -1,5 +1,6 @@
 from os import getenv
 from os.path import isfile
+from typing import LiteralString
 
 from libqtile.config import EzKey as Key
 from libqtile.lazy import lazy
@@ -14,7 +15,7 @@ from .lazy_functions import (
     update_volume,
 )
 
-mod = "mod4"
+mod: LiteralString = "mod4"
 # terminal = guess_terminal()
 terminal = getenv("TERMINAL", "xterm")
 # if qtile.core.name == "wayland":
@@ -38,12 +39,12 @@ keys = [
         desc="Move to next active group",
     ),
     Key(
-        "M-<period>",
+        "M-<apostrophe>",
         lazy.screen.next_group(skip_empty=True),
         desc="Move to next active group",
     ),
     Key(
-        "M-<comma>",
+        "M-<semicolon>",
         lazy.screen.prev_group(skip_empty=True),
         desc="Move to prev active group",
     ),
@@ -211,7 +212,8 @@ keys = [
     Key("M-w", lazy.spawn(browser), desc=f"Launch {browser}"),
     Key(
         "M-S-w",
-        lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
+        lazy.spawn("thorium-browser"),
+        # lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
         # lazy.spawn(
         #     "firefox"
         #     if browser != "firefox" and isfile("/usr/bin/firefox")
@@ -232,7 +234,7 @@ keys = [
         lazy.spawn("bash -c 'thunar || pcmanfm'", shell=True),
         desc="Launch File Manager",
     ),
-    Key("M-S-e", lazy.spawn("kitty -e lfv",shell=True), desc="Launch lf"),
+    Key("M-S-e", lazy.spawn("kitty -e lfv", shell=True), desc="Launch lf"),
     Key("M-S-q", smart_window_kill(), desc="Kill focused window"),
     Key("M-C-r", lazy.reload_config(), desc="Reload the config"),
     Key("M-C-S-r", lazy.restart(), desc="Reload the config"),
@@ -244,7 +246,8 @@ keys = [
     ),
     Key(
         "M-d",
-        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn(
+            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
@@ -306,25 +309,41 @@ keys = [
     # Brightness {{{
     Key(
         "<XF86AudioNext>",
-        lazy.spawn("brightnessctl s 10+"),
+        lazy.spawn("brightnessctl s 10+\
+        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        -h int:value:$(brightnessctl g)\
+        -h string:x-canonical-private-synchronous:backlight",
+                   shell=True),
         update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86AudioPrev>",
-        lazy.spawn("brightnessctl s 10-"),
+        lazy.spawn("brightnessctl s 10-\
+        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        -h int:value:$(brightnessctl g)\
+        -h string:x-canonical-private-synchronous:backlight",
+                   shell=True),
         update_brightness(),
         desc="Dec Brightness",
     ),
     Key(
         "<XF86MonBrightnessUp>",
-        lazy.spawn("brightnessctl s 10+"),
+        lazy.spawn("brightnessctl s 10+\
+        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        -h int:value:$(brightnessctl g)\
+        -h string:x-canonical-private-synchronous:backlight",
+                   shell=True),
         update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86MonBrightnessDown>",
-        lazy.spawn("brightnessctl s 10-"),
+        lazy.spawn("brightnessctl s 10-\
+        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        -h int:value:$(brightnessctl g)\
+        -h string:x-canonical-private-synchronous:backlight",
+                   shell=True),
         update_brightness(),
         desc="Dec Brightness",
     ),
@@ -341,8 +360,8 @@ keys = [
         desc="Dec Brightness",
     ),
     # }}}
-    Key("M-.", lazy.next_screen(), desc="Move to next screen"),
-    Key("M-,", lazy.prev_screen(), desc="Move to prev screen"),
+    Key("M-<period>", lazy.next_screen(), desc="Move to next screen"),
+    Key("M-<comma>", lazy.prev_screen(), desc="Move to prev screen"),
     # Key("M-S-.", lazy.next_screen(), desc="Move to next screen"),
     # Key("M-S-,", lazy.prev_screen(), desc="Move to prev screen"),
     # Custom Scripts {{{
@@ -350,8 +369,9 @@ keys = [
     Key("C-A-v", lazy.spawn("pavucontrol"), desc="Launch Pavucontrol"),
     Key("C-A-c", lazy.spawn("xcolor -s"), desc="Launch Color Picker"),
     Key("C-A-p", lazy.spawn("get-class-name"), desc="Copy WM_CLASS name"),
-    Key("<Print>", lazy.spawn("take_ss full"), desc="Take screenshot(FULL)"),
-    Key("S-<Print>", lazy.spawn("take_ss focus"), desc="Take screenshot(FOCUS)"),
+    Key("<Print>", lazy.spawn("flameshot gui"), desc="Take screenshot(FULL)"),
+    Key("S-<Print>", lazy.spawn("flameshot full"), desc="Take screenshot(FOCUS)"),
+    Key("<F1>", lazy.spawn("flameshot gui"), desc="Take screenshot(FOCUS)"),
     Key("M-A-c", lazy.spawn("open-rcs"), desc="Open a config file"),
     Key("M-A-g", lazy.spawn("open-games"), desc="Launch game menu"),
     Key("M-C-s", lazy.spawn("logout_prompt"), desc="Launch logout Prompt"),

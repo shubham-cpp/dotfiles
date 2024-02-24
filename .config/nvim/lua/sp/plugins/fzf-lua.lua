@@ -275,8 +275,8 @@ return {
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
         actions = vim.tbl_extend('force', m_keys, {
           ['ctrl-d'] = actions.buf_delete,
-          ['ctrl-x'] = actions.buf_vsplit,
-          ['ctrl-v'] = actions.buf_split,
+          ['ctrl-x'] = actions.buf_split,
+          ['ctrl-v'] = actions.buf_vsplit,
           ['ctrl-q'] = actions.buf_edit_or_qf,
         }),
       },

@@ -424,16 +424,7 @@ return {
           opt.settings = {
             redhat = { telemetry = { enabled = false } },
             yaml = {
-              schemas = require('schemastore').json.schemas({
-                select = {
-                  'docker-compose.yml',
-                  '.yarnrc.yml',
-                  'GitHub Workflow',
-                  'GitHub Workflow Template Properties',
-                  'GitHub Action',
-                  'Azure Pipelines',
-                },
-              }),
+              schemas = require('schemastore').yaml.schemas({}),
             },
           }
           lspconfig['yamlls'].setup(opt)
@@ -689,6 +680,7 @@ return {
         tsserver_plugins = {
           '@styled/typescript-styled-plugin',
         },
+        tsserver_max_memory = '3072',
       },
     },
     ft = { 'javascriptreact', 'typescriptreact', 'javascript.jsx', 'typescript.tsx', 'javascript', 'typescript' },

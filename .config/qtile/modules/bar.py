@@ -1,7 +1,8 @@
 import subprocess
-from typing import Union
+from typing import List, Union
 
-from libqtile import bar, widget
+from libqtile.command import lazy
+from libqtile import bar, widget, qtile
 from libqtile.config import Screen
 
 from .colors import backgroundColor, colors, foregroundColor
@@ -20,7 +21,16 @@ widget_defaults = dict(
 )
 extension_defaults = widget_defaults.copy()
 
-screens = [
+
+def toggle_microphone_mute():
+    print("Toggling microphone mute")
+    subprocess.run(
+        "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle".split(" "), shell=True)
+    w = qtile.widgets_map["volume_mic_icon"]
+    w.update(w.poll())
+
+
+screens: List[Screen] = [
     Screen(
         top=bar.Bar(
             [
@@ -76,16 +86,44 @@ screens = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                widget.Wttr(
-                    location={"Pune": "Home"},
-                    font="JetBrainsMono Nerd Font",
-                    fontsize=14,
-                    padding=5,
-                ),
+                # widget.Wttr(
+                #     location={"Pune": "Home"},
+                #     font="JetBrainsMono Nerd Font",
+                #     fontsize=14,
+                #     padding=5,
+                # ),
                 widget.Net(
-                    format="\uf1eb {down} \uf175\uf176 {up}",
+                    format="<span size=\"large\">\uf1eb</span>  {down: 4.2f} {down_suffix} <span size=\"large\">\uf175\uf176</span>  {up: 4.2f} {up_suffix}",
                     fontsize=13,
                     padding=10,
+                    # prefix='M',
+                    update_interval=3,
+                ),
+                widget.Battery(
+                    foreground=colors[11],
+                    fontsize=16,
+                    low_percentage=0.2,
+                    low_foreground=colors[5],
+                    font="JetBrainsMono Nerd Font",
+                    format='{char}',
+                    charge_char=' ',
+                    discharge_char='',
+                    # charge_char='',
+                    # discharge_char='󰁹',
+                    empty_char='󱃍',
+                    full_char='󰂅',
+                    not_charging_char='',
+                    unknown_char='󰂑',
+                ),
+                widget.Battery(
+                    font="JetBrainsMono Nerd Font",
+                    charge_char='󰄿',
+                    discharge_char='󰄼',
+                    notify_below=10,
+                    # format="<span size=\"xx-large\"{char}</span> {percent:2.0%}",
+                    format="{percent:2.0%}",
+                    foreground=foregroundColor,
+                    padding=5,
                 ),
                 widget.TextBox(
                     text=" ",
@@ -110,8 +148,9 @@ screens = [
                 widget.Memory(
                     font="JetBrainsMonoNerdFont",
                     foreground=foregroundColor,
-                    format="{MemUsed: .0f}{mm} /{MemTotal: .0f}{mm}",
+                    format="{MemUsed: 4.2f}{mm} /{MemTotal: 4.2f}{mm}",
                     measure_mem="G",
+                    update_interval=2,
                     padding=5,
                 ),
                 widget.Sep(linewidth=0, padding=10),
@@ -128,6 +167,7 @@ screens = [
                     fontsize=16,
                     foreground=colors[2],
                     update_interval=300,
+                    mouse_callbacks={"Button1": toggle_microphone_mute},
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.GenPollText(
@@ -142,7 +182,7 @@ screens = [
                     fontsize=16,
                     foreground=colors[9],
                     update_interval=300,
-                    padding=3,
+                    padding=5,
                 ),
                 widget.GenPollText(
                     name="volume",
@@ -158,12 +198,26 @@ screens = [
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.TextBox(
+                    text="󰃠 ",
+                    fontsize=16,
+                    font="JetBrainsMono Nerd Font",
+                    foreground=colors[2],
+                ),
+                widget.GenPollCommand(
+                    name="brightness",
+                    cmd=['brightnessctl', 'g'],
+                    fontsize=14,
+                    foreground=foregroundColor,
+                    update_interval=300,
+                ),
+                widget.Sep(linewidth=0, padding=10),
+                widget.TextBox(
                     text=" ",
                     fontsize=14,
                     font="JetBrainsMono Nerd Font",
                     foreground=colors[10],
                 ),
-                widget.Clock(format="%a %d, %I:%M %p"),
+                widget.Clock(update_interval=30, format="%a %d, %I:%M %p"),
                 widget.Sep(
                     linewidth=1,
                     padding=10,
@@ -171,7 +225,9 @@ screens = [
                     background=backgroundColor,
                 ),
                 # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.Systray(),
+                widget.Systray(
+                    icon_size=28,
+                ),
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 widget.Sep(

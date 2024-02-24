@@ -16,7 +16,7 @@ super +{_,shift + } e
 
 # {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
-    { $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium || brave-browser || brave || chromium || firefox}
+    { $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || thorium-browser || flatpak run com.github.Eloston.UngoogledChromium || brave-browser || brave || chromium || firefox}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical

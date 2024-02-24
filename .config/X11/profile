@@ -134,15 +134,9 @@ export CABAL_DIR="$XDG_CACHE_HOME"/cabal
 # export PYENV_ROOT="$HOME/.config/pyenv"
 # export PATH="$PATH:$PYENV_ROOT/bin/"
 # eval "$(pyenv init --path)"
-# source ~/.nix-profile/etc/profile.d/nix.sh
 # Ignore certain files while completing
 export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
+export ZK_NOTEBOOK_DIR="$HOME/Documents/Notes/Refrens"
+
 [ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh
-# This is the list for lf icons:
-# LF_ICONS=$(sed ~/.config/lf/dir_icons \
-# 	-e '/^[ \t]*#/d' \
-# 	-e '/^[ \t]*$/d' \
-# 	-e 's/[ \t]\+/=/g' \
-# 	-e 's/$/ /' | tr '\n' :)
-# export LF_ICONS

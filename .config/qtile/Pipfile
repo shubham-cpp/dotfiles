@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+qtile = "*"
+
+[dev-packages]
+python-lsp-server = {extras = ["all"], version = "*"}
+pylsp-mypy = "*"
+pyls-isort = "*"
+pylsp-rope = "*"
+python-lsp-black = "*"
+mypy = "*"
+
+[requires]
+python_version = "3.12"
