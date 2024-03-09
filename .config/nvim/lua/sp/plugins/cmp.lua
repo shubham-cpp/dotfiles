@@ -278,14 +278,15 @@ return {
           option = {
             keyword_length = 2,
             get_bufnrs = function()
-              -- local bufIsSmall = function(bufnr)
-              --   local max_filesize = 50 * 1024
-              --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
-              --   return ok and stats and stats.size < max_filesize
-              -- end
+              local bufIsSmall = function(bufnr)
+                --   local max_filesize = 50 * 1024
+                --   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
+                --   return ok and stats and stats.size < max_filesize
+                return vim.api.nvim_buf_line_count(bufnr) < 2000
+              end
 
-              -- return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
-              return vim.api.nvim_list_bufs()
+              return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
+              -- return vim.api.nvim_list_bufs()
             end,
           },
         },

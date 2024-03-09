@@ -2,7 +2,7 @@ local g = vim.g
 g.mapleader = ' '
 
 require 'sp.options'
-require 'sp.keys'
+-- require 'sp.keys'
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -41,4 +41,4 @@ require('lazy').setup('sp.plugins', {
     notify = false, -- get a notification when changes are found
   },
 })
-require 'sp.autocmds'
+-- require 'sp.autocmds'
