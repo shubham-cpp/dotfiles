@@ -315,6 +315,12 @@ return {
           require 'efmls-configs.formatters.clang_format',
           require 'efmls-configs.linters.clang_tidy',
         }
+        local python = {
+          -- require 'efmls-configs.formatters.black',
+          require 'efmls-configs.formatters.yapf',
+          require 'efmls-configs.formatters.isort',
+          require 'efmls-configs.linters.flake8',
+        }
 
         local languages = {
           c = c,
@@ -339,6 +345,9 @@ return {
           bash = { shfmt, shellcheck },
           sh = { shfmt, shellcheck },
           zsh = { shfmt, shellcheck },
+          python = python,
+          python2 = python,
+          pyrex = python,
         }
         lspconfig.efm.setup({
           init_options = {
@@ -535,7 +544,7 @@ return {
           python = {
             analysis = {
               autoImportCompletions = true,
-              typeCheckingMode = 'basic',
+              -- typeCheckingMode = 'basic',
             },
             exclude = { '**/node_modules', '**/__pycache__' },
           },
@@ -716,33 +725,33 @@ return {
       capabilities = cmp_capabilities,
     })
 
-    lspconfig['pylsp'].setup({
-      capabilities = cmp_capabilities,
-      on_attach = on_attach,
-      settings = {
-        pylsp = {
-          plugins = {
-            -- formatter options
-            black = { enabled = true },
-            autopep8 = { enabled = false },
-            yapf = { enabled = false },
-            flake8 = { enabled = true },
-            pycodestyle = { enabled = false },
-            -- type checker
-            pylsp_mypy = { enabled = true },
-            -- auto-completion options
-            jedi_completion = { fuzzy = true },
-            -- import sorting
-            pyls_isort = { enabled = true },
-            -- rope_autoimport = { enabled = true, memory = true },
-            -- rope_completion = { enabled = true },
-          },
-        },
-      },
-      flags = {
-        debounce_text_changes = 200,
-      },
-    })
+    -- lspconfig['pylsp'].setup({
+    --   capabilities = cmp_capabilities,
+    --   on_attach = on_attach,
+    --   settings = {
+    --     pylsp = {
+    --       plugins = {
+    --         -- formatter options
+    --         black = { enabled = true },
+    --         autopep8 = { enabled = false },
+    --         yapf = { enabled = false },
+    --         flake8 = { enabled = true },
+    --         pycodestyle = { enabled = false },
+    --         -- type checker
+    --         pylsp_mypy = { enabled = true },
+    --         -- auto-completion options
+    --         jedi_completion = { fuzzy = true },
+    --         -- import sorting
+    --         pyls_isort = { enabled = true },
+    --         -- rope_autoimport = { enabled = true, memory = true },
+    --         -- rope_completion = { enabled = true },
+    --       },
+    --     },
+    --   },
+    --   flags = {
+    --     debounce_text_changes = 200,
+    --   },
+    -- })
 
     lspconfig['ocamllsp'].setup({
       on_attach = function(client, bufnr)

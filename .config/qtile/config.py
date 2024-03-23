@@ -1,6 +1,7 @@
 from typing import List, Union
 
-from libqtile import hook, layout
+from libqtile import hook, layout, qtile
+from libqtile.backend.base.window import WindowType
 from libqtile.config import Click, Drag, Match, Rule
 from libqtile.layout.base import Layout
 from libqtile.layout.floating import Floating
@@ -8,13 +9,14 @@ from libqtile.layout.max import Max
 from libqtile.layout.spiral import Spiral
 from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.lazy import lazy
+from libqtile.log_utils import logger
 from libqtile.utils import guess_terminal
-from modules.bar import extension_defaults, layout_theme, screens, widget_defaults
+from modules.bar import (extension_defaults, layout_theme, screens,
+                         widget_defaults)
 from modules.colors import backgroundColor, colors, foregroundColor
 from modules.groups import groups
-from modules.keys import browser, keys, mod, terminal
+from modules.keys import keys, mod, terminal
 from modules.lazy_functions import sticky_windows
-from libqtile.log_utils import logger
 
 layouts: List[Layout] = [
     MonadTall(
@@ -24,12 +26,14 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
+    MonadWide(change_size=10,
+              single_border_width=0,
+              single_margin=0,
+              **layout_theme),
     Max(),
     Floating(),
     Spiral(**layout_theme),
 ]
-
 
 # Drag floating layouts.
 mouse: List[Union[Drag, Click]] = [
@@ -45,14 +49,32 @@ mouse: List[Union[Drag, Click]] = [
         lazy.window.set_size_floating(),
         start=lazy.window.get_size(),
     ),
-    Click([mod], "Button2", lazy.window.bring_to_front()),
+    Click([mod], "Button1", lazy.window.bring_to_front()),
 ]
 
 dgroups_key_binder = None
 dgroups_app_rules = [
-    # Rule(Match(wm_class="firefox"), group="2"),
-    # Rule(Match(wm_class="Brave-browser"), group=groups[1].name),
+    # Rule(Match(wm_class=[
+    #     "Navigator",
+    #     "firefox",
+    #     "brave-browser",
+    #     "Brave-browser",
+    #     "qutebrowser",
+    #     "LibreWolf",
+    #     "Chromium",
+    #     "chromium",
+    #     "Chromium-browser",
+    #     "chromium-browser",
+    #     "brave-browser",
+    #     "Brave-browser",
+    #     "Thorium-browser",
+    #     "thorium-browser",
+    #     "vieb",
+    # ]), group="2"),
 ]  # type: list
+follow_mouse_focus = True
+bring_front_click = True
+cursor_warp = False
 floating_layout = Floating(
     border_normal=layout_theme["border_normal"],
     border_focus=layout_theme["border_focus"],
@@ -66,7 +88,6 @@ floating_layout = Floating(
         Match(wm_class="ssh-askpass"),  # ssh-askpass
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
-        Match(title="Bitwarden"),
         Match(wm_class="Pavucontrol"),
         Match(wm_class="Gnome-calculator"),
         Match(wm_class="Qalculate-gtk"),
@@ -79,62 +100,68 @@ floating_layout = Floating(
         Match(wm_class="Gnome-disks"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="Virt-manager"),
-        Match(wm_class="Xdg-desktop-portal-gtk")
     ],
 )
 auto_fullscreen = True
-focus_on_window_activation = "smart"
+focus_on_window_activation = "focus"
 reconfigure_screens = True
 auto_minimize = True
-follow_mouse_focus = True
-bring_front_click = True
-cursor_warp = False
 # When using the Wayland backend, this can be used to configure input devices.
 wl_input_rules = None
 wmname = "LG3D"
 
 
 @hook.subscribe.client_new
-def assign_app_group(client):
-    wm_class: str = client.window.get_wm_class()[0]
+def assign_app_group(client: WindowType) -> None:
+    # wm_class: str = client.window.get_wm_class()[0]
+    wm_class: List[str] | None = client.get_wm_class()
 
-    if wm_class in [
-        "Navigator",
-        "firefox",
-        "brave-browser",
-        "Brave-browser",
-        "qutebrowser",
-        "LibreWolf",
-        "Chromium",
-        "chromium",
-        "Chromium-browser",
-        "chromium-browser",
-        "brave-browser",
-        "Brave-browser",
-        "vieb",
+    if wm_class is None or client.togroup is None:
+        return
+    if client.floating and client.bring_to_front:
+        client.command('cmd_bring_to_front')
+        return
+    if (wm_class[0] or wm_class[1]) in [
+            "Navigator",
+            "firefox",
+            "brave-browser",
+            "Brave-browser",
+            "qutebrowser",
+            "LibreWolf",
+            "Chromium",
+            "chromium",
+            "Chromium-browser",
+            "chromium-browser",
+            "brave-browser",
+            "Brave-browser",
+            "Thorium-browser",
+            "thorium-browser",
+            "vieb",
     ]:
+
         client.togroup("2", switch_group=True)
-    elif wm_class in [
-        "Vlc",
-        "vlc",
-        "Mpv",
-        "mpv",
-        "gl",
-        "Celluloid",
-        "io.github.celluloid_player.Celluloid",
-        "Io.github.celluloid_player.Celluloid",
+    elif (wm_class[0] or wm_class[1]) in [
+            "Vlc",
+            "vlc",
+            "Mpv",
+            "mpv",
+            "gl",
+            "Celluloid",
+            "io.github.celluloid_player.Celluloid",
+            "Io.github.celluloid_player.Celluloid",
     ]:
         client.togroup("4", switch_group=True)
-    elif wm_class in [
-        "VirtualBox Manager",
-        "VirtualBox Machine",
-        "Vmplayer",
-        "virtualbox manager",
-        "virtualbox machine",
-        "vmplayer",
+    elif (wm_class[0] or wm_class[1]) in [
+            "VirtualBox Manager",
+            "VirtualBox Machine",
+            "Vmplayer",
+            "virtualbox manager",
+            "virtualbox machine",
+            "vmplayer",
     ]:
         client.togroup("5", switch_group=True)
-    elif wm_class in ["Steam", "Lutris", "lutris", "steam"]:
+    elif (wm_class[0]
+          or wm_class[1]) in ["Steam", "Lutris", "lutris", "steam"]:
         client.togroup("3", switch_group=True)
 
 
@@ -145,7 +172,14 @@ def move_sticky_windows():
     return
 
 
+@hook.subscribe.client_mouse_enter
+def floating_to_top(client: WindowType):
+    if client.floating and client.bring_to_front:
+        client.bring_to_front()
+        # client.keep_above(True)
+
+
 @hook.subscribe.client_killed
-def remove_sticky_windows(window):
+def remove_sticky_windows(window: WindowType):
     if window in sticky_windows:
         sticky_windows.remove(window)

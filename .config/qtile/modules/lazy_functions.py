@@ -9,6 +9,7 @@ from libqtile.log_utils import logger
 
 sticky_windows: list = []
 
+
 @lz.function
 def toggle_layout_max(qtile):
     """Toggle Max layout
@@ -71,6 +72,7 @@ def update_volume(qtile):
     w.force_update()
     icon.force_update()
 
+
 @lz.function
 def update_mic_icon(qtile):
     """Update the volume_mic widget on keypress
@@ -91,14 +93,8 @@ def update_brightness(qtile):
         qtile (libqtile.qtile): By default passed by lz.function
     """
     w = qtile.widgets_map["brightness"]
-    icon = qtile.widgets_map["brightness_icon"]
-    # widgets = ",".join(qtile.widgets_map)
-    # logger.warn("widget names = " + widgets)
-    # logger.warn("values of w  = " + ",".join(dir(w)))
-    w.poll()
-    icon.poll()
     w.force_update()
-    icon.force_update()
+
 
 @lz.function
 def toggle_sticky_windows(qtile, window=None):
@@ -109,4 +105,6 @@ def toggle_sticky_windows(qtile, window=None):
     else:
         sticky_windows.append(window)
     return window
+
+
 # }}}

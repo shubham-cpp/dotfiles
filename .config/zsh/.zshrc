@@ -107,3 +107,6 @@ source "$ZDOTDIR"/mfunctions.zsh
 compinit -d "$HOME/.cache/zcompdump"
 colors
 [ -x /bin/dnf ] && compdef dnf5=dnf
+
+# bun completions
+[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

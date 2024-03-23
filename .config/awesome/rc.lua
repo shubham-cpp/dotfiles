@@ -24,7 +24,7 @@ require 'awful.hotkeys_popup.keys'
 local brightness_widget = require 'widgets.brightness'
 local calendar_widget = require 'widgets.calendar'
 local new_volume = require 'widgets.volume.volume'
-local gears = require("gears")
+local gears = require 'gears'
 --}}}
 
 -- {{{ Error handling
@@ -284,9 +284,9 @@ awful.screen.connect_for_each_screen(function(s)
       --   -- path_to_icons = '/usr/share/icons/Qogir/symbolic/status/',
       --   -- path_to_icons = gfs.get_xdg_data_home() .. 'icons/Fluent-grey-dark/symbolic/status/',
       -- }),
-			-- net_speed_widget({
-			-- 	timeout = 5,
-			-- }),
+      -- net_speed_widget({
+      -- 	timeout = 5,
+      -- }),
       -- spr,
       big_icon ' ',
       awful.widget.watch('bash -c "printf %d%% $(expr 100 - $(vmstat 1 2 | tail -1 | awk \'{print $15}\'))"', 3),
@@ -295,7 +295,7 @@ awful.screen.connect_for_each_screen(function(s)
       awful.widget.watch('sh -c "free -h | awk \'/^Mem/ {print $3}\'"', 5),
       spr,
       -- volume(),
-			new_volume(),
+      new_volume(),
       -- spr,
       -- brightness_widget({
       --   type = 'icon_and_text',
@@ -1131,12 +1131,12 @@ client.connect_signal('manage', dynamic_title)
 client.connect_signal('tagged', dynamic_title)
 -- }}}
 gears.timer({
-	timeout = 5,
-	autostart = true,
-	call_now = true,
-	callback = function()
-		collectgarbage("collect")
-	end,
+  timeout = 5,
+  autostart = true,
+  call_now = true,
+  callback = function()
+    collectgarbage 'collect'
+  end,
 })
 --[[
 write me awesomewm widget for volume. Requirements:

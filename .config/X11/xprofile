@@ -52,6 +52,7 @@ basic() {
 		xrdb ~/.config/X11/Xresources
 
 	fi
+	# pgrep -x pipewire || setsid -f pipewire
 	pgrep tmux && pkill -9 tmux
 	# run kitty
 	TERM=xterm-256color $TERMINAL -e "tmux" &

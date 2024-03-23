@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Qtile
+Comment=Qtile Session
+Exec=/home/shubham/.local/bin/qtile start
+Type=Application
+Keywords=wm;tiling;python

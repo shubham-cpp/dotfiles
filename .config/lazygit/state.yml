@@ -1,22 +1,13 @@
 lastupdatecheck: 0
 recentrepos:
 - /home/shubham/Documents/dotfiles
-- /home/shubham/Documents/Programming/WebDev/Svelte/sveltekit-messenger-clone
-- /home/shubham/Documents/Programming/WebDev/React/nextjs-messenger-clone
-- /home/shubham/Documents/Programming/WebDev/Refrens/lydia
-- /home/shubham/Documents/Programming/WebDev/Refrens/jupiter
-- /home/shubham/Documents/Programming/WebDev/Refrens/disco
-- /home/shubham/Documents/Programming/WebDev/Refrens/talos
-- /home/shubham/Documents/Programming/WebDev/Svelte/sveltekit-reddit-clone
-- /home/shubham/Documents/Programming/WebDev/React/nextjs-trello-clone
-- /home/shubham/Documents/Programming/WebDev/Vue/firebase-vue-blogs-app
-- /home/shubham/Documents/Programming/WebDev/Portfolio
-- /home/shubham/Documents/Programming/WebDev/Astro/astro-project-manager
+- /home/shubham/Downloads/GitClones/void-pkg-templates
+- /home/shubham/Downloads/GitClones/void-packages
+- /home/shubham/.config/dwm-6.4
 - /home/shubham/Downloads/GitClones/lfimg
 - /home/shubham/Documents/Programming/Go/APIs/JwtAuthentication
 - /home/shubham/Documents/Programming/Go/CLI/todo-app
 - /home/shubham/Documents/Programming/Go/APIs/StudentManagement
-- /home/shubham/Documents/Programming/WebDev/Backend/nest-typeorm-mysql
 startuppopupversion: 5
 customcommandshistory: []
 hidecommandlog: false
