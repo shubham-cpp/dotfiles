@@ -209,7 +209,11 @@ keys = [
     Key("M-<Return>", lazy.spawn(terminal), desc=f"Launch {terminal}"),
     Key("M-<KP_Enter>", lazy.spawn("alacritty"), desc="Launch alacritty"),
     Key("M-<KP_End>", lazy.spawn("xterm"), desc="Launch xterm"),
-    Key("M-w", lazy.spawn(browser), desc=f"Launch {browser}"),
+    Key(
+        "M-w",
+        lazy.spawn(f"sh -c 'flatpak run one.ablaze.floorp ||{browser}'", shell=True),
+        desc=f"Launch {browser}",
+    ),
     Key(
         "M-S-w",
         lazy.spawn("thorium-browser"),
@@ -246,8 +250,7 @@ keys = [
     ),
     Key(
         "M-d",
-        lazy.spawn(
-            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
@@ -309,41 +312,49 @@ keys = [
     # Brightness {{{
     Key(
         "<XF86AudioNext>",
-        lazy.spawn("brightnessctl s 10+\
-        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        lazy.spawn(
+            'brightnessctl s 10+\
+        && notify-send "Brightness: " -t 2000 -i display-brightness\
         -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight",
-                   shell=True),
+        -h string:x-canonical-private-synchronous:backlight',
+            shell=True,
+        ),
         update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86AudioPrev>",
-        lazy.spawn("brightnessctl s 10-\
-        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        lazy.spawn(
+            'brightnessctl s 10-\
+        && notify-send "Brightness: " -t 2000 -i display-brightness\
         -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight",
-                   shell=True),
+        -h string:x-canonical-private-synchronous:backlight',
+            shell=True,
+        ),
         update_brightness(),
         desc="Dec Brightness",
     ),
     Key(
         "<XF86MonBrightnessUp>",
-        lazy.spawn("brightnessctl s 10+\
-        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        lazy.spawn(
+            'brightnessctl s 10+\
+        && notify-send "Brightness: " -t 2000 -i display-brightness\
         -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight",
-                   shell=True),
+        -h string:x-canonical-private-synchronous:backlight',
+            shell=True,
+        ),
         update_brightness(),
         desc="Inc Brightness",
     ),
     Key(
         "<XF86MonBrightnessDown>",
-        lazy.spawn("brightnessctl s 10-\
-        && notify-send \"Brightness: \" -t 2000 -i display-brightness\
+        lazy.spawn(
+            'brightnessctl s 10-\
+        && notify-send "Brightness: " -t 2000 -i display-brightness\
         -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight",
-                   shell=True),
+        -h string:x-canonical-private-synchronous:backlight',
+            shell=True,
+        ),
         update_brightness(),
         desc="Dec Brightness",
     ),

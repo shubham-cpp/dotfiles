@@ -15,8 +15,8 @@ layout_theme: dict[str, Union[str, int, list[str]]] = {
 }
 
 widget_defaults = dict(
-    font="JetBrainsMono Nerd Font",
-    fontsize=12,
+    font="JetBrainsMonoNL NF SemiBold",
+    fontsize=13,
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
@@ -107,8 +107,7 @@ screens: List[Screen] = [
                     font="JetBrainsMono Nerd Font",
                     format='{char}',
                     charge_char=' ',
-                    discharge_char='',
-                    # charge_char='',
+                    discharge_char=' ',
                     # discharge_char='󰁹',
                     empty_char='󱃍',
                     full_char='󰂅',
@@ -116,7 +115,7 @@ screens: List[Screen] = [
                     unknown_char='󰂑',
                 ),
                 widget.Battery(
-                    font="JetBrainsMono Nerd Font",
+                    font="JetBrainsMonoNL NF SemiBold",
                     charge_char='󰄿',
                     discharge_char='󰄼',
                     notify_below=10,

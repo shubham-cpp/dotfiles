@@ -1,100 +1,23 @@
 return {
-  'nvim-treesitter/nvim-treesitter',
-  dependencies = {
-    {
-      'andymass/vim-matchup',
-      init = function()
-        vim.g.matchip_matchparen_deferred = 1
-      end,
-    },
-    'nvim-treesitter/nvim-treesitter-textobjects',
-  },
-  opts = {
-    highlight = {
-      disable = function(lang, buf)
-        local max_filesize = 100 * 1024 -- 100 KB
-        local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-        if lang ~= 'help' and ok and stats and stats.size > max_filesize then
-          return true
-        end
-      end,
-      additional_vim_regex_highlighting = { 'markdown' },
-    },
-    matchup = { enable = true },
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true,
-        keymaps = {
-          aA = '@attribute.outer',
-          iA = '@attribute.inner',
-          aB = '@block.outer',
-          iB = '@block.inner',
-          aD = '@conditional.outer',
-          iD = '@conditional.inner',
-          aF = '@function.outer',
-          iF = '@function.inner',
-          aL = '@loop.outer',
-          iL = '@loop.inner',
-          aP = '@parameter.outer',
-          iP = '@parameter.inner',
-          aR = '@regex.outer',
-          iR = '@regex.inner',
-          aX = '@class.outer',
-          iX = '@class.inner',
-          aS = '@statement.outer',
-          iS = '@statement.outer',
-          aN = '@number.inner',
-          iN = '@number.inner',
-          aC = '@comment.outer',
-          iC = '@comment.outer',
-        },
-      },
-      move = {
-        enable = true,
-        set_jumps = true,
-        goto_next_start = {
-          [']b'] = { query = '@block.outer', desc = 'Next block start' },
-          [']f'] = { query = '@function.outer', desc = 'Next function start' },
-          [']p'] = { query = '@parameter.outer', desc = 'Next parameter start' },
-          [']x'] = { query = '@class.outer', desc = 'Next class start' },
-          [']c'] = { query = '@comment.outer', desc = 'Next comment start' },
-        },
-        goto_next_end = {
-          [']B'] = { query = '@block.outer', desc = 'Next block end' },
-          [']F'] = { query = '@function.outer', desc = 'Next function end' },
-          [']P'] = { query = '@parameter.outer', desc = 'Next parameter end' },
-          [']X'] = { query = '@class.outer', desc = 'Next class end' },
-          [']C'] = { query = '@comment.outer', desc = 'Next comment end' },
-        },
-        goto_previous_start = {
-          ['[b'] = { query = '@block.outer', desc = 'Previous block start' },
-          ['[f'] = { query = '@function.outer', desc = 'Previous function start' },
-          ['[p'] = { query = '@parameter.outer', desc = 'Previous parameter start' },
-          ['[x'] = { query = '@class.outer', desc = 'Previous class start' },
-          ['[c'] = { query = '@comment.outer', desc = 'Previous comment start' },
-        },
-        goto_previous_end = {
-          ['[B'] = { query = '@block.outer', desc = 'Previous block end' },
-          ['[F'] = { query = '@function.outer', desc = 'Previous function end' },
-          ['[P'] = { query = '@parameter.outer', desc = 'Previous parameter end' },
-          ['[X'] = { query = '@class.outer', desc = 'Previous class end' },
-          ['[C'] = { query = '@comment.outer', desc = 'Previous comment end' },
-        },
-      },
-      swap = {
-        enable = true,
-        swap_next = {
-          ['>B'] = { query = '@block.outer', desc = 'Swap next block' },
-          ['>F'] = { query = '@function.outer', desc = 'Swap next function' },
-          ['>P'] = { query = '@parameter.inner', desc = 'Swap next parameter' },
-        },
-        swap_previous = {
-          ['<B'] = { query = '@block.outer', desc = 'Swap previous block' },
-          ['<F'] = { query = '@function.outer', desc = 'Swap previous function' },
-          ['<P'] = { query = '@parameter.inner', desc = 'Swap previous parameter' },
-        },
-      },
-    },
-  },
+	"nvim-treesitter/nvim-treesitter",
+	dependencies = {
+		"nvim-treesitter/nvim-treesitter-context",
+	},
+	config = function(arg1, opts)
+		require("plugins.configs.nvim-treesitter")(arg1, opts)
+		require("treesitter-context").setup({
+			enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
+			max_lines = 0, -- How many lines the window should span. Values <= 0 mean no limit.
+			min_window_height = 0, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+			line_numbers = true,
+			multiline_threshold = 20, -- Maximum number of lines to show for a single context
+			trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+			mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+			-- Separator between context and content. Should be a single character string, like '-'.
+			-- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+			separator = nil,
+			zindex = 20, -- The Z-index of the context window
+			on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
+		})
+	end,
 }

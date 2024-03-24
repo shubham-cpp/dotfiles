@@ -1,6 +1,7 @@
 return {
   'mrcjkb/rustaceanvim',
   version = '^3', -- Recommended
+  enabled = false,
   ft = { 'rust' },
   init = function()
     vim.g.rustaceanvim = {

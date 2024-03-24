@@ -1,41 +1,41 @@
 local o = vim.opt
 
-vim.cmd [[ command! Q :q! ]]
-vim.cmd [[ cabbrev vf vert sf ]]
+vim.cmd([[ command! Q :q! ]])
+vim.cmd([[ cabbrev vf vert sf ]])
 
 local options = {
   opt = {
-    path = o.path + '**',
+    path = o.path + "**",
     tabstop = 2,
     softtabstop = 2,
     shiftwidth = 2,
-    scrolloff = 8,
+    scrolloff = 12,
     expandtab = true,
     backup = true,
-    backupdir = vim.fn.stdpath 'cache' .. '/backups//',
-    backupcopy = 'yes',
+    backupdir = vim.fn.stdpath("cache") .. "/backups//",
+    backupcopy = "yes",
     writebackup = true,
     swapfile = true,
-    shortmess = o.shortmess + 'c',
-    iskeyword = o.iskeyword + '-',
-    foldcolumn = '1',
+    shortmess = o.shortmess + "c",
+    iskeyword = o.iskeyword + "-",
+    foldcolumn = "1",
     foldlevel = 99,
     foldenable = true,
     foldlevelstart = 99,
     wildignorecase = true,
-    wildmode = 'longest,list,full',
+    wildmode = "longest,list,full",
     wildignore = {
-      '*.out,*.o,*.pyc,*~,*.class,*/.git/*,*/.hg/*,*.jpg,*.png,*.svg,*.jpeg,*.jpg',
-      '*.mp4,*.mkv,*/.svn/*,*/.DS_Store,*/venv/*,*/__pycache__/*,',
-      '**/node_modules/*,**/build/*,**/coverage/*',
+      "*.out,*.o,*.pyc,*~,*.class,*/.git/*,*/.hg/*,*.jpg,*.png,*.svg,*.jpeg,*.jpg",
+      "*.mp4,*.mkv,*/.svn/*,*/.DS_Store,*/venv/*,*/__pycache__/*,",
+      "**/node_modules/*,**/build/*,**/coverage/*",
     },
-    whichwrap = o.whichwrap + '<,>,[,]',
-    colorcolumn = '120',
+    whichwrap = o.whichwrap + "<,>,[,]",
+    colorcolumn = "120",
     wrap = true,
     breakindent = true,
     linebreak = true,
-    showbreak = '>> ',
-    grepprg = vim.fn.executable 'rg' == 1 and 'rg --vimgrep --smart-case --hidden --follow' or o.grepprg,
+    showbreak = ">> ",
+    grepprg = vim.fn.executable("rg") == 1 and "rg --vimgrep --smart-case --hidden --follow" or o.grepprg,
   },
 }
 return options

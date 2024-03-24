@@ -1,5 +1,5 @@
 return {
-  root_dir = require('lspconfig.util').root_pattern('deno.json', 'deno.jsonc'),
+  root_dir = require("lspconfig.util").root_pattern("deno.json", "deno.jsonc"),
   settings = {
     deno = {
       enable = true,
@@ -8,7 +8,7 @@ return {
       inlayHints = {
         enumMemberValues = { enabled = true },
         variableTypes = { enabled = true, suppressWhenArgumentMatchesName = true },
-        parameterNames = { enabled = 'all', suppressWhenArgumentMatchesName = true },
+        parameterNames = { enabled = "all", suppressWhenArgumentMatchesName = true },
         parameterTypes = { enabled = true },
         functionLikeReturnTypes = { enabled = true },
         propertyDeclarationTypes = { enabled = true },
@@ -18,9 +18,9 @@ return {
         autoImports = true,
         imports = {
           hosts = {
-            ['https://crux.land'] = true,
-            ['https://deno.land'] = true,
-            ['https://x.nest.land'] = true,
+            ["https://crux.land"] = true,
+            ["https://deno.land"] = true,
+            ["https://x.nest.land"] = true,
           },
         },
       },

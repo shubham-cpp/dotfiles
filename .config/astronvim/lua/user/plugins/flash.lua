@@ -1,46 +1,40 @@
 return {
-  'folke/flash.nvim',
-  keys = {
-    {
-      's',
-      mode = { 'n', 'x', 'o' },
-      function()
-        require('flash').jump()
-      end,
-      desc = 'Flash',
-    },
-    {
-      'S',
-      mode = { 'n', 'o' },
-      function()
-        require('flash').treesitter()
-      end,
-      desc = 'Flash Treesitter',
-    },
-    {
-      'r',
-      mode = 'o',
-      function()
-        require('flash').remote()
-      end,
-      desc = 'Remote Flash',
-    },
-    {
-      'R',
-      mode = { 'o', 'x' },
-      function()
-        require('flash').treesitter_search()
-      end,
-      desc = 'Treesitter Search',
-    },
-    {
-      '<c-s>',
-      mode = { 'c' },
-      function()
-        require('flash').toggle()
-      end,
-      desc = 'Toggle Flash Search',
-    },
-  },
-  opts = {},
+	"folke/flash.nvim",
+	enabled = false,
+	keys = function()
+		local flash = require("flash")
+		return {
+			{
+				"s",
+				flash.jump,
+				mode = { "n", "x", "o" },
+				desc = "Flash",
+			},
+			{
+				"S",
+				flash.treesitter,
+				mode = { "n", "o" },
+				desc = "Flash Treesitter",
+			},
+			{
+				"r",
+				flash.remote,
+				mode = "o",
+				desc = "Remote Flash",
+			},
+			{
+				"R",
+				flash.treesitter_search,
+				mode = { "o", "x" },
+				desc = "Treesitter Search",
+			},
+			{
+				"<c-s>",
+				flash.toggle,
+				mode = { "c" },
+				desc = "Toggle Flash Search",
+			},
+		}
+	end,
+	opts = {},
 }

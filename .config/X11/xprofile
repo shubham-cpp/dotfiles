@@ -78,7 +78,7 @@ dwm)
 esac
 
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-	# run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '0.9:0.7'
+	run redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '1.1:0.9'
 	run flameshot
 	run greenclip daemon
 	run imwheel

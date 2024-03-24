@@ -2,8 +2,9 @@
 
 arg="$HOME"/.config/nvim/
 
-rg --files "$arg" -g '!tags' -g '!packer_compiled.vim' -g '!docs' -g '!unused'\
-    | sed 's#'$arg'##g' \
-    | fzf --reverse --preview="bat --line-range :40 '$arg'{}"\
-    | xargs -ro -I % nvim "$arg"% || echo "Please provide a directory"
-    # | fzf --reverse --preview="highlight -O xterm256 --style dante --line-range=1-40 '$arg'{}"\
+rg --files "$arg" -g '!tags' -g '!packer_compiled.vim' -g '!docs' -g '!unused' |
+	sed 's#'$arg'##g' |
+	fzf --reverse --preview="bat --line-range :40 '$arg'{}" |
+	xargs -ro -I % env NVIM_APPNAME=nvim-try nvim "$arg"% || echo "Please provide a directory"
+# | fzf --reverse --preview="highlight -O xterm256 --style dante --line-range=1-40 '$arg'{}"\
+

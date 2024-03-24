@@ -1,19 +1,13 @@
 return {
   'akinsho/toggleterm.nvim',
-  version = '*',
-  opts = {
-    open_mapping = [[<c-\>]],
-    winbar = { enabled = true },
-    -- shade_terminals = false,
-    highlights = {
-      -- highlights which map to a highlight group name and a table of it's values
-      -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
-      Normal = {
-        guibg = '#32343d',
-      },
-      NormalFloat = {
-        link = 'Normal',
-      },
-    },
-  },
+  keys = { '<C-\\>' },
+  opts = function(_, opts)
+    opts.open_mapping = [[<C-\>]]
+    opts.on_open = function()
+      local local_opts = { buffer = 0 }
+      vim.keymap.set('t', '<C-]>', [[<C-\><C-n>]], local_opts)
+      -- vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
+    end
+    return opts
+  end,
 }

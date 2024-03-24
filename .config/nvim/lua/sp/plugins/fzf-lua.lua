@@ -51,6 +51,7 @@ end
 -- horizontal = 'right:60%',
 return {
   'ibhagwan/fzf-lua',
+  enabled = false,
   keys = {
     {
       '<C-p>',
