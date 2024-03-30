@@ -132,7 +132,10 @@ xterm*color14:  #0f7cda
 xterm*color7:   #d6dae4
 xterm*color15:  #ffffff
 
-st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
+! st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
+! st*font: MesloLGS Nerd Font:size=11.5:antialias=true:autohint=true
+st*font: JetBrainsMono Nerd Font:size=11.5:antialias=true:autohint=true
+! st*font: Iosevka Nerd Font Propo:size=12.5:antialias=true:autohint=true
 
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
 !! ! URxvt.letterSpace: -1
@@ -183,4 +186,4 @@ URxvt*scrollBar_right: false
 URxvt*scrollBar: false
 ! URxvt*borderLess: false
 
-URxvt*font: xft:Iosevka Nerd Font Propo:size=12,xft:JetBrainsMono Nerd Font Mono:pixelsize=18
+URxvt*font: xft:D2CodingLigature Nerd Font:size=13.5,xft:JetBrainsMono Nerd Font Mono:pixelsize=18

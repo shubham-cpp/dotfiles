@@ -39,22 +39,22 @@ foreground = "0xc0caf5"
 unfocused_hollow = true
 
 [font]
-size = 12
+size = 11.5
 
 [font.normal]
-family = "CaskaydiaCove Nerd Font"
+family = "JetBrainsMono Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "CaskaydiaCove Nerd Font"
+family = "JetBrainsMono Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "CaskaydiaCove Nerd Font"
+family = "JetBrainsMono Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "CaskaydiaCove Nerd Font"
+family = "JetBrainsMono Nerd Font"
 style = "Italic"
 
 [hints]

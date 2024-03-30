@@ -5,13 +5,18 @@ set window-title-basename true
 set window-title-basename true
 set statusbar-basename true
 
+
 map i recolor
 map p print
 map u navigate previous
 map d navigate next
-map D toggle_page_mode
+map K navigate previous
+map J navigate next
+map P toggle_page_mode
 map r reload
 map R rotate
+map D set "first-page-column 1:1"
+map <C-d> set "first-page-column 1:2"
 
 # Base16 Dracula
 # Author: Mike Barkmin (http://github.com/mikebarkmin) based on Dracula Theme (http://github.com/dracula)
