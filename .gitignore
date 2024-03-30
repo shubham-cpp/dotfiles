@@ -48,3 +48,4 @@ npm
 .config/zsh-omz/.p10k.zsh
 .config/zsh-omz/.zcomp*
 .config/zsh-omz/.zsh_history
+.config/wezterm/wezterm_state_default.json
