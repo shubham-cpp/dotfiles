@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 
 fd -t f | fzf --reverse --preview 'bat --line-range :60 {}' |
-	xargs -ro -I % env NVIM_APPNAME=nvim-try nvim %
+	xargs -ro -I % nvim %
+	# xargs -ro -I % env NVIM_APPNAME=nvim-try nvim %

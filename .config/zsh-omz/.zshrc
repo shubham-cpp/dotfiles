@@ -121,7 +121,7 @@ WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/Documents/dotfiles/.config/zsh/alias.zsh
-source ~/.config/zsh-orig/.zprofile
+source ~/Documents/dotfiles/.config/zsh/.zprofile
 source $ZDOTDIR/keys.zsh
 
 # WORDCHARS=${WORDCHARS//\/[&.;]}
