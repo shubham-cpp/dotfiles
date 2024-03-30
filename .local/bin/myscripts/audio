@@ -38,3 +38,4 @@ pgrep polybar && polybar-msg action mvol hook 0
 pgrep dwmblocks && kill -37 "$(pidof dwmblocks)"
 pgrep goblocks && kill -36 "$(pidof goblocks)"
 pgrep goblocks && kill -40 "$(pidof goblocks)"
+kill -37 "$(pidof dwm)"

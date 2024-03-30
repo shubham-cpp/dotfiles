@@ -3,7 +3,7 @@
 /* appearance */
 static const int startwithgaps[]				 = { 1 };	/* 1 means gaps are used by default, this can be customized for each tag */
 static const unsigned int gappx[]   		 = { 3 };   /* default gap between windows in pixels, this can be customized for each tag */
-static const unsigned int borderpx       = 3;        /* border pixel of windows */
+static const unsigned int borderpx       = 2;        /* border pixel of windows */
 static const unsigned int snap           = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -12,7 +12,12 @@ static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display 
 static const int showsystray             = 1;        /* 0 means no systray */
 static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
-static const char *fonts[]               = { "Ubuntu:size=11","FiraCode Nerd Font:size=12","Emoji One:size=11:Noto Color Emoji:size=11"};
+static const Bool viewontag              = True;     /* Switch view on tag switch */
+static const char *fonts[]               = { 
+  "Ubuntu:size=11",
+  "FiraCode Nerd Font:size=14",
+  "Noto Color Emoji:size=12"
+};
 static const char dmenufont[]            = "monospace:size=10";
 // static const char col_gray1[]       = "#222222";
 // static const char col_gray2[]       = "#444444";
@@ -37,7 +42,30 @@ static const char *colors[][3]      = {
   [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
   [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
   [SchemeHid]  = { urg_fg,      norm_bg,   norm_border },
+  [SchemeHov]   = { sel_fg,    sel_bg,    sel_bg  },
+  [SchemeStatus]= { sel_bg,    norm_bg,   NULL  },
 };
+
+/* status bar */
+static const Block blocks[] = {
+	/* fg     command				interval(secs)	signal(34+x) */
+	{norm_fg,  "sb-date",   30, 1},
+  {norm_fg,  "sb-bright", 0,  2},
+  {norm_fg,  "sb-volume", 0,  3},
+	{norm_fg,  "sb-mic",    0,  4},
+	{norm_fg,  "sb-memory", 3,  5},
+  {norm_fg,  "sb-load",   3,  6},
+  {norm_fg,  "sb-battery",8, 7},
+
+  {norm_fg, "(sleep 5 ; curl \"wttr.in/Pune?format=3\")", 1800, 10},
+};
+
+/* inverse the order of the blocks, comment to disable */
+#define INVERSED	1
+/* delimeter between blocks commands. NULL character ('\0') means no delimeter. */
+static char delimiter[] = "    ";
+/* max number of character that one block command can output */
+#define CMDLENGTH	30
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -117,7 +145,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact     = 0.51; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
@@ -147,13 +175,14 @@ movemonfocus(const Arg *arg) {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *dmenucmd[] = { "dmenu_run_history", "-i" , NULL };
+static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[] = { "dmenu_run_history", "-i", "-m", dmenumon , NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */ /* Programs */
 	{ MODKEY|ShiftMask,             XK_d,            spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_Return,       spawn,          SHCMD("$TERMINAL || xterm") },
+	{ MODKEY,                       XK_Return,       spawn,          SHCMD("$TERMINAL || st") },
 	{ MODKEY,                       XK_b,            togglebar,      {0} },
 	{ Mod1Mask,                     XK_Tab,          focusstackvis,  {.i = +1 } },
 	{ MODKEY,                       XK_j,            focusstackvis,  {.i = +1 } },
@@ -168,14 +197,14 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_bracketleft,  viewprev,       {0} },
 	{ MODKEY|ShiftMask,             XK_bracketright, tagtonext,      {0} },
 	{ MODKEY|ShiftMask,             XK_bracketleft,  tagtoprev,      {0} },
-	{ MODKEY,                       XK_grave,        viewnextskip,   {0} },
-	{ MODKEY|ShiftMask,             XK_grave,        viewprevskip,   {0} },
-	{ MODKEY,                       XK_apostrophe,   viewnextskip,   {0} },
-	{ MODKEY,                       XK_semicolon,    viewprevskip,   {0} },
-	{ MODKEY,                       XK_Right,        viewnextskip,   {0} },
-	{ MODKEY,                       XK_Left,         viewprevskip,   {0} },
-	{ MODKEY|ShiftMask,             XK_Right,        tagtonextskip,  {0} },
-	{ MODKEY|ShiftMask,             XK_Left,         tagtoprevskip,  {0} },
+	{ MODKEY,                       XK_grave,        viewnext_skip,   {0} },
+	{ MODKEY|ShiftMask,             XK_grave,        viewprev_skip,   {0} },
+	{ MODKEY,                       XK_apostrophe,   viewnext_skip,   {0} },
+	{ MODKEY,                       XK_semicolon,    viewprev_skip,   {0} },
+	{ MODKEY,                       XK_Right,        viewnext_skip,   {0} },
+	{ MODKEY,                       XK_Left,         viewprev_skip,   {0} },
+	{ MODKEY|ShiftMask,             XK_Right,        tagtonext_skip,  {0} },
+	{ MODKEY|ShiftMask,             XK_Left,         tagtoprev_skip,  {0} },
 	{ MODKEY,                       XK_z,            zoom,           {0} },
 	{ MODKEY,                       XK_Tab,          view,           {0} },
 	{ MODKEY|ShiftMask,             XK_q,            killclient,     {0} },
@@ -184,6 +213,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_space,        setlayout,      {0} },
 	{ MODKEY,                       XK_s,            togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_s,            togglesticky,   {0} },
+  { MODKEY,                       XK_f,            togglefullscr,  {0} },
 	{ MODKEY,                       XK_0,            view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,            tag,            {.ui = ~0 } },
 	{ MODKEY,                       XK_comma,        focusmon,       {.i = -1 } },
@@ -218,7 +248,14 @@ static const Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 	{ ClkWinTitle,          0,              Button1,        togglewin,      {0} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+
+	{ ClkStatusText,        0,              Button1,        sendstatusbar,   {.i = 1 } },
+	{ ClkStatusText,        0,              Button2,        sendstatusbar,   {.i = 2 } },
+	{ ClkStatusText,        0,              Button3,        sendstatusbar,   {.i = 3 } },
+	{ ClkStatusText,        0,              Button4,        sendstatusbar,   {.i = 4 } },
+	{ ClkStatusText,        0,              Button5,        sendstatusbar,   {.i = 5 } },
+	{ ClkStatusText,        ShiftMask,      Button1,        sendstatusbar,   {.i = 6 } },
+
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
