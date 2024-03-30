@@ -4,3 +4,4 @@ Comment=Suckless' Dynamic Window Manager
 TryExec=dwm
 Exec=/usr/local/bin/dwm
 Type=Application
+Icon=dwm

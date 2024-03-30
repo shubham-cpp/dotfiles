@@ -144,8 +144,8 @@ return {
 				end, { "i", "s" }),
 			},
 			sources = {
-				{ name = "nvim_lsp" },
-				{ name = "luasnip" },
+				{ name = "nvim_lsp", priority = 1000 },
+				{ name = "luasnip", priority = 700 },
 				{
 					name = "buffer",
 					option = {
@@ -158,9 +158,9 @@ return {
 							-- return vim.api.nvim_list_bufs()
 						end,
 					},
+					priority = 500,
 				},
-				{ name = "path" },
-				-- { name = "cmdline" },
+				{ name = "path", priority = 400 },
 			},
 			formatting = {
 				format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),

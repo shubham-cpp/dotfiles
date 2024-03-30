@@ -1,16 +1,14 @@
 lastupdatecheck: 0
 recentrepos:
 - /home/shubham/Documents/dotfiles
-- /home/shubham/Documents/Programming/WebDev/Vue/firebase-vue-blogs-app
-- /home/shubham/Documents/Programming/WebDev/React/nextjs-stackoverflow
-- /home/shubham/Documents/Programming/WebDev/React/react-assignment-refrens
-- /home/shubham/Documents/Programming/WebDev/Portfolio
-- /home/shubham/Documents/Programming/WebDev/Astro/astro-project-manager
 - /home/shubham/Downloads/GitClones/lfimg
-- /home/shubham/Documents/Programming/Go/APIs/JwtAuthentication
-- /home/shubham/Documents/Programming/Go/CLI/todo-app
-- /home/shubham/Documents/Programming/Go/APIs/StudentManagement
-- /home/shubham/Documents/Programming/WebDev/Backend/nest-typeorm-mysql
 startuppopupversion: 5
+lastversion: 0.41.0
 customcommandshistory: []
 hidecommandlog: false
+ignorewhitespaceindiffview: false
+diffcontextsize: 3
+localbranchsortorder: recency
+remotebranchsortorder: alphabetical
+gitlogorder: topo-order
+gitlogshowgraph: always

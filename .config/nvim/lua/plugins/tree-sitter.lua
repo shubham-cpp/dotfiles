@@ -37,9 +37,9 @@ return {
 					"javascriptreact",
 					"markdown",
 					"svelte",
+					"typescript",
 					"typescriptreact",
 					"vue",
-					"xml",
 				},
 				--[[ enable_close_on_slash = true 
           enable_rename = true,

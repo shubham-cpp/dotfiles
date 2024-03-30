@@ -13,6 +13,7 @@ pyls-isort = "*"
 pylsp-rope = "*"
 python-lsp-black = "*"
 mypy = "*"
+pywlroots = "==0.16.4"
 
 [requires]
-python_version = "3.12"
+python_version = "3.11"

@@ -25,7 +25,7 @@ return {
 	event = "BufRead",
 	config = function()
 		require("lint").linters_by_ft = languages
-		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost" }, {
+		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
 			group = au_group,
 			callback = function()
 				require("lint").try_lint()
