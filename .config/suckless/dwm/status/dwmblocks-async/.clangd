@@ -1,6 +1,0 @@
-CompileFlags:
-  Add:
-    - "-I."
-    - "-I./inc"
-    - "-I.."
-    - "-I../inc"
