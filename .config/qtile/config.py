@@ -11,12 +11,31 @@ from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 from libqtile.utils import guess_terminal
-from modules.bar import (extension_defaults, layout_theme, screens,
-                         widget_defaults)
+from modules.bar import extension_defaults, layout_theme, screens, widget_defaults
 from modules.colors import backgroundColor, colors, foregroundColor
 from modules.groups import groups
 from modules.keys import keys, mod, terminal
 from modules.lazy_functions import sticky_windows
+
+
+# from libqtile.backend.wayland.inputs import InputConfig
+
+# wl_input_rules = {
+#     # "1267:12377:ELAN1300:00 04F3:3059 Touchpad": InputConfig(natural_scroll=True, middle_emulation=True,kb_repeat_delay=300,kb_repeat_rate=50,click_method='clickfinger',scroll_method='two_finger',tap=True,tap_button_map='lrm',pointer_accel=0.6,dwt=True),
+#     "*": InputConfig(
+#         natural_scroll=True,
+#         middle_emulation=True,
+#         kb_repeat_delay=300,
+#         kb_repeat_rate=50,
+#         click_method="clickfinger",
+#         scroll_method="two_finger",
+#         tap=True,
+#         tap_button_map="lrm",
+#         pointer_accel=0.6,
+#         dwt=True,
+#     ),
+#     # "type:keyboard": InputConfig(kb_options="ctrl:nocaps,compose:ralt"),
+# }
 
 layouts: List[Layout] = [
     MonadTall(
@@ -26,10 +45,7 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(change_size=10,
-              single_border_width=0,
-              single_margin=0,
-              **layout_theme),
+    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
     Max(),
     Floating(),
     Spiral(**layout_theme),
@@ -119,49 +135,47 @@ def assign_app_group(client: WindowType) -> None:
     if wm_class is None or client.togroup is None:
         return
     if client.floating and client.bring_to_front:
-        client.command('cmd_bring_to_front')
+        client.command("cmd_bring_to_front")
         return
     if (wm_class[0] or wm_class[1]) in [
-            "Navigator",
-            "firefox",
-            "brave-browser",
-            "Brave-browser",
-            "qutebrowser",
-            "LibreWolf",
-            "Chromium",
-            "chromium",
-            "Chromium-browser",
-            "chromium-browser",
-            "brave-browser",
-            "Brave-browser",
-            "Thorium-browser",
-            "thorium-browser",
-            "vieb",
+        "Navigator",
+        "firefox",
+        "brave-browser",
+        "Brave-browser",
+        "qutebrowser",
+        "LibreWolf",
+        "Chromium",
+        "chromium",
+        "Chromium-browser",
+        "chromium-browser",
+        "brave-browser",
+        "Brave-browser",
+        "Thorium-browser",
+        "thorium-browser",
+        "vieb",
     ]:
-
         client.togroup("2", switch_group=True)
     elif (wm_class[0] or wm_class[1]) in [
-            "Vlc",
-            "vlc",
-            "Mpv",
-            "mpv",
-            "gl",
-            "Celluloid",
-            "io.github.celluloid_player.Celluloid",
-            "Io.github.celluloid_player.Celluloid",
+        "Vlc",
+        "vlc",
+        "Mpv",
+        "mpv",
+        "gl",
+        "Celluloid",
+        "io.github.celluloid_player.Celluloid",
+        "Io.github.celluloid_player.Celluloid",
     ]:
         client.togroup("4", switch_group=True)
     elif (wm_class[0] or wm_class[1]) in [
-            "VirtualBox Manager",
-            "VirtualBox Machine",
-            "Vmplayer",
-            "virtualbox manager",
-            "virtualbox machine",
-            "vmplayer",
+        "VirtualBox Manager",
+        "VirtualBox Machine",
+        "Vmplayer",
+        "virtualbox manager",
+        "virtualbox machine",
+        "vmplayer",
     ]:
         client.togroup("5", switch_group=True)
-    elif (wm_class[0]
-          or wm_class[1]) in ["Steam", "Lutris", "lutris", "steam"]:
+    elif (wm_class[0] or wm_class[1]) in ["Steam", "Lutris", "lutris", "steam"]:
         client.togroup("3", switch_group=True)
 
 
