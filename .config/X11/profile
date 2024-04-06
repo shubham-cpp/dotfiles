@@ -107,10 +107,10 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export MACHINE_STORAGE_PATH="$XDG_DATA_HOME"/docker-machine
 export LEIN_HOME="$XDG_DATA_HOME/lein"
 export LESSHISTFILE=-
-export DENO_INSTALL="$XDG_CONFIG_HOME/deno"
+export DENO_INSTALL="/home/shubham/.config/deno"
 [ -s "$DENO_INSTALL" ] && export PATH="$PATH:$DENO_INSTALL/bin"
 export BUN_INSTALL="$XDG_DATA_HOME/bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+[ -s "$BUN_INSTALL" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 # export LESSOPEN="| /usr/bin/highlight -O xterm256 --style=leo %s 2>/dev/null"
 # export LESS='-q -F -i -J -M -W -x4 -z-4 -R --use-color'
 export LESS='-R --use-color -Dd+r$Du+b'
