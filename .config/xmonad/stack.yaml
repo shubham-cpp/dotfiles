@@ -10,7 +10,7 @@
 #
 # resolver: lts-3.5
 # resolver: nightly-2015-09-21
-# resolver: ghc-7.10.2
+# resolver: ghc-9.4.8
 #
 # The location of a snapshot can be provided as a file or url. Stack assumes
 # a snapshot provided as a file might change, whereas a url resource does not.
@@ -18,7 +18,7 @@
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
 resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/5.yaml
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/22/15.yaml
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -29,17 +29,21 @@ resolver:
 #   subdirs:
 #   - auto-update
 #   - wai
-packages: []
-#   # - xmonad-git
-#   # - xmonad-contrib-git
-#   # - dbus-git
-#   - https://hackage.haskell.org/package/xmonad-0.17.2/xmonad-0.17.2.tar.gz
-#   - https://hackage.haskell.org/package/dbus-1.3.2/dbus-1.3.2.tar.gz
-#   - https://hackage.haskell.org/package/xmonad-contrib-0.17.1/xmonad-contrib-0.17.1.tar.gz
+packages:
+  - .
+  #   # - xmonad-git
+  #   # - xmonad-contrib-git
+  #   # - dbus-git
+  # - https://hackage.haskell.org/package/xmonad-0.18.0/xmonad-0.18.0.tar.gz
+  # - https://hackage.haskell.org/package/dbus-1.3.2/dbus-1.3.2.tar.gz
+  # - https://hackage.haskell.org/package/xmonad-contrib-0.18.0/xmonad-contrib-0.18.0.tar.gz
 extra-deps:
-  - xmonad-0.17.2
-  - xmonad-contrib-0.17.1
+  - xmonad-0.18.0
+  - xmonad-contrib-0.18.0
   - dbus-1.3.2
+#   - xmonad-0.17.2
+#   - xmonad-contrib-0.17.1
+#   - dbus-1.3.2
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:
 #

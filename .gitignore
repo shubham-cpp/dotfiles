@@ -49,3 +49,4 @@ npm
 .config/zsh-omz/.zcomp*
 .config/zsh-omz/.zsh_history
 .config/wezterm/wezterm_state_default.json
+.config/qtile/modules/__pycache__

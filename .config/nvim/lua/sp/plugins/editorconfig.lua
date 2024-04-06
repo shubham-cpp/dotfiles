@@ -1,5 +1,5 @@
-  return {
-    'gpanders/editorconfig.nvim',
-    enabled = false,
-    event = 'BufRead',
-  }
+return {
+  'gpanders/editorconfig.nvim',
+  enabled = false,
+  event = 'BufRead',
+}
