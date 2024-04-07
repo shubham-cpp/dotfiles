@@ -15,23 +15,14 @@
 [delta]
     navigate = true    # use n and N to move between diff sections
     light = false
-
-[diff]
-    tool = mnvimdiff
-[difftool]
-    prompt = false
-# [difftool "meld"]
-#     cmd = meld "$LOCAL" "$REMOTE"
-
 [merge]
-    tool = mnvimdiff
-    conflictstyle=diff3
-
+  tool = diffview
 [mergetool]
-    prompt = false
+  prompt = false
+  keepBackup = false
+[mergetool "diffview"]
+  cmd = nvim -n -c "DiffviewOpen" "$MERGE"
 
-[mergetool "mnvimdiff"]
-	cmd = NVIM_APP=nvim-my nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
 [maintenance]
 	repo = /home/shubham/.cache/fast-syntax-highlighting
 	repo = /home/shubham/.cache/powerlevel10k

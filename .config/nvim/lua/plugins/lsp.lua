@@ -8,6 +8,7 @@ return {
         {
           'creativenull/efmls-configs-nvim',
           version = 'v1.x.x',
+          enabled = false,
         },
         {
           'folke/neodev.nvim',
@@ -104,18 +105,38 @@ return {
           },
           clangd = {
             capabilities = {
-              offsetEncoding = 'utf-8',
+              offsetEncoding = { 'utf-16' },
+              clangdInlayHintsProvider = true,
+            },
+            setting = {
+              InlayHints = {
+                Enabled = true,
+                ParameterNames = true,
+                DeducedTypes = true,
+              },
             },
             cmd = {
+              -- 'clangd',
+              -- '--background-index',
+              -- '--clang-tidy',
+              -- '--suggest-missing-includes',
+              -- '--header-insertion=iwyu',
+              -- '--completion-style=detailed',
+              -- '--function-arg-placeholders',
+              -- '--pch-storage=memory',
+              -- '--fallback-style=llvm',
               'clangd',
               '--background-index',
               '--clang-tidy',
               '--suggest-missing-includes',
-              '--header-insertion=iwyu',
+              '--header-insertion-decorators',
+              '--all-scopes-completion',
+              '--cross-file-rename',
+              '--log=info',
               '--completion-style=detailed',
-              '--function-arg-placeholders',
-              '--pch-storage=memory',
-              '--fallback-style=llvm',
+              -- "--enable-config", -- clangd 11+ supports reading from .clangd configuration file
+              -- "--offset-encoding=utf-16",
+              '--header-insertion=never',
             },
           },
           gopls = {
@@ -133,6 +154,11 @@ return {
                   rangeVariableTypes = true,
                 },
                 staticcheck = true,
+                ui = {
+                  completion = {
+                    usePlaceholders = true,
+                  },
+                },
                 codelenses = {
                   usePlaceholders = true,
                 },
