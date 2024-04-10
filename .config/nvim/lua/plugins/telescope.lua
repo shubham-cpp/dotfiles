@@ -100,21 +100,6 @@ return {
       { '<leader>gS', builtin.git_stash, desc = 'Git Stash' },
       { '<leader>gc', builtin.git_commits, desc = 'Git Commits' },
       { '<leader>gC', builtin.git_bcommits, desc = 'Git Buffer Commits' },
-      -- { "<leader>fs", builtin.lsp_document_symbols },
-      -- { "<leader>fw", builtin.lsp_workspace_symbols },
-      -- { "<leader>fc", builtin.lsp_code_actions },
-      -- { "<leader>fl", builtin.lsp_references },
-      -- { "<leader>fd", builtin.lsp_definitions },
-      -- { "<leader>fm", builtin.lsp_implementations },
-      -- { "<leader>fo", builtin.lsp_document_diagnostics },
-      -- { "<leader>fq", builtin.lsp_workspace_diagnostics },
-      -- { "<leader>fp", builtin.lsp_dynamic_workspace_symbols },
-      -- { "<leader>ft", builtin.lsp_type_definitions },
-      -- { "<leader>fy", builtin.lsp_document_diagnostics },
-      -- { "<leader>fi", builtin.lsp_implementations },
-      -- { "<leader>fv", builtin.lsp_references },
-      -- { "<leader>fx", builtin.lsp_code_actions },
-      -- { "<leader>fm", builtin.lsp_document_symbols },
     }
   end,
   config = function()
@@ -130,6 +115,7 @@ return {
     })
     local actions = require 'telescope.actions'
     local action_layout = require 'telescope.actions.layout'
+    local builtin = require 'telescope.builtin'
 
     local dropdown = {
       layout_strategy = 'vertical',
@@ -201,5 +187,15 @@ return {
     require('telescope').load_extension 'zf-native'
     -- require("telescope").load_extension("fzf")
     require('telescope').load_extension 'ui-select'
+    -- vim.lsp.handlers["textDocument/codeAction"] = builtin.lsp_references
+    vim.lsp.handlers['textDocument/definition'] = builtin.lsp_definitions
+    -- vim.lsp.handlers["textDocument/declaration"] = builtin.lsp_references
+    vim.lsp.handlers['textDocument/typeDefinition'] = builtin.lsp_type_definitions
+    vim.lsp.handlers['textDocument/implementation'] = builtin.lsp_implementations
+    vim.lsp.handlers['textDocument/references'] = builtin.lsp_references
+    vim.lsp.handlers['textDocument/documentSymbol'] = builtin.lsp_document_symbols
+    vim.lsp.handlers['workspace/symbol'] = builtin.lsp_workspace_symbols
+    vim.lsp.handlers['callHierarchy/incomingCalls'] = builtin.lsp_incoming_calls
+    vim.lsp.handlers['callHierarchy/outgoingCalls'] = builtin.lsp_outgoing_calls
   end,
 }

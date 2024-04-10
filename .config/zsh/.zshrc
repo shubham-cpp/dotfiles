@@ -30,32 +30,34 @@ zinit light zsh-users/zsh-history-substring-search
 # zinit light skywind3000/z.lua
 zinit light lukechilds/zsh-better-npm-completion
 zinit light buonomo/yarn-completion
-# Load starship theme
-# line 1: `starship` binary as command, from github release
-# line 2: starship setup at clone(create init.zsh, completion)
-# line 3: pull behavior same as clone, source init.zsh
+zinit light zsh-users/zsh-completions
+
+zinit snippet OMZP::git
+zinit snippet OMZP::colored-man-pages
+
 zinit ice as"command" from"gh-r" \
           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
-zinit ice as"command" from"gh-r" mv"rtx-v* -> rtx" \
-          atclone"./rtx activate zsh > rtx_init.sh" \
-          atpull"%atclone" src"rtx_init.sh"
-zinit light jdx/rtx
 zinit ice as"command" from"gh-r" \
           atclone"./zoxide init zsh > zo_init.sh" \
           atpull"%atclone" src"zo_init.sh"
 zinit light ajeetdsouza/zoxide
 
+zinit ice as"command" from"gh-r" \
+          atclone"./fnm env --use-on-cd > fnm_init.sh; ./fnm completions --shell zsh > _fnm" \
+          atpull"%atclone" src"fnm_init.sh"
+zinit light Schniz/fnm
+
 setopt correctall complete_in_word auto_param_keys auto_param_slash
 setopt extendedglob
 setopt autolist
 setopt rcexpandparam
-setopt numericglobsort 
+setopt numericglobsort
 setopt nocheckjobs nobeep nocaseglob
 setopt appendhistory incappendhistory extendedhistory sharehistory
 setopt hist_verify hist_save_no_dups hist_reduce_blanks hist_ignore_space hist_find_no_dups
-setopt histignorealldups histignoredups histignorespace histexpiredupsfirst
+setopt histignorealldups histignorespace histexpiredupsfirst
 setopt autocd autopushd pushdignoredups
 setopt globdots
 setopt local_options
@@ -84,10 +86,11 @@ zstyle ':completion:*' group-name ''
 zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'    # Ignore completion functions for commands you don't have:
 ## complete as much as you can ..
 zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
-HISTFILE=$ZDOTDIR/.zhistory
+# HISTFILE=$ZDOTDIR/.zhistory
+HISTFILE=$HOME/.cache/zhistory
 HISTSIZE=50000
 SAVEHIST=10000
-HISTDUP=erase
+# HISTDUP=erase
 
 WORDCHARS=${WORDCHARS//\/[&.;]}
 

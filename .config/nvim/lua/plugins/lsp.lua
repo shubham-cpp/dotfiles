@@ -205,14 +205,7 @@ return {
             K = { vim.lsp.buf.hover, desc = 'Hover', cond = 'textDocument/hover' },
             gl = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
             gd = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_definitions()
-                else
-                  vim.lsp.buf.definition()
-                end
-              end,
+              vim.lsp.buf.definition,
               desc = 'Goto definition',
               cond = 'textDocument/definition',
             },
@@ -228,28 +221,14 @@ return {
               cond = 'textDocument/codeAction',
             },
             gi = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_implementations()
-                else
-                  vim.lsp.buf.implementation()
-                end
-              end,
+              vim.lsp.buf.implementation,
               desc = 'Goto implementation',
               cond = 'textDocument/implementation',
             },
             -- condition for only server with declaration capabilities
             gD = { vim.lsp.buf.declaration, desc = 'Goto Declaration', cond = 'textDocument/declaration' },
             gt = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_type_definitions()
-                else
-                  vim.lsp.buf.type_definition()
-                end
-              end,
+              vim.lsp.buf.type_definition,
               desc = 'Type definition',
               cond = 'textDocument/typeDefinition',
             },
@@ -262,14 +241,7 @@ return {
               end,
             },
             gr = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_references()
-                else
-                  vim.lsp.buf.references()
-                end
-              end,
+              vim.lsp.buf.references,
               desc = 'Goto references',
               cond = 'textDocument/references',
             },
@@ -294,26 +266,12 @@ return {
               desc = 'Goto Next diagnostic',
             },
             gw = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_document_symbols()
-                else
-                  vim.lsp.buf.document_symbol()
-                end
-              end,
+              vim.lsp.buf.document_symbol,
               desc = 'Document symbols',
               cond = 'textDocument/documentSymbol',
             },
             gW = {
-              function()
-                local ok_tel, builtin = pcall(require, 'telescope.builtin')
-                if ok_tel then
-                  builtin.lsp_workspace_symbols()
-                else
-                  vim.lsp.buf.workspace_symbol()
-                end
-              end,
+              vim.lsp.buf.workspace_symbol,
               desc = 'Workspace symbols',
               cond = 'workspace/symbol',
             },

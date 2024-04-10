@@ -29,13 +29,14 @@ return {
     local lspkind = require 'lspkind'
     local luasnip = require 'luasnip'
     luasnip.config.setup({})
+    -- require'luasnip'.filetype_extend("ruby", {"rails"})
     require('luasnip.loaders.from_vscode').lazy_load()
     require('luasnip.loaders.from_snipmate').lazy_load()
 
     cmp.setup({
       snippet = {
         expand = function(args)
-          require('luasnip').lsp_expand(args.body)
+          luasnip.lsp_expand(args.body)
         end,
       },
       mapping = {

@@ -5,10 +5,10 @@ alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
-alias ls="exa -l --color=auto --group-directories-first --icons"  # long format
-alias ll="exa -al --color=auto --group-directories-first --icons --no-user" # my preferred listing
-alias la="exa -a --color=auto --group-directories-first --icons"  # all files and dirs
-alias lt="exa -aT --color=auto --group-directories-first --icons" # tree listing
+alias ls="exa -l --color=auto --icons --group-directories-first"  # long format
+alias ll="exa -al --color=auto --icons --group-directories-first --no-user" # my preferred listing
+alias la="exa -a --color=auto --icons --group-directories-first"  # all files and dirs
+alias lt="exa -aT --color=auto --icons --group-directories-first" # tree listing
 alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
@@ -17,11 +17,11 @@ alias rmd="trash-put -rf"
 alias tls="trash-list"
 
 # # alias d="sudo dnf"
-alias di="sudo dnf5 install"
-alias dr="sudo dnf5 remove"
-alias dU="sudo dnf5 upgrade"
-alias dp="dnf5 provides"
-alias ds="dnf5 search"
+# alias di="sudo dnf5 install"
+# alias dr="sudo dnf5 remove"
+# alias dU="sudo dnf5 upgrade"
+# alias dp="dnf5 provides"
+# alias ds="dnf5 search"
 # alias a="sudo nala"
 # alias ai="sudo nala install"
 # alias ar="sudo nala remove"
@@ -30,9 +30,9 @@ alias ds="dnf5 search"
 # alias in="ai"
 # alias un="ar"
 # alias sea="nala search"
-# alias yay="paru"
-# alias ys="yay -S --noredownload --needed"
-# alias yr="yay -Rcns"
+alias yay="paru"
+alias ys="yay -S --noredownload --needed"
+alias yr="yay -Rcns"
 # alias xin="sudo xbps-install -S"
 # alias xr="sudo xbps-remove -R"
 # alias xs="xbps-query -R --regex -s"
