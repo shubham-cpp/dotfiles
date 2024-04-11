@@ -357,7 +357,7 @@ return {
                   -- or for older TypeScript versions
                   -- "typescript-styled-plugin",
                 },
-                -- tsserver_max_memory = '3072',
+                tsserver_max_memory = '3072',
               },
             })
           end,

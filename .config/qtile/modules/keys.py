@@ -5,15 +5,9 @@ from typing import LiteralString
 from libqtile.config import EzKey as Key
 from libqtile.lazy import lazy
 
-from .lazy_functions import (
-    move_win_to_immediate_group,
-    smart_window_kill,
-    toggle_layout_max,
-    toggle_sticky_windows,
-    update_brightness,
-    update_mic_icon,
-    update_volume,
-)
+from .lazy_functions import (move_win_to_immediate_group, smart_window_kill,
+                             toggle_layout_max, toggle_sticky_windows,
+                             update_brightness, update_mic_icon, update_volume)
 
 mod: LiteralString = "mod4"
 # terminal = guess_terminal()
@@ -201,7 +195,7 @@ keys = [
     # Applications {{{
     Key(
         "M-S-<Return>",
-        lazy.spawn("kitty"),
+        lazy.spawn("wezterm || kitty", shell=True),
         desc="Spawn terminal kitty",
         # lazy.layout.toggle_split(),
         # desc="Toggle between split and unsplit sides of stack",
@@ -211,12 +205,13 @@ keys = [
     Key("M-<KP_End>", lazy.spawn("xterm"), desc="Launch xterm"),
     Key(
         "M-w",
-        lazy.spawn(f"sh -c 'flatpak run one.ablaze.floorp ||{browser}'", shell=True),
+        lazy.spawn(browser),
         desc=f"Launch {browser}",
     ),
     Key(
         "M-S-w",
-        lazy.spawn("thorium-browser"),
+        # lazy.spawn("thorium-browser"),
+        lazy.spawn("brave || brave-browser", shell=True),
         # lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
         # lazy.spawn(
         #     "firefox"
@@ -245,12 +240,14 @@ keys = [
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
         "M-S-d",
-        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'", shell=True),
+        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'",
+                   shell=True),
         desc="Spawn Run Prompt",
     ),
     Key(
         "M-d",
-        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn(
+            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
@@ -266,20 +263,15 @@ keys = [
     Key("M-v", lazy.spawn("virt-manager"), desc="Launch Virt-manager"),
     Key(
         "M-g",
-        lazy.spawn(
-            "bash -c 'qalculate-gtk || gnome-calculator || galculator'", shell=True
-        ),
+        lazy.spawn("bash -c 'qalculate-gtk || gnome-calculator || galculator'",
+                   shell=True),
         desc="Launch Calculator",
     ),
     Key(
         "<XF86Calculator>",
-        lazy.spawn(
-            "qalculate-gtk"
-            if isfile("/usr/bin/qalculate-gtk")
-            else "gnome-calculator"
-            if isfile("/usr/bin/gnome-calculator")
-            else "galculator"
-        ),
+        lazy.spawn("qalculate-gtk" if isfile("/usr/bin/qalculate-gtk") else
+                   "gnome-calculator" if isfile("/usr/bin/gnome-calculator"
+                                                ) else "galculator"),
         desc="Launch Calculator",
     ),
     # }}}
@@ -381,11 +373,14 @@ keys = [
     Key("C-A-c", lazy.spawn("xcolor -s"), desc="Launch Color Picker"),
     Key("C-A-p", lazy.spawn("get-class-name"), desc="Copy WM_CLASS name"),
     Key("<Print>", lazy.spawn("flameshot gui"), desc="Take screenshot(FULL)"),
-    Key("S-<Print>", lazy.spawn("flameshot full"), desc="Take screenshot(FOCUS)"),
+    Key("S-<Print>",
+        lazy.spawn("flameshot full"),
+        desc="Take screenshot(FOCUS)"),
     Key("<F1>", lazy.spawn("flameshot gui"), desc="Take screenshot(FOCUS)"),
     Key("M-A-c", lazy.spawn("open-rcs"), desc="Open a config file"),
     Key("M-A-g", lazy.spawn("open-games"), desc="Launch game menu"),
     Key("M-C-s", lazy.spawn("logout_prompt"), desc="Launch logout Prompt"),
+    Key("M-S-m", lazy.spawn("load_monitors"), desc="Launch monitor script"),
     Key("M-y", lazy.spawn("clipboard"), desc="Launch clipboard history"),
     # }}}
 ]

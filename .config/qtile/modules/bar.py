@@ -1,7 +1,7 @@
 import subprocess
 from typing import List, Union
 
-from libqtile.command import lazy
+# from libqtile.command import lazy
 from libqtile import bar, widget, qtile
 from libqtile.config import Screen
 
@@ -25,7 +25,8 @@ extension_defaults = widget_defaults.copy()
 def toggle_microphone_mute():
     print("Toggling microphone mute")
     subprocess.run(
-        "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle".split(" "), shell=True)
+        "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle".split(" "), shell=True
+    )
     w = qtile.widgets_map["volume_mic_icon"]
     w.update(w.poll())
 
@@ -93,7 +94,7 @@ screens: List[Screen] = [
                 #     padding=5,
                 # ),
                 widget.Net(
-                    format="<span size=\"large\">\uf1eb</span>  {down: 4.2f} {down_suffix} <span size=\"large\">\uf175\uf176</span>  {up: 4.2f} {up_suffix}",
+                    format='<span size="large">\uf1eb</span>  {down: 4.2f} {down_suffix} <span size="large">\uf175\uf176</span>  {up: 4.2f} {up_suffix}',
                     fontsize=13,
                     padding=10,
                     # prefix='M',
@@ -105,24 +106,26 @@ screens: List[Screen] = [
                     low_percentage=0.2,
                     low_foreground=colors[5],
                     font="JetBrainsMono Nerd Font",
-                    format='{char}',
-                    charge_char=' ',
-                    discharge_char=' ',
+                    format="{char}",
+                    charge_char=" ",
+                    discharge_char=" ",
                     # discharge_char='󰁹',
-                    empty_char='󱃍',
-                    full_char='󰂅',
-                    not_charging_char='',
-                    unknown_char='󰂑',
+                    empty_char="󱃍",
+                    full_char="󰂅",
+                    not_charging_char="",
+                    unknown_char="󰂑",
+                    update_interval=3,
                 ),
                 widget.Battery(
                     font="JetBrainsMonoNL NF SemiBold",
-                    charge_char='󰄿',
-                    discharge_char='󰄼',
+                    charge_char="󰄿",
+                    discharge_char="󰄼",
                     notify_below=10,
                     # format="<span size=\"xx-large\"{char}</span> {percent:2.0%}",
                     format="{percent:2.0%}",
                     foreground=foregroundColor,
                     padding=5,
+                    update_interval=3,
                 ),
                 widget.TextBox(
                     text=" ",
@@ -204,7 +207,7 @@ screens: List[Screen] = [
                 ),
                 widget.GenPollCommand(
                     name="brightness",
-                    cmd=['brightnessctl', 'g'],
+                    cmd=["brightnessctl", "g"],
                     fontsize=14,
                     foreground=foregroundColor,
                     update_interval=300,
