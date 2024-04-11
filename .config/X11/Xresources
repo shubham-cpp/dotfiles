@@ -28,7 +28,7 @@ xterm*internalBorder: 0
 xterm*externalBorder: 0
 
 xterm*cursorColor: #61AFEF
-xterm*cursorBlink: true
+xterm*cursorBlink: false
 xterm*cursorOffTime: 300
 xterm*cursorOnTime: 800
 xterm*cursorUnderLine: false
@@ -49,11 +49,11 @@ xterm*highlightTextColor: XtDefaultBackground
 
 ! Font settings
 xterm*faceName: JetBrainsMono Nerd Font
-xterm*faceSize: 10
+xterm*faceSize: 11.5
 xterm*renderFont: true
 xterm*boldColors: true
 ! xterm*faceSize1: 9.5
-xterm*faceSize2: 12
+xterm*faceSize2: 12.5
 xterm*faceSize3: 15
 xterm*faceSize4: 18.25
 xterm*faceSize5: 20.5
@@ -186,4 +186,4 @@ URxvt*scrollBar_right: false
 URxvt*scrollBar: false
 ! URxvt*borderLess: false
 
-URxvt*font: xft:D2CodingLigature Nerd Font:size=13.5,xft:JetBrainsMono Nerd Font Mono:pixelsize=18
+URxvt*font: xft:FiraCode Nerd Font:size=11.5,xft:JetBrainsMono Nerd Font Mono:pixelsize=18
