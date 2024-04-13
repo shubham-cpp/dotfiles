@@ -54,6 +54,7 @@ return {
       n = { name = 'Neogen' },
       s = { name = 'Sessions' },
       z = { name = 'Zk(Notes)' },
+      p = { name = '[P]ick', g = '[G]it' },
       b = {
         name = 'Buffers',
         a = { ':badd<space>', 'Add', silent = false },

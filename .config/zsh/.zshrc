@@ -39,15 +39,16 @@ zinit ice as"command" from"gh-r" \
           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
-zinit ice as"command" from"gh-r" \
-          atclone"./zoxide init zsh > zo_init.sh" \
-          atpull"%atclone" src"zo_init.sh"
-zinit light ajeetdsouza/zoxide
 
-zinit ice as"command" from"gh-r" \
-          atclone"./fnm env --use-on-cd > fnm_init.sh; ./fnm completions --shell zsh > _fnm" \
-          atpull"%atclone" src"fnm_init.sh"
-zinit light Schniz/fnm
+# zinit ice as"command" from"gh-r" \
+#           atclone"./zoxide init zsh > zo_init.sh" \
+#           atpull"%atclone" src"zo_init.sh"
+# zinit light ajeetdsouza/zoxide
+#
+# zinit ice as"command" from"gh-r" \
+#           atclone"./fnm env --use-on-cd > fnm_init.sh; ./fnm completions --shell zsh > _fnm" \
+#           atpull"%atclone" src"fnm_init.sh"
+# zinit light Schniz/fnm
 
 setopt correctall complete_in_word auto_param_keys auto_param_slash
 setopt extendedglob

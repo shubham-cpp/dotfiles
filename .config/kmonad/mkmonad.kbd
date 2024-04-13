@@ -25,7 +25,8 @@
 (defalias
   tnum  (tap-hold-next 300 grv (layer-toggle numbers)) ;; Bind num to a button that switches to a layer
   num  (layer-toggle numbers) ;; Bind num to a button that switches to a layer
-  xcp (tap-hold-next 400 esc lctl)
+  xcp (tap-hold-next 250 esc lctl)
+  ;; msup (tap-hold-next 300 grv lmet)
   ;; res M-A-r
   res (cmd-button "pkill -USR1 -x sxhkd && notify-send -t 1000 \"BSPWM\" \"SXHKD Restarted\"")
 )
