@@ -135,7 +135,7 @@ return {
               '--log=info',
               '--completion-style=detailed',
               -- "--enable-config", -- clangd 11+ supports reading from .clangd configuration file
-              -- "--offset-encoding=utf-16",
+              '--offset-encoding=utf-16',
               '--header-insertion=never',
             },
           },
@@ -306,11 +306,6 @@ return {
               desc = 'Rename',
               cond = 'textDocument/rename',
             },
-            -- ["<leader>="] = {
-            -- 	vim.lsp.buf.formatting,
-            -- 	desc = "Format buffer(lsp)",
-            -- 	cond = "textDocument/formatting",
-            -- },
             ['<leader>lr'] = {
               vim.lsp.buf.rename,
               desc = 'Rename',
@@ -333,7 +328,7 @@ return {
                 require('astrolsp.toggles').buffer_semantic_tokens()
               end,
               desc = 'Toggle LSP semantic highlight (buffer)',
-              cond = function(client, bufnr)
+              cond = function(client)
                 return client.server_capabilities.semanticTokensProvider and vim.lsp.semantic_tokens
               end,
             },
@@ -355,10 +350,6 @@ return {
           tsserver = function(_, opts)
             require('typescript-tools').setup({
               on_attach = function(client, bufnr)
-                -- if client.server_capabilities.documentSymbolProvider then
-                -- 	vim.b[bufnr].navic_enabled = true
-                -- 	require("nvim-navic").attach(client, bufnr)
-                -- end
                 opts.on_attach(client, bufnr)
                 vim.keymap.set('n', 'go', '<cmd>TSToolsOrganizeImports<cr>', { buffer = bufnr })
                 vim.keymap.set('n', 'gD', '<cmd>TSToolsGoToSourceDefinition<cr>', { buffer = bufnr })
@@ -398,22 +389,15 @@ return {
           jsonls = function(server, opts)
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
             opts.settings = {
-              schemas = require('schemastore').json.schemas({}),
-              validate = { enable = true },
-              format = { enable = false },
+              json = {
+                schemas = require('schemastore').json.schemas({}),
+                validate = { enable = true },
+                format = { enable = false },
+              },
             }
-            -- local on = opts.on_attach
-            -- opts.on_attach = function(client, bufnr)
-            -- 	if client.server_capabilities.documentSymbolProvider then
-            -- 		vim.b[bufnr].navic_enabled = true
-            -- 		require("nvim-navic").attach(client, bufnr)
-            -- 	end
-            -- 	on(client, bufnr)
-            -- end
             require('lspconfig')[server].setup(opts)
           end,
           yamlls = function(server, opts)
-            -- opts.capabilities = require("cmp_nvim_lsp").default_capabilities(opts.capabilities)
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
             opts.settings = {
               redhat = { telemetry = { enabled = false } },

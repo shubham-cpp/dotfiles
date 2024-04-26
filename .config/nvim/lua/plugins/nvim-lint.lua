@@ -1,17 +1,17 @@
-local au_group = vim.api.nvim_create_augroup('sp_nvim_lint', { clear = true })
+local au_group = vim.api.nvim_create_augroup('sp_nvim_lint', {})
 local languages = {
   astro = { 'eslint_d' },
   bash = { 'shellcheck' },
-  c = { 'clangtidy' },
-  cpp = { 'clangtidy' },
+  -- c = { 'clangtidy' },
+  -- cpp = { 'clangtidy' },
   fish = { 'fish' },
   go = { 'golangcilint' },
-  javascript = { 'eslint_d' },
-  javascriptreact = { 'eslint_d' },
   markdown = { 'vale' },
   python = { 'ruff' },
   sh = { 'shellcheck' },
   svelte = { 'eslint_d' },
+  javascript = { 'eslint_d' },
+  javascriptreact = { 'eslint_d' },
   typescript = { 'eslint_d' },
   typescriptreact = { 'eslint_d' },
   vue = { 'eslint_d' },
@@ -22,14 +22,17 @@ local languages = {
 return {
   'mfussenegger/nvim-lint',
   enabled = true,
-  event = 'BufRead',
+  ft = vim.tbl_keys(languages),
   config = function()
     require('lint').linters_by_ft = languages
-    vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufReadPost', 'InsertLeave' }, {
+    local function run()
+      require('lint').try_lint()
+    end
+    vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufRead', 'InsertLeave', 'FocusGained' }, {
       group = au_group,
-      callback = function()
-        require('lint').try_lint()
-      end,
+      desc = 'Lint on save',
+      pattern = '*',
+      callback = run,
     })
   end,
 }

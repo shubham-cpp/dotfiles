@@ -1,0 +1,28 @@
+// Place your key bindings in this file to override the defaults
+[
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "neovim.mode == insert && editorFocus"
+  },
+  {
+    "key": "ctrl+shift+d",
+    "command": "editor.action.previousSelectionMatchFindAction",
+    "when": "neovim.mode == insert && editorFocus"
+  },
+  {
+    "key": "ctrl+x",
+    "command": "editor.action.moveSelectionToNextFindMatch",
+    "when": "neovim.mode == insert && editorFocus"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "selectNextSuggestion",
+    "when": "neovim.init && neovim.mode == insert && suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "selectPrevSuggestion",
+    "when": "neovim.init && neovim.mode == insert && suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  }
+]

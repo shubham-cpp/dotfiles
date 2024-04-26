@@ -1,0 +1,49 @@
+{
+  "editor.tabSize": 2,
+  "editor.fontFamily": "'FiraCode Nerd Font','Droid Sans Mono', 'monospace', monospace",
+  "editor.guides.bracketPairs": "active",
+  "editor.minimap.autohide": true,
+  "editor.minimap.scale": 3,
+  "workbench.sideBar.location": "right",
+  "workbench.colorTheme": "GitHub Dark Default",
+  "editor.wordWrap": "on",
+  "workbench.editor.revealIfOpen": true,
+  "github.copilot.enable": {
+    "markdown": "true"
+  },
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "vscode-neovim.NVIM_APPNAME": "nvim-vscode",
+  "editor.cursorSurroundingLines": 12,
+  "editor.lineNumbers": "relative",
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "terminal.integrated.scrollback": 10000,
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.minimap.enabled": false
+}

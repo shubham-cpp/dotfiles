@@ -5,9 +5,15 @@ from typing import LiteralString
 from libqtile.config import EzKey as Key
 from libqtile.lazy import lazy
 
-from .lazy_functions import (move_win_to_immediate_group, smart_window_kill,
-                             toggle_layout_max, toggle_sticky_windows,
-                             update_brightness, update_mic_icon, update_volume)
+from .lazy_functions import (
+    move_win_to_immediate_group,
+    smart_window_kill,
+    toggle_layout_max,
+    toggle_sticky_windows,
+    update_brightness,
+    update_mic_icon,
+    update_volume,
+)
 
 mod: LiteralString = "mod4"
 # terminal = guess_terminal()
@@ -84,12 +90,14 @@ keys = [
     ),
     Key(
         "M-j",
-        lazy.group.next_window(),
+        # lazy.group.next_window(),
+        lazy.layout.next(),
         desc="Move focus down",
     ),
     Key(
         "M-k",
-        lazy.group.prev_window(),
+        # lazy.group.prev_window(),
+        lazy.layout.previous(),
         desc="Move focus up",
     ),
     Key("M-<Left>", lazy.layout.left(), desc="Move focus to left"),
@@ -98,17 +106,20 @@ keys = [
     # Key("M-<Up>", lazy.layout.up(), desc="Move focus up"),
     Key(
         "M-<Down>",
-        lazy.group.next_window(),
+        # lazy.group.next_window(),
+        lazy.layout.next(),
         desc="Move focus down",
     ),
     Key(
         "M-<Up>",
-        lazy.group.prev_window(),
+        # lazy.group.prev_window(),
+        lazy.layout.previous(),
         desc="Move focus up",
     ),
     Key(
         "A-<Tab>",
-        lazy.group.next_window(),
+        # lazy.group.next_window(),
+        lazy.layout.next(),
         desc="Switch window focus to next window in group",
     ),
     # }}}
@@ -191,6 +202,30 @@ keys = [
         lazy.layout.decrease_nmaster(),
         desc="Grow window up",
     ),
+    Key(
+        "M-C-h",
+        lazy.layout.grow_left(),
+        lazy.layout.grow(),
+        desc="Grow window to the left",
+    ),
+    Key(
+        "M-C-l",
+        lazy.layout.grow_right(),
+        lazy.layout.shrink(),
+        desc="Grow window to the right",
+    ),
+    Key(
+        "M-C-j",
+        lazy.layout.grow_down(),
+        lazy.layout.shrink(),
+        desc="Grow window down",
+    ),
+    Key(
+        "M-C-k",
+        lazy.layout.grow_up(),
+        lazy.layout.grow(),
+        desc="Grow window up",
+    ),
     # }}}
     # Applications {{{
     Key(
@@ -240,14 +275,12 @@ keys = [
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
     Key(
         "M-S-d",
-        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'",
-                   shell=True),
+        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'", shell=True),
         desc="Spawn Run Prompt",
     ),
     Key(
         "M-d",
-        lazy.spawn(
-            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
@@ -263,15 +296,20 @@ keys = [
     Key("M-v", lazy.spawn("virt-manager"), desc="Launch Virt-manager"),
     Key(
         "M-g",
-        lazy.spawn("bash -c 'qalculate-gtk || gnome-calculator || galculator'",
-                   shell=True),
+        lazy.spawn(
+            "bash -c 'qalculate-gtk || gnome-calculator || galculator'", shell=True
+        ),
         desc="Launch Calculator",
     ),
     Key(
         "<XF86Calculator>",
-        lazy.spawn("qalculate-gtk" if isfile("/usr/bin/qalculate-gtk") else
-                   "gnome-calculator" if isfile("/usr/bin/gnome-calculator"
-                                                ) else "galculator"),
+        lazy.spawn(
+            "qalculate-gtk"
+            if isfile("/usr/bin/qalculate-gtk")
+            else "gnome-calculator"
+            if isfile("/usr/bin/gnome-calculator")
+            else "galculator"
+        ),
         desc="Launch Calculator",
     ),
     # }}}
@@ -373,14 +411,12 @@ keys = [
     Key("C-A-c", lazy.spawn("xcolor -s"), desc="Launch Color Picker"),
     Key("C-A-p", lazy.spawn("get-class-name"), desc="Copy WM_CLASS name"),
     Key("<Print>", lazy.spawn("flameshot gui"), desc="Take screenshot(FULL)"),
-    Key("S-<Print>",
-        lazy.spawn("flameshot full"),
-        desc="Take screenshot(FOCUS)"),
+    Key("S-<Print>", lazy.spawn("flameshot full"), desc="Take screenshot(FOCUS)"),
     Key("<F1>", lazy.spawn("flameshot gui"), desc="Take screenshot(FOCUS)"),
     Key("M-A-c", lazy.spawn("open-rcs"), desc="Open a config file"),
     Key("M-A-g", lazy.spawn("open-games"), desc="Launch game menu"),
     Key("M-C-s", lazy.spawn("logout_prompt"), desc="Launch logout Prompt"),
-    Key("M-S-m", lazy.spawn("load_monitors"), desc="Launch monitor script"),
+    Key("M-C-m", lazy.spawn("load_monitors"), desc="Launch monitor script"),
     Key("M-y", lazy.spawn("clipboard"), desc="Launch clipboard history"),
     # }}}
 ]

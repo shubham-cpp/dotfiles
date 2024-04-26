@@ -31,6 +31,8 @@ zinit light zsh-users/zsh-history-substring-search
 zinit light lukechilds/zsh-better-npm-completion
 zinit light buonomo/yarn-completion
 zinit light zsh-users/zsh-completions
+# zinit light QuarticCat/zsh-smartcache
+zinit light mroth/evalcache
 
 zinit snippet OMZP::git
 zinit snippet OMZP::colored-man-pages
@@ -39,16 +41,6 @@ zinit ice as"command" from"gh-r" \
           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
-
-# zinit ice as"command" from"gh-r" \
-#           atclone"./zoxide init zsh > zo_init.sh" \
-#           atpull"%atclone" src"zo_init.sh"
-# zinit light ajeetdsouza/zoxide
-#
-# zinit ice as"command" from"gh-r" \
-#           atclone"./fnm env --use-on-cd > fnm_init.sh; ./fnm completions --shell zsh > _fnm" \
-#           atpull"%atclone" src"fnm_init.sh"
-# zinit light Schniz/fnm
 
 setopt correctall complete_in_word auto_param_keys auto_param_slash
 setopt extendedglob
@@ -109,8 +101,5 @@ source "$ZDOTDIR"/mfunctions.zsh
 
 # eval "$(starship init zsh)"
 
-# bun completions
-# [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
-
-# opam configuration
-[[ ! -r /home/shubham/.local/share/opam/opam-init/init.zsh ]] || source /home/shubham/.local/share/opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+# smartcache eval fnm env --use-on-cd
+_evalcache fnm env --use-on-cd

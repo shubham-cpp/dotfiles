@@ -30,6 +30,7 @@ return {
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', enabled = false },
     'natecraddock/telescope-zf-native.nvim',
     'nvim-telescope/telescope-ui-select.nvim',
+    { 'fdschmidt93/telescope-egrepify.nvim', dependencies = 'nvim-lua/plenary.nvim' },
   },
   keys = function()
     local builtin = require 'telescope.builtin'
@@ -50,7 +51,8 @@ return {
       },
       { '<leader>fk', builtin.keymaps, desc = 'keymaps' },
       { '<leader>fS', builtin.current_buffer_fuzzy_find, desc = 'Search(Buffer)' },
-      { '<leader>fs', builtin.live_grep, desc = 'Search(Project)' },
+      -- { '<leader>fs', builtin.live_grep, desc = 'Search(Project)' },
+      { '<leader>fs', '<cmd>Telescope egrepify<cr>', desc = 'Search(Project)' },
       { '<leader>fw', builtin.grep_string, desc = 'Search Current Word' },
       { '<leader>fb', builtin.buffers, desc = 'Buffers' },
       { '<leader>fh', builtin.help_tags, desc = 'Help' },
@@ -143,6 +145,17 @@ return {
           },
           n = { q = actions.close, ['<A-p>'] = action_layout.toggle_preview },
         },
+        -- vimgrep_arguments = {
+        --   'rg',
+        --   '--color=never',
+        --   '--no-heading',
+        --   '--with-filename',
+        --   '--line-number',
+        --   '--column',
+        --   '--smart-case',
+        --   '--hidden',
+        --   '--trim', -- add this value
+        -- },
       },
 
       pickers = {
@@ -187,6 +200,7 @@ return {
     require('telescope').load_extension 'zf-native'
     -- require("telescope").load_extension("fzf")
     require('telescope').load_extension 'ui-select'
+    require('telescope').load_extension 'egrepify'
     -- vim.lsp.handlers["textDocument/codeAction"] = builtin.lsp_references
     vim.lsp.handlers['textDocument/definition'] = builtin.lsp_definitions
     -- vim.lsp.handlers["textDocument/declaration"] = builtin.lsp_references
