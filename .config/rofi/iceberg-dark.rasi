@@ -5,11 +5,14 @@
  *******************************************************************************/
 
 configuration {
-    matching: "regex";
-    /* font: "Cascadia Mono PL 12"; */
-    font: "CaskaydiaCove Nerd Font 12";
-    show-icons: true;
-    modi: "window,run,drun";
+    matching:         "regex";
+    font:             "CaskaydiaCove Nerd Font 12";
+    show-icons:       true;
+    modi:             "window,run,drun";
+    kb-accept-entry:  "Control+m,Return,KP_Enter";
+    kb-row-up:        "Control+k,Up";
+    kb-row-down:      "Control+j,Down";
+    kb-remove-to-eol: "Control+i";
 }
 
 * {

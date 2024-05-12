@@ -1,27 +1,32 @@
 return {
   {
-    'rose-pine/neovim',
+    'projekt0n/github-nvim-theme',
     event = 'VimEnter',
-    enabled = false,
-    name = 'rose-pine',
+    enabled = true,
     config = function()
-      require('rose-pine').setup({
-        dim_inactive_windows = true,
-        styles = { transparency = false },
+      require('github-theme').setup({
+        options = {
+          transparent = false,
+          dim_inactive = true,
+          inverse = { -- Inverse highlight for different types
+            match_paren = false,
+            visual = false,
+            search = false,
+          },
+        }
       })
-      vim.cmd 'colorscheme rose-pine-main'
-      -- vim.cmd("colorscheme rose-pine-moon")
-      -- vim.cmd("colorscheme rose-pine-dawn")
+      -- github_dark_tritanopia | github_dark_colorblind | github_dark_high_contrast | github_dark_dimmed | github_dark_default | github_dark
+      vim.cmd.colorscheme 'github_dark_default'
     end,
   },
   {
     'rebelot/kanagawa.nvim',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require('kanagawa').setup({
         compile = true,
-        transparent = true, -- do not set background color
+        -- transparent = true, -- do not set background color
         dimInactive = true,
         theme = 'wave', -- Load "wave" | "dragon" | "lotus"
       })

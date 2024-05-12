@@ -8,6 +8,7 @@ from libqtile.layout.floating import Floating
 from libqtile.layout.max import Max
 from libqtile.layout.spiral import Spiral
 from libqtile.layout.xmonad import MonadTall, MonadWide
+from libqtile.layout.zoomy import Zoomy
 from libqtile.lazy import lazy
 from libqtile.log_utils import logger
 from libqtile.utils import guess_terminal
@@ -48,6 +49,7 @@ layouts: List[Layout] = [
     MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
     Max(),
     Floating(),
+    Zoomy(),
     Spiral(**layout_theme),
 ]
 

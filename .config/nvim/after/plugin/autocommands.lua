@@ -183,6 +183,7 @@ vim.filetype.add({
     fish = 'fish',
     ocaml = 'ocaml',
     rasi = 'rasi',
+    roc = 'roc'
   },
   filename = {
     vimfrc = 'vim',

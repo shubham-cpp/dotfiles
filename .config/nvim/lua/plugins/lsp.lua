@@ -1,30 +1,25 @@
 return {
   'neovim/nvim-lspconfig',
-  event = 'BufReadPost',
+  event = 'BufReadPre',
   dependencies = {
     {
       'AstroNvim/astrolsp',
       dependencies = {
         {
-          'creativenull/efmls-configs-nvim',
-          version = 'v1.x.x',
-          enabled = false,
-        },
-        {
           'folke/neodev.nvim',
           opts = {},
+          ft = { 'lua' }
         },
-        'b0o/schemastore.nvim',
-        { 'pmizio/typescript-tools.nvim', dependencies = 'nvim-lua/plenary.nvim' },
-        { 'SmiteshP/nvim-navic', enabled = false, opts = {} },
+        { 'b0o/schemastore.nvim',         ft = { 'json', 'jsonc', 'json5', 'yaml' } },
+        { 'pmizio/typescript-tools.nvim', dependencies = 'nvim-lua/plenary.nvim',   ft = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' } },
       },
       ---@type AstroLSPConfig
       opts = {
         -- Configuration table of features provided by AstroLSP
         features = {
-          autoformat = true, -- enable or disable auto formatting on start
-          codelens = true, -- enable/disable codelens refresh on start
-          inlay_hints = true, -- enable/disable inlay hints on start
+          autoformat = true,      -- enable or disable auto formatting on start
+          codelens = true,        -- enable/disable codelens refresh on start
+          inlay_hints = true,     -- enable/disable inlay hints on start
           semantic_tokens = true, -- enable/disable semantic token highlighting
         },
         -- Configure buffer local auto commands to add when attaching a language server
@@ -183,6 +178,13 @@ return {
                 exclude = { '**/node_modules', '**/__pycache__' },
               },
             },
+          },
+          nim_langserver = {
+            settings = {
+              nim = {
+                nimsuggestPath = vim.fn.expand('~/.local/share/nim-2.0.4/bin/nimsuggest'),
+              }
+            }
           },
           bashls = {
             settings = { bashIde = { highlightParsingErrors = true } },
@@ -348,7 +350,11 @@ return {
             require('lspconfig')[server].setup(opts)
           end,
           tsserver = function(_, opts)
-            require('typescript-tools').setup({
+            local ok, ts_tools = pcall(require, 'typescript-tools')
+            if not ok then
+              return
+            end
+            ts_tools.setup({
               on_attach = function(client, bufnr)
                 opts.on_attach(client, bufnr)
                 vim.keymap.set('n', 'go', '<cmd>TSToolsOrganizeImports<cr>', { buffer = bufnr })
@@ -379,9 +385,19 @@ return {
             })
           end,
           lua_ls = function(server, opts)
-            require('neodev').setup({
-              -- add any options here, or leave empty to use the default settings
-            })
+            local ok, neodev = pcall(require, 'neodev')
+            if ok then
+              neodev.setup({
+                override = function(_, library)
+                  library.enabled = true
+                  library.plugins = true
+                end,
+                -- lspconfig = false,
+              })
+            end
+            -- if ok then
+            --   opts.before_init = require("neodev.lsp").before_init
+            -- end
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
 
             require('lspconfig')[server].setup(opts)
@@ -432,78 +448,10 @@ return {
           end,
           eslint = false,
           efm = false,
-          -- efm = function()
-          -- 	local prettier = require("efmls-configs.formatters.prettier_d")
-          -- 	local stylua = require("efmls-configs.formatters.stylua")
-          -- 	local go = {
-          -- 		require("efmls-configs.linters.golangci_lint"),
-          -- 		require("efmls-configs.formatters.gofumpt"),
-          -- 	}
-          -- 	local c = {
-          -- 		require("efmls-configs.formatters.clang_format"),
-          -- 		require("efmls-configs.linters.clang_tidy"),
-          -- 	}
-          -- 	local python = {
-          -- 		require("efmls-configs.formatters.isort"),
-          -- 		require("efmls-configs.formatters.ruff"),
-          -- 		require("efmls-configs.linters.ruff"),
-          -- 	}
-          -- 	local sh = {
-          -- 		require("efmls-configs.formatters.shfmt"),
-          -- 		require("efmls-configs.linters.shellcheck"),
-          -- 	}
-          -- 	local languages = {
-          -- 		bash = sh,
-          -- 		c = c,
-          -- 		cpp = c,
-          -- 		css = { prettier },
-          -- 		go = go,
-          -- 		graphql = { prettier },
-          -- 		html = { prettier },
-          -- 		javascript = { prettier },
-          -- 		javascriptreact = { prettier },
-          -- 		json = { prettier },
-          -- 		json5 = { prettier },
-          -- 		jsonc = { prettier },
-          -- 		less = { prettier },
-          -- 		lua = { stylua },
-          -- 		markdown = { prettier },
-          -- 		python = python,
-          -- 		sass = { prettier },
-          -- 		scss = { prettier },
-          -- 		sh = sh,
-          -- 		svelte = { prettier },
-          -- 		typescript = { prettier },
-          -- 		typescriptreact = { prettier },
-          -- 		vue = { prettier },
-          -- 	}
-          -- 	require("lspconfig").efm.setup({
-          -- 		init_options = {
-          -- 			documentFormatting = true,
-          -- 			documentRangeFormatting = true,
-          -- 		},
-          -- 		filetypes = vim.tbl_keys(languages),
-          -- 		settings = {
-          -- 			rootMarkers = { ".git/" },
-          -- 			languages = languages,
-          -- 		},
-          --
-          -- 		on_attach = function(_, buf)
-          -- 			vim.keymap.set({ "n", "v" }, "<leader>=", function()
-          -- 				vim.lsp.buf.format({
-          -- 					async = true,
-          -- 					filter = function(client)
-          -- 						return client.name == "efm"
-          -- 					end,
-          -- 				})
-          -- 			end, { buffer = buf, desc = "Efm Fix" })
-          -- 		end,
-          -- 	})
-          -- end,
           zk = false,
         },
         -- A list like table of servers that should be setup, useful for enabling language servers not installed with Mason.
-        servers = { 'gleam', 'zls' },
+        servers = { 'gleam', 'zls', 'roc_ls', 'nim_langserver' },
       },
     },
     {
@@ -565,22 +513,6 @@ return {
     for sign, icon in pairs(diags) do
       vim.fn.sign_define('DiagnosticSign' .. sign, { text = icon, texthl = 'DiagnosticSign' .. sign })
     end
-    -- vim.fn.sign_define(
-    --   'DiagnosticSignError',
-    --   { text = '', texthl = 'DiagnosticSignError' }
-    -- )
-    -- vim.fn.sign_define(
-    --   'DiagnosticSignWarn',
-    --   { text = '', texthl = 'DiagnosticSignWarn' }
-    -- )
-    -- vim.fn.sign_define(
-    --   'DiagnosticSignInfo',
-    --   { text = '', texthl = 'DiagnosticSignInfo' }
-    -- )
-    -- vim.fn.sign_define(
-    --   'DiagnosticSignHint',
-    --   { text = '', texthl = 'DiagnosticSignHint' }
-    -- )
     -- set up servers configured with AstroLSP
     vim.tbl_map(require('astrolsp').lsp_setup, require('astrolsp').config.servers)
   end,

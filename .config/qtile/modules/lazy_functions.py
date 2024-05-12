@@ -1,6 +1,6 @@
 from libqtile.command import lazy as lz
 from libqtile.log_utils import logger
-
+from libqtile.core.manager import Qtile
 # Custom Lazy Functions {{{
 # @hook.subscribe.client_urgent_hint_changed
 # def go_to(window):
@@ -9,8 +9,9 @@ from libqtile.log_utils import logger
 
 sticky_windows: list = []
 
+
 @lz.function
-def toggle_layout_max(qtile):
+def toggle_layout_max(qtile: Qtile):
     """Toggle Max layout
 
     Args:
@@ -23,7 +24,7 @@ def toggle_layout_max(qtile):
 
 
 @lz.function
-def move_win_to_immediate_group(qtile, prev=False):
+def move_win_to_immediate_group(qtile: Qtile, prev=False):
     """Move to window to immediate next/prev group
 
     Args:
@@ -42,14 +43,15 @@ def move_win_to_immediate_group(qtile, prev=False):
 
 
 @lz.function
-def smart_window_kill(qtile):
+def smart_window_kill(qtile: Qtile):
     """Kill the window and move to last group if it was the last window
 
     Args:
-        qtile (libqtile.qtile): By default passed by lz.function
+        qtile (libqtile.core.manager.Qtile): By default passed by lz.function
     """
     win_count = len(qtile.current_group.windows)
-    qtile.current_window.kill()
+    if qtile.current_window:
+        qtile.current_window.kill()
     if win_count <= 1:
         qtile.current_screen.toggle_group()
 
@@ -59,24 +61,24 @@ def update_volume(qtile):
     """Update the volume widget on keypress
 
     Args:
-        qtile (libqtile.qtile): By default passed by lz.function
+        qtile (libqtile.core.manager.Qtile): By default passed by lz.function
     """
     w = qtile.widgets_map["volume"]
     icon = qtile.widgets_map["volume_icon"]
-    # widgets = ",".join(qtile.widgets_map)
-    # logger.warn("widget names = " + widgets)
-    # logger.warn("values of w  = " + ",".join(dir(w)))
-    w.poll()
-    icon.poll()
-    w.force_update()
-    icon.force_update()
+    if w:
+        w.poll()
+        w.force_update()
+    if icon:
+        icon.poll()
+        icon.force_update()
+
 
 @lz.function
 def update_mic_icon(qtile):
     """Update the volume_mic widget on keypress
 
     Args:
-        qtile (libqtile.qtile): By default passed by lz.function
+        qtile (libqtile.core.manager.Qtile): By default passed by lz.function
     """
     icon = qtile.widgets_map["volume_mic_icon"]
     icon.poll()
@@ -93,8 +95,9 @@ def update_brightness(qtile):
     w = qtile.widgets_map["brightness"]
     w.force_update()
 
+
 @lz.function
-def toggle_sticky_windows(qtile, window=None):
+def toggle_sticky_windows(qtile: Qtile, window=None):
     if window is None:
         window = qtile.current_screen.group.current_window
     if window in sticky_windows:
@@ -102,4 +105,38 @@ def toggle_sticky_windows(qtile, window=None):
     else:
         sticky_windows.append(window)
     return window
+
+
+@lz.function
+def toggle_monad_tall_wide(qtile: Qtile):
+    """Toggle Monadtall and MonadWide layout
+
+    Args:
+        qtile (libqtile.qtile): By default passed by lz.function
+    """
+    lname = qtile.current_group.layout.name
+    logger.warn("Current Layout:: " + lname)
+    change_to = "monadtall" if lname != "monadtall" else "monadwide"
+    qtile.current_group.setlayout(change_to)
+
+
+last_layout = "monadtall"  # Default layout
+
+
+@lz.function
+def toggle_layout(qtile: Qtile, switch_to: str):
+    """Toggle between current layout and last layout
+
+    Args:
+        qtile (libqtile.core.manager.Qtile): By default passed by lz.function
+    """
+    current_layout_name = qtile.current_group.layout.name
+    if current_layout_name != switch_to:
+        global last_layout
+        last_layout = current_layout_name
+        qtile.current_group.setlayout(switch_to)
+    else:
+        qtile.current_group.setlayout(last_layout)
+
+
 # }}}

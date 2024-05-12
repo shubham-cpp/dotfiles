@@ -8,6 +8,7 @@ from libqtile.lazy import lazy
 from .lazy_functions import (
     move_win_to_immediate_group,
     smart_window_kill,
+    toggle_layout,
     toggle_layout_max,
     toggle_sticky_windows,
     update_brightness,
@@ -76,6 +77,8 @@ keys = [
         desc="Move window focus to other window",
     ),
     Key("M-n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key("M-S-m", toggle_layout("monadwide"), desc="Toggle Monad Wide"),
+    Key("M-z", toggle_layout("zoomy"), desc="Toggle Zoomy"),
     # }}}
     # Change focus among windows {{{
     Key(
@@ -124,8 +127,8 @@ keys = [
     ),
     # }}}
     # Move window {{{
-    Key("M-S-h", lazy.layout.shuffle_left(), desc="Move window to the left"),
-    Key("M-S-l", lazy.layout.shuffle_right(), desc="Move window to the right"),
+    Key("M-S-h", lazy.layout.swap_left(), desc="Move window to the left"),
+    Key("M-S-l", lazy.layout.swap_right(), desc="Move window to the right"),
     Key("M-S-j", lazy.layout.shuffle_down(), desc="Move window down"),
     Key("M-S-k", lazy.layout.shuffle_up(), desc="Move window up"),
     Key(
@@ -230,7 +233,7 @@ keys = [
     # Applications {{{
     Key(
         "M-S-<Return>",
-        lazy.spawn("wezterm || kitty", shell=True),
+        lazy.spawn("bash -c 'wezterm || kitty'", shell=True),
         desc="Spawn terminal kitty",
         # lazy.layout.toggle_split(),
         # desc="Toggle between split and unsplit sides of stack",
@@ -246,7 +249,7 @@ keys = [
     Key(
         "M-S-w",
         # lazy.spawn("thorium-browser"),
-        lazy.spawn("brave || brave-browser", shell=True),
+        lazy.spawn("bash -c 'brave || brave-browser'", shell=True),
         # lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
         # lazy.spawn(
         #     "firefox"

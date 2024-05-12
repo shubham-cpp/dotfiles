@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-# For removing duplicates from path
-# echo $PATH | tr ' ' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':'
-
 PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
 PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
+PATH="$PATH:$HOME/.local/share/nim-2.0.4/bin:$HOME/Downloads/GitClones/roc_nightly:$HOME/.nimble/bin"
 PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/:$HOME/.nimble/bin"
 # Deduplicate entries in PATH
 PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
@@ -14,21 +12,14 @@ export PATH
 export EDITOR=nvim
 export VISUAL=nvim
 
-# export TERM="xterm-256color"
-export TERMINAL="alacritty"
-
-export FILE_BROWSER="thunar"
-
-export BROWSER="firefox"
-
-# [ -x /bin/brave ] && export BROWSER="brave"
-# [ -x /bin/brave-browser ] && export BROWSER="brave-browser"
-# [ -x /bin/brave-browser-stable ] && export BROWSER="brave-browser-stable"
-export READER="zathura"
+export TERMINAL=/usr/bin/alacritty
+export FILE_BROWSER=thunar
+export BROWSER=firefox
+export READER=zathura
 
 if [ $DESKTOP_SESSION != "plasma" ]; then
-	export QT_QPA_PLATFORMTHEME="qt5ct"
-	export QT_AUTO_SCREEN_SCALE_FACTOR=0
+  export QT_QPA_PLATFORMTHEME="qt5ct"
+  export QT_AUTO_SCREEN_SCALE_FACTOR=0
 fi
 
 # ~/ Clean-up:
@@ -37,10 +28,10 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-	export MOZ_ENABLE_WAYLAND=1
-	export XDG_CURRENT_DESKTOP=Unity
-	export _JAVA_AWT_WM_NONREPARENTING=1
-	export XCURSOR_SIZE=24
+  export MOZ_ENABLE_WAYLAND=1
+  export XDG_CURRENT_DESKTOP=Unity
+  export _JAVA_AWT_WM_NONREPARENTING=1
+  export XCURSOR_SIZE=24
 fi
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel

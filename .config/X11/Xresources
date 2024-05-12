@@ -93,48 +93,57 @@ xterm*on3Clicks:  regex [^ \n]+
 xterm*on4Clicks:  regex [^#$]+
 XTerm*fullscreen: never
 ! Space Duck
-*.background: #0f111b
-*.foreground: #ecf0c1
-*.cursorColor: #61AFEF
-*.color0:  #000000
-*.color8:  #686f9a
-*.color1:  #e33400
-*.color9:  #e33400
-*.color2:  #5ccc96
-*.color10: #5ccc96
-*.color3:  #b3a1e6
-*.color11: #b3a1e6
-*.color4:  #00a3cc
-*.color12: #00a3cc
-*.color5:  #f2ce00
-*.color13: #f2ce00
-*.color6:  #7a5ccc
-*.color14: #7a5ccc
-*.color7:  #686f9a
-*.color15: #f0f1ce
-
-! brogrammer theme
-xterm*background: #070b0f
-xterm*color0:   #1f1f1f
-xterm*color8:   #d6dae4
-xterm*color1:   #f71118
-xterm*color9:   #de342e
-xterm*color2:   #2cc55d
-xterm*color10:  #1dd260
-xterm*color3:   #ecb90f
-xterm*color11:  #f2bd09
-xterm*color4:   #2a84d2
-xterm*color12:  #0f80d5
-xterm*color5:   #4e59b7
-xterm*color13:  #524fb9
-xterm*color6:   #0f80d5
-xterm*color14:  #0f7cda
-xterm*color7:   #d6dae4
-xterm*color15:  #ffffff
-
+!*.background: #0f111b
+!*.foreground: #ecf0c1
+!*.cursorColor: #61AFEF
+!*.color0:  #000000
+!*.color8:  #686f9a
+!*.color1:  #e33400
+!*.color9:  #e33400
+!*.color2:  #5ccc96
+!*.color10: #5ccc96
+!*.color3:  #b3a1e6
+!*.color11: #b3a1e6
+!*.color4:  #00a3cc
+!*.color12: #00a3cc
+!*.color5:  #f2ce00
+!*.color13: #f2ce00
+!*.color6:  #7a5ccc
+!*.color14: #7a5ccc
+!*.color7:  #686f9a
+!*.color15: #f0f1ce
+! kanagawa.nvim
+! special
+*.foreground:   #dcd7ba
+*.background:   #0f111b
+*.cursorColor:  #dcd7ba
+! black
+*.color0:       #090618
+*.color8:       #727169
+! red
+*.color1:       #c34043
+*.color9:       #e82424
+! green
+*.color2:       #76946a
+*.color10:      #98bb6c
+! yellow
+*.color3:       #c0a36e
+*.color11:      #e6c384
+! blue
+*.color4:       #7e9cd8
+*.color12:      #7fb4ca
+! magenta
+*.color5:       #957fb8
+*.color13:      #938aa9
+! cyan
+*.color6:       #6a9589
+*.color14:      #7aa89f
+! white
+*.color7:       #c8c093
+*.color15:      #dcd7ba
 ! st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
 ! st*font: MesloLGS Nerd Font:size=11.5:antialias=true:autohint=true
-st*font: JetBrainsMono Nerd Font:size=11.5:antialias=true:autohint=true
+st*font: RecMonoLinear Nerd Font:size=12:antialias=true:autohint=true
 ! st*font: Iosevka Nerd Font Propo:size=12.5:antialias=true:autohint=true
 
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex

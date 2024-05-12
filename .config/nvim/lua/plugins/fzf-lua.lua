@@ -41,7 +41,7 @@ return {
     -- calling `setup` is optional for customization
     fzf.setup({
       'telescope',
-
+      defaults = { formatter = 'path.filename_first' },
       fzf_opts = {
         ['--layout'] = 'reverse',
         ['--info'] = 'inline-right',

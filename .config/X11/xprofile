@@ -38,6 +38,8 @@ run_polkit() {
 }
 basic() {
 	bash ~/.local/bin/myscripts/default_mouse_settings &
+
+	[ -x /bin/dunst ] && exec --no-startup-id dunst &
 	run_polkit
 	run dunst
 	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then

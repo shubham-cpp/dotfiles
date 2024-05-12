@@ -41,17 +41,13 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias v="nvim"
-alias vv="NVIM_APPNAME=nvim-my nvim"
-alias vt="NVIM_APPNAME=nvim-try nvim"
-alias vl="NVIM_APPNAME=nvim-try nvim"
+alias va="NVIM_APPNAME=nvim-astro nvim"
 alias se="sudo nvim"
 alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
 
 alias xcp="xclip -i -r -sel clip"
 alias rg="rg -i"
 alias r="ranger"
-# alias fd="fdfind"
-# alias bat="batcat"
 alias mci="make -j4 && sudo make install clean"
 
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
@@ -82,7 +78,3 @@ alias gch='git checkout'
 
 alias p="pnpm"
 alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
-# if /bin/grep -iq void /etc/issue*; then
-#     alias reboot="loginctl reboot"
-#     alias poweroff="loginctl poweroff"
-# fi

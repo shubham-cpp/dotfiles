@@ -87,14 +87,8 @@ screens: List[Screen] = [
                     },
                     name_transform=lambda name: name.upper(),
                 ),
-                # widget.Wttr(
-                #     location={"Pune": "Home"},
-                #     font="JetBrainsMono Nerd Font",
-                #     fontsize=14,
-                #     padding=5,
-                # ),
                 widget.Net(
-                    format='<span size="large">\uf1eb</span>  {down: 4.2f} {down_suffix} <span size="large">\uf175\uf176</span>  {up: 4.2f} {up_suffix}',
+                    format='<span size="large">\uf1eb</span> {down: 4.2f} {down_suffix} <span size="large">\uf175\uf176</span> {up: 4.2f} {up_suffix}',
                     fontsize=13,
                     padding=10,
                     # prefix='M',
@@ -138,7 +132,7 @@ screens: List[Screen] = [
                     update_interval=1.5,
                     format="{load_percent}%",
                     foreground=foregroundColor,
-                    padding=5,
+                    padding=2,
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.TextBox(
@@ -153,7 +147,7 @@ screens: List[Screen] = [
                     format="{MemUsed: 4.2f}{mm} /{MemTotal: 4.2f}{mm}",
                     measure_mem="G",
                     update_interval=2,
-                    padding=5,
+                    padding=2,
                 ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.GenPollText(

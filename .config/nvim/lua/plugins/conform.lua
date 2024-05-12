@@ -41,6 +41,7 @@ return {
       typescriptreact = { prettier, 'eslint_d' },
       svelte = { prettier, 'eslint_d' },
       vue = { prettier, 'eslint_d' },
+      nim = { 'nimpretty' },
       zig = { 'zigfmt' },
       -- You can use a function here to determine the formatters dynamically
       python = function(bufnr)
