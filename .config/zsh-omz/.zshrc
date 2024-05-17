@@ -1,13 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-# WORDCHARS=${WORDCHARS//\/[&.;]}
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
 # Path to your oh-my-zsh installation.
 export ZSH="$ZDOTDIR/ohmyzsh"
 
@@ -98,33 +88,13 @@ WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
-
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/Documents/dotfiles/.config/zsh/alias.zsh
-source ~/Documents/dotfiles/.config/zsh/.zprofile
+source ~/.config/zsh-orig/.zprofile
 source $ZDOTDIR/keys.zsh
 
-# WORDCHARS=${WORDCHARS//\/[&.;]}
 alias mkd=take
 compdef trash-put=rm
 [ -x /bin/dnf5 ] && compdef dnf5=dnf
@@ -135,17 +105,6 @@ bindkey -M viins '^[[B' history-substring-search-down # or '\eOB'
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # source ~/Documents/dotfiles/.config/zsh/alias.zsh
-
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-# [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-
-# unix-word-rubout() {
-#   local WORDCHARS=$'!"#$%&\'()*+,-.:;?@[\\]^_`{|}~'
-#   zle backward-kill-word
-# }
-#
-# zle -N unix-word-rubout
-# bindkey '^W' unix-word-rubout
 
 # bun completions
 [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

@@ -414,7 +414,7 @@ return {
             require('lspconfig')[server].setup(opts)
           end,
           yamlls = function(server, opts)
-            opts.capabilities = require('cmp_nvim_lsp').default_capabilities()
+            opts.capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
             opts.settings = {
               redhat = { telemetry = { enabled = false } },
               yaml = {

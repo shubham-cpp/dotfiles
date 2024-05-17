@@ -8,6 +8,7 @@ killall waybar
 killall swaync
 killall kmonad
 xrdb -override ~/.config/X11/Xresources
+dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP
 /usr/lib/xdg-desktop-portal-hyprland &
 sleep 2
 /usr/lib/xdg-desktop-portal &

@@ -1,105 +1,92 @@
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+# Set the directory we want to store zinit and plugins
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+# Download Zinit, if it's not there yet
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
+# Source/Load zinit
+source "${ZINIT_HOME}/zinit.zsh"
 
-### End of Zinit's installer chunk
-# Plugin history-search-multi-word loaded with investigating.
-zinit load zdharma-continuum/history-search-multi-word
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-# Two regular plugins loaded without investigating.
-zinit light zsh-users/zsh-autosuggestions
-zinit light zdharma-continuum/fast-syntax-highlighting
-zinit light zsh-users/zsh-history-substring-search
-# zinit light skywind3000/z.lua
-zinit light lukechilds/zsh-better-npm-completion
-zinit light buonomo/yarn-completion
-zinit light zsh-users/zsh-completions
-# zinit light QuarticCat/zsh-smartcache
-zinit light mroth/evalcache
+# Add in Powerlevel10k
+zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-zinit snippet OMZP::git
-zinit snippet OMZP::colored-man-pages
-
-zinit ice as"command" from"gh-r" \
-          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-          atpull"%atclone" src"init.zsh"
-zinit light starship/starship
-
-setopt correctall complete_in_word auto_param_keys auto_param_slash
-setopt extendedglob
-setopt autolist
-setopt rcexpandparam
-setopt numericglobsort
-setopt nocheckjobs nobeep nocaseglob
-setopt appendhistory incappendhistory extendedhistory sharehistory
-setopt hist_verify hist_save_no_dups hist_reduce_blanks hist_ignore_space hist_find_no_dups
-setopt histignorealldups histignorespace histexpiredupsfirst
-setopt autocd autopushd pushdignoredups
-setopt globdots
-setopt local_options
-
-fpath=(~/.local/share/zsh/site-functions $fpath)
-
-zstyle ':completion:*:*:*:*:*' menu select
-# This is my old
-# zstyle ':completion:*' menu yes
-zstyle ':completion:*' verbose yes
-# zstyle ':completion:*:*:kill:*:*' verbose no
-zstyle ':completion:*:*:kill:*:jobs' verbose no
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive completion
-# zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'  # partial words completion
-zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
-zstyle ':completion:*' rehash true
-zstyle ':autocomplete:*' add-space \
-    executables aliases functions builtins reserved-words commands
-# # Speed up completions
-zstyle ':completion:*' accept-exact '*(N)'
-zstyle ':completion:*' use-cache true
-zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh_cache"
-zstyle ':completion:*' completer _extensions _expand_alias _complete _approximate _prefix
-zstyle ':completion:*' squeeze-slashes true
-zstyle ':completion:*' group-name ''
-zstyle ':completion::(^approximate*):*:functions'   ignored-patterns '_*'    # Ignore completion functions for commands you don't have:
-## complete as much as you can ..
-zstyle ':completion:*' completer _complete _list _oldlist _expand _ignored _match _correct _approximate _prefix
-# HISTFILE=$ZDOTDIR/.zhistory
-HISTFILE=$HOME/.cache/zhistory
-HISTSIZE=50000
-SAVEHIST=10000
-# HISTDUP=erase
-
-WORDCHARS=${WORDCHARS//\/[&.;]}
-
-autoload -Uz compinit
+# fpath=(~/.local/share/zsh/site-functions $fpath)
 autoload -Uz colors edit-command-line
-autoload -Uz bashcompinit && bashcompinit
-zmodload -i zsh/complist
+autoload -Uz compinit && compinit
+zt(){ zinit depth3 lucid ${1/#[0-9][a-c]/wait${1}} ${@:2}; }
+# Add in zsh plugins
+zinit light zdharma-continuum/fast-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-history-substring-search
+zinit light Aloxaf/fzf-tab
+# zinit light lukechilds/zsh-better-npm-completion
+zinit ice trigger-load!npm wait'0' lucid; zinit light lukechilds/zsh-better-npm-completion
+zinit ice trigger-load!man wait'0' lucid; zinit snippet OMZP::colored-man-pages
+# zinit ice as"command" from"gh-r" \
+#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+#           atpull"%atclone" src"init.zsh"
+# zinit light starship/starship
+# Add in snippets
+zinit snippet OMZP::git
+# zinit snippet OMZP::sudo
+# zinit snippet OMZP::archlinux
+# Load completions
+# autoload -Uz compinit && compinit
+zinit cdreplay -q
 
-compinit -d "$HOME/.cache/zcompdump"
-colors
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
-source "$ZDOTDIR"/alias.zsh
-source "$ZDOTDIR"/bindings.zsh
-source "$ZDOTDIR"/mfunctions.zsh
+# History
+export ZSH_CACHE_DIR=$HOME/.cache/zsh-cache
+HISTSIZE=5000
+HISTFILE=~/.cache/zhistory
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
+WORDCHARS=${WORDCHARS//\/[&.;]}
+setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt pushdminus
+setopt extendedglob numericglobsort
 
-# eval "$(starship init zsh)"
+# Completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+# zstyle ':completion:*' menu no
+# zstyle ':completion:*' squeeze-slashes true
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+# disable sort when completing `git checkout`
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:*' switch-group '<' '>'
+zinit snippet ~/Documents/dotfiles/.config/zsh/alias.zsh
+zinit snippet ~/Documents/dotfiles/.config/zsh/bindings.zsh
+zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
-# smartcache eval fnm env --use-on-cd
-_evalcache fnm env --use-on-cd
+# Shell integrations
+eval "$(fzf --zsh)"
+eval "$(zoxide init zsh)"
+eval "$(fnm env --use-on-cd)"
+# _evalcache fzf --zsh
+# _evalcache zoxide init zsh
+# _evalcache fnm env --use-on-cd

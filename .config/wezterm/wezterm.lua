@@ -39,7 +39,7 @@ config.freetype_load_target = "Light"
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 config.mouse_bindings = {
   -- { event = { Up = { streak = 1, button = 'Left' } }, mods = 'NONE', action = wezterm.action.CompleteSelection('PrimarySelection'), },
-  { event = { Up = { streak = 1, button = "Left" } }, mods = "CMD", action = wezterm.action.OpenLinkAtMouseCursor },
+  { event = { Up = { streak = 1, button = "Left" } }, mods = "CTRL", action = wezterm.action.OpenLinkAtMouseCursor },
 }
 config.default_cursor_style = "SteadyBar"
 

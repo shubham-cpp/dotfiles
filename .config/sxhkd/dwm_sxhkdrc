@@ -8,15 +8,12 @@ super + shift + Return
 
 super + Escape
 	pkill -USR1 -x sxhkd && notify-send -t 1000 "DWM" "SXHKD Restarted"
-    # && pkill -RTMIN+1 bliss && notify-send -t 1000 "DWM" "Bliss Restarted"
 
-# Launch Filemanager
 super +{_,shift + } e
     {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
 
-# {  $BROWSER || flatpak run com.brave.Browser || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || flatpak run com.github.Eloston.UngoogledChromium ||  brave-browser || brave || chromium}
 super +{_,shift +} w
-    { flatpak run one.ablaze.floorp || $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || thorium-browser || flatpak run com.github.Eloston.UngoogledChromium || brave-browser || brave || chromium || firefox}
+    { $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || brave-browser || brave || thorium-browser || flatpak run com.github.Eloston.UngoogledChromium || chromium || firefox}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical
@@ -29,8 +26,8 @@ super + alt + {c,g}
 control + alt + {p,c,v,e}
     {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
 
-super + control + {s,l}
-    {logout_prompt,betterlockscreen -l}
+super + control + {s,l,m}
+    {logout_prompt,betterlockscreen -l,load_monitors}
 
 # {_,shift +, alt + }@Print
 #     take_ss {clip,focus,full} && notify-send "Maim" "Screenshot Taken" || notify-send "Failed" "Maim is not installed." -u critical

@@ -14,8 +14,8 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const Bool viewontag              = True;     /* Switch view on tag switch */
 static const char *fonts[]               = { 
-  "Ubuntu:size=11",
-  "FiraCode Nerd Font:size=14",
+  "IBM Plex Sans:size=11",
+  "Symbols Nerd Font:size=12",
   "Noto Color Emoji:size=12"
 };
 static const char dmenufont[]            = "monospace:size=10";

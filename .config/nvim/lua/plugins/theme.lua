@@ -2,7 +2,7 @@ return {
   {
     'projekt0n/github-nvim-theme',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require('github-theme').setup({
         options = {
@@ -17,6 +17,31 @@ return {
       })
       -- github_dark_tritanopia | github_dark_colorblind | github_dark_high_contrast | github_dark_dimmed | github_dark_default | github_dark
       vim.cmd.colorscheme 'github_dark_default'
+    end,
+  },
+  {
+    'catppuccin/nvim',
+    name = "catppuccin",
+    event = 'VimEnter',
+    enabled = true,
+    config = function()
+      require("catppuccin").setup({
+        ---@type "latte"| "frappe"| "macchiato"| "mocha"|"auto"
+        flavour = "mocha",
+        transparent_background = false,
+        dim_inactive = {
+          enabled = false,   -- dims the background color of inactive window
+          shade = "dark",
+          percentage = 0.15, -- percentage of the shade to apply to the inactive window
+        },
+        custom_highlights = function(colors)
+          return {
+            QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = { 'underline', 'bold' } },
+            QuickScopeSecondary = { fg = '#61afef', bg = '#505050', style = { 'underline', 'bold', } },
+          }
+        end
+      })
+      vim.cmd 'colorscheme catppuccin'
     end,
   },
   {
