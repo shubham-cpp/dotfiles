@@ -2,7 +2,7 @@ return {
   {
     'mg979/vim-visual-multi',
     branch = 'master',
-    enabled = false,
+    enabled = true,
     init = function()
       vim.g.VM_maps = {}
       vim.g.VM_mouse_mappings = 1
@@ -19,7 +19,7 @@ return {
   {
     'brenton-leighton/multiple-cursors.nvim',
     version = '*', -- Use the latest tagged version
-    enabled = true,
+    enabled = false,
     opts = {},
     cmd = {
       'MultipleCursorsAddDown',
@@ -33,14 +33,14 @@ return {
     },
     keys = {
       { '<C-Down>', '<Cmd>MultipleCursorsAddDown<CR>', desc = 'Add cursor down', mode = { 'n', 'x' } },
-      { '<C-Up>',   '<Cmd>MultipleCursorsAddUp<CR>',   desc = 'Add cursor up',   mode = { 'n', 'x' } },
+      { '<C-Up>', '<Cmd>MultipleCursorsAddUp<CR>', desc = 'Add cursor up', mode = { 'n', 'x' } },
       {
         '<C-LeftMouse>',
         '<Cmd>MultipleCursorsMouseAddDelete<CR>',
         desc = 'Add cursor with mouse',
         mode = { 'n', 'x' },
       },
-      { '<leader>ca', '<Cmd>MultipleCursorsAddMatches<CR>', desc = 'Add cursor matches',   mode = { 'n', 'x' } },
+      { '<leader>ca', '<Cmd>MultipleCursorsAddMatches<CR>', desc = 'Add cursor matches', mode = { 'n', 'x' } },
       {
         '<leader>cA',
         '<Cmd>MultipleCursorsAddMatchesV<CR>',
@@ -59,7 +59,7 @@ return {
         desc = 'Move cursor to next match',
         mode = { 'n', 'x' },
       },
-      { '<leader>cl', '<Cmd>MultipleCursorsLock<CR>',       desc = 'Lock virtual cursors', mode = { 'n', 'x' } },
+      { '<leader>cl', '<Cmd>MultipleCursorsLock<CR>', desc = 'Lock virtual cursors', mode = { 'n', 'x' } },
     },
   },
 }

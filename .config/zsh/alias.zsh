@@ -43,7 +43,8 @@ alias ....="cd ../../.."
 alias v="nvim"
 alias va="NVIM_APPNAME=nvim-astro nvim"
 alias se="sudo nvim"
-alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
+# alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
+
 
 alias xcp="xclip -i -r -sel clip"
 alias rg="rg -i"

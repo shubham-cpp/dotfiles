@@ -2,7 +2,7 @@ return {
   {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufReadPost',
-    enabled = true,
+    enabled = false,
     main = 'ibl',
     opts = {
       indent = { char = '▏' },
@@ -30,9 +30,21 @@ return {
   {
     'nvimdev/indentmini.nvim',
     enabled = false,
-    event = 'BufEnter',
+    event = 'BufReadPost',
     config = function()
       require('indentmini').setup()
+    end,
+  },
+  {
+    'echasnovski/mini.indentscope',
+    version = false,
+    enabled = true,
+    event = 'BufReadPost',
+    config = function()
+      require('mini.indentscope').setup({
+        -- Which character to use for drawing scope indicator
+        symbol = '╎',
+      })
     end,
   },
 }

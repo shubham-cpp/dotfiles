@@ -22,6 +22,7 @@ o.scrolloff = 16
 o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
+o.showtabline = 1
 o.formatoptions = 'jcrqlnt'
 -- o.timeoutlen = 300
 o.swapfile = true

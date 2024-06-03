@@ -2,8 +2,9 @@
 
 PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
 PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
-PATH="$PATH:$HOME/.local/share/nim-2.0.4/bin:$HOME/Downloads/GitClones/roc_nightly:$HOME/.nimble/bin"
+PATH="$PATH:$HOME/.local/share/nim-2.0.4/bin:$HOME/Downloads/GitClones/roc_nightly:$HOME/.nimble/bin:$HOME/.cache/rebar3/bin"
 PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/:$HOME/.nimble/bin"
+PATH="$PATH:$HOME/.local/share/odin-lang/"
 # Deduplicate entries in PATH
 PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 
@@ -29,7 +30,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
   export MOZ_ENABLE_WAYLAND=1
-  export XDG_CURRENT_DESKTOP=Unity
   export _JAVA_AWT_WM_NONREPARENTING=1
   export XCURSOR_SIZE=24
 fi

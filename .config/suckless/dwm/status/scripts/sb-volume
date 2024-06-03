@@ -1,30 +1,30 @@
 #!/bin/sh
 
 case $BLOCK_BUTTON in
-	1) pavucontrol & ;;
-	2) audio toggle ;;
-	4) audio inc ;;
-	5) audio dec ;;
-	6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+1) pavucontrol & ;;
+2) audio toggle ;;
+4) audio inc ;;
+5) audio dec ;;
+6) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
 # if pactl get-sink-mute @DEFAULT_SINK@ | grep yes > /dev/null; then
 if wpctl get-volume @DEFAULT_AUDIO_SINK@ | /bin/grep -q "[MUTED]"; then
-	echo "󰖁 Muted"
-	exit
+  echo "󰖁 Muted"
+  exit
 fi
 
 vol="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)"
 [ $? -ne 0 ] && exit $?
 
-if [ "$vol" -gt 70 ]; then
-	icon="  "
-elif [ "$vol" -gt 40 ]; then
-	icon="󰕾 "
-elif [ "$vol" -gt 10 ]; then
-	icon=" "
+if [ "$vol" -ge 70 ]; then
+  icon="  "
+elif [ "$vol" -ge 40 ]; then
+  icon="󰕾 "
+elif [ "$vol" -ge 10 ]; then
+  icon=" "
 else
-	icon="󰕿"
+  icon="󰕿"
 fi
 
 echo "$icon $vol%"

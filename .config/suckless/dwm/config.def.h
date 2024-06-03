@@ -49,15 +49,14 @@ static const char *colors[][3]      = {
 /* status bar */
 static const Block blocks[] = {
 	/* fg     command				interval(secs)	signal(34+x) */
-	{norm_fg,  "sb-date",   30, 1},
+  {norm_fg, "(sleep 5 ; curl \"wttr.in/Pune?format=3\")", 1800, 10},
   {norm_fg,  "sb-bright", 0,  2},
   {norm_fg,  "sb-volume", 0,  3},
 	{norm_fg,  "sb-mic",    0,  4},
 	{norm_fg,  "sb-memory", 3,  5},
   {norm_fg,  "sb-load",   3,  6},
   {norm_fg,  "sb-battery",8, 7},
-
-  {norm_fg, "(sleep 5 ; curl \"wttr.in/Pune?format=3\")", 1800, 10},
+	{norm_fg,  "sb-date",   30, 1},
 };
 
 /* inverse the order of the blocks, comment to disable */
@@ -116,6 +115,7 @@ static const Rule rules[] = {
     {"Nitrogen",           NULL,      NULL,       0,          0,            1,          -1 },
     {"Grub-customizer",    NULL,      NULL,       0,          0,            1,          -1 },
     {"Pavucontrol",        NULL,      NULL,       0,          0,            1,          -1 },
+    {"pavucontrol",        NULL,      NULL,       0,          0,            1,          -1 },
     {"Minipad",            NULL,      NULL,       0,          0,            1,          -1 },
     {"Connman-gtk",        NULL,      NULL,       0,          0,            1,          -1 },
 

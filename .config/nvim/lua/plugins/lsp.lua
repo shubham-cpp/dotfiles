@@ -8,18 +8,54 @@ return {
         {
           'folke/neodev.nvim',
           opts = {},
-          ft = { 'lua' }
+          ft = { 'lua' },
         },
-        { 'b0o/schemastore.nvim',         ft = { 'json', 'jsonc', 'json5', 'yaml' } },
-        { 'pmizio/typescript-tools.nvim', dependencies = 'nvim-lua/plenary.nvim',   ft = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' } },
+        { 'b0o/schemastore.nvim', ft = { 'json', 'jsonc', 'json5', 'yaml' } },
+        {
+          'pmizio/typescript-tools.nvim',
+          dependencies = 'nvim-lua/plenary.nvim',
+          ft = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+        },
+        {
+          'nvimdev/lspsaga.nvim',
+          enabled = false,
+          opts = {
+            lightbulb = { enable = false },
+          },
+        },
+        {
+          'mrcjkb/rustaceanvim',
+          enabled = false,
+          version = '^4', -- Recommended
+          lazy = false, -- This plugin is already lazy
+        },
+        {
+          'SmiteshP/nvim-navic',
+          init = function()
+            vim.g.navic_silence = true
+          end,
+          opts = {
+            highlight = true,
+            depth_limit = 5,
+            lazy_update_context = true,
+          },
+        },
+        {
+          'elixir-tools/elixir-tools.nvim',
+          version = '*',
+          event = { 'BufReadPre', 'BufNewFile' },
+          dependencies = {
+            'nvim-lua/plenary.nvim',
+          },
+        },
       },
       ---@type AstroLSPConfig
       opts = {
         -- Configuration table of features provided by AstroLSP
         features = {
-          autoformat = true,      -- enable or disable auto formatting on start
-          codelens = true,        -- enable/disable codelens refresh on start
-          inlay_hints = true,     -- enable/disable inlay hints on start
+          autoformat = true, -- enable or disable auto formatting on start
+          codelens = true, -- enable/disable codelens refresh on start
+          inlay_hints = false, -- enable/disable inlay hints on start
           semantic_tokens = true, -- enable/disable semantic token highlighting
         },
         -- Configure buffer local auto commands to add when attaching a language server
@@ -182,9 +218,9 @@ return {
           nim_langserver = {
             settings = {
               nim = {
-                nimsuggestPath = vim.fn.expand('~/.local/share/nim-2.0.4/bin/nimsuggest'),
-              }
-            }
+                nimsuggestPath = vim.fn.expand '~/.local/share/nim-2.0.4/bin/nimsuggest',
+              },
+            },
           },
           bashls = {
             settings = { bashIde = { highlightParsingErrors = true } },
@@ -217,6 +253,26 @@ return {
                   boxModel = 'warn',
                   unknownVendorSpecificProperties = 'warn',
                   float = 'error',
+                },
+              },
+            },
+          },
+          rust_analyzer = {
+            settings = {
+              ['rust-analyzer'] = {
+                imports = {
+                  granularity = {
+                    group = 'module',
+                  },
+                  prefix = 'self',
+                },
+                cargo = {
+                  buildScripts = {
+                    enable = true,
+                  },
+                },
+                procMacro = {
+                  enable = true,
                 },
               },
             },
@@ -334,6 +390,15 @@ return {
                 return client.server_capabilities.semanticTokensProvider and vim.lsp.semantic_tokens
               end,
             },
+            ['<leader>uI'] = {
+              function()
+                require('astrolsp.toggles').buffer_inlay_hints()
+              end,
+              desc = 'Toggle LSP semantic highlight (buffer)',
+              -- cond = function(client)
+              --   return client.server_capabilities.semanticTokensProvider and vim.lsp.semantic_tokens
+              -- end,
+            },
           },
           i = {
             ['<C-k>'] = {
@@ -356,6 +421,9 @@ return {
             end
             ts_tools.setup({
               on_attach = function(client, bufnr)
+                if client.supports_method 'textDocument/documentSymbol' then
+                  require('nvim-navic').attach(client, bufnr)
+                end
                 opts.on_attach(client, bufnr)
                 vim.keymap.set('n', 'go', '<cmd>TSToolsOrganizeImports<cr>', { buffer = bufnr })
                 vim.keymap.set('n', 'gD', '<cmd>TSToolsGoToSourceDefinition<cr>', { buffer = bufnr })
@@ -365,14 +433,15 @@ return {
               settings = {
                 tsserver_file_preferences = {
                   includeInlayParameterNameHints = 'all',
+                  includeInlayVariableTypeHints = false,
+                  includeInlayVariableTypeHintsWhenTypeMatchesName = false,
                   includeCompletionsForModuleExports = true,
                   includeInlayParameterNameHintsWhenArgumentMatchesName = false,
                   includeInlayFunctionParameterTypeHints = true,
-                  includeInlayVariableTypeHints = true,
-                  includeInlayVariableTypeHintsWhenTypeMatchesName = false,
                   includeInlayPropertyDeclarationTypeHints = true,
                   includeInlayFunctionLikeReturnTypeHints = true,
                   includeInlayEnumMemberValueHints = true,
+                  importModuleSpecifierPreference = 'non-relative',
                 },
                 tsserver_plugins = {
                   -- for TypeScript v4.9+
@@ -380,7 +449,7 @@ return {
                   -- or for older TypeScript versions
                   -- "typescript-styled-plugin",
                 },
-                tsserver_max_memory = '3072',
+                -- tsserver_max_memory = '3072',
               },
             })
           end,
@@ -414,11 +483,19 @@ return {
             require('lspconfig')[server].setup(opts)
           end,
           yamlls = function(server, opts)
-            opts.capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+            local capabilities = vim.lsp.protocol.make_client_capabilities()
+            capabilities.textDocument.foldingRange = {
+              dynamicRegistration = false,
+              lineFoldingOnly = true,
+            }
+            opts.capabilities = capabilities
+            -- require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
             opts.settings = {
               redhat = { telemetry = { enabled = false } },
               yaml = {
                 validate = true,
+                format = { enable = true },
+                hover = true,
                 schemas = require('schemastore').yaml.schemas({}),
               },
             }
@@ -446,12 +523,45 @@ return {
             opts.single_file_support = false
             require('lspconfig')[server].setup(opts)
           end,
-          eslint = false,
+          elixir_ls = function(_, opts)
+            local elixir = require 'elixir'
+            local elixirls = require 'elixir.elixirls'
+
+            elixir.setup({
+              nextls = { enable = false },
+              credo = { enable = true },
+              elixirls = {
+                enable = true,
+                capabilities = opts.capabilities,
+                settings = elixirls.settings({
+                  dialyzerEnabled = true,
+                  enableTestLenses = true,
+                }),
+                on_attach = function(client, bufnr)
+                  opts.on_attach(client, bufnr)
+                  vim.keymap.set('n', '<space>lp', ':ElixirFromPipe<cr>', { buffer = true, noremap = true })
+                  vim.keymap.set('n', '<space>lP', ':ElixirToPipe<cr>', { buffer = true, noremap = true })
+                  vim.keymap.set('v', '<space>lm', ':ElixirExpandMacro<cr>', { buffer = true, noremap = true })
+                end,
+              },
+            })
+          end,
+          -- eslint = false,
           efm = false,
           zk = false,
         },
         -- A list like table of servers that should be setup, useful for enabling language servers not installed with Mason.
-        servers = { 'gleam', 'zls', 'roc_ls', 'nim_langserver' },
+        servers = {
+          'gleam',
+          'zls',
+          'roc_ls',
+          'nim_langserver' --[[, 'rust_analyzer' ]],
+        },
+        on_attach = function(client, bufnr)
+          if client.supports_method 'textDocument/documentSymbol' then
+            require('nvim-navic').attach(client, bufnr)
+          end
+        end,
       },
     },
     {
@@ -515,5 +625,13 @@ return {
     end
     -- set up servers configured with AstroLSP
     vim.tbl_map(require('astrolsp').lsp_setup, require('astrolsp').config.servers)
+    vim.g.rustaceanvim = {
+      server = {
+        on_attach = function(client, bufnr)
+          -- you can also put keymaps in here
+          require('astrolsp').on_attach(client, bufnr)
+        end,
+      },
+    }
   end,
 }

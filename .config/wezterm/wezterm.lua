@@ -23,6 +23,8 @@ config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 
 -- default is true, has more "native" look
 config.use_fancy_tab_bar = false
+config.enable_wayland = false
+-- config.front_end = "OpenGL"
 config.hide_tab_bar_if_only_one_tab = true
 config.window_background_opacity = 0.90
 -- I don't like putting anything at the ege if I can help it.
@@ -71,6 +73,8 @@ table.insert(keys, { key = "t", mods = "LEADER", action = wezterm.action.SpawnTa
 table.insert(keys, { key = "g", mods = "LEADER", action = wezterm.action.ShowTabNavigator })
 table.insert(keys, { key = "o", mods = "LEADER", action = wezterm.action.ActivateLastTab })
 table.insert(keys, { key = "p", mods = "LEADER", action = wezterm.action.PaneSelect })
+table.insert(keys, { key = "q", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
+table.insert(keys, { key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentTab({ confirm = false }) })
 
 table.insert(
   keys,
@@ -142,18 +146,20 @@ local process_icons = {
   ["ruby"] = wezterm.nerdfonts.cod_ruby,
 }
 local function get_current_working_dir(tab)
-  local current_dir = tab.active_pane and tab.active_pane.current_working_dir or { file_path = "" }
+  local pane = tab.active_pane
+  local current_dir = pane and pane.current_working_dir or { file_path = "" }
   local HOME_DIR = os.getenv "HOME"
 
   return current_dir.file_path == HOME_DIR and "~" or string.gsub(current_dir.file_path, "(.*[/\\])(.*)", "%2")
 end
 
 local function get_process(tab)
-  if not tab.active_pane or tab.active_pane.foreground_process_name == "" then
+  local pane = tab.active_pane
+  if not pane or pane.foreground_process_name == "" then
     return nil
   end
 
-  local process_name = string.gsub(tab.active_pane.foreground_process_name, "(.*[/\\])(.*)", "%2")
+  local process_name = string.gsub(pane.foreground_process_name, "(.*[/\\])(.*)", "%2")
   if string.find(process_name, "kubectl") then
     process_name = "kubectl"
   end
@@ -161,35 +167,35 @@ local function get_process(tab)
   return process_icons[process_name] or string.format("[%s]", process_name)
 end
 
-wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
-  local has_unseen_output = false
-  if not tab.is_active then
-    for _, pane in ipairs(tab.panes) do
-      if pane.has_unseen_output then
-        has_unseen_output = true
-        break
-      end
-    end
-  end
-
-  local cwd = wezterm.format({
-    { Text = get_current_working_dir(tab) },
-  })
-
-  local process = get_process(tab)
-  local title = process and string.format("%s (%s) ", process, cwd) or " [?] "
-
-  if has_unseen_output then
-    return {
-      { Foreground = { Color = "#28719c" } },
-      { Text = title },
-    }
-  end
-
-  return {
-    { Text = title },
-  }
-end)
+-- wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+--   local has_unseen_output = false
+--   if not tab.is_active then
+--     for _, pane in ipairs(tab.panes) do
+--       if pane.has_unseen_output then
+--         has_unseen_output = true
+--         break
+--       end
+--     end
+--   end
+--
+--   local cwd = wezterm.format({
+--     { Text = get_current_working_dir(tab) },
+--   })
+--
+--   local process = get_process(tab)
+--   local title = process and string.format("%s (%s) ", process, cwd) or " [?] "
+--
+--   if has_unseen_output then
+--     return {
+--       { Foreground = { Color = "#28719c" } },
+--       { Text = title },
+--     }
+--   end
+--
+--   return {
+--     { Text = title },
+--   }
+-- end)
 
 for i = 1, 8 do
   -- ALT + number to activate that tab

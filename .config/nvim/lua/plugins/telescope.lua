@@ -25,6 +25,7 @@ local au_telescope = vim.api.nvim_create_augroup('au_telescope', { clear = true 
 return {
   'nvim-telescope/telescope.nvim',
   cmd = 'Telescope',
+  enabled = false,
   dependencies = {
     'nvim-lua/plenary.nvim',
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', enabled = false },

@@ -178,12 +178,21 @@ vim.api.nvim_create_autocmd({ 'BufDelete', 'TermClose' }, {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'hyprlang',
+  group = au_buffer,
+  callback = function(event)
+    local bufnr = event.buf
+    vim.bo[bufnr].commentstring = '# %s'
+    vim.opt_local.formatoptions = 'jcrqlnt'
+  end,
+})
 vim.filetype.add({
   extension = {
     fish = 'fish',
     ocaml = 'ocaml',
     rasi = 'rasi',
-    roc = 'roc'
+    roc = 'roc',
   },
   filename = {
     vimfrc = 'vim',
@@ -193,10 +202,11 @@ vim.filetype.add({
     ['package.json'] = 'jsonc',
   },
   pattern = {
-    ['tsconfig.*.json'] = 'jsonc',
-    ['.eslintrc.*'] = 'jsonc',
     ['*profile'] = 'sh',
-    ['*.kbd'] = 'lisp',
     ['*.postcss'] = 'css',
+    ['*.kbd'] = 'lisp',
+    ['.eslintrc.*'] = 'jsonc',
+    ['tsconfig.*.json'] = 'jsonc',
+    ['.*/hyprland%.conf'] = 'hyprlang',
   },
 })

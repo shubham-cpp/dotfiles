@@ -9,19 +9,14 @@ local conditions = {
     return vim.fn.winwidth(0) > 80
   end,
   lsp_active = function()
-    -- return next(vim.lsp.buf_get_clients()) ~= nil
-    return next(vim.lsp.get_active_clients({ bufnr = 0 })) ~= nil
+    return next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
   end,
 }
 local function servers_attached()
   local msg = 'None'
-  local clients = vim.tbl_map(
-    function(client)
-      return client.name
-    end,
-    -- vim.lsp.get_clients({ bufnr = 0 }))
-    vim.lsp.get_active_clients({ bufnr = 0 })
-  )
+  local clients = vim.tbl_map(function(client)
+    return client.name
+  end, vim.lsp.get_clients({ bufnr = 0 }))
   if vim.tbl_isempty(clients) then
     return msg
   end
@@ -68,6 +63,37 @@ return {
         lualine_z = {},
         lualine_c = {},
         lualine_x = {},
+      },
+
+      winbar = {
+        lualine_c = {
+          {
+            function()
+              return require('nvim-navic').get_location()
+            end,
+            cond = function()
+              return package.loaded['nvim-navic'] and require('nvim-navic').is_available()
+            end,
+          },
+          {
+            'filename',
+            path = 1,
+            color = { fg = '#c8c093', bg = '#1E1E2E', gui = 'italic,bold' },
+            cond = function()
+              local is_ok = package.loaded['nvim-navic'] and require('nvim-navic').is_available()
+              return not is_ok
+            end,
+          },
+        },
+      },
+      inactive_winbar = {
+        lualine_c = {
+          {
+            'filename',
+            path = 1,
+            color = { fg = '#c8c093', bg = '#1E1E2E', gui = 'italic,bold' },
+          },
+        },
       },
       extensions = { 'lazy', 'neo-tree', 'quickfix', 'toggleterm', 'man' },
     }
@@ -140,7 +166,6 @@ return {
       --   color_info = { fg = vim.g.my_colors.diagnostics.info },
       -- },
     })
-    ins_left_tab '%='
     ins_right({
       servers_attached,
       icon = ' LSPs:',

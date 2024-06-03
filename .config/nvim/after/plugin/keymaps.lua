@@ -42,6 +42,11 @@ vim.keymap.set('x', '<leader>p', '"+p')
 
 vim.keymap.set('o', 'ie', ':exec "normal! ggVG"<cr>')
 vim.keymap.set('o', 'iv', ':exec "normal! HVL"<cr>')
-vim.keymap.set('n', ',e', ':e <C-R>=expand("%:p:h") . "/" <CR>', { desc = 'Edit in same dir' })
-vim.keymap.set('n', ',t', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', { desc = 'Edit in same dir(Tab)' })
-vim.keymap.set('n', ',s', ':vsplit <C-R>=expand("%:p:h") . "/" <CR>', { desc = 'Edit in same dir(Split)' })
+vim.keymap.set('n', ',e', ':e <C-R>=expand("%:p:h") . "/" <CR>', { silent = false, desc = 'Edit in same dir' })
+vim.keymap.set('n', ',t', ':tabe <C-R>=expand("%:p:h") . "/" <CR>', { silent = false, desc = 'Edit in same dir(Tab)' })
+vim.keymap.set(
+  'n',
+  ',v',
+  ':vsplit <C-R>=expand("%:p:h") . "/" <CR>',
+  { silent = false, desc = 'Edit in same dir(Split)' }
+)

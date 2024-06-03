@@ -90,3 +90,6 @@ eval "$(fnm env --use-on-cd)"
 # _evalcache fzf --zsh
 # _evalcache zoxide init zsh
 # _evalcache fnm env --use-on-cd
+
+# bun completions
+[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

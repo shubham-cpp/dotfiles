@@ -1,93 +1,90 @@
 #!/bin/env sh
 run() {
-	if ! pgrep -f "$1"; then
-		if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-			XDG_CURRENT_DESKTOP=Unity $@ &
-		else
-			$@ &
-		fi
-	fi
+  if ! pgrep -f "$1"; then
+    if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
+      XDG_CURRENT_DESKTOP=Unity $@ &
+    else
+      $@ &
+    fi
+  fi
 }
 
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-	# setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock'
-	# xcape -e 'Control_L=Escape'
-	# numlockx on
-	xset -b
-	sleep 0.3s
-	xset r rate 300 50
-	xsetroot -cursor_name left_ptr
-	xrdb ~/.config/X11/Xresources
+  # setxkbmap -option 'ctrl:nocaps' -option 'shift:both_capslock' ;xcape -e 'Control_L=Escape'
+  numlockx on
+  xset -b
+  sleep 0.3s
+  xset r rate 300 50
+  xsetroot -cursor_name left_ptr
+  xrdb ~/.config/X11/Xresources
 fi
 
 run_polkit() {
-	# run lxpolkit
-	if [ -x /usr/lib/polkit-kde-authentication-agent-1 ]; then
-		run /usr/lib/polkit-kde-authentication-agent-1
-	elif [ -x /usr/libexec/kf5/polkit-kde-authentication-agent-1 ]; then
-		run /usr/libexec/kf5/polkit-kde-authentication-agent-1
-	# elif [ -x "$(which lxpolkit)" ]; then
-	# 	run lxpolkit
-	elif [ -x /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 ]; then
-		run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
-	elif [ -x /usr/libexec/polkit-gnome-authentication-agent-1 ]; then # polkit-gnome kde
-		run /usr/libexec/polkit-gnome-authentication-agent-1
-	elif [ -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 ]; then
-		run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-	fi
+  # run lxpolkit
+  if [ -x /usr/lib/polkit-kde-authentication-agent-1 ]; then
+    run /usr/lib/polkit-kde-authentication-agent-1
+  elif [ -x /usr/libexec/kf5/polkit-kde-authentication-agent-1 ]; then
+    run /usr/libexec/kf5/polkit-kde-authentication-agent-1
+  # elif [ -x "$(which lxpolkit)" ]; then
+  # 	run lxpolkit
+  elif [ -x /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 ]; then
+    run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+  elif [ -x /usr/libexec/polkit-gnome-authentication-agent-1 ]; then # polkit-gnome kde
+    run /usr/libexec/polkit-gnome-authentication-agent-1
+  elif [ -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 ]; then
+    run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+  fi
 }
 basic() {
-	bash ~/.local/bin/myscripts/default_mouse_settings &
+  bash ~/.local/bin/myscripts/default_mouse_settings &
 
-	[ -x /bin/dunst ] && exec --no-startup-id dunst &
-	run_polkit
-	run dunst
-	if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-		if [ -x /bin/picom ]; then
-			picom -b --config ~/.config/picom/picom.conf
-		elif [ -x /bin/xcompmgr ]; then
-			run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
-		fi
-		if [ -x /bin/xwallpaper ]; then
-			run xwallpaper --stretch ~/.config/wall.png
-		elif [ -x /bin/feh ]; then
-			run feh --bg-fill --no-fehbg -q ~/.config/wall.png
-		fi
-	fi
-	# run kitty
-	gnome-keyring-daemon --start --components=secrets
-	systemctl --user import-environment PATH
-	systemctl --user restart xdg-desktop-portal.service
-	pgrep tmux && pkill tmux
-	if [ -x /usr/bin/tmux ]; then
-		TERM=xterm-256color alacritty -e "tmux" &
-	elif [ -x /usr/bin/kitty ]; then
-		run kitty
-	elif [ -x /usr/bin/urxvt ]; then
-		run urxvt
-	else
-		run $TERMINAL
-	fi
+  [ -x /bin/dunst ] && exec --no-startup-id dunst &
+  run_polkit
+  run dunst
+  if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
+    if [ -x /bin/picom ]; then
+      picom -b --config ~/.config/picom/picom.conf
+    elif [ -x /bin/xcompmgr ]; then
+      run xcompmgr -c -C -t-5 -l-5 -r4.2 -o.8
+    fi
+    if [ -x /bin/xwallpaper ]; then
+      run xwallpaper --stretch ~/.config/wall.png
+    elif [ -x /bin/feh ]; then
+      run feh --bg-fill --no-fehbg -q ~/.config/wall.png
+    fi
+  fi
+  # run kitty
+  gnome-keyring-daemon --start --components=secrets
+  systemctl --user import-environment PATH
+  systemctl --user restart xdg-desktop-portal.service
+  pgrep tmux && pkill tmux
+  if [ -x /usr/bin/tmux ]; then
+    TERM=xterm-256color alacritty -e "tmux" &
+  elif [ -x /usr/bin/kitty ]; then
+    run kitty
+  elif [ -x /usr/bin/urxvt ]; then
+    run urxvt
+  else
+    run $TERMINAL
+  fi
 }
 
 case "$DESKTOP_SESSION" in
 bspwm | awesome | dk | spectrwm | qtile | Qtile)
-	basic
-	;;
+  basic
+  ;;
 dwm)
-	basic
-	# run goblocks
-	run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
-	;;
+  basic
+  # run goblocks
+  run sxhkd -c ~/.config/sxhkd/dwm_sxhkdrc
+  ;;
 esac
 
 if [ "$XDG_SESSION_TYPE" != "wayland" ]; then
-	pkill redshift
-	setsid -f redshift -m randr -l manual -l '18.520430:73.856743' -g 0.8 -b '1.0:0.8'
-	run flameshot
-	run greenclip daemon
-	# run imwheel
+  pkill redshift
+  redshift -m randr -l manual -l '18.520430:73.856743' -g 0.9 -b '1.0:0.9' &
+  run flameshot
+  run greenclip daemon
 fi
-# run udiskie -q -t --no-terminal
 pgrep nm-applet || run nm-applet
-run kmonad ~/.config/kmonad/mkmonad.kbd
+# run kmonad ~/.config/kmonad/mkmonad.kbd
