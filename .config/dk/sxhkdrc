@@ -18,8 +18,8 @@ super {_, + shift } + e
 super + control + s
     logout_prompt
 
-super + {shift + ,_} d
-    {dmenu_run_history -i,rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi}
+super + {r,d}
+    {rofi -show drun,rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi}
 
 super + @g
     qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical
@@ -49,7 +49,7 @@ super + ctrl + x
 
 # reload dkrc
 super + shift + r
-	dkcmd reload
+	$HOME/.config/dk/dkrc
 
 # restart dk
 super + ctrl + shift + r
@@ -107,8 +107,8 @@ super + {_,shift + ,ctrl + }{comma,period,backslash}
 	dkcmd mon {view,send,follow} {prev,next,last}
 
 # change active workspace layout
-super + {t,r,m,g}
-	dkcmd set layout {tile,rtile,mono,grid}
+super + {t,m,g,c}
+	dkcmd set layout {tile,mono,grid,cycle}
 
 # change number of windows in master or first stack
 # super + {_,shift + }{i,d}

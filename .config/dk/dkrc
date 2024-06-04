@@ -14,6 +14,22 @@ if hash sxhkd >/dev/null 2>&1; then
 fi
 pgrep polybar >/dev/null 2>&1 || setsid -f polybar xmonad
 
+# adjust border widths based on the DPI of the monitor
+px=$(xrandr | grep ' connected' | tail -n1 | grep -o '[0-9]\+x[0-9]\+' | cut -d'x' -f2)
+mm=$(xrandr | grep ' connected' | tail -n1 | grep -o '[0-9]\+mm' | tail -n1 | sed 's/mm//')
+dpi=$(( (px / mm) * 25 ))
+
+if [ $dpi -ge 140 ]; then
+	border_width=5
+	border_outer_width=3
+elif [ $dpi -ge 120 ]; then
+	border_width=4
+	border_outer_width=2
+else
+	border_width=2
+	border_outer_width=1
+fi
+
 { # compound command to redirect all output
 
 	dkcmd set numws=10
@@ -52,7 +68,7 @@ pgrep polybar >/dev/null 2>&1 || setsid -f polybar xmonad
 	# alternative
 	# enable split borders and colours, width is overall width, outer width consumes some of width.
 	# outer width must be less than width, outer width of 0 will be single borders
-	dkcmd set border width=5 outer_width=3 \
+	dkcmd set border width=$border_width outer_width=$border_outer_width \
 		colour \
 		focus='#6699cc' \
 		unfocus='#444444' \
@@ -76,13 +92,17 @@ pgrep polybar >/dev/null 2>&1 || setsid -f polybar xmonad
 	dkcmd rule class="^(mpv|Evolution|thunderbird)$" ws=4 focus=true
 
 	# open window(s) in a floating state
-	dkcmd rule class="^(pavucontrol|transmission-gtk|steam|lxappearance)$" float=true
+	dkcmd rule class="^([pP]avucontrol|transmission-gtk|steam|lxappearance)$" float=true
 	dkcmd rule class="^(albert|feh|Galculator|Qalculate|Gnome-calculator)$" float=true
 	dkcmd rule class="^(nitrogen|oblogout|noiseTorch)$" float=true
 
 	# open window(s) with sticky and floating enabled to view on all workspaces.
 	dkcmd rule class="^stickyterm$" stick=true float=true
 	dkcmd rule class="^scratchpad$" float=true
+	# set a window to never absorb other windows, like the xev event tester
+	dkcmd rule title="^Event Tester$" no_absorb=true
+	# define some terminals and allow them to be absorbed by spawned windows
+	dkcmd rule class="^(st|st-256color|urxvt|kitty|alacritty|xterm|xterm-256colors)$" terminal=true
 
 	# apply current rule set to all existing windows
 	dkcmd rule apply '*'
