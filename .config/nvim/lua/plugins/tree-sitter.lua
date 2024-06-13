@@ -1,6 +1,7 @@
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    event = { 'BufReadPre', 'BufNewFile' },
     -- event = { 'VeryLazy' },
     lazy = vim.fn.argc(-1) == 0,
     version = false, -- last release is way too old and doesn't work on Windows
@@ -20,7 +21,6 @@ return {
         },
       },
     },
-
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup({
@@ -36,18 +36,24 @@ return {
         },
         matchup = { enable = true },
         ensure_installed = {
+          'astro',
           'bash',
           'c',
           'comment',
           'cpp',
           'css',
           'dockerfile',
+          'elixir',
+          'embedded_template',
+          'erlang',
           'fish',
+          'gleam',
           'go',
           'gomod',
           'gosum',
           'gowork',
           'html',
+          'hyprlang',
           'javascript',
           'jsdoc',
           'json',
@@ -57,22 +63,28 @@ return {
           'luadoc',
           'markdown',
           'markdown_inline',
+          'nim',
+          'nim_format_string',
+          'prisma',
           'python',
           'query',
-          'regex',
           'rasi',
+          'regex',
+          'ron',
           'rust',
           'scss',
-          'sxhkdrc',
+          'styled',
           'svelte',
-          'tsx',
+          'sxhkdrc',
+          'tmux',
           'todotxt',
+          'tsx',
           'typescript',
           'vim',
           'vimdoc',
           'vue',
-          'yaml',
           'xml',
+          'yaml',
         },
         incremental_selection = {
           enable = true,
@@ -156,6 +168,7 @@ return {
   },
   {
     'windwp/nvim-ts-autotag',
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       -- Defaults
       opts = {

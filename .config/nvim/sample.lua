@@ -1,4 +1,3 @@
-local MiniPick = require 'mini.pick'
 local bufnr = 0
 local winnr = 0
 local pick_clear_namespace = function(buf_id)
@@ -63,6 +62,7 @@ local pick_highlight_line = function(buf_id, line, hl_group, priority)
   vim.api.nvim_buf_set_extmark(buf_id, ns_id.pickers, line - 1, 0, opts)
 end
 _G.lsp_make_on_list = function(source, opts)
+  local MiniPick = require 'mini.pick'
   -- Prepend file position info to item and sort
   local process = function(items)
     if source ~= 'document_symbol' then
@@ -113,6 +113,7 @@ local get_hash = function()
 end
 
 local mini_mru = function()
+  local MiniPick = require 'mini.pick'
   local hash = get_hash()
   local cmd =
     string.format("command cat <(fre --sorted --store_name %s) <(fd -t f --color never) | awk '!x[$0]++'", hash)
@@ -291,8 +292,85 @@ local function fzf_mru(opts)
   })
 end
 
+local function telescope_create_file()
+  require('telescope.builtin').find_files({
+    prompt_title = 'Create File',
+    find_command = { 'fd', '--type', 'd', '.', vim.fn.getcwd() },
+    attach_mappings = function(_, map)
+      local state = require 'telescope.actions.state'
+      local actions = require 'telescope.actions'
+      map('i', '<CR>', function(prompt_bufnr)
+        local content = state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        -- vim.print('content : ' .. content.cwd .. '/' .. content.value)
+        local dir = content.value
+        local name = vim.fn.input 'File Name: '
+        vim.cmd('e ' .. dir .. name)
+      end)
+      return true
+    end,
+  })
+end
+
+local function FzfCreate()
+  local fzf = require 'fzf-lua'
+  local path = require 'fzf-lua.path'
+  local uv = vim.uv or vim.loop
+  local cmd = 'fd -t d . ' .. uv.cwd()
+  local function get_full_path(selected)
+    if #selected < 1 then
+      return
+    end
+    local entry = path.entry_to_file(selected[1], { cwd = uv.cwd() })
+    if entry.path == '<none>' then
+      return
+    end
+
+    local fullpath = entry.path or entry.uri and entry.uri:match '^%a+://(.*)'
+    if not path.is_absolute(fullpath) then
+      fullpath = path.join({ uv.cwd(), fullpath })
+    end
+    return fullpath
+  end
+  fzf.fzf_exec(cmd, {
+    defaults = {},
+    prompt = 'Create> ',
+    cwd = uv.cwd(),
+    cwd_prompt_shorten_len = 32,
+    cwd_prompt_shorten_val = 1,
+    fzf_opts = {
+      ['--tiebreak'] = 'end',
+      ['--preview-window'] = 'nohidden,down,50%',
+      ['--preview'] = {
+        type = 'cmd',
+        fn = function(selected)
+          local fullpath = get_full_path(selected)
+          return string.format('command ls -Alhv --group-directories-first %s', fullpath)
+        end,
+      },
+    },
+    fn_transform = function(x)
+      return fzf.make_entry.file(x, { file_icons = true, color_icons = true, cwd = uv.cwd() })
+    end,
+    actions = {
+      ['default'] = function(selected)
+        local fullpath = get_full_path(selected)
+        vim.ui.input({ prompt = 'File Name: ' }, function(name)
+          if name == nil then
+            return
+          end
+          vim.cmd('e ' .. fullpath .. name)
+          vim.cmd 'w ++p'
+        end)
+      end,
+    },
+  })
+end
+
 vim.api.nvim_create_user_command('MRU', fzf_mru, {})
+vim.api.nvim_create_user_command('TeleF', telescope_create_file, {})
 vim.api.nvim_create_user_command('MiniMRU', mini_mru, {})
+vim.api.nvim_create_user_command('FzfF', FzfCreate, {})
 
 vim.api.nvim_create_user_command('References', function()
   vim.lsp.buf.references(nil, { on_list = lsp_make_on_list 'references' })

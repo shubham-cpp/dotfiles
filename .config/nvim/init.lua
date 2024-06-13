@@ -22,6 +22,14 @@ require('lazy').setup('plugins', {
     enabled = true,
     notify = false,
   },
+  ui = {
+    icons = {
+      ft = '',
+      lazy = '󰂠 ',
+      loaded = '',
+      not_loaded = '',
+    },
+  },
   performance = {
     rtp = {
       ---@type string[] list any plugins you want to disable here

@@ -12,6 +12,8 @@ if wezterm.config_builder then
 end
 -- For example, changing the color scheme:
 config.color_scheme = "Tokyo Night"
+-- Spawn a fish shell in login mode
+config.default_prog = { "/bin/fish", "-l" }
 
 config.font_size = 11.5
 config.font = wezterm.font_with_fallback({
@@ -164,38 +166,38 @@ local function get_process(tab)
     process_name = "kubectl"
   end
 
-  return process_icons[process_name] or string.format("[%s]", process_name)
+  return process_icons[process_name] or string.format("%s", process_name)
 end
 
--- wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
---   local has_unseen_output = false
---   if not tab.is_active then
---     for _, pane in ipairs(tab.panes) do
---       if pane.has_unseen_output then
---         has_unseen_output = true
---         break
---       end
---     end
---   end
---
---   local cwd = wezterm.format({
---     { Text = get_current_working_dir(tab) },
---   })
---
---   local process = get_process(tab)
---   local title = process and string.format("%s (%s) ", process, cwd) or " [?] "
---
---   if has_unseen_output then
---     return {
---       { Foreground = { Color = "#28719c" } },
---       { Text = title },
---     }
---   end
---
---   return {
---     { Text = title },
---   }
--- end)
+wezterm.on("format-tab-title", function(tab, tabs, panes, config, hover, max_width)
+  local has_unseen_output = false
+  if not tab.is_active then
+    for _, pane in ipairs(tab.panes) do
+      if pane.has_unseen_output then
+        has_unseen_output = true
+        break
+      end
+    end
+  end
+
+  local cwd = wezterm.format({
+    { Text = get_current_working_dir(tab) },
+  })
+
+  local process = get_process(tab) or ""
+  local title = string.format("[%s] %s ", cwd, process) or " [?] "
+
+  if has_unseen_output then
+    return {
+      { Foreground = { Color = "#28719c" } },
+      { Text = title },
+    }
+  end
+
+  return {
+    { Text = title },
+  }
+end)
 
 for i = 1, 8 do
   -- ALT + number to activate that tab

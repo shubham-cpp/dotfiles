@@ -2,9 +2,10 @@
   "separator": "  ",
   "actions": [
     {
-      "updateSignal": "39",
-      "command": "(sleep 5 ; curl \"wttr.in/Pune?format=3\")",
-      "timer": "60m"
+      "prefix": "🗓 ",
+      "updateSignal": "35",
+      "command": "sb-date | cut -d' ' -f3-",
+      "timer": "60s"
     },
     {
       "updateSignal": "40",
@@ -37,10 +38,9 @@
       "timer": "10s"
     },
     {
-      "prefix": "🗓 ",
-      "updateSignal": "35",
-      "command": "sb-date | cut -d' ' -f3-",
-      "timer": "60s"
+      "updateSignal": "39",
+      "command": "(sleep 5 ; curl \"wttr.in/Pune?format=3\")",
+      "timer": "60m"
     }
   ]
 }

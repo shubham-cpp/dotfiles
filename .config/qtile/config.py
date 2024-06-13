@@ -107,6 +107,7 @@ floating_layout = Floating(
         Match(title="branchdialog"),  # gitk
         Match(title="pinentry"),  # GPG key password entry
         Match(wm_class="Pavucontrol"),
+        Match(wm_class="pavucontrol"),
         Match(wm_class="Gnome-calculator"),
         Match(wm_class="Qalculate-gtk"),
         Match(wm_class="Galculator"),

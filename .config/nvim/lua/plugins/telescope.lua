@@ -20,6 +20,27 @@ local function filename_first(_, path)
   return string.format('%s\t\t%s', tail, parent)
 end
 
+local function telescope_create_file()
+  require('telescope.builtin').find_files({
+    prompt_title = 'Create File',
+    find_command = { 'fd', '--type', 'd', '.', vim.fn.getcwd() },
+    attach_mappings = function(_, map)
+      local state = require 'telescope.actions.state'
+      local actions = require 'telescope.actions'
+      map('i', '<CR>', function(prompt_bufnr)
+        local content = state.get_selected_entry()
+        actions.close(prompt_bufnr)
+        -- vim.print('content : ' .. content.cwd .. '/' .. content.value)
+        local dir = content.value
+        local name = vim.fn.input 'File Name: '
+        vim.cmd('e ' .. dir .. name)
+        vim.cmd 'w ++p'
+      end)
+      return true
+    end,
+  })
+end
+
 local au_telescope = vim.api.nvim_create_augroup('au_telescope', { clear = true })
 
 return {
@@ -50,6 +71,8 @@ return {
         end,
         desc = 'Files',
       },
+      { '<leader>fp', telescope_create_file, desc = 'Create File' },
+      { '<leader>fc', telescope_create_file, desc = 'Create File' },
       { '<leader>fk', builtin.keymaps, desc = 'keymaps' },
       { '<leader>fS', builtin.current_buffer_fuzzy_find, desc = 'Search(Buffer)' },
       -- { '<leader>fs', builtin.live_grep, desc = 'Search(Project)' },
@@ -100,6 +123,7 @@ return {
       },
       { '<leader>gb', builtin.git_branches, desc = 'Git Branches' },
       { '<leader>fg', builtin.git_status, desc = 'Git Status' },
+      { '<leader>gt', builtin.git_status, desc = 'S[t]atus' },
       { '<leader>gS', builtin.git_stash, desc = 'Git Stash' },
       { '<leader>gc', builtin.git_commits, desc = 'Git Commits' },
       { '<leader>gC', builtin.git_bcommits, desc = 'Git Buffer Commits' },

@@ -1,7 +1,6 @@
 local M = {}
 M.au_group = vim.api.nvim_create_augroup('sp_nvim_lint', {})
 M.languages = {
-  astro = { 'eslint_d' },
   bash = { 'shellcheck' },
   -- c = { 'clangtidy' },
   -- cpp = { 'clangtidy' },
@@ -10,6 +9,7 @@ M.languages = {
   -- markdown = { 'vale' },
   python = { 'ruff' },
   sh = { 'shellcheck' },
+  astro = { 'eslint_d' },
   svelte = { 'eslint_d' },
   javascript = { 'eslint_d' },
   javascriptreact = { 'eslint_d' },
@@ -32,6 +32,16 @@ function M.debounce(ms, fn)
 end
 M.linters = {
   eslint_d = {
+    -- args = {
+    --   '--no-warn-ignored', -- <-- this is the key argument
+    --   '--format',
+    --   'json',
+    --   '--stdin',
+    --   '--stdin-filename',
+    --   function()
+    --     return vim.api.nvim_buf_get_name(0)
+    --   end,
+    -- },
     condition = function(ctx)
       return vim.fs.find({
         'eslint.config.js',

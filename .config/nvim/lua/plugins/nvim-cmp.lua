@@ -23,6 +23,17 @@ return {
     'saadparwaiz1/cmp_luasnip',
     'rafamadriz/friendly-snippets',
     'onsails/lspkind.nvim',
+    {
+      'folke/lazydev.nvim',
+      ft = 'lua', -- only load on lua files
+      opts = {
+        library = {
+          'lazy.nvim',
+          { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+        },
+      },
+    },
+    { 'Bilal2453/luvit-meta', lazy = true },
   },
   config = function()
     local cmp = require 'cmp'
@@ -150,6 +161,7 @@ return {
       },
       sources = {
         { name = 'nvim_lsp', priority = 1000 },
+        { name = 'lazydev', priority = 800 },
         { name = 'luasnip', priority = 700 },
         {
           name = 'buffer',

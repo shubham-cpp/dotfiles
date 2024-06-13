@@ -34,4 +34,6 @@ bind \e\[1\;5C forward-bigword
 bind -M insert \ek accept-autosuggestion
 # C-backspace
 bind -M insert \b backward-kill-word
+bind -M insert \cl 'history merge; commandline -f clear-screen'
+bind -M visual \cl 'history merge; commandline -f clear-screen'
 complete -c dnf5 -w dnf

@@ -9,7 +9,7 @@ local conditions = {
     return vim.fn.winwidth(0) > 80
   end,
   lsp_active = function()
-    return next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
+    return vim.fn.winwidth(0) > 90 and next(vim.lsp.get_clients({ bufnr = 0 })) ~= nil
   end,
 }
 local function servers_attached()
@@ -20,12 +20,13 @@ local function servers_attached()
   if vim.tbl_isempty(clients) then
     return msg
   end
-  return vim.fn.join(vim.tbl_flatten(clients), ',')
+  return vim.iter(clients):flatten():join ','
 end
 
 return {
   'nvim-lualine/lualine.nvim',
   event = 'VeryLazy',
+  enabled = true,
   dependencies = {
     'nvim-tree/nvim-web-devicons',
   },

@@ -113,10 +113,10 @@ XTerm*fullscreen: never
 *.color7:  #686f9a
 *.color15: #f0f1ce
 
-! st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
+st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
 ! st*font: MesloLGS Nerd Font:size=11.5:antialias=true:autohint=true
 ! st*font: RecMonoLinear Nerd Font:size=12:antialias=true:autohint=true
-st*font: Iosevka Nerd Font Propo:size=13.0:antialias=true:autohint=true
+! st*font: Iosevka Nerd Font Propo:size=13.0:antialias=true:autohint=true
 
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
 !! ! URxvt.letterSpace: -1

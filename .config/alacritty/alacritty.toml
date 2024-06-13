@@ -435,9 +435,9 @@ mouse = "Left"
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-# [shell]
-# args = ["--login"]
-# program = "/bin/fish"
+[shell]
+args = ["--login"]
+program = "/bin/fish"
 
 [window]
 opacity = 0.9

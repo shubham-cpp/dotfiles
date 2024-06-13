@@ -1,9 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
@@ -17,7 +17,7 @@ fi
 source "${ZINIT_HOME}/zinit.zsh"
 
 # Add in Powerlevel10k
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # fpath=(~/.local/share/zsh/site-functions $fpath)
 autoload -Uz colors edit-command-line
@@ -29,13 +29,24 @@ zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-history-substring-search
 zinit light Aloxaf/fzf-tab
+
+zinit ice as"command" from"gh-r" \
+          atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+          atpull"%atclone" src"init.zsh"
+zinit light starship/starship
+
 # zinit light lukechilds/zsh-better-npm-completion
 zinit ice trigger-load!npm wait'0' lucid; zinit light lukechilds/zsh-better-npm-completion
 zinit ice trigger-load!man wait'0' lucid; zinit snippet OMZP::colored-man-pages
-# zinit ice as"command" from"gh-r" \
-#           atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-#           atpull"%atclone" src"init.zsh"
-# zinit light starship/starship
+zinit ice wait"2" as"command" from"gh-r" lucid \
+  mv"zoxide*/zoxide -> zoxide" \
+  atclone"./zoxide init zsh > zo_init.zsh" \
+  atpull"%atclone" src"zo_init.zsh" nocompile'!'
+zinit light ajeetdsouza/zoxide
+# zinit ice wait"2" as"command" from"gh-r" lucid \
+#   atclone"./fnm env --use-on-cd > fnmenv.zsh" \
+#   atpull"%atclone" pick"fnm" src"fnmenv.zsh" nocompile'!'
+# zinit light Schniz/fnm
 # Add in snippets
 zinit snippet OMZP::git
 # zinit snippet OMZP::sudo
@@ -43,9 +54,6 @@ zinit snippet OMZP::git
 # Load completions
 # autoload -Uz compinit && compinit
 zinit cdreplay -q
-
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-[[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
 
 # History
 export ZSH_CACHE_DIR=$HOME/.cache/zsh-cache
@@ -85,7 +93,7 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
 # Shell integrations
 eval "$(fzf --zsh)"
-eval "$(zoxide init zsh)"
+# eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 # _evalcache fzf --zsh
 # _evalcache zoxide init zsh
@@ -93,3 +101,6 @@ eval "$(fnm env --use-on-cd)"
 
 # bun completions
 [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+# [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh

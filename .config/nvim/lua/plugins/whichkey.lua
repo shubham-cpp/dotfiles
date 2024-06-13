@@ -29,7 +29,6 @@ end
 
 return {
   'folke/which-key.nvim',
-  -- event = "VeryLazy",
   keys = { '<leader>', ']', '[', '<LocalLeader>' },
   init = function()
     vim.o.timeout = true

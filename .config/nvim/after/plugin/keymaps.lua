@@ -50,3 +50,12 @@ vim.keymap.set(
   ':vsplit <C-R>=expand("%:p:h") . "/" <CR>',
   { silent = false, desc = 'Edit in same dir(Split)' }
 )
+
+vim.keymap.set('n', '<leader>x', function()
+  vim.cmd 'source %'
+  local file = vim.fn.substitute(vim.fn.expand '%:p:r', vim.fn.stdpath 'config' .. '/lua/', '', '')
+  local ok, mod = pcall(require, file)
+  if ok and type(mod) ~= 'boolean' and next(mod or {}) ~= nil and mod.config then
+    mod.config()
+  end
+end, { silent = false, desc = 'Reload module' })

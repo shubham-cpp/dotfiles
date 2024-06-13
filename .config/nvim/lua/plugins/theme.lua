@@ -1,45 +1,26 @@
+---@type LazySpec
 return {
   {
-    'projekt0n/github-nvim-theme',
+    'catppuccin/nvim',
+    name = 'catppuccin',
     event = 'VimEnter',
     enabled = false,
     config = function()
-      require('github-theme').setup({
-        options = {
-          transparent = false,
-          dim_inactive = true,
-          inverse = { -- Inverse highlight for different types
-            match_paren = false,
-            visual = false,
-            search = false,
-          },
-        }
-      })
-      -- github_dark_tritanopia | github_dark_colorblind | github_dark_high_contrast | github_dark_dimmed | github_dark_default | github_dark
-      vim.cmd.colorscheme 'github_dark_default'
-    end,
-  },
-  {
-    'catppuccin/nvim',
-    name = "catppuccin",
-    event = 'VimEnter',
-    enabled = true,
-    config = function()
-      require("catppuccin").setup({
+      require('catppuccin').setup({
         ---@type "latte"| "frappe"| "macchiato"| "mocha"|"auto"
-        flavour = "mocha",
+        flavour = 'mocha',
         transparent_background = false,
         dim_inactive = {
-          enabled = false,   -- dims the background color of inactive window
-          shade = "dark",
+          enabled = false, -- dims the background color of inactive window
+          shade = 'dark',
           percentage = 0.15, -- percentage of the shade to apply to the inactive window
         },
         custom_highlights = function(colors)
           return {
             QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = { 'underline', 'bold' } },
-            QuickScopeSecondary = { fg = '#61afef', bg = '#505050', style = { 'underline', 'bold', } },
+            QuickScopeSecondary = { fg = '#61afef', bg = '#505050', style = { 'underline', 'bold' } },
           }
-        end
+        end,
       })
       vim.cmd 'colorscheme catppuccin'
     end,
@@ -62,7 +43,7 @@ return {
   },
   {
     'rmehri01/onenord.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VimEnter',
     opts = {
       fade_nc = true,

@@ -1,11 +1,26 @@
 #!/bin/sh
 
+get_vol() {
+  vol=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)
+  echo "$vol"
+}
+
 case $BLOCK_BUTTON in
-  1) setsid -f "$TERMINAL" -e pulsemixer ;;
-  2) wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle ;;
-  4) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+ ;;
-  5) wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%- ;;
-  6) "$TERMINAL" -e "$EDITOR" "$0" ;;
+1) # left click
+  notify-send 'Button 1' 'Left click'
+  # wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+  # kill -38 "$(pidof dwm)"
+  # pgrep dwmblocks && kill -38 "$(pidof dwmblocks)"
+  ;;
+3) pavucontrol & ;; # right click
+4)                  # scroll up
+  wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%+
+  notify-send "Volume" -t 2000 -i mic-volume-high -h string:x-canonical-private-synchronous:volume -h int:value:"$(get_vol)" -r 10001
+  ;;
+5) # scroll down
+  wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-
+  notify-send "Volume" -t 2000 -i mic-volume-low -h string:x-canonical-private-synchronous:volume -h int:value:"$(get_vol)" -r 10001
+  ;;
 esac
 
 if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | /bin/grep -q "[MUTED]"; then

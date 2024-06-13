@@ -28,14 +28,6 @@ return {
     },
   },
   {
-    'nvimdev/indentmini.nvim',
-    enabled = false,
-    event = 'BufReadPost',
-    config = function()
-      require('indentmini').setup()
-    end,
-  },
-  {
     'echasnovski/mini.indentscope',
     version = false,
     enabled = true,

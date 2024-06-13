@@ -3,7 +3,7 @@
 /* appearance */
 static const int startwithgaps[]				 = { 1 };	/* 1 means gaps are used by default, this can be customized for each tag */
 static const unsigned int gappx[]   		 = { 3 };   /* default gap between windows in pixels, this can be customized for each tag */
-static const unsigned int borderpx       = 2;        /* border pixel of windows */
+static const unsigned int borderpx       = 3;        /* border pixel of windows */
 static const unsigned int snap           = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft  = 0;    /* 0: systray in the right corner, >0: systray on left of status text */
@@ -14,8 +14,8 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const Bool viewontag              = True;     /* Switch view on tag switch */
 static const char *fonts[]               = { 
-  "Ubuntu:size=11",
-  "FiraCode Nerd Font:size=14",
+  "Fira Sans:size=12",
+  "Symbols Nerd Font:size=13",
   "Noto Color Emoji:size=12"
 };
 static const char dmenufont[]            = "monospace:size=10";
@@ -128,6 +128,9 @@ static const Rule rules[] = {
     {"Evolution-alarm-notify",    NULL, NULL,                                   0, 0, 1, -1 },
     {"tauri-sveltekit-notes-app", NULL, NULL,                                   0, 0, 1, -1 },
     {"Tauri-sveltekit-notes-app", NULL, NULL,                                   0, 0, 1, -1 },
+    {"brave-browser",             NULL, "Sign in - Google Accounts - Brave",    0, 0, 1, -1 },
+    {"Brave-browser",             NULL, "Sign in - Google Accounts - Brave",    0, 0, 1, -1 },
+    {"Chromium-browser",          NULL, "Sign in - Google Accounts - Chromium", 0, 0, 1, -1 },
     {"thorium-browser",           NULL, "Sign in - Google Accounts - Thorium",  0, 0, 1, -1 },
     {"Chromium-browser",          NULL, "Sign in - Google Accounts - Chromium", 0, 0, 1, -1 },
     {"firefox",                   NULL, "Sign in - Google Accounts - Firefox",  0, 0, 1, -1 },

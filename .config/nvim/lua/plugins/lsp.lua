@@ -1,3 +1,4 @@
+---@type LazySpec
 return {
   'neovim/nvim-lspconfig',
   event = 'BufReadPre',
@@ -5,23 +6,20 @@ return {
     {
       'AstroNvim/astrolsp',
       dependencies = {
-        {
-          'folke/neodev.nvim',
-          opts = {},
-          ft = { 'lua' },
-        },
-        { 'b0o/schemastore.nvim', ft = { 'json', 'jsonc', 'json5', 'yaml' } },
+        { 'b0o/schemastore.nvim', ft = { 'json', 'jsonc', 'json5', 'yaml' }, version = false },
         {
           'pmizio/typescript-tools.nvim',
           dependencies = 'nvim-lua/plenary.nvim',
           ft = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+          enabled = false,
         },
         {
-          'nvimdev/lspsaga.nvim',
-          enabled = false,
-          opts = {
-            lightbulb = { enable = false },
-          },
+          'yioneko/nvim-vtsls',
+          lazy = true,
+          opts = {},
+          config = function(_, opts)
+            require('vtsls').config(opts)
+          end,
         },
         {
           'mrcjkb/rustaceanvim',
@@ -122,9 +120,6 @@ return {
                   checkThirdParty = false,
                   library = {
                     vim.env.VIMRUNTIME,
-                    -- Depending on the usage, you might want to add additional paths here.
-                    -- "${3rd}/luv/library"
-                    -- "${3rd}/busted/library",
                   },
                 },
                 runtime = { version = 'LuaJIT' },
@@ -139,7 +134,7 @@ return {
               offsetEncoding = { 'utf-16' },
               clangdInlayHintsProvider = true,
             },
-            setting = {
+            settings = {
               InlayHints = {
                 Enabled = true,
                 ParameterNames = true,
@@ -299,7 +294,7 @@ return {
                   context = { only = { 'source.organizeImports' } },
                   apply = true,
                 })
-                vim.lsp.buf.code_action({ context = { only = { 'source.removeUnused' } }, apply = true })
+                vim.lsp.buf.code_action({ context = { only = { 'source.fixAll' } }, apply = true })
               end,
               desc = 'Oraganize imports',
               cond = 'textDocument/codeAction',
@@ -414,68 +409,114 @@ return {
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
             require('lspconfig')[server].setup(opts)
           end,
-          tsserver = function(_, opts)
-            local ok, ts_tools = pcall(require, 'typescript-tools')
-            if not ok then
-              return
-            end
-            ts_tools.setup({
-              on_attach = function(client, bufnr)
-                if client.supports_method 'textDocument/documentSymbol' then
-                  require('nvim-navic').attach(client, bufnr)
-                end
-                opts.on_attach(client, bufnr)
-                vim.keymap.set('n', 'go', '<cmd>TSToolsOrganizeImports<cr>', { buffer = bufnr })
-                vim.keymap.set('n', 'gD', '<cmd>TSToolsGoToSourceDefinition<cr>', { buffer = bufnr })
-                vim.keymap.set('n', 'gR', '<cmd>TSToolsFileReferences<cr>', { buffer = bufnr })
-                vim.keymap.set('n', '<F2>', '<cmd>TSToolsRenameFile<space>', { buffer = bufnr, silent = false })
-              end,
-              settings = {
-                tsserver_file_preferences = {
-                  includeInlayParameterNameHints = 'all',
-                  includeInlayVariableTypeHints = false,
-                  includeInlayVariableTypeHintsWhenTypeMatchesName = false,
-                  includeCompletionsForModuleExports = true,
-                  includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-                  includeInlayFunctionParameterTypeHints = true,
-                  includeInlayPropertyDeclarationTypeHints = true,
-                  includeInlayFunctionLikeReturnTypeHints = true,
-                  includeInlayEnumMemberValueHints = true,
-                  importModuleSpecifierPreference = 'non-relative',
+          tsserver = false,
+          vtsls = function(server, opts)
+            local default_attach = opts.on_attach
+            opts.filetypes = {
+              'javascript',
+              'javascriptreact',
+              'javascript.jsx',
+              'typescript',
+              'typescriptreact',
+              'typescript.tsx',
+              'vue',
+            }
+            opts.settings = {
+              complete_function_calls = true,
+              vtsls = {
+                enableMoveToFileCodeAction = true,
+                autoUseWorkspaceTsdk = true,
+                experimental = {
+                  completion = {
+                    enableServerSideFuzzyMatch = true,
+                  },
                 },
-                tsserver_plugins = {
-                  -- for TypeScript v4.9+
-                  '@styled/typescript-styled-plugin',
-                  -- or for older TypeScript versions
-                  -- "typescript-styled-plugin",
+                tsserver = {
+                  globalPlugins = {
+                    {
+                      name = 'typescript-svelte-plugin',
+                      location = require('mason-registry').get_package('svelte-language-server'):get_install_path()
+                        .. '/node_modules/typescript-svelte-plugin',
+                      enableForWorkspaceTypeScriptVersions = true,
+                    },
+                    {
+                      name = '@vue/typescript-plugin',
+                      location = require('mason-registry').get_package('vue-language-server'):get_install_path()
+                        .. '/node_modules/@vue/language-server',
+                      languages = { 'vue' },
+                      configNamespace = 'typescript',
+                      enableForWorkspaceTypeScriptVersions = true,
+                    },
+                  },
                 },
-                -- tsserver_max_memory = '3072',
               },
-            })
+              typescript = {
+                updateImportsOnFileMove = { enabled = 'always' },
+                suggest = {
+                  completeFunctionCalls = true,
+                },
+                inlayHints = {
+                  enumMemberValues = { enabled = true },
+                  functionLikeReturnTypes = { enabled = true },
+                  parameterNames = { enabled = 'literals' },
+                  parameterTypes = { enabled = true },
+                  propertyDeclarationTypes = { enabled = true },
+                  variableTypes = { enabled = false },
+                },
+              },
+            }
+            opts.settings.javascript = vim.tbl_deep_extend('force', {}, opts.settings.typescript, {})
+
+            opts.on_attach = function(client, buffer)
+              ---@diagnostic disable-next-line: redefined-local
+              local map = function(lhs, rhs, opts)
+                local o = {
+                  buffer = buffer,
+                  noremap = true,
+                  desc = opts,
+                }
+                vim.keymap.set('n', lhs, rhs, o)
+              end
+
+              map('gD', function()
+                require('vtsls').commands.goto_source_definition(buffer)
+              end, 'Goto Source Definition')
+
+              map('gR', function()
+                require('vtsls').commands.file_references(buffer)
+              end, 'File References')
+              map('<leader>lo', function()
+                require('vtsls').commands.organize_imports(buffer)
+                require('vtsls').commands.add_missing_imports(buffer)
+                require('vtsls').commands.remove_unused_imports(buffer)
+              end, 'Organize Imports')
+              map('<leader>lF', function()
+                require('vtsls').commands.fix_all(buffer)
+              end, 'Fix All')
+              map('<leader>lv', function()
+                require('vtsls').commands.select_ts_version(buffer)
+              end, 'Select Version')
+              map('<leader>lR', function()
+                require('vtsls').commands.rename_file(buffer)
+              end, 'Rename File')
+              default_attach(client, buffer)
+            end
+            -- require('lspconfig.configs')[server].setup = require('vtsls').lspconfig
+            require('lspconfig')[server].setup(opts)
           end,
           lua_ls = function(server, opts)
-            local ok, neodev = pcall(require, 'neodev')
-            if ok then
-              neodev.setup({
-                override = function(_, library)
-                  library.enabled = true
-                  library.plugins = true
-                end,
-                -- lspconfig = false,
-              })
-            end
-            -- if ok then
-            --   opts.before_init = require("neodev.lsp").before_init
-            -- end
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
-
             require('lspconfig')[server].setup(opts)
           end,
           jsonls = function(server, opts)
             opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+            opts.on_new_config = function(new_config)
+              new_config.settings.json.schemas = new_config.settings.json.schemas or {}
+              vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())
+            end
             opts.settings = {
               json = {
-                schemas = require('schemastore').json.schemas({}),
+                -- schemas = require('schemastore').json.schemas({}),
                 validate = { enable = true },
                 format = { enable = false },
               },
@@ -489,14 +530,22 @@ return {
               lineFoldingOnly = true,
             }
             opts.capabilities = capabilities
-            -- require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+            opts.on_new_config = function(new_config)
+              new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+                'force',
+                new_config.settings.yaml.schemas or {},
+                require('schemastore').yaml.schemas()
+              )
+            end
             opts.settings = {
               redhat = { telemetry = { enabled = false } },
               yaml = {
+                keyOrdering = false,
+                format = {
+                  enable = true,
+                },
                 validate = true,
-                format = { enable = true },
-                hover = true,
-                schemas = require('schemastore').yaml.schemas({}),
+                schemaStore = { enable = false, url = '' },
               },
             }
             require('lspconfig')[server].setup(opts)
@@ -546,7 +595,7 @@ return {
               },
             })
           end,
-          -- eslint = false,
+          eslint = false,
           efm = false,
           zk = false,
         },
@@ -569,53 +618,76 @@ return {
       dependencies = {
         {
           'williamboman/mason.nvim',
+          cmd = { 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUpdate' },
+          opts_extend = { 'ensure_installed' },
           opts = {
             ---@type '"prepend"' | '"append"' | '"skip"'
             PATH = 'append',
-
             ui = {
               icons = {
-                package_installed = '✓',
-                package_uninstalled = '✗',
-                package_pending = '⟳',
+                package_pending = ' ',
+                package_installed = '󰄳 ',
+                package_uninstalled = ' 󰚌',
               },
             },
+            ensure_installed = {
+              'astro-language-server',
+              'bash-language-server',
+              'clangd',
+              'css-lsp',
+              'docker-compose-language-service',
+              'dockerfile-language-server',
+              'elixir-ls',
+              'eslint-lsp',
+              'eslint_d',
+              'gofumpt',
+              'goimports',
+              'golangci-lint',
+              'gopls',
+              'html-lsp',
+              'htmlhint',
+              'json-lsp',
+              'lua-language-server',
+              'ols',
+              'prettierd',
+              'prisma-language-server',
+              'pyright',
+              'ruff',
+              'shellcheck',
+              'shfmt',
+              'stylua',
+              'svelte-language-server',
+              'tailwindcss-language-server',
+              'typescript-language-server',
+              'vtsls',
+              'vue-language-server',
+              'yaml-language-server',
+              'yamllint',
+              'zk',
+            },
           },
+          config = function(_, opts)
+            require('mason').setup(opts)
+            local mr = require 'mason-registry'
+            mr.refresh(function()
+              for _, tool in ipairs(opts.ensure_installed or {}) do
+                local p = mr.get_package(tool)
+                if not p:is_installed() then
+                  p:install()
+                end
+              end
+            end)
+          end,
         },
       },
-      opts = function()
-        return {
-          ensure_installed = {
-            'astro',
-            'bashls',
-            'clangd',
-            'cssls',
-            'docker_compose_language_service',
-            'dockerls',
-            'emmet_language_server',
-            -- "eslint",
-            -- "efm",
-            'gopls',
-            'html',
-            'jsonls',
-            'lua_ls',
-            'prismals',
-            'pyright',
-            'svelte',
-            'tailwindcss',
-            'tsserver',
-            'volar',
-            'yamlls',
-            'zk',
-          },
-          -- use AstroLSP setup for mason-lspconfig
-          handlers = {
-            function(server)
-              require('astrolsp').lsp_setup(server)
-            end,
-          },
-        }
-      end,
+      opts = {
+        -- use AstroLSP setup for mason-lspconfig
+        handlers = {
+          function(server)
+            require('astrolsp').lsp_setup(server)
+          end,
+        },
+      },
     },
   },
   config = function()
