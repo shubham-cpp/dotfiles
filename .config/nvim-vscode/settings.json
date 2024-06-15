@@ -1,6 +1,6 @@
 {
   "editor.tabSize": 2,
-  "editor.fontFamily": "'FiraCode Nerd Font','Droid Sans Mono', 'monospace', monospace",
+  "editor.fontFamily": "'RecMonoLinear Nerd Font','FiraCode Nerd Font','Droid Sans Mono', 'monospace', monospace",
   "editor.guides.bracketPairs": "active",
   "editor.minimap.autohide": true,
   "editor.minimap.scale": 3,
@@ -45,5 +45,6 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.minimap.enabled": false
+  "editor.minimap.enabled": false,
+  "github.copilot.editor.enableAutoCompletions": true
 }

@@ -123,7 +123,7 @@ return {
     -- calling `setup` is optional for customization
     fzf.setup({
       -- 'telescope',
-      defaults = { formatter = { 'path.filename_first', 2 } },
+      defaults = { formatter = 'path.filename_first' },
       fzf_opts = {
         ['--layout'] = 'reverse',
         ['--nth'] = '2..,-1',
@@ -217,9 +217,11 @@ return {
       lsp = {
         definitions = {
           jump_to_single_result = true,
+          actions = m_keys,
         },
         references = {
           ignore_current_line = true,
+          actions = m_keys,
         },
         symbols = {
           actions = m_keys,
