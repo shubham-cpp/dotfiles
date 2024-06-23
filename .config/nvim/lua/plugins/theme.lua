@@ -28,11 +28,11 @@ return {
   {
     'rebelot/kanagawa.nvim',
     event = 'VimEnter',
-    enabled = false,
+    enabled = true,
     config = function()
       require('kanagawa').setup({
         compile = true,
-        -- transparent = true, -- do not set background color
+        transparent = true,
         dimInactive = true,
         theme = 'wave', -- Load "wave" | "dragon" | "lotus"
       })
@@ -43,7 +43,7 @@ return {
   },
   {
     'rmehri01/onenord.nvim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     opts = {
       fade_nc = true,

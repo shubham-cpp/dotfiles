@@ -44,16 +44,16 @@ shift + XF86Audio{Raise,Lower}Volume
     wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 10%{+,-}
 #Mute
 {_,shift + }XF86AudioMute
-    {audio toggle,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && (kill -38 "$(pidof dwm)"; pgrep goblocks && kill -40 "$(pidof goblocks)")}
+    {audio toggle,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && kill -40 "$(pidof goblocks)"}
 
 XF86{Search,Calculator}
     {rofi -show drun -async-read 10,qalculate-gtk || gnome-calculator || galculator}
 
 #Brightness up
 XF86Audio{Next,Prev}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) -h string:x-canonical-private-synchronous:backlight  -r 10001 && (kill -36 $(pidof dwm); kill -53 $(pidof dwmblocks ))
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g) -h string:x-canonical-private-synchronous:backlight  -r 10001 && kill -36 $(pidof dwmblocks)
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g)  -h string:x-canonical-private-synchronous:backlight -r 10002 && (kill -36 $(pidof dwm); kill -53 $(pidof dwmblocks ))
+    brightnessctl s 10{+,-} && notify-send "Brightness: " -t 2000 -i display-brightness -h int:value:$(brightnessctl g)  -h string:x-canonical-private-synchronous:backlight -r 10002 && kill -36 $(pidof dwmblocks)
 
 shift + XF86MonBrightness{Up,Down}
-    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h string:x-canonical-private-synchronous:backlight -h int:value:$(light) && (kill -36 $(pidof dwm); kill -53 $(pidof dwmblocks ))
+    brightnessctl s {200,10} && notify-send "Brightness: " -t 2000 -i display-brightness -h string:x-canonical-private-synchronous:backlight -h int:value:$(light) && kill -36 $(pidof dwmblocks)

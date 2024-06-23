@@ -58,7 +58,7 @@ alias vt="env NVIM_APPNAME=nvim-test nvim"
 alias vv="env NVIM_APPNAME=nvim-chad nvim"
 alias se="sudoedit nvim"
 alias mci="make -j5 && sudo make install clean"
-alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
+#alias sel_font="fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip"
 
 #get fastest mirrors in your neighborhood
 # alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"

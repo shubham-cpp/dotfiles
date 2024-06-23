@@ -118,8 +118,9 @@ st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
 ! st*font: RecMonoLinear Nerd Font:size=12:antialias=true:autohint=true
 ! st*font: Iosevka Nerd Font Propo:size=13.0:antialias=true:autohint=true
 
+URxvt*font: xft:JetBrains Mono:size=12,xft:FiraCode Nerd Font Mono:antialias=true:size=12
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
-!! ! URxvt.letterSpace: -1
+URxvt.letterSpace: -1
 ! URxvt*skipBuiltinGlyphs: true
 ! URxvt.iso14755: false
 ! URxvt.iso14755_52: false
@@ -166,5 +167,3 @@ URxvt.cursorBlink: false
 URxvt*scrollBar_right: false
 URxvt*scrollBar: false
 ! URxvt*borderLess: false
-
-URxvt*font: xft:FiraCode Nerd Font:size=11.5,xft:JetBrainsMono Nerd Font Mono:pixelsize=18

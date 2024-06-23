@@ -113,11 +113,11 @@ export _ZL_DATA_DIR="$XDG_CACHE_HOME/zlua"
 export RANGER_ZLUA="$HOME/Downloads/GitClones/z.lua/z.lua"
 export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
 export PATH="$PATH:$XDG_CACHE_HOME/fnm-install:$HOME/Documents/Programming/Flutter/flutter/bin"
-export FZF_DEFAULT_COMMAND="fd -t f --hidden --follow --ignore-file \"$HOME\"/.config/git/ignore"
+export FZF_DEFAULT_COMMAND="fd -t f --hidden --follow --ignore-file node_modules --ignore-file .git --ignore-file .github --ignore-file dist"
 # export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!Git*' --iglob '!void-*' --iglob '!.git*' --iglob '!venv' --iglob '!__pycache__' --iglob '!*.out'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd -t d -H -L --ignore-file ~/.config/git/ignore"
-export FZF_DEFAULT_OPTS="--cycle --marker='+' --keep-right --bind=ctrl-j:preview-down --bind=ctrl-k:preview-up"
+export FZF_DEFAULT_OPTS="--cycle --marker='+' --keep-right"
 # remember --bind KEY:ACTION or EVENT:ACTION
 # eval $(dircolors "$XDG_CONFIG_HOME"/dir_colors)
 export XCURSOR_PATH=${XCURSOR_PATH}:~/.local/share/icons

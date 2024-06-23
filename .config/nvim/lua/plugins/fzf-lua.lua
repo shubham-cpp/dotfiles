@@ -31,7 +31,10 @@ local function fzf_create_file()
         type = 'cmd',
         fn = function(selected)
           local fullpath = get_full_path(selected)
-          return string.format('command ls -Alhv --group-directories-first %s', fullpath)
+          local ls_cmd = 'command ls --color -hsv1F --group-directories-first'
+          local eza_cmd =
+            'eza -al --color=always --icons=always --group-directories-first --no-user --no-permissions --no-time'
+          return string.format('%s %s', vim.fn.executable 'eza' == 1 and eza_cmd or ls_cmd, fullpath)
         end,
       },
     },
@@ -123,7 +126,7 @@ return {
     -- calling `setup` is optional for customization
     fzf.setup({
       -- 'telescope',
-      defaults = { formatter = 'path.filename_first' },
+      defaults = { formatter = { 'path.filename_first', 2 } },
       fzf_opts = {
         ['--layout'] = 'reverse',
         ['--nth'] = '2..,-1',

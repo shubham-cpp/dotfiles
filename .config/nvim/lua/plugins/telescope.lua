@@ -30,7 +30,6 @@ local function telescope_create_file()
       map('i', '<CR>', function(prompt_bufnr)
         local content = state.get_selected_entry()
         actions.close(prompt_bufnr)
-        -- vim.print('content : ' .. content.cwd .. '/' .. content.value)
         local dir = content.value
         local name = vim.fn.input 'File Name: '
         vim.cmd('e ' .. dir .. name)
