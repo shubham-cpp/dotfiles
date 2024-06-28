@@ -13,7 +13,7 @@ end
 -- For example, changing the color scheme:
 config.color_scheme = "Tokyo Night"
 -- Spawn a fish shell in login mode
-config.default_prog = { "/bin/fish", "-l" }
+-- config.default_prog = { "/bin/fish", "-l" }
 
 config.font_size = 11.5
 config.font = wezterm.font_with_fallback({

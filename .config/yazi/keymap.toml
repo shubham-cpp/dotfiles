@@ -1,3 +1,7 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/keymap.json"
+
 [manager]
 prepend_keymap = [
   # { on = [ "g", "D" ], run = 'cd ~/Downloads', desc = "Goto Downloads" },
@@ -10,19 +14,21 @@ prepend_keymap = [
   { on= ["g","D","i"],run="cd ~/Downloads/ISOs", desc = "Goto ISOs" },
   { on= ["g","D","g"],run="cd ~/Downloads/GitClones", desc = "Goto GitClones" },
 
-  { on= ["g","c","a"],run="cd ~/.config/awesome", desc = "Goto awesome" },
-  { on= ["g","c","A"],run="cd ~/.config/alacritty", desc = "Goto alacritty" },
-  { on= ["g","c","b"],run="cd ~/.config/bspwm", desc = "Goto bspwm" },
-  { on= ["g","c","d"],run="cd ~/.config/doom", desc = "Goto doom" },
-  { on= ["g","c","l"],run="cd ~/.config/lf", desc = "Goto lf" },
-  { on= ["g","c","n"],run="cd ~/.config/nvim", desc = "Goto nvim" },
-  { on= ["g","c","k"],run="cd ~/.config/kitty", desc = "Goto kitty" },
-  { on= ["g","c","q"],run="cd ~/.config/qutebrowser", desc = "Goto qutebrowser" },
-  { on= ["g","c","s"],run="cd ~/.config/sxhkd", desc = "Goto sxhkd" },
-  { on= ["g","c","v"],run="cd ~/.config/vifm", desc = "Goto vifm" },
-  { on= ["g","c","r"],run="cd ~/.config/rofi", desc = "Goto rofi" },
-  { on= ["g","c","z"],run="cd ~/.config/zsh", desc = "Goto zsh" },
+  { on= ["g","C","a"],run="cd ~/.config/awesome", desc = "Goto awesome" },
+  { on= ["g","C","A"],run="cd ~/.config/alacritty", desc = "Goto alacritty" },
+  { on= ["g","C","b"],run="cd ~/.config/bspwm", desc = "Goto bspwm" },
+  { on= ["g","C","d"],run="cd ~/.config/doom", desc = "Goto doom" },
+  { on= ["g","C","l"],run="cd ~/.config/lf", desc = "Goto lf" },
+  { on= ["g","C","n"],run="cd ~/.config/nvim", desc = "Goto nvim" },
+  { on= ["g","C","k"],run="cd ~/.config/kitty", desc = "Goto kitty" },
+  { on= ["g","C","q"],run="cd ~/.config/qutebrowser", desc = "Goto qutebrowser" },
+  { on= ["g","C","s"],run="cd ~/.config/sxhkd", desc = "Goto sxhkd" },
+  { on= ["g","C","v"],run="cd ~/.config/vifm", desc = "Goto vifm" },
+  { on= ["g","C","r"],run="cd ~/.config/rofi", desc = "Goto rofi" },
+  { on= ["g","C","z"],run="cd ~/.config/zsh", desc = "Goto zsh" },
   { on= ["g","l","m"],run="cd ~/.local/bin/myscripts", desc = "Goto myscripts" },
   { on= ["g","l","f"],run="cd ~/.local/share/fonts", desc = "Goto fonts" },
-  { on= ["g","l","t"],run="cd ~/.local/share/Trash/files", desc = "Goto Trash" }
+  { on= ["g","l","t"],run="cd ~/.local/share/Trash/files", desc = "Goto Trash" },
+
+  { on = [ "l" ], run = 'plugin --sync smart-enter', desc = "Enter the child directory, or open the file" },
 ]
