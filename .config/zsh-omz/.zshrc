@@ -92,7 +92,7 @@ WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 # export LANG=en_US.UTF-8
 
 source ~/Documents/dotfiles/.config/zsh/alias.zsh
-source ~/.config/zsh-orig/.zprofile
+source ~/Documents/dotfiles/.config/zsh/.zprofile
 source $ZDOTDIR/keys.zsh
 
 alias mkd=take
@@ -105,6 +105,6 @@ bindkey -M viins '^[[B' history-substring-search-down # or '\eOB'
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # source ~/Documents/dotfiles/.config/zsh/alias.zsh
-
+eval "$(fnm env --use-on-cd)"
 # bun completions
 [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

@@ -1,0 +1,21 @@
+{
+  "using_namespace": {
+    "prefix": ["usd", "uns"],
+    "body": ["using namespace ${1:std};", "$0"],
+    "description": "using namespace std"
+  },
+  "cpp": {
+    "prefix": "cpp",
+    "body": [
+      "#include <iostream>",
+      "",
+      "using namespace std;",
+      "",
+      "int main() {",
+      "\t$1",
+      "\treturn 0;",
+      "}"
+    ],
+    "description": "C++ quick start"
+  }
+}

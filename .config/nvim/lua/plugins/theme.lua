@@ -33,7 +33,7 @@ return {
       require('kanagawa').setup({
         compile = true,
         transparent = true,
-        dimInactive = true,
+        dimInactive = false,
         theme = 'wave', -- Load "wave" | "dragon" | "lotus"
       })
       vim.cmd 'colorscheme kanagawa-wave'
