@@ -25,11 +25,17 @@ vim.api.nvim_create_autocmd('TermOpen', {
   group = au_term,
   callback = function()
     vim.keymap.set('t', '<C-]>', '<C-\\><C-n>', { buffer = true })
+    vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w><C-j>', { buffer = true })
+    vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-w><C-k>', { buffer = true })
+    vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w><C-h>', { buffer = true })
+    -- vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w><C-l>', { buffer = true })
+
     vim.keymap.set('n', 'A', 'A<C-k>', { buffer = true })
     vim.keymap.set('n', 'D', 'A<C-k><C-\\><C-n>', { buffer = true })
     vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
     vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
     vim.keymap.set('n', 'dd', 'A<C-e><C-u><C-><C-n>', { buffer = true })
+
     vim.opt_local.signcolumn = 'no'
     vim.opt_local.relativenumber = false
     vim.opt_local.number = false

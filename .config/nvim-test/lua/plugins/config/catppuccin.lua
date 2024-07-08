@@ -1,7 +1,7 @@
 require('catppuccin').setup({
   ---@type "latte"| "frappe"| "macchiato"| "mocha"|"auto"
   flavour = 'mocha',
-  transparent_background = false,
+  transparent_background = true,
   dim_inactive = {
     enabled = false, -- dims the background color of inactive window
     shade = 'dark',

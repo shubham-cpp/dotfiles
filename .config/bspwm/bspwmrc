@@ -17,6 +17,7 @@ bspc config left_monocle_padding        2
 bspc config right_monocle_padding       1
 bspc config bottom_monocle_padding      2
 
+bspc config hide_by_moving              true
 bspc config single_monocle              true
 bspc config split_ratio                 0.50
 bspc config borderless_monocle          true
@@ -55,6 +56,12 @@ bspc rule -a Arcolinux-tweak-tool.py    state=floating
 bspc rule -a Arcolinux-welcome-app.py   state=floating
 bspc rule -a Connman-gtk                state=floating
 bspc rule -a Arcologout.py              state=fullscreen
+bspc rule -a dialog                     state=floating follow=on
+bspc rule -a Dialog                     state=floating follow=on
+bspc rule -a Menu                       state=floating follow=on
+bspc rule -a menu                       state=floating follow=on
+bspc rule -a Dropdown_menu              state=floating follow=on
+bspc rule -a dropdown_menu              state=floating follow=on
 
 bspc rule -a albert                     state=floating  focus=true
 bspc rule -a feh                        state=floating
@@ -68,6 +75,7 @@ bspc rule -a NoiseTorch                 state=floating
 
 bspc rule -a "Grub-customizer"          state=floating
 bspc rule -a Pavucontrol                state=floating
+bspc rule -a pavucontrol                state=floating
 bspc rule -a rofi                       state=floating
 bspc rule -a matplotlib                 state=floating
 #Tiled applications

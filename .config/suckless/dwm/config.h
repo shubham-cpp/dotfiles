@@ -14,9 +14,9 @@ static const int showbar                 = 1;        /* 0 means no bar */
 static const int topbar                  = 1;        /* 0 means bottom bar */
 static const Bool viewontag              = True;     /* Switch view on tag switch */
 static const char *fonts[]               = { 
-  "Fira Sans:size=12",
-  "Symbols Nerd Font:size=13",
-  "Noto Color Emoji:size=12"
+  "Cantarell:size=12:antialias=true:autohint=true",
+  "Symbols Nerd Font:size=11:antialias=true:autohint=true",
+  "Noto Color Emoji:size=11:antialias=true:autohint=true"
 };
 static const char dmenufont[]            = "monospace:size=10";
 // static const char col_gray1[]       = "#222222";

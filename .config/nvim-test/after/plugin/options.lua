@@ -5,6 +5,7 @@ o.number = true
 o.relativenumber = true
 o.expandtab = true
 o.tabstop = 2
+o.softtabstop = -1
 o.shiftround = true
 o.shiftwidth = 2
 o.smarttab = true
@@ -17,7 +18,7 @@ o.incsearch = true
 o.splitright = true
 o.splitbelow = true
 o.cursorline = true
-o.inccommand = 'nosplit'
+o.inccommand = 'split'
 o.scrolloff = 16
 o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })

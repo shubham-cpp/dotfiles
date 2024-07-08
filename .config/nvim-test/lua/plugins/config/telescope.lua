@@ -142,6 +142,7 @@ M.config = function()
     defaults = {
       -- path_display = { "truncate" },
       sorting_strategy = 'ascending',
+      set_env = { ['COLORTERM'] = 'truecolor' },
       layout_config = {
         horizontal = { prompt_position = 'top', preview_width = 0.40 },
         vertical = { mirror = false },
@@ -157,8 +158,16 @@ M.config = function()
           ['<C-p>'] = actions.cycle_history_prev,
           ['<C-c>'] = actions.close,
           ['<A-p>'] = action_layout.toggle_preview,
+
+          ['<Tab>'] = actions.toggle_selection + actions.move_selection_next,
+          ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_previous,
+          ['<C-q>'] = actions.smart_send_to_qflist + actions.open_qflist,
         },
-        n = { q = actions.close, ['<A-p>'] = action_layout.toggle_preview },
+        n = {
+          q = actions.close,
+          ['<A-p>'] = action_layout.toggle_preview,
+          ['<Space>'] = actions.toggle_selection,
+        },
       },
       vimgrep_arguments = {
         'rg',
@@ -170,11 +179,98 @@ M.config = function()
         '--smart-case',
         '--hidden',
         '--trim', -- add this value
+        '--glob=!.git/',
+        '--glob=!node_modules/',
+        '--glob=!.venv/',
+        '--glob=!venv/',
       },
     },
 
     pickers = {
-      buffers = { ignore_current_buffer = true, sort_lastused = true },
+      buffers = {
+        ignore_current_buffer = true,
+        sort_lastused = true,
+        mappings = {
+          i = { ['<c-d>'] = 'delete_buffer' },
+          n = { d = 'delete_buffer' },
+        },
+        prompt_title = 'Buffers',
+        results_title = 'Command History',
+        prompt_prefix = ' ',
+        sorting_strategy = 'ascending',
+        layout_strategy = 'bottom_pane',
+        layout_config = {
+          prompt_position = 'top',
+        },
+        border = true,
+        borderchars = {
+          prompt = { ' ', ' ', '─', ' ', ' ', ' ', '─', '─' },
+          results = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+          preview = { '─', ' ', '─', '│', '┬', '─', '─', '╰' },
+        },
+      },
+      help_tags = {
+        prompt_title = 'Help',
+        results_title = 'Help Tags',
+        prompt_prefix = ' ',
+        sorting_strategy = 'ascending',
+        layout_strategy = 'bottom_pane',
+        layout_config = {
+          prompt_position = 'top',
+          height = 25,
+        },
+        border = true,
+        borderchars = {
+          prompt = { ' ', ' ', '─', ' ', ' ', ' ', '─', '─' },
+          results = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+          preview = { '─', ' ', '─', '│', '┬', '─', '─', '╰' },
+        },
+      },
+      keymaps = {
+        prompt_title = 'keymaps',
+        results_title = 'keymaps',
+        prompt_prefix = ' ',
+        sorting_strategy = 'ascending',
+        layout_strategy = 'bottom_pane',
+        layout_config = {
+          prompt_position = 'top',
+          height = 25,
+        },
+        border = true,
+        borderchars = {
+          prompt = { ' ', ' ', '─', ' ', ' ', ' ', '─', '─' },
+          results = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+          preview = { '─', ' ', '─', '│', '┬', '─', '─', '╰' },
+        },
+      },
+      command_history = {
+        prompt_title = '',
+        results_title = 'Command History',
+
+        --           
+        --  卑 喝   
+        prompt_prefix = ' ',
+        -- prompt_prefix = " ",
+        -- prompt_prefix = " ",
+        -- prompt_prefix = " ",
+
+        sorting_strategy = 'ascending',
+        layout_strategy = 'bottom_pane',
+        layout_config = {
+          prompt_position = 'top',
+          height = 25,
+        },
+        border = true,
+        borderchars = {
+          prompt = { ' ', ' ', '─', ' ', ' ', ' ', '─', '─' },
+          results = { '─', ' ', ' ', ' ', '─', '─', ' ', ' ' },
+          preview = { '─', ' ', '─', '│', '┬', '─', '─', '╰' },
+        },
+        mappings = {
+          i = { ['<CR>'] = actions.edit_command_line },
+          n = { ['<CR>'] = actions.edit_command_line },
+        },
+      },
       lsp_references = dropdown,
       lsp_definitions = dropdown,
       git_branches = dropdown,
@@ -213,12 +309,9 @@ M.config = function()
     },
   })
   require('telescope').load_extension 'zf-native'
-  -- require("telescope").load_extension("fzf")
   require('telescope').load_extension 'ui-select'
   require('telescope').load_extension 'egrepify'
-  -- vim.lsp.handlers["textDocument/codeAction"] = builtin.lsp_references
   vim.lsp.handlers['textDocument/definition'] = builtin.lsp_definitions
-  -- vim.lsp.handlers["textDocument/declaration"] = builtin.lsp_references
   vim.lsp.handlers['textDocument/typeDefinition'] = builtin.lsp_type_definitions
   vim.lsp.handlers['textDocument/implementation'] = builtin.lsp_implementations
   vim.lsp.handlers['textDocument/references'] = builtin.lsp_references

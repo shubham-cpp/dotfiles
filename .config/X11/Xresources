@@ -93,25 +93,53 @@ xterm*on3Clicks:  regex [^ \n]+
 xterm*on4Clicks:  regex [^#$]+
 XTerm*fullscreen: never
 ! Space Duck
-*.background: #0f111b
-*.foreground: #ecf0c1
-*.cursorColor: #61AFEF
-*.color0:  #000000
-*.color8:  #686f9a
-*.color1:  #e33400
-*.color9:  #e33400
-*.color2:  #5ccc96
-*.color10: #5ccc96
-*.color3:  #b3a1e6
-*.color11: #b3a1e6
-*.color4:  #00a3cc
-*.color12: #00a3cc
-*.color5:  #f2ce00
-*.color13: #f2ce00
-*.color6:  #7a5ccc
-*.color14: #7a5ccc
-*.color7:  #686f9a
-*.color15: #f0f1ce
+! *.background: #0f111b
+! *.foreground: #ecf0c1
+! *.cursorColor: #61AFEF
+! *.color0:  #000000
+! *.color8:  #686f9a
+! *.color1:  #e33400
+! *.color9:  #e33400
+! *.color2:  #5ccc96
+! *.color10: #5ccc96
+! *.color3:  #b3a1e6
+! *.color11: #b3a1e6
+! *.color4:  #00a3cc
+! *.color12: #00a3cc
+! *.color5:  #f2ce00
+! *.color13: #f2ce00
+! *.color6:  #7a5ccc
+! *.color14: #7a5ccc
+! *.color7:  #686f9a
+! *.color15: #f0f1ce
+! Challenger Deep
+*.foreground:   #cbe3e7
+*.background:   #0f111b
+*.cursorColor:  #fbfcfc
+! black
+*.color0:       #565575
+*.color8:       #100e23
+! red
+*.color1:       #ff8080
+*.color9:       #ff5458
+! green
+*.color2:       #95ffa4
+*.color10:      #62d196
+! yellow
+*.color3:       #ffe9aa
+*.color11:      #ffb378
+! blue
+*.color4:       #91ddff
+*.color12:      #65b2ff
+! magenta
+*.color5:       #c991e1
+*.color13:      #906cff
+! cyan
+*.color6:       #aaffe4
+*.color14:      #63f2f1
+! white
+*.color7:       #cbe3e7
+*.color15:      #a6b3cc
 
 st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
 ! st*font: MesloLGS Nerd Font:size=11.5:antialias=true:autohint=true

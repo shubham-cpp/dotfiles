@@ -1,8 +1,9 @@
+---@type LazySpec
 return {
   {
     'sainnhe/gruvbox-material',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     init = function()
       vim.g.gruvbox_material_background = 'hard' -- 'hard', 'medium'(default), 'soft'
       vim.g.gruvbox_material_enable_bold = 1
@@ -25,7 +26,7 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
-    enabled = false,
+    enabled = true,
     config = function()
       require 'plugins.config.catppuccin'
     end,

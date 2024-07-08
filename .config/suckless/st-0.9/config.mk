@@ -5,12 +5,17 @@ VERSION = 0.9
 
 # paths
 PREFIX = /usr/local
+APPPREFIX = $(PREFIX)/share/applications
 MANPREFIX = $(PREFIX)/share/man
 
 X11INC = /usr/X11R6/include
 X11LIB = /usr/X11R6/lib
 
 PKG_CONFIG = pkg-config
+# Optional compiler optimisations may create smaller binaries and
+# faster code, but increases compile time.
+# See https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
+OPTIMISATIONS = -march=native -flto=auto -O3
 
 # includes and libs
 INCS = -I$(X11INC) \
@@ -21,7 +26,7 @@ LIBS = -L$(X11LIB) -lm -lrt -lX11 -lutil -lXft -lXrender \
        `$(PKG_CONFIG) --libs fontconfig` \
        `$(PKG_CONFIG) --libs freetype2` \
        `$(PKG_CONFIG) --libs harfbuzz`
-CFLAGS = -Wall -Wextra -Wno-deprecated-declarations -Os
+CFLAGS = $(OPTIMISATIONS) -Wall -Wextra -Wno-deprecated-declarations
 # flags
 STCPPFLAGS = -DVERSION=\"$(VERSION)\" -D_XOPEN_SOURCE=600
 STCFLAGS = $(INCS) $(STCPPFLAGS) $(CPPFLAGS) $(CFLAGS)

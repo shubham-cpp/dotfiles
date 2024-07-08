@@ -28,10 +28,10 @@ vim.keymap.set('c', '<C-e>', '<End>', { silent = false })
 vim.cmd [[ nnoremap <silent> ,s :let @/='\<'.expand('<cword>').'\>'<CR>cgn ]]
 vim.keymap.set('x', ',s', '"sy:let @/=@s<CR>cgn')
 
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-vim.keymap.set('x', '<', '<gv')
-vim.keymap.set('x', '>', '>gv')
+-- vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+-- vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+-- vim.keymap.set('x', '<', '<gv')
+-- vim.keymap.set('x', '>', '>gv')
 
 vim.keymap.set('i', ',', ',<C-g>u')
 vim.keymap.set('i', '.', '.<C-g>u')
@@ -53,7 +53,7 @@ vim.keymap.set(
 
 vim.keymap.set('n', '<leader>x', function()
   vim.cmd 'source %'
-  local file = vim.fn.substitute(vim.fn.expand '%:p:r', vim.fn.stdpath 'config' .. '/lua/', '', '')
+  local file = vim.fn.substitute(vim.fn.expand '%:r', 'lua/', '', '')
   local ok, mod = pcall(require, file)
   if ok and type(mod) ~= 'boolean' and next(mod or {}) ~= nil and mod.config then
     mod.config()

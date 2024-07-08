@@ -39,15 +39,15 @@ super + control + {s,l,m}
     flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 #Raises volume
 XF86Audio{Raise,Lower}Volume
-    audio {inc,dec}
+  audio {inc,dec}
 shift + XF86Audio{Raise,Lower}Volume
-    wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 10%{+,-}
+  wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 10%{+,-}
 #Mute
 {_,shift + }XF86AudioMute
-    {audio toggle,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && kill -40 "$(pidof goblocks)"}
+  {audio toggle, audio toggle-mic}
 
 XF86{Search,Calculator}
-    {rofi -show drun -async-read 10,qalculate-gtk || gnome-calculator || galculator}
+  {rofi -show drun -async-read 10,qalculate-gtk || gnome-calculator || galculator}
 
 #Brightness up
 XF86Audio{Next,Prev}

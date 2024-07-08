@@ -19,7 +19,7 @@ source "${ZINIT_HOME}/zinit.zsh"
 # Add in Powerlevel10k
 # zinit ice depth=1; zinit light romkatv/powerlevel10k
 
-# fpath=(~/.local/share/zsh/site-functions $fpath)
+fpath+=~/.local/share/zsh/site-functions
 autoload -Uz colors edit-command-line
 autoload -Uz compinit && compinit
 zt(){ zinit depth3 lucid ${1/#[0-9][a-c]/wait${1}} ${@:2}; }
@@ -28,6 +28,7 @@ zinit light zdharma-continuum/fast-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-history-substring-search
+zinit light QuarticCat/zsh-smartcache
 zinit light Aloxaf/fzf-tab
 
 zinit ice as"command" from"gh-r" \
@@ -35,7 +36,6 @@ zinit ice as"command" from"gh-r" \
           atpull"%atclone" src"init.zsh"
 zinit light starship/starship
 
-# zinit light lukechilds/zsh-better-npm-completion
 zinit ice trigger-load!npm wait'0' lucid; zinit light lukechilds/zsh-better-npm-completion
 zinit ice trigger-load!man wait'0' lucid; zinit snippet OMZP::colored-man-pages
 zinit ice wait"2" as"command" from"gh-r" lucid \
@@ -92,15 +92,11 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/bindings.zsh
 zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
 # Shell integrations
-eval "$(fzf --zsh)"
+# eval "$(fzf --zsh)"
 # eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
-# _evalcache fzf --zsh
-# _evalcache zoxide init zsh
-# _evalcache fnm env --use-on-cd
+smartcache eval fzf --zsh
+smartcache comp rustup completions zsh
 
 # bun completions
-[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"
-
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-# [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
+# [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

@@ -63,14 +63,10 @@ ENABLE_CORRECTION="true"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 # ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 plugins=(git bun vi-mode zoxide zsh-history-substring-search zsh-autosuggestions zsh-smartcache docker zsh-better-npm-completion fast-syntax-highlighting)
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+fpath+=${XDG_DATA_HOME:-${HOME:-~/}/.local/share}/zsh/site-functions
 
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
@@ -80,16 +76,13 @@ HISTFILE=$HOME/.cache/zhistory
 
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
-# zstyle ':omz:plugins:docker' legacy-completion yes
 
 source $ZSH/oh-my-zsh.sh
 smartcache eval starship init zsh
+smartcache eval register-python-argcomplete pipx
+smartcache comp rustup completions zsh
+smartcache comp rustup completions zsh
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 source ~/Documents/dotfiles/.config/zsh/alias.zsh
 source ~/Documents/dotfiles/.config/zsh/.zprofile
@@ -106,5 +99,3 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # source ~/Documents/dotfiles/.config/zsh/alias.zsh
 eval "$(fnm env --use-on-cd)"
-# bun completions
-[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

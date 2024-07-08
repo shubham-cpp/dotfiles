@@ -1,4 +1,4 @@
-from libqtile.command import lazy as lz
+from libqtile.lazy import lazy as lz
 from libqtile.log_utils import logger
 from libqtile.core.manager import Qtile
 # Custom Lazy Functions {{{

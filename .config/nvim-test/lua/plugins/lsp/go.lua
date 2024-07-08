@@ -43,11 +43,11 @@ return {
                 rangeVariableTypes = true,
               },
               staticcheck = true,
-              ui = {
-                completion = {
-                  usePlaceholders = true,
-                },
-              },
+              -- ui = {
+              --   completion = {
+              --     usePlaceholders = true,
+              --   },
+              -- },
               codelenses = {
                 usePlaceholders = true,
               },
