@@ -30,8 +30,13 @@ super + {r,v,y,p}
 super + alt + {c,g}
     {open-rcs,open-games}
 
-{_,shift + }@Print
-    take_ss {full,focus}
+# {_,shift + }@Print
+#     take_ss {full,focus}
+{_,shift +, alt + }@Print
+    flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
+
+{_,shift +, alt + }@F1
+    flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 
 control + alt + {p,c,v,e}
     {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}

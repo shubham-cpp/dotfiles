@@ -80,7 +80,7 @@ zstyle ':completion:*:*:docker-*:*' option-stacking yes
 source $ZSH/oh-my-zsh.sh
 smartcache eval starship init zsh
 smartcache eval register-python-argcomplete pipx
-smartcache comp rustup completions zsh
+smartcache eval fzf --zsh
 smartcache comp rustup completions zsh
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 

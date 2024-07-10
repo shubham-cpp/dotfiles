@@ -50,6 +50,7 @@ end
 return {
   'echasnovski/mini.files',
   version = '*',
+  enabled = false,
   keys = function()
     local f = require 'mini.files'
     local minifiles_toggle = function(...)
