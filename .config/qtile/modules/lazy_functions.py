@@ -139,4 +139,21 @@ def toggle_layout(qtile: Qtile, switch_to: str):
         qtile.current_group.setlayout(last_layout)
 
 
+@lz.function
+def focus_next_class(qtile: Qtile):
+    """Focus to next window of the same class
+
+    Args:
+        qtile (libqtile.qtile): By default passed by lz.function
+    """
+    windows = qtile.current_group.focus_history
+    current_window = qtile.current_window
+    for w in windows:
+        if w == current_window:
+            continue
+        if w.window.get_wm_class() == current_window.window.get_wm_class() and w.is_visible:
+            w.group.focus(w, True)
+            w.keep_above(True)
+            break
+
 # }}}

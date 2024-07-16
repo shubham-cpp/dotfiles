@@ -18,25 +18,7 @@ from modules.groups import groups
 from modules.keys import keys, mod, terminal
 from modules.lazy_functions import sticky_windows
 
-
-# from libqtile.backend.wayland.inputs import InputConfig
-
-# wl_input_rules = {
-#     # "1267:12377:ELAN1300:00 04F3:3059 Touchpad": InputConfig(natural_scroll=True, middle_emulation=True,kb_repeat_delay=300,kb_repeat_rate=50,click_method='clickfinger',scroll_method='two_finger',tap=True,tap_button_map='lrm',pointer_accel=0.6,dwt=True),
-#     "*": InputConfig(
-#         natural_scroll=True,
-#         middle_emulation=True,
-#         kb_repeat_delay=300,
-#         kb_repeat_rate=50,
-#         click_method="clickfinger",
-#         scroll_method="two_finger",
-#         tap=True,
-#         tap_button_map="lrm",
-#         pointer_accel=0.6,
-#         dwt=True,
-#     ),
-#     # "type:keyboard": InputConfig(kb_options="ctrl:nocaps,compose:ralt"),
-# }
+from extras.floating_window_snapping import move_snap_window
 
 layouts: List[Layout] = [
     MonadTall(
@@ -46,7 +28,8 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
+    MonadWide(change_size=10, single_border_width=0,
+              single_margin=0, **layout_theme),
     Max(),
     Floating(),
     Zoomy(),
@@ -58,7 +41,8 @@ mouse: List[Union[Drag, Click]] = [
     Drag(
         [mod],
         "Button1",
-        lazy.window.set_position_floating(),
+        move_snap_window(snap_dist=20),
+        # lazy.window.set_position_floating(),
         start=lazy.window.get_position(),
     ),
     Drag(

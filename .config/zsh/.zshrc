@@ -97,6 +97,7 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 eval "$(fnm env --use-on-cd)"
 smartcache eval fzf --zsh
 smartcache eval register-python-argcomplete pipx
+smartcache eval $HOME/.local/bin/mise activate zsh
 smartcache comp rustup completions zsh
 
 # bun completions

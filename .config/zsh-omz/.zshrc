@@ -78,10 +78,18 @@ zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
 source $ZSH/oh-my-zsh.sh
-smartcache eval starship init zsh
-smartcache eval register-python-argcomplete pipx
-smartcache eval fzf --zsh
-smartcache comp rustup completions zsh
+# check if starship is available as executable in path
+if [ -x "$(which starship)" ]; then
+  smartcache eval starship init zsh
+fi
+[ -x $HOME/.local/bin/register-python-argcomplete ] && smartcache eval register-python-argcomplete pipx
+if [ -x "$(which fzf)" ]; then
+  smartcache eval fzf --zsh
+fi
+smartcache eval $HOME/.local/bin/mise activate zsh
+if [ -x "$(which rustup)" ]; then
+  smartcache comp rustup completions zsh
+fi
 WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 source ~/Documents/dotfiles/.config/zsh/alias.zsh

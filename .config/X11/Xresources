@@ -118,7 +118,7 @@ XTerm*fullscreen: never
 *.cursorColor:  #fbfcfc
 ! black
 *.color0:       #565575
-*.color8:       #100e23
+*.color8:       #686f9a
 ! red
 *.color1:       #ff8080
 *.color9:       #ff5458

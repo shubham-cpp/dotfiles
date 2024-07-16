@@ -43,6 +43,7 @@ return {
         tsserver = false,
         eslint = false,
         vtsls = function(server, opts)
+          require('lspconfig.configs').vtsls = require('vtsls').lspconfig
           local default_attach = opts.on_attach
           opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
           opts.filetypes = {

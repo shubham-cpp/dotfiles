@@ -19,7 +19,7 @@ config.font_size = 11.5
 config.font = wezterm.font_with_fallback({
   -- "FiraCode Nerd Font",
   "JetBrainsMono Nerd Font",
-  -- "Symbols Nerd Font Mono",
+  "FontAwesome",
 })
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 

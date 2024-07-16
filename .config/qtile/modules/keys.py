@@ -14,6 +14,7 @@ from .lazy_functions import (
     update_brightness,
     update_mic_icon,
     update_volume,
+    focus_next_class,
 )
 
 mod: LiteralString = "mod4"
@@ -76,7 +77,10 @@ keys = [
         lazy.next_layout(),
         desc="Move window focus to other window",
     ),
-    Key("M-n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    # Key("M-n", lazy.layout.normalize(), desc="Reset all window sizes"),
+    Key("M-n", focus_next_class(), desc="Focus next window of same class"),
+    # Key("M-S-n", focus_next_class(prev=True),
+    #     desc="Focus prev window of same class"),
     Key("M-S-m", toggle_layout("monadwide"), desc="Toggle Monad Wide"),
     Key("M-z", toggle_layout("zoomy"), desc="Toggle Zoomy"),
     # }}}
@@ -283,7 +287,8 @@ keys = [
     ),
     Key(
         "M-d",
-        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn(
+            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
