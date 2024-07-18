@@ -9,6 +9,16 @@ function which -d "Print alias for program or print location of program"
         echo "Please provide a valid program name"
     end
 end
+
+function yy -d "yy shell wrapper that provides the ability to change the current working directory when exiting Yazi"
+    set tmp (mktemp -t "yazi-cwd.XXXXXX")
+    yazi $argv --cwd-file="$tmp"
+    if set cwd (cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+        cd -- "$cwd"
+    end
+    rm -f -- "$tmp"
+end
+
 # function jnb -d "Start jupyter lab in background"
 #     nohup jupyter lab &> /dev/null &
 #     sleep 2

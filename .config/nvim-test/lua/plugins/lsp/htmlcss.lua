@@ -7,6 +7,7 @@ return {
         'html-lsp',
         'css-lsp',
         'prettierd',
+        'emmet-language-server',
       })
       return opts
     end,
@@ -27,7 +28,6 @@ return {
   },
   {
     'AstroNvim/astrolsp',
-    ---@type AstroLSPConfig
     opts = function(_, opts)
       opts.config = vim.tbl_extend('force', opts.config or {}, {
         html = {},
@@ -61,6 +61,21 @@ return {
                 float = 'error',
               },
             },
+          },
+        },
+        emmet_language_server = {
+          filetypes = {
+            'css',
+            'eruby',
+            'html',
+            'htmldjango',
+            'javascriptreact',
+            'less',
+            'pug',
+            'sass',
+            'scss',
+            'typescriptreact',
+            'heex',
           },
         },
       })

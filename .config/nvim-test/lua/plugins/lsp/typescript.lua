@@ -9,7 +9,6 @@ return {
         'prettierd',
         'eslint_d',
         'eslint-lsp',
-        'emmet-language-server',
       })
       return opts
     end,

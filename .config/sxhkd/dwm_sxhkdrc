@@ -10,10 +10,10 @@ super + Escape
 	pkill -USR1 -x sxhkd && notify-send -t 1000 "DWM" "SXHKD Restarted"
 
 super +{_,shift + } e
-    {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e vifmrun}
+    {thunar || pcmanfm || notify-send -t 1500 -u critical "Failed to open File manager" "Thunar or Pcmanfm is not installed " ,alacritty -e yazi}
 
 super +{_,shift +} w
-    { $BROWSER || firefox, ([[ "$BROWSER" != "firefox" ]] && firefox) || brave-browser || brave || thorium-browser || flatpak run com.github.Eloston.UngoogledChromium || chromium || firefox}
+    { $BROWSER || notify-send -t 1500 -u critical "No Browser is set", brave-browser || brave || flatpak run com.github.Eloston.UngoogledChromium || chromium}
 
 super + @g
     qalculate-gtk || gnome-calculator || galculator || notify-send "Error" "Calculator App not installed" -u critical

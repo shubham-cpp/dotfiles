@@ -3,11 +3,12 @@ return {
   'nvim-neo-tree/neo-tree.nvim',
   version = 'v3.x',
   cmd = 'Neotree',
-  enabled = false,
+  enabled = true,
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
     'MunifTanjim/nui.nvim',
+    'antosha417/nvim-lsp-file-operations',
     {
       's1n7ax/nvim-window-picker',
       version = '2.*',
@@ -31,7 +32,19 @@ return {
     },
   },
   keys = {
-    { '<leader>e', '<cmd>Neotree reveal toggle<cr>', desc = 'Open File [E]xplorer(Reveal)' },
+    {
+      '<leader>e',
+      function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        local bufname = vim.fn.bufname(bufnr)
+        if bufname ~= '' and string.match(bufname, 'neo.tree %w+') ~= nil then
+          vim.cmd 'Neotree toggle'
+        else
+          vim.cmd 'Neotree reveal focus'
+        end
+      end,
+      desc = 'Open File [E]xplorer(Reveal)',
+    },
     { '<leader>E', '<cmd>Neotree focus<cr>', desc = 'Open File [E]xplorer' },
   },
   init = function()

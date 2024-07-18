@@ -13,20 +13,19 @@ super + F12
 
 # Launch Filemanager
 super +{_,shift + } e
-    {thunar || pcmanfm || nemo ,alacritty -e vifmrun}
+    {thunar || pcmanfm || nemo ,alacritty -e yazi}
 
 super +{_,shift +} w
-    {  $BROWSER || firefox, qutebrowser || brave || chromium }
+    { $BROWSER || notify-send -t 1500 -u critical "No Browser is set", brave-browser || brave || flatpak run com.github.Eloston.UngoogledChromium || chromium}
 
 super + control + s
     logout_prompt
 
-super + {shift + ,_} d
-    {dmenu_run_history -i,rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi}
 super + @g
     qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical
-super + {r,v,y,p}
-    {rofi -show drun -async-pre-read,virt-manager || virtualbox || VirtualBox,clipboard,superp}
+
+super + {d,r,v,y,p}
+    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -drun-reload-desktop-cache -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
 super + alt + {c,g}
     {open-rcs,open-games}
 

@@ -86,6 +86,7 @@ fi
 if [ -x "$(which fzf)" ]; then
   smartcache eval fzf --zsh
 fi
+
 smartcache eval $HOME/.local/bin/mise activate zsh
 if [ -x "$(which rustup)" ]; then
   smartcache comp rustup completions zsh
@@ -98,6 +99,7 @@ source $ZDOTDIR/keys.zsh
 
 alias mkd=take
 compdef trash-put=rm
+[ -x /bin/exa ] && compdef exa=eza
 [ -x /bin/dnf5 ] && compdef dnf5=dnf
 
 bindkey -M viins '^[k' autosuggest-accept
@@ -105,5 +107,15 @@ bindkey -M viins '^[[A' history-substring-search-up # or '\eOA'
 bindkey -M viins '^[[B' history-substring-search-down # or '\eOB'
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
-# source ~/Documents/dotfiles/.config/zsh/alias.zsh
 eval "$(fnm env --use-on-cd)"
+
+if [ -x "$(which yazi)" ]; then
+  function yy() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+      cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+  }
+fi

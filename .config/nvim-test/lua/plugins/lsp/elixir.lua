@@ -16,6 +16,7 @@ return {
         'elixir',
         'erlang',
         'eex',
+        'heex',
       })
       return opts
     end,

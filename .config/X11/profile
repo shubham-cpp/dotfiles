@@ -15,7 +15,7 @@ export VISUAL=nvim
 
 export TERMINAL=/usr/bin/alacritty
 export FILE_BROWSER=thunar
-export BROWSER=firefox
+export BROWSER=librewolf
 export READER=zathura
 
 if [ $DESKTOP_SESSION != "plasma" ]; then

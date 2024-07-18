@@ -23,12 +23,10 @@ vim.api.nvim_create_autocmd('TermOpen', {
 
 vim.api.nvim_create_autocmd('TermOpen', {
   group = au_term,
+  pattern = 'term://*',
   callback = function()
     vim.keymap.set('t', '<C-]>', '<C-\\><C-n>', { buffer = true })
-    vim.keymap.set('t', '<C-j>', '<C-\\><C-n><C-w><C-j>', { buffer = true })
-    vim.keymap.set('t', '<C-k>', '<C-\\><C-n><C-w><C-k>', { buffer = true })
-    vim.keymap.set('t', '<C-h>', '<C-\\><C-n><C-w><C-h>', { buffer = true })
-    -- vim.keymap.set('t', '<C-l>', '<C-\\><C-n><C-w><C-l>', { buffer = true })
+    vim.keymap.set('t', '<A-w>', '<C-\\><C-n><C-w>', { buffer = true })
 
     vim.keymap.set('n', 'A', 'A<C-k>', { buffer = true })
     vim.keymap.set('n', 'D', 'A<C-k><C-\\><C-n>', { buffer = true })

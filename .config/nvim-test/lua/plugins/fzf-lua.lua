@@ -60,18 +60,18 @@ return {
   'ibhagwan/fzf-lua',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   cmd = 'FzfLua',
-  enabled = false,
+  enabled = true,
   keys = function()
     local fzf = require 'fzf-lua'
     return {
-      { '<C-p>', fzf.files, desc = '[F]iles' },
-      { '<leader>ff', fzf.files, desc = '[F]iles' },
-      { '<leader>fr', fzf.resume, desc = '[R]esume' },
-      { '<leader>fs', fzf.live_grep_native, desc = '[S]earch(Project)' },
-      { '<leader>fp', fzf_create_file, desc = 'Create File' },
-      { '<leader>fc', fzf_create_file, desc = 'Create File' },
+      -- { '<C-p>', fzf.files, desc = '[F]iles' },
+      { '<leader>pf', fzf.files, desc = '[F]iles' },
+      { '<leader>pr', fzf.resume, desc = '[R]esume' },
+      { '<leader>ps', fzf.live_grep_native, desc = '[S]earch(Project)' },
+      { '<leader>pp', fzf_create_file, desc = 'Create File' },
+      { '<leader>pc', fzf_create_file, desc = 'Create File' },
       {
-        '<leader>fS',
+        '<leader>pS',
         function()
           fzf.grep_curbuf({
             winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
@@ -79,35 +79,35 @@ return {
         end,
         desc = '[S]earch Current Buffer',
       },
-      { '<leader>fw', fzf.grep_cWORD, desc = '[W]ord under cursor' },
-      { '<leader>fw', fzf.grep_visual, mode = 'v', desc = 'Selection' },
+      { '<leader>pw', fzf.grep_cWORD, desc = '[W]ord under cursor' },
+      { '<leader>pw', fzf.grep_visual, mode = 'v', desc = 'Selection' },
       {
-        '<leader>fo',
+        '<leader>po',
         function()
           fzf.oldfiles({ path_shorten = true })
         end,
         desc = '[O]ld Files',
       },
-      { '<leader>fb', fzf.buffers, desc = '[B]uffers' },
-      { '<leader>fz', fzf.spell_suggest, desc = '[S]pelling' },
-      { '<leader>fk', fzf.keymaps, desc = '[K]eymaps' },
-      { '<leader>fh', fzf.help_tags, desc = '[H]elp Tags' },
-      { '<leader>fD', fzf.diagnostics, desc = '[D]iagnostics' },
+      { '<leader>pb', fzf.buffers, desc = '[B]uffers' },
+      { '<leader>pz', fzf.spell_suggest, desc = '[S]pelling' },
+      { '<leader>pk', fzf.keymaps, desc = '[K]eymaps' },
+      { '<leader>ph', fzf.help_tags, desc = '[H]elp Tags' },
+      { '<leader>pD', fzf.diagnostics, desc = '[D]iagnostics' },
       {
-        '<leader>fd',
+        '<leader>pd',
         function()
           fzf.files({ cwd = vim.fn.expand '~/Documents/dotfiles' })
         end,
         desc = '[D]otfiles',
       },
       {
-        '<leader>fn',
+        '<leader>pn',
         function()
           fzf.files({ cwd = vim.fn.stdpath 'config' })
         end,
         desc = '[N]eovim Config',
       },
-      { '<leader>fg', fzf.git_status, desc = '[S]tatus' },
+      { '<leader>pg', fzf.git_status, desc = '[S]tatus' },
       { '<leader>gt', fzf.git_status, desc = '[S]tatus' },
       { '<leader>gS', fzf.git_stash, desc = 'Stash' },
       { '<leader>gb', fzf.git_branches, desc = '[B]ranches' },

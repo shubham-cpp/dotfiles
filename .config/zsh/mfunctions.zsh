@@ -5,6 +5,15 @@ chx(){
 mkd(){
 	mkdir -p $@ && cd ${@:$#}|| echo "Please provide a valid directory name"
 }
+
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
 # Adding zsh tab completions for unstaged files
 # __git_status_files () {
 #   local -a status_files=( ${"${(0)"$(git status -z)"}"} )

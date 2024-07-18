@@ -7,11 +7,9 @@ local m_keys = {
 }
 -- calling `setup` is optional for customization
 fzf.setup({
-  -- 'telescope',
   defaults = { formatter = { 'path.filename_first', 2 } },
   fzf_opts = {
     ['--layout'] = 'reverse',
-    ['--nth'] = '2..,-1',
     ['--info'] = 'inline-right',
     -- ['--tiebreak'] = 'end',
   },

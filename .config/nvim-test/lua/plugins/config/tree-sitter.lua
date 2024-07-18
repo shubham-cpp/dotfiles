@@ -108,6 +108,19 @@ require('nvim-treesitter.configs').setup({
     },
   },
 })
+
+require('nvim-ts-autotag').setup({
+  -- Defaults
+  opts = {
+    enable_close = true, -- Auto close tags
+    enable_rename = true, -- Auto rename pairs of tags
+    enable_close_on_slash = false, -- Auto close on trailing </
+  },
+  aliases = {
+    heex = 'html',
+  },
+})
+
 vim.keymap.set('n', '<LocalLeader>c', function()
   require('treesitter-context').go_to_context(vim.v.count1)
 end, { silent = true, desc = 'Goto Context' })

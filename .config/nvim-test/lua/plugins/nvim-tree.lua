@@ -17,7 +17,7 @@ end
 ---@type LazySpec
 return {
   'nvim-tree/nvim-tree.lua',
-  enabled = true,
+  enabled = false,
   dependencies = { 'nvim-tree/nvim-web-devicons', 'antosha417/nvim-lsp-file-operations', 'nvim-lua/plenary.nvim' },
   cmd = 'NvimTreeToggle',
   keys = {

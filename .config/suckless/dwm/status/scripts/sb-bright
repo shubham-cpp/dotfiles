@@ -6,17 +6,17 @@ light="${output/.*/}"
 [ $? -ne 0 ] && exit $?
 
 if [ "$light" -gt 90 ]; then
-  icon="󰛨 "
+  icon=" "
 elif [ "$light" -gt 70 ]; then
-  icon="󱩖 "
+  icon=" "
 elif [ "$light" -gt 50 ]; then
-  icon="󱩓 "
+  icon=" "
 elif [ "$light" -gt 40 ]; then
-  icon="󱩒 "
+  icon=" "
 elif [ "$light" -gt 10 ]; then
-  icon="󱩐 "
+  icon=" "
 else
-  icon="󰌶 "
+  icon=" "
 fi
 
 echo "$icon  $light%"

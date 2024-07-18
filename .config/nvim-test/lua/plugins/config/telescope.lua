@@ -1,4 +1,6 @@
 local M = {}
+local au_telescope = vim.api.nvim_create_augroup('au_telescope', { clear = true })
+
 local function getVisualSelection()
   vim.cmd 'noau normal! "vy"'
   local text = vim.fn.getreg 'v'
@@ -41,18 +43,36 @@ local function telescope_create_file()
     end,
   })
 end
+-- We cache the results of "git rev-parse"
+-- Process creation is expensive in Windows, so this reduces latency
+local is_inside_work_tree = {}
+local function project_files()
+  local opts = {
+    path_display = filename_first,
+    previewer = false,
+  } -- define here if you want to define something
 
-local au_telescope = vim.api.nvim_create_augroup('au_telescope', { clear = true })
+  local cwd = vim.fn.getcwd()
+  if is_inside_work_tree[cwd] == nil then
+    vim.fn.system 'git rev-parse --is-inside-work-tree'
+    is_inside_work_tree[cwd] = vim.v.shell_error == 0
+  end
+
+  if is_inside_work_tree[cwd] then
+    opts.show_untracked = true
+    require('telescope.builtin').git_files(opts)
+  else
+    require('telescope.builtin').find_files(opts)
+  end
+end
 
 M.keys = function()
   local builtin = require 'telescope.builtin'
   return {
     {
       '<C-p>',
-      function()
-        builtin.find_files({ path_display = filename_first, previewer = false })
-      end,
-      desc = 'Files',
+      project_files,
+      desc = 'Git/Files',
     },
     {
       '<leader>ff',
@@ -60,6 +80,13 @@ M.keys = function()
         builtin.find_files({ path_display = filename_first })
       end,
       desc = 'Files',
+    },
+    {
+      '<leader>fF',
+      function()
+        builtin.git_files({ show_untracked = true, use_file_path = true, path_display = filename_first })
+      end,
+      desc = 'Git Files(use_file_path)',
     },
     { '<leader>fp', telescope_create_file, desc = 'CreateFile' },
     { '<leader>fc', telescope_create_file, desc = 'CreateFile' },
@@ -103,10 +130,10 @@ M.keys = function()
     {
       '<leader>fd',
       function()
-        builtin.find_files({
+        builtin.git_files({
           cwd = vim.fn.expand '$HOME/Documents/dotfiles',
           path_display = filename_first,
-          hidden = true,
+          show_untracked = true,
         })
       end,
       desc = 'Dotfiles',

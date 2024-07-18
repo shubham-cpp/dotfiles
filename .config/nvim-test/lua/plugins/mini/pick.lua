@@ -2,6 +2,7 @@
 return {
   {
     'echasnovski/mini.pick',
+    enabled = false,
     dependencies = {
       { 'echasnovski/mini.extra', version = '*' },
     },

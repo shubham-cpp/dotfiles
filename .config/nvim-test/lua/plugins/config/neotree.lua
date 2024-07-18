@@ -12,6 +12,15 @@ M.config = function(_, opts)
     },
     filesystem = {
       use_libuv_file_watcher = true,
+      window = {
+        -- mappings = { },
+        fuzzy_finder_mappings = {
+          ['<down>'] = 'move_cursor_down',
+          ['<up>'] = 'move_cursor_up',
+          ['<C-j>'] = 'move_cursor_down',
+          ['<C-k>'] = 'move_cursor_up',
+        },
+      },
 
       commands = {
         -- Override delete to use trash instead of rm
@@ -48,5 +57,6 @@ M.config = function(_, opts)
   }, opts)
 
   require('neo-tree').setup(options)
+  require('lsp-file-operations').setup({})
 end
 return M

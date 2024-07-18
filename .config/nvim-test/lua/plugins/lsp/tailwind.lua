@@ -32,7 +32,11 @@ return {
             'postcss.config.js',
             'postcss.config.cjs',
             'postcss.config.mjs',
-            'postcss.config.ts'
+            'postcss.config.ts',
+            'assets/tailwind.config.js', -- for elixir phoenix
+            'assets/tailwind.config.cjs', -- for elixir phoenix
+            'assets/tailwind.config.mjs', -- for elixir phoenix
+            'assets/tailwind.config.ts' -- for elixir phoenix
           )
           opts.settings = {
             tailwindCSS = {
