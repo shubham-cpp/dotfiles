@@ -1,7 +1,7 @@
 return {
   'nvim-telescope/telescope.nvim',
   cmd = 'Telescope',
-  enabled = true,
+  enabled = false,
   dependencies = {
     'nvim-lua/plenary.nvim',
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', enabled = false },

@@ -121,8 +121,6 @@ export FZF_DEFAULT_OPTS="--cycle --marker='+' --keep-right"
 # remember --bind KEY:ACTION or EVENT:ACTION
 # eval $(dircolors "$XDG_CONFIG_HOME"/dir_colors)
 export XCURSOR_PATH=${XCURSOR_PATH}:~/.local/share/icons
-# export LUA_PATH="${XDG_DATA_HOME:-$HOME/.local/share}/luarocks/share/lua/5.4/?.lua;;"
-# export LUA_CPATH="/usr/lib/lua/5.4/?.so;/usr/lib/lua/5.4/loadall.so;./?.so;$XDG_DATA_HOME/luarocks/lib/lua/5.4/?.so"
 export GHCUP_USE_XDG_DIRS="$HOME"/.config
 export STACK_ROOT="$XDG_DATA_HOME"/stack
 export CABAL_CONFIG="$XDG_CONFIG_HOME"/cabal/config
@@ -137,5 +135,4 @@ export ZK_NOTEBOOK_DIR="$HOME/Documents/Notes/Refrens"
 export MIX_XDG="true"
 export FFMPEG_DATADIR="$XDG_CONFIG_HOME"/ffmpeg
 export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion
-
-[ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh
+# [ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh

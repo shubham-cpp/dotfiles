@@ -43,22 +43,14 @@ local function telescope_create_file()
     end,
   })
 end
--- We cache the results of "git rev-parse"
--- Process creation is expensive in Windows, so this reduces latency
-local is_inside_work_tree = {}
+
 local function project_files()
   local opts = {
     path_display = filename_first,
     previewer = false,
   } -- define here if you want to define something
 
-  local cwd = vim.fn.getcwd()
-  if is_inside_work_tree[cwd] == nil then
-    vim.fn.system 'git rev-parse --is-inside-work-tree'
-    is_inside_work_tree[cwd] = vim.v.shell_error == 0
-  end
-
-  if is_inside_work_tree[cwd] then
+  if vim.b.gitsigns_head then
     opts.show_untracked = true
     require('telescope.builtin').git_files(opts)
   else

@@ -19,10 +19,10 @@ require('persistent-breakpoints').setup({
   load_breakpoints_event = { 'BufReadPost' },
 })
 ---@diagnostic disable-next-line: missing-fields
-require('dap-vscode-js').setup({
-  debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug',
-  adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
-})
+-- require('dap-vscode-js').setup({
+--   debugger_path = vim.fn.stdpath 'data' .. '/lazy/vscode-js-debug',
+--   adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+-- })
 dap.adapters.bashdb = {
   type = 'executable',
   command = vim.fn.stdpath 'data' .. '/mason/packages/bash-debug-adapter/bash-debug-adapter',
@@ -94,6 +94,22 @@ for _, language in ipairs(js_filetypes) do
   end
 end
 
+dap.adapters.php = {
+  type = 'executable',
+  command = require('mason-registry').get_package('php-debug-adapter'):get_install_path() .. 'php-debug-adapter',
+  -- command = 'node',
+  -- args = { require('mason-registry').get_package('php-debug-adapter'):get_install_path() .. '/out/phpDebug.js' }
+}
+
+dap.configurations.php = {
+  {
+    type = 'php',
+    request = 'launch',
+    name = 'Listen for Xdebug',
+    port = 9000,
+  },
+}
+
 dap.configurations.elixir = {
   {
     type = 'mix_task',
@@ -115,7 +131,7 @@ dap.configurations.elixir = {
     },
   },
 }
-
+require('dap-go').setup()
 dapui.setup()
 require('nvim-dap-virtual-text').setup({})
 

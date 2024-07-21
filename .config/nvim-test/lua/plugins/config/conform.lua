@@ -28,6 +28,9 @@ require('conform').setup({
     vue = { prettier, 'eslint_d' },
     nim = { 'nimpretty' },
     zig = { 'zigfmt' },
+    php = { 'phpcbf', 'php_cs_fixer' },
+    blade = { 'blade-formatter' },
+    gleam = { 'gleam' },
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require('conform').get_formatter_info('ruff_format', bufnr).available then

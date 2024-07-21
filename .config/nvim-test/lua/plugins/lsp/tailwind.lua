@@ -41,7 +41,18 @@ return {
           opts.settings = {
             tailwindCSS = {
               emmetCompletions = true,
-              validate = 'error',
+              -- validate = 'error',
+              classAttributes = { 'class', 'className', 'classList', 'ngClass' },
+              lint = {
+                cssConflict = 'warning',
+                invalidApply = 'error',
+                invalidConfigPath = 'error',
+                invalidScreen = 'error',
+                invalidTailwindDirective = 'error',
+                invalidVariant = 'error',
+                recommendedVariantOrder = 'warning',
+              },
+              validate = true,
             },
           }
           opts.single_file_support = false

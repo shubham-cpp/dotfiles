@@ -19,6 +19,7 @@ M.languages = {
   zsh = { 'shellcheck', 'zsh' },
   html = { 'htmlhint' },
   yaml = { 'yamllint' },
+  php = { 'phpcs' },
 }
 function M.debounce(ms, fn)
   local timer = vim.uv.new_timer()

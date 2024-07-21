@@ -26,7 +26,7 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require 'plugins.config.catppuccin'
     end,
@@ -51,6 +51,14 @@ return {
     event = 'VimEnter',
     config = function()
       require 'plugins.config.onenord'
+    end,
+  },
+  {
+    'blazkowolf/gruber-darker.nvim',
+    enabled = true,
+    event = 'VimEnter',
+    config = function()
+      require 'plugins.config.gruber-darker'
     end,
   },
 }

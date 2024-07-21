@@ -8,13 +8,14 @@ return {
     },
     'rcarriga/nvim-dap-ui',
     'nvim-neotest/nvim-nio',
-    'mxsdev/nvim-dap-vscode-js',
     'Weissle/persistent-breakpoints.nvim',
-    {
-      'microsoft/vscode-js-debug',
-      version = false,
-      build = 'npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out',
-    },
+    'leoluz/nvim-dap-go',
+    -- 'mxsdev/nvim-dap-vscode-js',
+    -- {
+    --   'microsoft/vscode-js-debug',
+    --   version = false,
+    --   build = 'npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out',
+    -- },
   },
   keys = function()
     local dap, dapui, pb = require 'dap', require 'dapui', require 'persistent-breakpoints.api'

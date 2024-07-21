@@ -71,7 +71,9 @@ o.wildignore:append({
 
 o.completeopt = 'menu,menuone,noselect'
 o.path:append '**'
-o.clipboard:append 'unnamedplus'
+vim.schedule(function()
+  o.clipboard:append 'unnamedplus'
+end)
 o.iskeyword:append '-'
 
 -- credits - https://github.com/neovim/neovim/pull/17446
@@ -86,10 +88,12 @@ if vim.fn.executable 'rg' == 1 then
 end
 
 if vim.fn.has 'nvim-0.9' == 1 then
-  o.splitkeep = 'screen'
-  o.shortmess:append({ C = true })
-  o.backspace:append({ 'nostop' })
-  o.diffopt:append 'linematch:60'
+  vim.schedule(function()
+    o.splitkeep = 'screen'
+    o.shortmess:append({ C = true })
+    o.backspace:append({ 'nostop' })
+    o.diffopt:append 'linematch:60'
+  end)
 end
 
 -- vim.t["bufs"] = vim.t.bufs and vim.t.bufs or vim.api.nvim_list_bufs() -- initialize buffers for the current tab

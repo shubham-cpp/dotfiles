@@ -92,13 +92,8 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/bindings.zsh
 zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
 # Shell integrations
-# eval "$(fzf --zsh)"
-# eval "$(zoxide init zsh)"
-eval "$(fnm env --use-on-cd)"
+# eval "$(fnm env --use-on-cd)"
 smartcache eval fzf --zsh
 smartcache eval register-python-argcomplete pipx
 smartcache eval $HOME/.local/bin/mise activate zsh
 smartcache comp rustup completions zsh
-
-# bun completions
-# [ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

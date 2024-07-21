@@ -14,23 +14,25 @@ local conditions = {
 }
 local function servers_attached()
   local msg = 'None'
-  local clients = vim.tbl_map(function(client)
-    return client.name
-  end, vim.lsp.get_clients({ bufnr = 0 }))
-  if vim.tbl_isempty(clients) then
-    return msg
-  end
-  return vim.fn.join(vim.tbl_flatten(clients), ',')
+  local clients = vim
+    .iter(vim.lsp.get_clients({ bufnr = 0 }))
+    :map(function(client)
+      return client.name
+    end)
+    :flatten()
+    :join ','
+  return clients == '' and msg or clients
 end
 
+-- local navic = require 'nvim-navic'
 local config = {
   options = {
     globalstatus = true,
     component_separators = '',
     section_separators = '',
     theme = {
-      normal = { c = { bg = '#2a2a37', fg = '#353B49', blend = 100 } },
-      inactive = { c = { bg = '#2a2a37', fg = '#353B49' } },
+      normal = { c = { bg = '#181818', fg = '#303540', blend = 100 } },
+      inactive = { c = { bg = '#101010', fg = '#303540' } },
     },
   },
   sections = {
@@ -58,36 +60,8 @@ local config = {
     lualine_x = {},
   },
 
-  winbar = {
-    lualine_c = {
-      {
-        function()
-          return require('nvim-navic').get_location()
-        end,
-        cond = function()
-          return package.loaded['nvim-navic'] and require('nvim-navic').is_available()
-        end,
-      },
-      {
-        'filename',
-        path = 1,
-        color = { fg = '#c8c093', bg = '#1E1E2E', gui = 'italic,bold' },
-        cond = function()
-          local is_ok = package.loaded['nvim-navic'] and require('nvim-navic').is_available()
-          return not is_ok
-        end,
-      },
-    },
-  },
-  inactive_winbar = {
-    lualine_c = {
-      {
-        'filename',
-        path = 1,
-        color = { fg = '#c8c093', bg = '#1E1E2E', gui = 'italic,bold' },
-      },
-    },
-  },
+  winbar = { lualine_c = {} },
+  inactive_winbar = { lualine_c = {} },
   extensions = { 'lazy', 'neo-tree', 'quickfix', 'toggleterm', 'man' },
 }
 local function ins_left(component)
@@ -106,8 +80,8 @@ ins_left_tab({
   'buffers',
   buffers_color = {
     -- Same values as the general color option can be used here.
-    active = { fg = '#010748', bg = '#a9a9a9' }, -- Color for active tab.
-    inactive = { fg = '#c8c093', bg = '#16161d' }, -- Color for inactive tab.
+    active = { fg = '#96a6c8', bg = '#303540' }, -- Color for active tab.
+    inactive = { fg = '#52494e', bg = '#181818' }, -- Color for inactive tab.
   },
 })
 ins_left_tab '%='
@@ -115,8 +89,8 @@ ins_right_tab({
   'tabs',
   tabs_color = {
     -- Same values as the general color option can be used here.
-    active = { fg = '#010748', bg = '#a9a9a9' }, -- Color for active tab.
-    inactive = { fg = '#c8c093', bg = '#16161d' }, -- Color for inactive tab.
+    active = { fg = '#96a6c8', bg = '#303540' }, -- Color for active tab.
+    inactive = { fg = '#52494e', bg = '#181818' }, -- Color for inactive tab.
   },
 })
 ins_left({
@@ -124,14 +98,13 @@ ins_left({
   icon_only = true,
   condition = conditions.buffer_not_empty,
   left_padding = 0,
-  -- color = { fg = vim.g.my_colors.purple },
 })
 ins_left({
   'filename',
   path = 1,
   -- shorting_target = 40,
   condition = conditions.buffer_not_empty,
-  color = { fg = '#8992a7' },
+  color = { fg = '#96a6c8' },
 })
 ins_left({
   'branch',
@@ -143,21 +116,19 @@ ins_left({
   colored = true,
   symbols = { added = ' ', modified = '󰇊 ', removed = ' ' },
   -- symbols = { added = ' ', modified = ' ', removed = ' ' },
-  -- diff_color = {
-  --   added = { fg = vim.g.my_colors.git.added },
-  --   modified = { fg = vim.g.my_colors.git.modified },
-  --   removed = { fg = vim.g.my_colors.git.removed },
-  -- },
   cond = conditions.hide_in_width,
 })
 ins_left({
   'diagnostics',
   sources = { 'nvim_lsp' },
-  -- diagnostics_color = {
-  --   color_error = { fg = vim.g.my_colors.diagnostics.error },
-  --   color_warn = { fg = vim.g.my_colors.diagnostics.warn },
-  --   color_info = { fg = vim.g.my_colors.diagnostics.info },
-  -- },
+})
+
+local navic = require 'nvim-navic'
+ins_left({
+  'navic',
+  ---@type "static"| "dynamic"| nil
+  color_correction = nil,
+  navic_opts = nil,
 })
 ins_right({
   servers_attached,
@@ -170,7 +141,8 @@ ins_right({ 'location', color = { fg = '#6CAF95' } })
 ins_right({
   'searchcount',
   icon = '',
-  color = { fg = '#DCA561' },
+  -- color = { fg = '#DCA561' },
+  color = { fg = '#cc8c3c' },
 })
 ins_right({
   function()

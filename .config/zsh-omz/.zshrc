@@ -107,7 +107,7 @@ bindkey -M viins '^[[A' history-substring-search-up # or '\eOA'
 bindkey -M viins '^[[B' history-substring-search-down # or '\eOB'
 bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
-eval "$(fnm env --use-on-cd)"
+# eval "$(fnm env --use-on-cd)"
 
 if [ -x "$(which yazi)" ]; then
   function yy() {
