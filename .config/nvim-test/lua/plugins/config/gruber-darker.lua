@@ -11,6 +11,8 @@ vim.api.nvim_set_hl(0, 'lualine_x_tabs_active', { bg = c['bg+4']:to_string() })
 vim.api.nvim_set_hl(0, 'lualine_x_tabs_inactive', { bg = c['bg+1']:to_string() })
 vim.api.nvim_set_hl(0, '@lsp.type.keyword.lua', { fg = c['brown']:to_string(), bold = false })
 vim.api.nvim_set_hl(0, '@lsp.type.event.lua', { link = 'GruberDarkerYellowBold' })
+vim.api.nvim_set_hl(0, 'WinBar', { link = 'TreesitterContext' })
+-- vim.api.nvim_set_hl(0, 'WinBarNC', { link = 'NormalNC' })
 vim.api.nvim_set_hl(
   0,
   'QuickScopePrimary',
@@ -21,13 +23,6 @@ vim.api.nvim_set_hl(
   'QuickScopeSecondary',
   { fg = c['brown']:to_string(), bg = c['bg+1']:to_string(), underline = true, bold = true }
 )
-
--- vim.api.nvim_set_hl(
---   0,
---   'QuickScopeSecondary',
---   { fg = c['brown']:to_string(), bg = c['bg+1']:to_string(), underline = true, bold = true }
--- )
-
 --[[
 local Color = require("gruber-darker.color")
 local M = {}

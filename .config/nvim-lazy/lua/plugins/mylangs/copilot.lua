@@ -1,12 +1,12 @@
 ---@type LazySpec
 return {
-  'zbirenbaum/copilot.lua',
-  cmd = 'Copilot',
-  build = ':Copilot auth',
-  event = 'InsertEnter',
+  "zbirenbaum/copilot.lua",
+  cmd = "Copilot",
+  build = ":Copilot auth",
+  event = "InsertEnter",
   enabled = true,
   config = function()
-    require('copilot').setup({
+    require("copilot").setup({
       suggestion = {
         auto_trigger = true,
       },
@@ -16,9 +16,9 @@ return {
         help = false,
         gitcommit = true,
         gitrebase = true,
-        ['.'] = true,
+        ["."] = true,
         sh = function()
-          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
+          if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), "^%.env.*") then
             -- disable for .env files
             return false
           end

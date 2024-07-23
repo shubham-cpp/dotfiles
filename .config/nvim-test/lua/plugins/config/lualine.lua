@@ -24,7 +24,7 @@ local function servers_attached()
   return clients == '' and msg or clients
 end
 
--- local navic = require 'nvim-navic'
+local navic = require 'nvim-navic'
 local config = {
   options = {
     globalstatus = true,
@@ -60,8 +60,26 @@ local config = {
     lualine_x = {},
   },
 
-  winbar = { lualine_c = {} },
-  inactive_winbar = { lualine_c = {} },
+  winbar = {
+    lualine_c = {
+      {
+        'navic',
+        ---@type "static"| "dynamic"| nil
+        color_correction = nil,
+        navic_opts = nil,
+      },
+    },
+  },
+  inactive_winbar = {
+    lualine_c = {
+      {
+        'filename',
+        path = 1,
+        condition = conditions.buffer_not_empty,
+        color = { fg = '#96a6c8', bg = '#181818', gui = 'bold,italic' },
+      },
+    },
+  },
   extensions = { 'lazy', 'neo-tree', 'quickfix', 'toggleterm', 'man' },
 }
 local function ins_left(component)
@@ -123,13 +141,12 @@ ins_left({
   sources = { 'nvim_lsp' },
 })
 
-local navic = require 'nvim-navic'
-ins_left({
-  'navic',
-  ---@type "static"| "dynamic"| nil
-  color_correction = nil,
-  navic_opts = nil,
-})
+-- ins_left({
+--   'navic',
+--   ---@type "static"| "dynamic"| nil
+--   color_correction = nil,
+--   navic_opts = nil,
+-- })
 ins_right({
   servers_attached,
   icon = ' LSPs:',
