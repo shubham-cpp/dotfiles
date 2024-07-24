@@ -29,67 +29,70 @@ end
 
 return {
   'folke/which-key.nvim',
+  event = 'VeryLazy',
   keys = { '<leader>', ']', '[', '<LocalLeader>' },
   init = function()
     vim.o.timeout = true
     vim.o.timeoutlen = 300
   end,
   opts = {
-    disable = { filetypes = { 'TelescopePrompt' } },
-    hidden = { '<silent>', '<cmd>', '<Cmd>', '<CR>', 'call', 'lua', '^:', '^ ', 'require' },
-    window = {
-      winblend = 20,
-    },
+    -- win = { winblend = 20 },
   },
   config = function(_, opts)
     local wk = require 'which-key'
     wk.setup(opts)
-    wk.register({
-      f = { name = 'Files' },
-      l = { name = 'LSP', r = 'Rename', a = 'Code Action', I = 'Lsp Info' },
-      t = { name = 'Terminal' },
-      g = { name = 'Git' },
-      o = { name = 'Open' },
-      n = { name = 'Neogen' },
-      s = { name = 'Sessions' },
-      z = { name = 'Zk(Notes)' },
-      p = { name = '[P]ick', g = '[G]it' },
-      b = {
-        name = 'Buffers',
-        a = { ':badd<space>', 'Add', silent = false },
-        c = {
-          function()
-            close_all(true, true)
-          end,
-          'Close(except current)',
-        },
-        C = {
-          function()
-            close_all(false, true)
-          end,
-          'Close All(yes ALL)',
-        },
-        D = { '<cmd>bd<cr>', 'Delete' },
-        n = { '<cmd>bn<cr>', 'Next' },
-        p = { '<cmd>bp<cr>', 'Prev' },
+    wk.add({
+      { '<leader>f', group = 'Files' },
+      { '<leader>l', group = 'LSP' },
+      { '<leader>lr', desc = '[R]ename' },
+      { '<leader>la', desc = 'Code [A]ction' },
+      { '<leader>lI', desc = 'Lsp [I]nfo' },
+      { '<leader>t', group = 'Terminal' },
+      { '<leader>g', group = '[G]it' },
+      { '<leader>o', group = '[O]pen' },
+      { '<leader>n', group = '[N]eogen' },
+      { '<leader>s', group = 'Sessions' },
+      { '<leader>r', group = 'Refactor' },
+      { '<leader>w', group = 'Window' },
+      { '<leader>u', group = 'Ui' },
+      { '<leader>z', group = 'Zk(Notes)' },
+      -- { '<leader>p', group = '[P]ick' },
+      { '<leader>b', group = 'Buffers' },
+      { '<leader>ba', ':badd<space>', desc = 'Add', silent = false },
+      {
+        '<leader>bc',
+        function()
+          close_all(true, true)
+        end,
+        desc = 'Close(except current)',
       },
-      ['1'] = { '1gt', 'Goto tab 1' },
-      ['2'] = { '2gt', 'Goto tab 2' },
-      ['3'] = { '3gt', 'Goto tab 3' },
-      ['4'] = { '4gt', 'Goto tab 4' },
-      ['5'] = { '5gt', 'Goto tab 5' },
-      ['6'] = { '6gt', 'Goto tab 6' },
-      ['7'] = { '7gt', 'Goto tab 7' },
-      ['8'] = { '8gt', 'Goto tab 8' },
-      ['9'] = { '9gt', 'Goto tab 9' },
-    }, { prefix = '<leader>' })
-    wk.register({
-      [']q'] = { '<cmd>cnext<cr>', 'Quickfix next' },
-      ['[q'] = { '<cmd>cprev<cr>', 'Quickfix prev' },
-      [']l'] = { '<cmd>lnext<cr>', 'Local next' },
-      ['[l'] = { '<cmd>lprev<cr>', 'Local prev' },
-      [']b'] = { '<cmd>bnext<cr>', 'Buffer next' },
-      ['[b'] = { '<cmd>bprev<cr>', 'Buffer prev' },
+      {
+        '<leader>bC',
+        function()
+          close_all(false, true)
+        end,
+        desc = 'Close All(yes ALL)',
+      },
+      { '<leader>bD', '<cmd>bd<cr>', desc = 'Delete' },
+      { '<leader>bn', '<cmd>bn<cr>', desc = 'Next' },
+      { '<leader>bp', '<cmd>bp<cr>', desc = 'Prev' },
+      { '<leader>1', '1gt', desc = 'Goto tab 1' },
+      { '<leader>2', '2gt', desc = 'Goto tab 2' },
+      { '<leader>3', '3gt', desc = 'Goto tab 3' },
+      { '<leader>4', '4gt', desc = 'Goto tab 4' },
+      { '<leader>5', '5gt', desc = 'Goto tab 5' },
+      { '<leader>6', '6gt', desc = 'Goto tab 6' },
+      { '<leader>7', '7gt', desc = 'Goto tab 7' },
+      { '<leader>8', '8gt', desc = 'Goto tab 8' },
+      { '<leader>9', '9gt', desc = 'Goto tab 9' },
+    })
+    wk.add({
+      { ']q', '<cmd>cnext<cr>', desc = 'Quickfix next' },
+      { '[q', '<cmd>cprev<cr>', desc = 'Quickfix prev' },
+      { ']l', '<cmd>lnext<cr>', desc = 'Local next' },
+      { '[l', '<cmd>lprev<cr>', desc = 'Local prev' },
+      { ']b', '<cmd>bnext<cr>', desc = 'Buffer next' },
+      { '[b', '<cmd>bprev<cr>', desc = 'Buffer prev' },
     })
   end,
 }

@@ -1,4 +1,3 @@
--- vim.keymap.del('n','<space>')
 vim.g.mapleader = ' '
 vim.g.maplocalleader = '\\'
 
@@ -17,19 +16,17 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup('plugins', {
+require('lazy').setup({
+  { import = 'plugins' },
+  { import = 'plugins.mini' },
+  { import = 'plugins.cmp' },
+  { import = 'plugins.lsp' },
+}, {
   change_detection = {
     enabled = true,
     notify = false,
   },
-  ui = {
-    icons = {
-      ft = '',
-      lazy = '󰂠 ',
-      loaded = '',
-      not_loaded = '',
-    },
-  },
+  lockfile = vim.fn.stdpath 'state' .. '/lazy-lock.json', -- lockfile generated after running update.
   performance = {
     rtp = {
       ---@type string[] list any plugins you want to disable here

@@ -53,7 +53,9 @@ return {
         callback = function()
           -- Only load the session if nvim was started with no args
           if vim.fn.argc(-1) == 0 then
-            require('resession').load(get_session_name(), { dir = 'dirsession', silence_errors = true })
+            vim.schedule(function()
+              require('resession').load(get_session_name(), { dir = 'dirsession', silence_errors = true })
+            end)
           end
         end,
         nested = true,

@@ -5,6 +5,7 @@ o.number = true
 o.relativenumber = true
 o.expandtab = true
 o.tabstop = 2
+o.softtabstop = -1
 o.shiftround = true
 o.shiftwidth = 2
 o.smarttab = true
@@ -17,11 +18,10 @@ o.incsearch = true
 o.splitright = true
 o.splitbelow = true
 o.cursorline = true
-o.inccommand = 'nosplit'
+o.inccommand = 'split'
 o.scrolloff = 16
 o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
-o.sessionoptions:remove 'folds'
 o.showmode = false -- Dont show mode since we have a statusline
 o.showtabline = 1
 o.formatoptions = 'jcrqlnt'
@@ -37,6 +37,10 @@ o.foldcolumn = '1' -- '0' is not bad
 o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 o.foldlevelstart = 99
 o.foldenable = true
+o.sessionoptions:append({
+  'globals',
+})
+o.sessionoptions:remove 'folds'
 
 o.wildmode = 'longest:full,full'
 o.wildignorecase = true
@@ -71,9 +75,7 @@ o.wildignore:append({
 
 o.completeopt = 'menu,menuone,noselect'
 o.path:append '**'
-vim.schedule(function()
-  o.clipboard:append 'unnamedplus'
-end)
+o.clipboard:append 'unnamedplus'
 o.iskeyword:append '-'
 
 -- credits - https://github.com/neovim/neovim/pull/17446
@@ -88,12 +90,10 @@ if vim.fn.executable 'rg' == 1 then
 end
 
 if vim.fn.has 'nvim-0.9' == 1 then
-  vim.schedule(function()
-    o.splitkeep = 'screen'
-    o.shortmess:append({ C = true })
-    o.backspace:append({ 'nostop' })
-    o.diffopt:append 'linematch:60'
-  end)
+  o.splitkeep = 'screen'
+  o.shortmess:append({ C = true })
+  o.backspace:append({ 'nostop' })
+  o.diffopt:append 'linematch:60'
 end
 
 -- vim.t["bufs"] = vim.t.bufs and vim.t.bufs or vim.api.nvim_list_bufs() -- initialize buffers for the current tab

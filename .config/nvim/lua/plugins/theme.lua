@@ -1,76 +1,64 @@
 ---@type LazySpec
 return {
   {
+    'sainnhe/gruvbox-material',
+    event = 'VimEnter',
+    enabled = false,
+    init = function()
+      vim.g.gruvbox_material_background = 'hard' -- 'hard', 'medium'(default), 'soft'
+      vim.g.gruvbox_material_enable_bold = 1
+      vim.g.gruvbox_material_dim_inactive_windows = 1
+      vim.g.gruvbox_material_transparent_background = 2 -- 0, 1, 2
+      vim.g.gruvbox_material_better_performance = 1
+    end,
+    config = function()
+      local configuration = vim.fn['gruvbox_material#get_configuration']()
+      local palette = vim.fn['gruvbox_material#get_palette'](
+        configuration.background,
+        configuration.foreground,
+        configuration.colors_override
+      )
+      vim.cmd.colorscheme 'gruvbox-material'
+      vim.cmd(string.format('hi! MiniTablineCurrent guifg=%s guibg=%s gui=bold', palette.bg0[1], palette.grey2[1]))
+    end,
+  },
+  {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
     enabled = false,
     config = function()
-      require('catppuccin').setup({
-        ---@type "latte"| "frappe"| "macchiato"| "mocha"|"auto"
-        flavour = 'mocha',
-        transparent_background = false,
-        dim_inactive = {
-          enabled = false, -- dims the background color of inactive window
-          shade = 'dark',
-          percentage = 0.15, -- percentage of the shade to apply to the inactive window
-        },
-        custom_highlights = function(colors)
-          return {
-            QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = { 'underline', 'bold' } },
-            QuickScopeSecondary = { fg = '#61afef', bg = '#505050', style = { 'underline', 'bold' } },
-          }
-        end,
-      })
-      vim.cmd 'colorscheme catppuccin'
+      require 'plugins.config.catppuccin'
     end,
   },
   {
     'rebelot/kanagawa.nvim',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require('kanagawa').setup({
         compile = true,
-        transparent = true,
-        dimInactive = false,
+        -- transparent = true, -- do not set background color
+        dimInactive = true,
         theme = 'wave', -- Load "wave" | "dragon" | "lotus"
       })
       vim.cmd 'colorscheme kanagawa-wave'
-      -- vim.cmd("colorscheme kanagawa-dragon")
-      -- vim.cmd("colorscheme kanagawa-lotus")
     end,
   },
   {
     'rmehri01/onenord.nvim',
     enabled = false,
     event = 'VimEnter',
-    opts = {
-      fade_nc = true,
-      disable = {
-        background = true,
-      },
-      styles = {
-        comments = 'italic',
-        strings = 'NONE',
-        keywords = 'NONE',
-        functions = 'bold',
-        variables = 'NONE',
-        diagnostics = 'underline',
-      },
-      custom_highlights = {
-        QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = 'underline,bold' },
-        QuickScopeSecondary = {
-          fg = '#61afef',
-          bg = '#505050',
-          style = 'underline,bold',
-        },
-        PmenuSel = { bg = '#61afef', fg = '#24253b' },
-      },
-    },
-    config = function(_, opts)
-      require('onenord').setup(opts)
-      vim.cmd 'colorscheme onenord'
+    config = function()
+      require 'plugins.config.onenord'
+    end,
+  },
+  {
+    'blazkowolf/gruber-darker.nvim',
+    enabled = true,
+    event = 'VimEnter',
+    config = function()
+      require 'plugins.config.gruber-darker'
     end,
   },
 }

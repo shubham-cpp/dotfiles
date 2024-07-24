@@ -167,7 +167,7 @@ M.opts = {
         function()
           require('astrolsp.toggles').buffer_inlay_hints()
         end,
-        desc = 'Toggle LSP semantic highlight (buffer)',
+        desc = 'Toggle LSP inlay highlight (buffer)',
         cond = function(client)
           return client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint
         end,

@@ -1,12 +1,7 @@
-vim.keymap.set('n', '<C-h>', '<C-W>h')
-vim.keymap.set('n', '<C-j>', '<C-W>j')
-vim.keymap.set('n', '<C-k>', '<C-W>k')
-vim.keymap.set('n', '<C-l>', '<C-W>l')
-
 return {
   {
     'alexghergh/nvim-tmux-navigation',
-    enabled = false,
+    enabled = true,
     config = function()
       -- return require('tmux').setup()
       require('nvim-tmux-navigation').setup({})

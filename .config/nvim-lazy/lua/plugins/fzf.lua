@@ -85,14 +85,20 @@ return {
       desc = "Create File",
     },
   },
-  opts = {
-    defaults = { formatter = "path.filename_first" },
-    fzf_opts = {
+  opts = function(_, opts)
+    local actions = require("fzf-lua.actions")
+    local m_keys = {
+      ["alt-enter"] = actions.file_tabedit,
+      ["ctrl-x"] = actions.file_split,
+      ["ctrl-q"] = actions.file_edit_or_qf,
+    }
+    opts.defaults = { formatter = "path.filename_first" }
+    opts.fzf_opts = vim.tbl_extend("force", opts.fzf_opts or {}, {
       ["--layout"] = "reverse",
       ["--info"] = "inline-right",
       -- ['--tiebreak'] = 'end',
-    },
-    files = {
+    })
+    opts.files = vim.tbl_deep_extend("force", opts.files or {}, {
       fzf_opts = {
         ["--layout"] = "reverse",
         ["--tiebreak"] = "chunk",
@@ -105,14 +111,12 @@ return {
       },
       -- preview = { default = false, horizontal = 'right:45%' },
       previewer = false,
-      -- actions = {
-      --
-      -- },
-    },
-    git = {
+      actions = m_keys,
+    })
+    opts.git = vim.tbl_deep_extend("force", opts.git or {}, {
       files = {
         cmd = "git ls-files --exclude-standard --cached --others", -- '--others' is used to show untracked files
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = {
           height = 0.55,
           width = 0.65,
@@ -122,11 +126,11 @@ return {
         previewer = false,
       },
       bcommits = {
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
       },
       commits = {
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
       },
       branches = {
@@ -134,42 +138,50 @@ return {
         cmd = "git branch --all --color | sed 's#remotes/origin/##g'",
         cmd_add = { "git", "checkout", "-b" },
       },
-    },
-    buffers = {
+    })
+    opts.buffers = vim.tbl_deep_extend("force", opts.buffers or {}, {
       ignore_current_buffer = true,
       winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-    },
-    grep = {
+      actions = vim.tbl_extend("force", m_keys, {
+        ["ctrl-d"] = actions.buf_delete,
+        ["ctrl-x"] = actions.buf_split,
+        ["ctrl-v"] = actions.buf_vsplit,
+        ["ctrl-q"] = actions.buf_edit_or_qf,
+      }),
+    })
+    opts.grep = vim.tbl_deep_extend("force", opts.grep or {}, {
       winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      -- actions = m_keys,
+      actions = m_keys,
       rg_glob = true,
       glob_flah = "--glob",
       glob_separator = "%s%-%-",
-    },
-    blines = {
-      -- actions = m_keys,
+    })
+    opts.blines = vim.tbl_deep_extend("force", opts.blines or {}, {
+      actions = m_keys,
       no_term_buffers = false,
       winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-    },
-    lsp = {
+    })
+    opts.lsp = vim.tbl_deep_extend("force", opts.lsp or {}, {
       definitions = {
         jump_to_single_result = true,
+        actions = m_keys,
       },
       references = {
         ignore_current_line = true,
+        actions = m_keys,
       },
       symbols = {
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
       },
       finder = {
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
       },
       code_actions = {
-        -- actions = m_keys,
+        actions = m_keys,
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
       },
-    },
-  },
+    })
+  end,
 }

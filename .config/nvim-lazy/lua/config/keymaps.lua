@@ -3,8 +3,10 @@
 -- Add any additional keymaps here
 vim.keymap.del("n", "<leader>l")
 
+vim.keymap.set("", "0", "^", { silent = false })
+
 vim.keymap.set("n", ",w", "<cmd>w!<cr>", { desc = "Save file" })
-vim.keymap.set("n", ",W", "<cmd>noautocmd w!<cr>", { desc = "Save file" })
+vim.keymap.set("n", ",W", "<cmd>noautocmd w!<cr>", { desc = "Save file(noautocmd)" })
 
 vim.keymap.set("o", "ie", ':exec "normal! ggVG"<cr>')
 vim.keymap.set("o", "iv", ':exec "normal! HVL"<cr>')
@@ -30,7 +32,8 @@ vim.keymap.set("n", "C", '"_C')
 local lazyterm = function()
   LazyVim.terminal(nil, { cwd = LazyVim.root() })
 end
--- vim.keymap.del({ "n", "t" }, "<c-/>")
+vim.keymap.del({ "n", "t" }, "<c-/>")
+vim.keymap.del("t", "<c-l>")
 vim.keymap.del({ "n", "t" }, "<c-_>")
 vim.keymap.set("n", "<c-\\>", lazyterm, { desc = "Open terminal" })
 -- vim.keymap.set("n", "<c-/>", function()
