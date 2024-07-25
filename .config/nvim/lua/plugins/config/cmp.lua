@@ -165,39 +165,24 @@ cmp.setup({
     },
     { name = 'path', priority = 200 },
   },
+  sorting = {
+    priority_weight = 2,
+    comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
   formatting = {
     format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
   },
 })
--- local ok_nvs, _ = pcall(require, 'nvim-snippets')
--- if ok_nvs then
---   vim.keymap.set('i', '<Tab>', function()
---     if vim.snippet.active({ direction = 1 }) then
---       vim.schedule(function()
---         vim.snippet.jump(1)
---       end)
---       return
---     end
---     return '<Tab>'
---   end, { expr = true, silent = true })
---
---   vim.keymap.set('s', '<Tab>', function()
---     vim.schedule(function()
---       vim.snippet.jump(1)
---     end)
---   end, { expr = true, silent = true })
---
---   vim.keymap.set({ 's', 'i' }, '<Tab>', function()
---     if vim.snippet.active({ direction = -1 }) then
---       vim.schedule(function()
---         vim.snippet.jump(-1)
---       end)
---       return
---     end
---     return '<S-Tab>'
---   end, { expr = true, silent = true })
--- end
-
 local sources = require 'cmp.config.sources'
 cmp.setup.cmdline(':', {
   sources = sources({

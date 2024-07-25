@@ -143,10 +143,16 @@ fzf.setup({
 fzf.register_ui_select()
 
 vim.lsp.handlers['textDocument/codeAction'] = fzf.lsp_code_actions
-vim.lsp.handlers['textDocument/references'] = fzf.lsp_references
+vim.lsp.handlers['textDocument/references'] = function()
+  fzf.lsp_references({ jump_to_single_result = true })
+end
 
-vim.lsp.handlers['textDocument/definition'] = fzf.lsp_definitions
-vim.lsp.handlers['textDocument/declaration'] = fzf.lsp_declarations
+vim.lsp.handlers['textDocument/definition'] = function()
+  fzf.lsp_definitions({ jump_to_single_result = true })
+end
+vim.lsp.handlers['textDocument/declaration'] = function()
+  fzf.lsp_declarations({ jump_to_single_result = true })
+end
 vim.lsp.handlers['textDocument/typeDefinition'] = fzf.lsp_typedefs
 vim.lsp.handlers['textDocument/implementation'] = fzf.lsp_implementations
 
