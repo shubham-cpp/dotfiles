@@ -2,18 +2,35 @@
 return {
   'hrsh7th/nvim-cmp',
   event = 'BufReadPre',
+  version = false,
+  -- commit = 'b356f2c',
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
     {
-      'L3MON4D3/LuaSnip',
-      version = 'v2.*',
-      run = 'make install_jsregexp',
+      'hrsh7th/vim-vsnip',
+      version = false,
+      dependencies = {
+        { 'hrsh7th/cmp-vsnip', version = false },
+        { 'rafamadriz/friendly-snippets', version = false },
+      },
     },
-    'saadparwaiz1/cmp_luasnip',
-    'rafamadriz/friendly-snippets',
+    -- {
+    --   'L3MON4D3/LuaSnip',
+    --   version = 'v2.*',
+    --   run = 'make install_jsregexp',
+    --   dependencies = {
+    --     'saadparwaiz1/cmp_luasnip',
+    --     'rafamadriz/friendly-snippets',
+    --   },
+    --   config = function()
+    --     -- require'luasnip'.filetype_extend("ruby", {"rails"})
+    --     require('luasnip.loaders.from_vscode').lazy_load()
+    --     -- require('luasnip.loaders.from_snipmate').lazy_load()
+    --   end,
+    -- },
     'onsails/lspkind.nvim',
     {
       'folke/lazydev.nvim',

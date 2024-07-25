@@ -9,16 +9,12 @@ end
 
 local cmp = require 'cmp'
 local lspkind = require 'lspkind'
-local luasnip = require 'luasnip'
-luasnip.config.setup({})
--- require'luasnip'.filetype_extend("ruby", {"rails"})
-require('luasnip.loaders.from_vscode').lazy_load()
-require('luasnip.loaders.from_snipmate').lazy_load()
-
+local snippet = 'vsnip'
 cmp.setup({
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body)
+      vim.fn['vsnip#anonymous'](args.body)
+      -- require 'luasnip'.lsp_expand(args.body)
     end,
   },
   mapping = {
@@ -89,7 +85,7 @@ cmp.setup({
       end,
     }),
     ['<C-x><C-x>'] = cmp.mapping.complete({
-      config = { sources = { { name = 'luasnip' } } },
+      config = { sources = { { name = snippet } } },
     }),
     ['<C-x><C-f>'] = cmp.mapping.complete({
       config = { sources = { { name = 'path' } } },
@@ -97,43 +93,62 @@ cmp.setup({
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-        -- elseif luasnip.expand_or_jumpable() then
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
+      elseif vim.fn['vsnip#available'](1) == 1 then
+        feedkey('<Plug>(vsnip-expand-or-jump)', '')
       elseif has_words_before() then
         cmp.complete()
       else
-        fallback()
+        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
       end
     end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
+
+    ['<S-Tab>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
+      elseif vim.fn['vsnip#jumpable'](-1) == 1 then
+        feedkey('<Plug>(vsnip-jump-prev)', '')
       end
     end, { 'i', 's' }),
-    ['<C-f>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(1) then
-        luasnip.jump(1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<C-b>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
+    -- ['<Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_next_item()
+    --     -- elseif luasnip.expand_or_jumpable() then
+    --   elseif luasnip.expand_or_locally_jumpable() then
+    --     luasnip.expand_or_jump()
+    --   elseif has_words_before() then
+    --     cmp.complete()
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
+    --   if cmp.visible() then
+    --     cmp.select_prev_item()
+    --   elseif luasnip.jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<C-f>'] = cmp.mapping(function(fallback)
+    --   if luasnip.jumpable(1) then
+    --     luasnip.jump(1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
+    -- ['<C-b>'] = cmp.mapping(function(fallback)
+    --   if luasnip.jumpable(-1) then
+    --     luasnip.jump(-1)
+    --   else
+    --     fallback()
+    --   end
+    -- end, { 'i', 's' }),
   },
   sources = {
     { name = 'nvim_lsp', priority = 1000, max_item_count = 8 },
     { name = 'lazydev', priority = 800 },
-    { name = 'luasnip', priority = 700 },
+    { name = snippet, priority = 700 },
     {
       name = 'buffer',
       max_item_count = 10,
@@ -154,6 +169,34 @@ cmp.setup({
     format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
   },
 })
+-- local ok_nvs, _ = pcall(require, 'nvim-snippets')
+-- if ok_nvs then
+--   vim.keymap.set('i', '<Tab>', function()
+--     if vim.snippet.active({ direction = 1 }) then
+--       vim.schedule(function()
+--         vim.snippet.jump(1)
+--       end)
+--       return
+--     end
+--     return '<Tab>'
+--   end, { expr = true, silent = true })
+--
+--   vim.keymap.set('s', '<Tab>', function()
+--     vim.schedule(function()
+--       vim.snippet.jump(1)
+--     end)
+--   end, { expr = true, silent = true })
+--
+--   vim.keymap.set({ 's', 'i' }, '<Tab>', function()
+--     if vim.snippet.active({ direction = -1 }) then
+--       vim.schedule(function()
+--         vim.snippet.jump(-1)
+--       end)
+--       return
+--     end
+--     return '<S-Tab>'
+--   end, { expr = true, silent = true })
+-- end
 
 local sources = require 'cmp.config.sources'
 cmp.setup.cmdline(':', {
@@ -166,6 +209,7 @@ cmp.setup.cmdline(':', {
     },
     { name = 'path' },
   }),
+  matching = { disallow_symbol_nonprefix_matching = false },
   mapping = cmp.mapping.preset.cmdline(),
   formatting = { fields = { 'abbr' } },
   window = { completion = cmp.config.window.bordered({ col_offset = 0 }) },

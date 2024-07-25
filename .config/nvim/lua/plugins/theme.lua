@@ -34,15 +34,9 @@ return {
   {
     'rebelot/kanagawa.nvim',
     event = 'VimEnter',
-    enabled = false,
+    enabled = true,
     config = function()
-      require('kanagawa').setup({
-        compile = true,
-        -- transparent = true, -- do not set background color
-        dimInactive = true,
-        theme = 'wave', -- Load "wave" | "dragon" | "lotus"
-      })
-      vim.cmd 'colorscheme kanagawa-wave'
+      require 'plugins.config.kangawa'
     end,
   },
   {
@@ -55,7 +49,7 @@ return {
   },
   {
     'blazkowolf/gruber-darker.nvim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.gruber-darker'
