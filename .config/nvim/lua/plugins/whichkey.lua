@@ -35,28 +35,25 @@ return {
     vim.o.timeout = true
     vim.o.timeoutlen = 300
   end,
-  opts = {
-    -- win = { winblend = 20 },
-  },
+  opts = {},
   config = function(_, opts)
     local wk = require 'which-key'
     wk.setup(opts)
     wk.add({
       { '<leader>f', group = 'Files' },
-      { '<leader>l', group = 'LSP' },
+      { '<leader>l', group = 'Lsp', mode = { 'n', 'x' } },
       { '<leader>lr', desc = '[R]ename' },
       { '<leader>la', desc = 'Code [A]ction' },
-      { '<leader>lI', desc = 'Lsp [I]nfo' },
+      { '<leader>lI', desc = '[I]nfo' },
       { '<leader>t', group = 'Terminal' },
-      { '<leader>g', group = '[G]it' },
-      { '<leader>o', group = '[O]pen' },
-      { '<leader>n', group = '[N]eogen' },
+      { '<leader>g', group = 'Git' },
+      { '<leader>o', group = 'Open' },
+      { '<leader>n', group = 'Neogen' },
       { '<leader>s', group = 'Sessions' },
       { '<leader>r', group = 'Refactor' },
       { '<leader>w', group = 'Window' },
       { '<leader>u', group = 'Ui' },
       { '<leader>z', group = 'Zk(Notes)' },
-      -- { '<leader>p', group = '[P]ick' },
       { '<leader>b', group = 'Buffers' },
       { '<leader>ba', ':badd<space>', desc = 'Add', silent = false },
       {

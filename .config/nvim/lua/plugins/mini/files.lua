@@ -1,78 +1,40 @@
 local au_group = vim.api.nvim_create_augroup('sp_mini', { clear = true })
 
-local function get_clients(opts)
-  local ret = {} ---@type vim.lsp.Client[]
-  if vim.lsp.get_clients then
-    ret = vim.lsp.get_clients(opts)
-  else
-    ---@diagnostic disable-next-line: deprecated
-    ret = vim.lsp.get_active_clients(opts)
-    if opts and opts.method then
-      ---@param client vim.lsp.Client
-      ret = vim.tbl_filter(function(client)
-        return client.supports_method(opts.method, { bufnr = opts.bufnr })
-      end, ret)
-    end
-  end
-  return opts and opts.filter and vim.tbl_filter(opts.filter, ret) or ret
-end
-
----@param from string
----@param to string
----@param rename? fun()
-local function on_rename(from, to, rename)
-  local changes = { files = { {
-    oldUri = vim.uri_from_fname(from),
-    newUri = vim.uri_from_fname(to),
-  } } }
-
-  local clients = get_clients()
-  for _, client in ipairs(clients) do
-    if client.supports_method 'workspace/willRenameFiles' then
-      local resp = client.request_sync('workspace/willRenameFiles', changes, 1000, 0)
-      if resp and resp.result ~= nil then
-        vim.lsp.util.apply_workspace_edit(resp.result, client.offset_encoding)
-      end
-    end
-  end
-
-  if rename then
-    rename()
-  end
-
-  for _, client in ipairs(clients) do
-    if client.supports_method 'workspace/didRenameFiles' then
-      client.notify('workspace/didRenameFiles', changes)
+local minifiles_toggle = function(...)
+  local f = require 'mini.files'
+  local arg_len = ... == nil and 0 or #...
+  if not f.close() then
+    if arg_len == 0 then
+      f.open(f.get_latest_path())
+    else
+      f.open(...)
     end
   end
 end
 
+---@type LazySpec
 return {
   'echasnovski/mini.files',
+  dependencies = {
+    'nvim-tree/nvim-web-devicons',
+    { 'antosha417/nvim-lsp-file-operations', dependencies = { 'nvim-lua/plenary.nvim' } },
+  },
   version = '*',
-  enabled = false,
-  keys = function()
-    local f = require 'mini.files'
-    local minifiles_toggle = function(...)
-      if not f.close() then
-        f.open(...)
-      end
-    end
-    return {
-      {
-        '<leader>e',
-        function()
-          minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
-        end,
-        desc = 'Open file explorer(same directory as current file)',
-      },
-      {
-        '<leader>E',
-        minifiles_toggle,
-        desc = 'Open file explorer',
-      },
-    }
-  end,
+  enabled = true,
+  keys = {
+    {
+      '<leader>e',
+      minifiles_toggle,
+      desc = 'Toggle file explorer',
+    },
+    {
+      '<leader>E',
+      function()
+        minifiles_toggle(vim.api.nvim_buf_get_name(0), false)
+      end,
+      desc = 'Toggle file explorer(current file)',
+    },
+  },
   config = function()
     require('mini.files').setup({
       options = {
@@ -81,6 +43,7 @@ return {
       },
       windows = { preview = true, width_preview = 45 },
     })
+    require('lsp-file-operations').setup()
     local map_split = function(buf_id, lhs, direction, close_on_file)
       local rhs = function()
         local new_target_window
@@ -116,13 +79,44 @@ return {
         map_split(buf_id, 'gV', 'vertical', true)
       end,
     })
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'MiniFilesActionRename',
-      group = au_group,
-      desc = 'LSP Rename file',
-      callback = function(event)
-        on_rename(event.data.from, event.data.to)
-      end,
-    })
+    local events = {
+      ['lsp-file-operations.did-rename'] = { { 'MiniFilesActionRename', 'MiniFilesActionMove' }, 'Renamed' },
+      ['lsp-file-operations.will-create'] = { 'MiniFilesActionCreate', 'Create' },
+      ['lsp-file-operations.will-delete'] = { 'MiniFilesActionDelete', 'Delete' },
+    }
+    for module, pattern in pairs(events) do
+      vim.api.nvim_create_autocmd('User', {
+        pattern = pattern[1],
+        group = au_group,
+        desc = string.format('Auto-refactor LSP file %s', pattern[2]),
+        callback = function(event)
+          local ok, action = pcall(require, module)
+          if not ok then
+            return
+          end
+          local args = {}
+          local data = event.data
+          if data.from == nil or data.to == nil then
+            args = { fname = data.from or data.to }
+          else
+            args = { old_name = data.from, new_name = data.to }
+          end
+          action.callback(args)
+        end,
+      })
+    end
+
+    -- vim.api.nvim_create_autocmd('User', {
+    --   pattern = 'MiniFilesActionRename',
+    --   group = au_group,
+    --   desc = 'LSP Rename file',
+    --   callback = function(event)
+    --     local ok, rename = pcall(require, 'lsp-file-operations.did-rename')
+    --     if not ok then
+    --       return
+    --     end
+    --     rename.callback({ old_name = event.data.from, new_name = event.data.to })
+    --   end,
+    -- })
   end,
 }

@@ -5,6 +5,7 @@ PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME
 PATH="$PATH:$HOME/.local/share/nim-2.0.4/bin:$HOME/Downloads/GitClones/roc_nightly:$HOME/.nimble/bin:$HOME/.cache/rebar3/bin"
 PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/:$HOME/.nimble/bin"
 PATH="$PATH:$HOME/.local/share/odin-lang/"
+PATH="$PATH:$HOME/.turso"
 # Deduplicate entries in PATH
 PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 
@@ -134,5 +135,6 @@ export MICRO_TRUECOLOR=1
 export ZK_NOTEBOOK_DIR="$HOME/Documents/Notes/Refrens"
 export MIX_XDG="true"
 export FFMPEG_DATADIR="$XDG_CONFIG_HOME"/ffmpeg
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgreprc"
 export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion
 # [ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh

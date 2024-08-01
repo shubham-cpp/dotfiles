@@ -166,7 +166,7 @@ cmp.setup({
     { name = 'path', priority = 200 },
   },
   sorting = {
-    priority_weight = 2,
+    priority_weight = 1,
     comparators = {
       cmp.config.compare.offset,
       cmp.config.compare.exact,

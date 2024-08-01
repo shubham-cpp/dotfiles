@@ -11,7 +11,10 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 -- For example, changing the color scheme:
-config.color_scheme = "Tokyo Night"
+config.color_scheme = "Gruber (base16)"
+config.colors = {
+  background = "#181818",
+}
 -- Spawn a fish shell in login mode
 -- config.default_prog = { "/bin/fish", "-l" }
 
@@ -28,7 +31,7 @@ config.use_fancy_tab_bar = false
 config.enable_wayland = false
 -- config.front_end = "OpenGL"
 config.hide_tab_bar_if_only_one_tab = true
-config.window_background_opacity = 0.90
+config.window_background_opacity = 0.93
 -- I don't like putting anything at the ege if I can help it.
 config.enable_scroll_bar = false
 config.check_for_updates = false

@@ -59,7 +59,7 @@ ENABLE_CORRECTION="true"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
-
+export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -95,6 +95,8 @@ WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 source ~/Documents/dotfiles/.config/zsh/alias.zsh
 source ~/Documents/dotfiles/.config/zsh/.zprofile
+# pkgfile "command not found" handler
+source /usr/share/doc/pkgfile/command-not-found.zsh
 source $ZDOTDIR/keys.zsh
 
 alias mkd=take

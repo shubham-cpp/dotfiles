@@ -55,8 +55,10 @@ basic() {
   fi
   # run kitty
   gnome-keyring-daemon --start --components=secrets
+  sleep 0.3s
   systemctl --user import-environment PATH
-  systemctl --user restart xdg-desktop-portal.service
+  systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal.service
+  dbus-update-activation-environment
   pgrep tmux && pkill tmux
   if [ -x /usr/bin/tmux ]; then
     TERM=xterm-256color alacritty -e "tmux" &

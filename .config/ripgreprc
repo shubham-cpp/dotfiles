@@ -1,0 +1,21 @@
+# TSX/JSX
+--type-add
+tsx:*.tsx,*.jsx
+
+--type-add
+test:*.spec.ts,*.spec.js,*.jest.ts,*.jest.js,*.spec.tsx,*.spec.jsx,*.jest.tsx,*.jest.jsx
+
+--type-add
+vue:*.vue
+
+--type-add
+svelte:*.svelte
+
+--type-add
+prisma:*.prisma
+
+--type-add
+astro:*.astro
+
+--glob
+!.git/*

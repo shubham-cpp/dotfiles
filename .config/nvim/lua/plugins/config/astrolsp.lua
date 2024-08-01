@@ -180,6 +180,13 @@ M.opts = {
         cond = 'textDocument/signatureHelp',
       },
     },
+    x = {
+      ['<leader>la'] = {
+        vim.lsp.buf.code_action,
+        desc = 'Code actions',
+        cond = 'textDocument/codeAction',
+      },
+    },
   },
 
   handlers = {

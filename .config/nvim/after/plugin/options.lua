@@ -75,7 +75,9 @@ o.wildignore:append({
 
 o.completeopt = 'menu,menuone,noselect'
 o.path:append '**'
-o.clipboard:append 'unnamedplus'
+vim.schedule(function()
+  o.clipboard:append(vim.env.SSH_TTY and '' or 'unnamedplus') -- Sync with system clipboard
+end)
 o.iskeyword:append '-'
 
 -- credits - https://github.com/neovim/neovim/pull/17446
@@ -85,18 +87,17 @@ o.statuscolumn =
 
 if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'
-  o.grepprg = 'rg --vimgrep --no-heading --smart-case'
-  -- o.grepprg = 'rg --vimgrep --no-heading --smart-case --type-add vue:*.vue --type-add svelte:*.svelte --type-add prisma:*.prisma'
+  o.grepprg = 'rg --vimgrep --no-heading --smart-case' -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 end
 
-if vim.fn.has 'nvim-0.9' == 1 then
-  o.splitkeep = 'screen'
-  o.shortmess:append({ C = true })
-  o.backspace:append({ 'nostop' })
-  o.diffopt:append 'linematch:60'
-end
-
--- vim.t["bufs"] = vim.t.bufs and vim.t.bufs or vim.api.nvim_list_bufs() -- initialize buffers for the current tab
+vim.schedule(function()
+  if vim.fn.has 'nvim-0.9' == 1 then
+    o.splitkeep = 'screen'
+    o.shortmess:append({ C = true })
+    o.backspace:append({ 'nostop' })
+    o.diffopt:append 'linematch:60'
+  end
+end)
 
 -- Fix markdown indentation settings
 g.markdown_recommended_style = 0

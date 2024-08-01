@@ -1,5 +1,24 @@
-local prettier = { 'prettierd', 'prettier' }
+local prettier = { 'prettierd', 'prettier', stop_after_first = true }
 local slow_format_filetypes = {}
+
+---@param bufnr integer
+---@param ... string
+---@return string
+local function first(bufnr, ...)
+  local conform = require 'conform'
+  for i = 1, select('#', ...) do
+    local formatter = select(i, ...)
+    if conform.get_formatter_info(formatter, bufnr).available then
+      return formatter
+    end
+  end
+  return select(1, ...)
+end
+
+local function prettier_eslint(bufnr)
+  return { first(bufnr, 'prettierd', 'prettier'), 'eslint_d' }
+end
+
 require('conform').setup({
   -- Define your formatters
   formatters_by_ft = {
@@ -8,24 +27,26 @@ require('conform').setup({
     bash = { 'shfmt' },
     c = { 'clang-format' },
     cpp = { 'clang-format' },
-    go = { 'goimports', { 'gofumpt', 'gofmt' } },
+    go = function(bufnr)
+      return { 'goimports', first(bufnr, 'gofumpt', 'gofmt') }
+    end,
     fish = { 'fish_indent' },
-    css = { prettier },
-    html = { prettier },
-    jsonc = { prettier },
-    json = { prettier },
-    json5 = { prettier },
-    less = { prettier },
-    markdown = { prettier },
-    sass = { prettier },
-    scss = { prettier },
-    astro = { prettier, 'eslint_d' },
-    javascript = { prettier, 'eslint_d' },
-    javascriptreact = { prettier, 'eslint_d' },
-    typescript = { prettier, 'eslint_d' },
-    typescriptreact = { prettier, 'eslint_d' },
-    svelte = { prettier, 'eslint_d' },
-    vue = { prettier, 'eslint_d' },
+    css = prettier,
+    html = prettier,
+    jsonc = prettier,
+    json = prettier,
+    json5 = prettier,
+    less = prettier,
+    markdown = prettier,
+    sass = prettier,
+    scss = prettier,
+    astro = prettier_eslint,
+    javascript = prettier_eslint,
+    javascriptreact = prettier_eslint,
+    typescript = prettier_eslint,
+    typescriptreact = prettier_eslint,
+    svelte = prettier_eslint,
+    vue = prettier_eslint,
     nim = { 'nimpretty' },
     zig = { 'zigfmt' },
     php = { 'phpcbf', 'php_cs_fixer' },
@@ -42,6 +63,9 @@ require('conform').setup({
     -- Use the "_" filetype to run formatters on filetypes that don't
     -- have other formatters configured.
     ['_'] = { 'trim_whitespace', 'trim_newlines' },
+  },
+  default_format_opts = {
+    lsp_format = 'fallback',
   },
   -- Set up format-on-save
   -- format_on_save = { timeout_ms = 500, lsp_fallback = true },
