@@ -3,6 +3,7 @@ return {
   'AstroNvim/astrolsp',
   lazy = true,
   dependencies = {
+    'AstroNvim/astrocore',
     {
       'SmiteshP/nvim-navic',
       init = function()

@@ -5,6 +5,30 @@ end
 ---@type LazySpec
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  dependencies = {
+    "antosha417/nvim-lsp-file-operations",
+    {
+      "s1n7ax/nvim-window-picker",
+      version = "2.*",
+      config = function()
+        require("window-picker").setup({
+          filter_rules = {
+            include_current_win = false,
+            autoselect_one = true,
+            -- filter using buffer options
+            bo = {
+              -- if the file type is one of following, the window will be ignored
+              filetype = { "neo-tree", "neo-tree-popup", "notify" },
+              -- if the buffer type is one of following, the window will be ignored
+              buftype = { "terminal", "quickfix" },
+            },
+          },
+          --- @type 'statusline-winbar' | 'floating-big-letter'
+          hint = "floating-big-letter",
+        })
+      end,
+    },
+  },
   opts = function(_, opts)
     opts.window.mappings["l"] = "open"
     -- opts.window.mappings['l'] = 'open'
@@ -39,5 +63,10 @@ return {
       end,
     })
     return opts
+  end,
+  config = function(_, opts)
+    require("neo-tree").setup(opts)
+
+    require("lsp-file-operations").setup({})
   end,
 }

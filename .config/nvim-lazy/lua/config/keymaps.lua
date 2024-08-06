@@ -43,3 +43,14 @@ vim.keymap.set("n", "<c-\\>", lazyterm, { desc = "Open terminal" })
 vim.keymap.set("t", "<c-]>", "<C-\\><C-n>", { desc = "Terminal Escape mode" })
 vim.keymap.set("t", "<c-\\>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 vim.keymap.set("t", "<c-/>", "<cmd>close<cr>", { desc = "Hide Terminal" })
+
+for i = 1, 9 do
+  vim.keymap.set("n", "<leader>" .. i, i .. "gt", { desc = "Goto Tab " .. i })
+end
+
+vim.keymap.set("n", "<leader>tf", function()
+  LazyVim.terminal({ "yazi" }, { cwd = LazyVim.root.cwd(), esc_esc = false, ctrl_hjkl = false })
+end, { desc = "Yazi (Root cwd)" })
+vim.keymap.set("n", "<leader>tF", function()
+  LazyVim.terminal({ "yazi" }, { esc_esc = false, ctrl_hjkl = false })
+end, { desc = "Yazi" })

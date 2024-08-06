@@ -34,7 +34,7 @@ return {
   {
     'rebelot/kanagawa.nvim',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require 'plugins.config.kangawa'
     end,
@@ -49,7 +49,7 @@ return {
   },
   {
     'blazkowolf/gruber-darker.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.gruber-darker'

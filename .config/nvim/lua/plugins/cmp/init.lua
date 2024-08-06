@@ -3,6 +3,8 @@ return {
   'hrsh7th/nvim-cmp',
   event = 'BufReadPre',
   version = false,
+  commit = 'b356f2c',
+  pin = true,
   -- commit = 'b356f2c',
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',

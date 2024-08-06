@@ -40,7 +40,7 @@ return {
           return name
         end
       end
-      vim.api.nvim_create_autocmd("VimEnter", {
+      vim.api.nvim_create_autocmd("UIEnter", {
         desc = "Load session on VimEnter",
         group = au_group,
         callback = function()
@@ -53,10 +53,11 @@ return {
         end,
         nested = true,
       })
-      vim.api.nvim_create_autocmd("VimLeavePre", {
+      vim.api.nvim_create_autocmd("ExitPre", {
         desc = "Save session on VimLeavePre",
         group = au_group,
         callback = function()
+          print("Saving session")
           require("resession").save(get_session_name(), { dir = "dirsession", notify = false })
         end,
       })
