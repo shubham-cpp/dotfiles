@@ -23,7 +23,7 @@ o.scrolloff = 16
 o.sidescrolloff = 8
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
-o.showtabline = 1
+o.showtabline = 2
 o.formatoptions = 'jcrqlnt'
 -- o.timeoutlen = 300
 o.swapfile = true
@@ -82,8 +82,9 @@ o.iskeyword:append '-'
 
 -- credits - https://github.com/neovim/neovim/pull/17446
 -- o.statuscolumn='%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? " " : " ") : "") : " " }%=%l%s'
-o.statuscolumn =
-  '%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? "" : "") : "|") : " " }%=%{v:relnum?v:relnum:v:lnum}%s '
+-- o.statuscolumn =
+--   '%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? "" : "") : "|") : " " }%=%{v:relnum?v:relnum:v:lnum}%s '
+o.fillchars:append({ foldclose = '', foldopen = '',foldsep = '|' })
 
 if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'
@@ -100,4 +101,4 @@ vim.schedule(function()
 end)
 
 -- Fix markdown indentation settings
-g.markdown_recommended_style = 0
+g['markdown_recommended_style'] = 0

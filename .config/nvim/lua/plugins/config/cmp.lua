@@ -97,6 +97,9 @@ cmp.setup({
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
+      elseif vim.snippet.active({ direction = 1 }) then
+        -- return '<cmd>lua vim.snippet.jump(1)<cr>'
+        vim.snippet.jump(1)
       elseif vim.fn['vsnip#available'](1) == 1 then
         feedkey('<Plug>(vsnip-expand-or-jump)', '')
       elseif has_words_before() then
@@ -109,48 +112,32 @@ cmp.setup({
     ['<S-Tab>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
+      elseif vim.snippet.active({ direction = -1 }) then
+        -- return '<cmd>lua vim.snippet.jump(-1)<cr>'
+        vim.snippet.jump(-1)
       elseif vim.fn['vsnip#jumpable'](-1) == 1 then
         feedkey('<Plug>(vsnip-jump-prev)', '')
       end
     end, { 'i', 's' }),
-    -- ['<Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_next_item()
-    --     -- elseif luasnip.expand_or_jumpable() then
-    --   elseif luasnip.expand_or_locally_jumpable() then
-    --     luasnip.expand_or_jump()
-    --   elseif has_words_before() then
-    --     cmp.complete()
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
-    -- ['<S-Tab>'] = cmp.mapping(function(fallback)
-    --   if cmp.visible() then
-    --     cmp.select_prev_item()
-    --   elseif luasnip.jumpable(-1) then
-    --     luasnip.jump(-1)
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
-    -- ['<C-f>'] = cmp.mapping(function(fallback)
-    --   if luasnip.jumpable(1) then
-    --     luasnip.jump(1)
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
-    -- ['<C-b>'] = cmp.mapping(function(fallback)
-    --   if luasnip.jumpable(-1) then
-    --     luasnip.jump(-1)
-    --   else
-    --     fallback()
-    --   end
-    -- end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp', priority = 1000, max_item_count = 8 },
+    {
+      name = 'nvim_lsp',
+      priority = 1000,
+      max_item_count = 12,
+      entry_filter = function(entry)
+        vim.print('source name = ', entry.source:get_debug_name())
+        if
+          (
+            entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
+            or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
+          ) and entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
+        then
+          return false
+        end
+        return true
+      end,
+    },
     { name = 'lazydev', priority = 800 },
     { name = snippet, priority = 700 },
     {
