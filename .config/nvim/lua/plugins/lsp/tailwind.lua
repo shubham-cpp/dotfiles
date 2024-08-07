@@ -24,6 +24,11 @@ return {
       handlers = {
         tailwindcss = function(server, opts)
           opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.filetypes = vim.tbl_extend(
+            'force',
+            require('lspconfig').tailwindcss.document_config.default_config.filetypes,
+            { 'blade' }
+          )
           opts.root_dir = require('lspconfig.util').root_pattern(
             'tailwind.config.js',
             'tailwind.config.cjs',

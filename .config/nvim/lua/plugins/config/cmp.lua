@@ -8,18 +8,26 @@ local function has_words_before()
 end
 
 local cmp = require 'cmp'
+local sources = require 'cmp.config.sources'
 local lspkind = require 'lspkind'
-local snippet = 'vsnip'
+local snippet = 'luasnip'
+local luasnip = require 'luasnip'
 cmp.setup({
   snippet = {
     expand = function(args)
-      vim.fn['vsnip#anonymous'](args.body)
-      -- require 'luasnip'.lsp_expand(args.body)
+      -- vim.fn['vsnip#anonymous'](args.body)
+      luasnip.lsp_expand(args.body)
     end,
   },
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
+  window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
+
+  duplicates = {
+    nvim_lsp = 1,
+    lazydev = 1,
+    [snippet] = 1,
+    cmp_tabnine = 1,
+    buffer = 1,
+    path = 1,
   },
   mapping = {
     ['<C-d>'] = cmp.mapping({
@@ -97,11 +105,13 @@ cmp.setup({
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
-      elseif vim.snippet.active({ direction = 1 }) then
+        -- elseif vim.snippet.active({ direction = 1 }) then
         -- return '<cmd>lua vim.snippet.jump(1)<cr>'
-        vim.snippet.jump(1)
-      elseif vim.fn['vsnip#available'](1) == 1 then
-        feedkey('<Plug>(vsnip-expand-or-jump)', '')
+        -- vim.snippet.jump(1)
+        -- elseif vim.fn['vsnip#available'](1) == 1 then
+        --   feedkey('<Plug>(vsnip-expand-or-jump)', '')
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
       elseif has_words_before() then
         cmp.complete()
       else
@@ -112,15 +122,17 @@ cmp.setup({
     ['<S-Tab>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item()
-      elseif vim.snippet.active({ direction = -1 }) then
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+        -- elseif vim.snippet.active({ direction = -1 }) then
         -- return '<cmd>lua vim.snippet.jump(-1)<cr>'
-        vim.snippet.jump(-1)
-      elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-        feedkey('<Plug>(vsnip-jump-prev)', '')
+        --   vim.snippet.jump(-1)
+        -- elseif vim.fn['vsnip#jumpable'](-1) == 1 then
+        --   feedkey('<Plug>(vsnip-jump-prev)', '')
       end
     end, { 'i', 's' }),
   },
-  sources = {
+  sources = sources({
     {
       name = 'nvim_lsp',
       priority = 1000,
@@ -138,8 +150,8 @@ cmp.setup({
         return true
       end,
     },
-    { name = 'lazydev', priority = 800 },
-    { name = snippet, priority = 700 },
+    { name = 'lazydev', priority = 850 },
+    { name = snippet, priority = 750 },
     {
       name = 'buffer',
       max_item_count = 10,
@@ -152,29 +164,29 @@ cmp.setup({
           return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
         end,
       },
-      priority = 300,
+      priority = 400,
     },
-    { name = 'path', priority = 200 },
-  },
-  sorting = {
-    priority_weight = 1,
-    comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-      cmp.config.compare.recently_used,
-      cmp.config.compare.locality,
-      cmp.config.compare.kind,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-    },
-  },
+    { name = 'path', priority = 250 },
+  }),
+  -- sorting = {
+  --   priority_weight = 2,
+  --   comparators = {
+  --     cmp.config.compare.offset,
+  --     cmp.config.compare.exact,
+  --     cmp.config.compare.score,
+  --     cmp.config.compare.recently_used,
+  --     cmp.config.compare.locality,
+  --     cmp.config.compare.kind,
+  --     cmp.config.compare.sort_text,
+  --     cmp.config.compare.length,
+  --     cmp.config.compare.order,
+  --   },
+  -- },
   formatting = {
+    fields = { 'kind', 'abbr', 'menu' },
     format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
   },
 })
-local sources = require 'cmp.config.sources'
 cmp.setup.cmdline(':', {
   sources = sources({
     {

@@ -41,4 +41,53 @@ return {
       return opts
     end,
   },
+  {
+    'ricardoramirezr/blade-nav.nvim',
+    dependencies = {
+      'hrsh7th/nvim-cmp', -- if using nvim-cmp
+    },
+    ft = { 'blade', 'php' },
+  },
+  {
+    -- Add the Laravel.nvim plugin which gives the ability to run Artisan commands
+    -- from Neovim.
+    'adalessa/laravel.nvim',
+    enabled = false,
+    dependencies = {
+      -- "nvim-telescope/telescope.nvim",
+      'tpope/vim-dotenv',
+      'MunifTanjim/nui.nvim',
+      -- "nvimtools/none-ls.nvim",
+    },
+    cmd = { 'Sail', 'Artisan', 'Composer', 'Npm', 'Yarn', 'Laravel' },
+    keys = {
+      { '<leader>La', ':Laravel artisan<cr>' },
+      { '<leader>Lr', ':Laravel routes<cr>' },
+      { '<leader>Lm', ':Laravel related<cr>' },
+    },
+    ft = { 'blade', 'php' },
+    opts = {
+      ---@type 'phpactor'|'intelephense'
+      lsp_server = 'phpactor',
+      features = { null_ls = { enable = false } },
+    },
+  },
+  {
+    'AstroNvim/astrolsp',
+    opts = {
+      config = {
+        blade = {
+          cmd = { 'laravel-dev-tools', 'lsp' },
+          filetypes = { 'blade' },
+          root_dir = function(fname)
+            return require('lspconfig').util.find_git_ancestor(fname)
+          end,
+        },
+      },
+      handlers = {
+        phpactor = false,
+        blade = false,
+      },
+    },
+  },
 }

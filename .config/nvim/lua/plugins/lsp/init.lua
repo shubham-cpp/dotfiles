@@ -15,5 +15,25 @@ return {
     end
     -- set up servers configured with AstroLSP
     vim.tbl_map(require('astrolsp').lsp_setup, require('astrolsp').config.servers)
+    local lspconfig = require 'lspconfig'
+    local configs = require 'lspconfig.configs'
+    -- Configure it
+    configs.blade = {
+      default_config = {
+        -- Path to the executable: laravel-dev-generators
+        cmd = { '/home/shubham/.local/bin/laravel-dev-tools', 'lsp' },
+        filetypes = { 'blade' },
+        root_dir = function(fname)
+          return lspconfig.util.find_git_ancestor(fname)
+        end,
+        settings = {},
+      },
+    }
+    -- Set it up
+    -- lspconfig.blade.setup({
+    -- Capabilities is specific to my setup.
+    -- capabilities = capabilities
+    --   on_attach = require('astrolsp').on_attach,
+    -- })
   end,
 }

@@ -87,7 +87,12 @@ return {
                   local snip_string = textEdit.newText
                   textEdit.newText = ''
                   vim.lsp.util.apply_text_edits({ textEdit }, bufnr, client.offset_encoding)
-                  vim.snippet.expand(snip_string)
+                  local ok, luasnip = pcall(require, 'luasnip')
+                  if ok then
+                    luasnip.lsp_expand(snip_string)
+                  else
+                    vim.snippet.expand(snip_string)
+                  end
                 end,
                 bufnr
               )
