@@ -51,3 +51,5 @@ npm
 .config/zsh-omz/.zsh_history
 .config/wezterm/wezterm_state_default.json
 .config/qtile/modules/__pycache__
+.local/bin/myscripts/sorting_filev3
+.local/bin/myscripts/sort_files

@@ -138,7 +138,6 @@ cmp.setup({
       priority = 1000,
       max_item_count = 12,
       entry_filter = function(entry)
-        vim.print('source name = ', entry.source:get_debug_name())
         if
           (
             entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text

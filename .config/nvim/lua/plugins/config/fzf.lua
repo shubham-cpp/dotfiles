@@ -1,5 +1,9 @@
 local fzf = require 'fzf-lua'
 local actions = require 'fzf-lua.actions'
+
+local rg_cmd =
+  'rg --files -l ".*" --follow --color=never --sortr=modified -g "!.git/" -g "!*.png"  -g "!node_modules/" -g "!*.jpeg" -g "!*.jpg" -g "!*.ico" -g "!*.exe" -g "!*.out"'
+
 local m_keys = {
   ['alt-enter'] = actions.file_tabedit,
   ['ctrl-x'] = actions.file_split,
@@ -7,29 +11,19 @@ local m_keys = {
 }
 -- calling `setup` is optional for customization
 fzf.setup({
-  defaults = { formatter = { 'path.filename_first', 2 } },
+  'borderless_full',
+  defaults = {
+    formatter = { 'path.filename_first', 2 },
+  },
   fzf_opts = {
     ['--layout'] = 'reverse',
     ['--info'] = 'inline-right',
     -- ['--tiebreak'] = 'end',
   },
   winopts = {
-    border = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
-    -- border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
-  },
-  hls = {
-    border = 'LineNr',
-    preview_border = 'NormalFloat',
-    preview_normal = 'NormalFloat',
-    preview_title = 'Title',
-  },
-  fzf_colors = {
-    ['gutter'] = { 'bg', 'LineNr' },
-    ['bg'] = { 'bg', 'LineNr' },
-    ['bg+'] = { 'bg', 'NormalFloat' },
-    ['fg+'] = { 'fg', 'NormalFloat' },
-    ['border'] = { 'fg', 'Comment' },
-    ['header'] = { 'fg', 'Comment' },
+    preview = {
+      default = 'bat', -- override the default previewer?
+    },
   },
   keymap = {
     fzf = {
@@ -65,9 +59,13 @@ fzf.setup({
       width = 0.65,
       row = 0.52,
       col = 0.47,
+      preview = {
+        ---@type 'wrap'|'nowrap'
+        wrap = 'nowrap',
+        ---@type 'hidden'|'nohidden'
+        hidden = 'hidden',
+      },
     },
-    -- preview = { default = false, horizontal = 'right:45%' },
-    previewer = false,
     actions = m_keys,
   },
   git = {
@@ -196,6 +194,24 @@ local function fzf_create_file()
     end
     return fullpath
   end
+
+  --- This will create a file in the selected directory
+  ---@param split_dir ?"e" | "vs" | "sp" | "tabe" Default is "e"
+  ---@return function
+  local function perform_action(split_dir)
+    split_dir = split_dir or 'e'
+    return function(selected)
+      local fullpath = get_full_path(selected)
+      vim.ui.input({ prompt = 'File Name: ' }, function(name)
+        if name == nil then
+          return
+        end
+        vim.cmd(string.format('%s %s%s', split_dir, fullpath, name))
+        vim.cmd 'w ++p'
+      end)
+    end
+  end
+
   fzf.fzf_exec(cmd, {
     defaults = {},
     prompt = 'Create> ',
@@ -220,33 +236,50 @@ local function fzf_create_file()
       return fzf.make_entry.file(x, { file_icons = true, color_icons = true, cwd = uv.cwd() })
     end,
     actions = {
-      ['default'] = function(selected)
-        local fullpath = get_full_path(selected)
-        vim.ui.input({ prompt = 'File Name: ' }, function(name)
-          if name == nil then
-            return
-          end
-          vim.cmd('e ' .. fullpath .. name)
-          vim.cmd 'w ++p'
-        end)
-      end,
+      ['default'] = perform_action(),
+      ['ctrl-x'] = perform_action 'sp',
+      ['ctrl-v'] = perform_action 'vs',
+      ['ctrl-t'] = perform_action 'tabe',
     },
   })
 end
 
 local function project_files(default_opts)
-  local opts = vim.tbl_extend('force', {}, default_opts or {})
+  local opts = vim.tbl_extend('force', {
+    fzf_opts = {
+      ['--layout'] = 'reverse',
+      ['--info'] = 'inline-right',
+      ['--tiebreak'] = 'index',
+    },
+  }, default_opts or {})
   local fzf = require 'fzf-lua'
   if vim.b.gitsigns_head then
+    -- Either use one of the following .local/bin/myscripts/sort_file.rs or .local/bin/myscripts/sorting_filev3.cpp
+    -- compile and then add to `PATH`
+    --`sort_files` is a program that sorts files based on modified time, recently modified files will be shown first
+    opts.cmd = 'git ls-files --exclude-standard --cached --others | sort_files' -- '--others' is used to show untracked files
     fzf.git_files(opts)
   else
+    opts.cmd = rg_cmd
     fzf.files(opts)
   end
 end
 
 local keys = {
   ['<C-p>'] = { project_files, { desc = 'Git [F]iles' } },
-  ['<leader>ff'] = { fzf.files, { desc = '[F]iles' } },
+  ['<leader>ff'] = {
+    function()
+      fzf.files({
+        cmd = rg_cmd,
+        fzf_opts = {
+          ['--layout'] = 'reverse',
+          ['--info'] = 'inline-right',
+          ['--tiebreak'] = 'index',
+        },
+      })
+    end,
+    { desc = '[F]iles' },
+  },
   ['<leader>fr'] = { fzf.resume, { desc = '[R]esume' } },
   ['<leader>fs'] = { fzf.live_grep_native, { desc = '[S]earch(Project)' } },
   ['<leader>fc'] = { fzf_create_file, { desc = 'Create File' } },
@@ -288,13 +321,29 @@ local keys = {
   ['<leader>fD'] = { fzf.diagnostics_document, { desc = '[D]iagnostics' } },
   ['<leader>fd'] = {
     function()
-      fzf.files({ cwd = vim.fn.expand '~/Documents/dotfiles' })
+      fzf.files({
+        cwd = vim.fn.expand '~/Documents/dotfiles',
+        cmd = rg_cmd .. ' --hidden',
+        fzf_opts = {
+          ['--layout'] = 'reverse',
+          ['--info'] = 'inline-right',
+          ['--tiebreak'] = 'index',
+        },
+      })
     end,
     { desc = '[D]otfiles' },
   },
   ['<leader>fn'] = {
     function()
-      fzf.files({ cwd = vim.fn.stdpath 'config' })
+      fzf.files({
+        cwd = vim.fn.stdpath 'config',
+        cmd = rg_cmd,
+        fzf_opts = {
+          ['--layout'] = 'reverse',
+          ['--info'] = 'inline-right',
+          ['--tiebreak'] = 'index',
+        },
+      })
     end,
     { desc = '[N]eovim Config' },
   },
