@@ -69,13 +69,14 @@ return {
             'eruby',
             'html',
             'htmldjango',
-            'javascriptreact',
             'less',
             'pug',
             'sass',
             'scss',
-            'typescriptreact',
             'heex',
+            'blade',
+            'javascriptreact',
+            'typescriptreact',
           },
           on_attach = function(client, bufnr)
             vim.keymap.set('i', '<C-t>', function()
