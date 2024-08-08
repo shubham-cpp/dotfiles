@@ -14,7 +14,8 @@ return {
     '<leader>fc',
     '<leader>fS',
 
-    '<leader>fw',
+    { '<leader>fw', mode = { 'n', 'v' } },
+    '<leader>fW',
     '<leader>fo',
     '<leader>fb',
     '<leader>fz',
@@ -31,6 +32,10 @@ return {
     '<leader>gb',
     '<leader>gc',
     '<leader>gC',
+
+    { '<C-x><C-k>', mode = 'i', desc = 'Complete bline' },
+    { '<C-x><C-l>', mode = 'i', desc = 'Complete line' },
+    { '<C-x><C-f>', mode = 'i', desc = 'Complete path' },
   },
   -- keys = vim.tbl_keys(require('plugins.config.fzf').keys),
   -- keys = function()

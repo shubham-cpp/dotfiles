@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sleep 1
-systemctl --user stop xdg-desktop-portal-hyprland xdg-desktop-portal-gtk xdg-desktop-portal
+systemctl --user stop xdg-desktop-portal-gtk xdg-desktop-portal xdg-desktop-portal-hyprland 
 killall waybar
 killall swaync
 killall kmonad
@@ -17,3 +17,4 @@ nm-applet &
 swaybg --image ~/.config/wall.png --mode stretch &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 # kmonad ~/.config/kmonad/mkmonad.kbd &
+systemctl --user reload-or-restart xdg-desktop-portal.service  xdg-desktop-portal-hyprland.service &

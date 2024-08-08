@@ -99,9 +99,9 @@ cmp.setup({
     ['<C-x><C-x>'] = cmp.mapping.complete({
       config = { sources = { { name = snippet } } },
     }),
-    ['<C-x><C-f>'] = cmp.mapping.complete({
-      config = { sources = { { name = 'path' } } },
-    }),
+    -- ['<C-x><C-f>'] = cmp.mapping.complete({
+    --   config = { sources = { { name = 'path' } } },
+    -- }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()

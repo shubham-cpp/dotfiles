@@ -22,6 +22,9 @@ source "${ZINIT_HOME}/zinit.zsh"
 fpath+=~/.local/share/zsh/site-functions
 autoload -Uz colors edit-command-line
 autoload -Uz compinit && compinit
+# Smart Url
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
 zt(){ zinit depth3 lucid ${1/#[0-9][a-c]/wait${1}} ${@:2}; }
 # Add in zsh plugins
 zinit light zdharma-continuum/fast-syntax-highlighting
@@ -97,3 +100,6 @@ smartcache eval fzf --zsh
 smartcache eval register-python-argcomplete pipx
 smartcache eval $HOME/.local/bin/mise activate zsh
 smartcache comp rustup completions zsh
+
+# Ensure unique path
+typeset -gU cdpath fpath mailpath path

@@ -14,7 +14,22 @@ fzf.setup({
     -- ['--tiebreak'] = 'end',
   },
   winopts = {
-    border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+    border = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+    -- border = { '┏', '━', '┓', '┃', '┛', '━', '┗', '┃' },
+  },
+  hls = {
+    border = 'LineNr',
+    preview_border = 'NormalFloat',
+    preview_normal = 'NormalFloat',
+    preview_title = 'Title',
+  },
+  fzf_colors = {
+    ['gutter'] = { 'bg', 'LineNr' },
+    ['bg'] = { 'bg', 'LineNr' },
+    ['bg+'] = { 'bg', 'NormalFloat' },
+    ['fg+'] = { 'fg', 'NormalFloat' },
+    ['border'] = { 'fg', 'Comment' },
+    ['header'] = { 'fg', 'Comment' },
   },
   keymap = {
     fzf = {
@@ -241,12 +256,30 @@ local keys = {
     end,
     { desc = '[S]earch Current Buffer' },
   },
-  ['<leader>fw'] = { fzf.grep_cWORD, { desc = '[W]ord under cursor' } },
+  ['<leader>fw'] = { fzf.grep_cword, { desc = '[W]ord under cursor' } },
+  ['<leader>fW'] = { fzf.grep_cWORD, { desc = '[W]ord under cursor' } },
   ['<leader>fo'] = {
     function()
       fzf.oldfiles({ path_shorten = true })
     end,
     { desc = '[O]ld Files' },
+  },
+  ['<leader>f/'] = {
+    function()
+      fzf.lgrep_curbuf({
+        prompt = 'Buffer❫ ',
+      })
+    end,
+    { desc = 'Grep buffer' },
+  },
+  ['<leader>*'] = {
+    function()
+      fzf.grep_curbuf({
+        prompt = 'Buffer❫ ',
+        search = vim.fn.expand '<cword>',
+      })
+    end,
+    { desc = 'Grep buffer with cword' },
   },
   ['<leader>fb'] = { fzf.buffers, { desc = '[B]uffers' } },
   ['<leader>fz'] = { fzf.spell_suggest, { desc = '[S]pelling' } },
@@ -274,6 +307,9 @@ local keys = {
 }
 
 vim.keymap.set('v', '<leader>fw', fzf.grep_visual, { desc = 'Selection' })
+vim.keymap.set('i', '<C-x><C-k>', fzf.complete_bline, { desc = 'Complete bline', silent = true, noremap = true })
+vim.keymap.set('i', '<C-x><C-l>', fzf.complete_line, { desc = 'Complete line', silent = true, noremap = true })
+vim.keymap.set('i', '<C-x><C-f>', fzf.complete_path, { desc = 'Complete path', silent = true, noremap = true })
 for key, value in pairs(keys) do
   if value[1] == nil then
     vim.print(key .. ' is nil')
