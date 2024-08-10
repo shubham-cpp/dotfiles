@@ -19,6 +19,10 @@ cmp.setup({
       luasnip.lsp_expand(args.body)
     end,
   },
+  experimental = {
+    ghost_text = false,
+    native_menu = false,
+  },
   window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
 
   duplicates = {
@@ -182,8 +186,19 @@ cmp.setup({
   --   },
   -- },
   formatting = {
-    fields = { 'kind', 'abbr', 'menu' },
-    format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
+    -- fields = { 'kind', 'abbr', 'menu' },
+    -- format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
+    format = function(entry, item)
+      local color_item = require('nvim-highlight-colors').format(entry, { kind = item.kind })
+      item = require('lspkind').cmp_format({
+        -- any lspkind format settings here
+      })(entry, item)
+      if color_item.abbr_hl_group then
+        item.kind_hl_group = color_item.abbr_hl_group
+        item.kind = color_item.abbr
+      end
+      return item
+    end,
   },
 })
 cmp.setup.cmdline(':', {

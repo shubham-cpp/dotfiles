@@ -24,6 +24,13 @@ return {
       handlers = {
         tailwindcss = function(server, opts)
           opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.init_options = {
+            userLanguages = {
+              eelixir = 'html-eex',
+              eruby = 'erb',
+              blade = 'html',
+            },
+          }
           opts.filetypes = vim.tbl_extend(
             'force',
             require('lspconfig').tailwindcss.document_config.default_config.filetypes,
@@ -46,7 +53,6 @@ return {
           opts.settings = {
             tailwindCSS = {
               emmetCompletions = true,
-              -- validate = 'error',
               classAttributes = { 'class', 'className', 'classList', 'ngClass' },
               lint = {
                 cssConflict = 'warning',
@@ -58,6 +64,19 @@ return {
                 recommendedVariantOrder = 'warning',
               },
               validate = true,
+              experimental = {
+                classRegex = {
+                  'tw`([^`]*)',
+                  'tw="([^"]*)',
+                  'tw={"([^"}]*)',
+                  'tw\\.\\w+`([^`]*)',
+                  'tw\\(.*?\\)`([^`]*)',
+                  { 'clsx\\(([^)]*)\\)', "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+                  { 'classnames\\(([^)]*)\\)', "'([^']*)'" },
+                  { 'cva\\(([^)]*)\\)', '["\'`]([^"\'`]*).*?["\'`]' },
+                  { 'cn\\(([^)]*)\\)', "(?:'|\"|`)([^']*)(?:'|\"|`)" },
+                },
+              },
             },
           }
           opts.single_file_support = false

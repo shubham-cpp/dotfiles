@@ -98,11 +98,15 @@ vim.api.nvim_create_autocmd('FileType', {
     'javascriptreact',
     'javascript',
     'javascript.jsx',
+    'svelte',
     'vue',
     'html',
     'css',
     'less',
     'scss',
+    'php',
+    'blade',
+    'heex',
   },
   callback = function()
     vim.opt_local.tabstop = 2

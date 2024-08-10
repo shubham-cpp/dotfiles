@@ -49,10 +49,18 @@ return {
   },
   {
     'blazkowolf/gruber-darker.nvim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.gruber-darker'
+    end,
+  },
+  {
+    'folke/tokyonight.nvim',
+    enabled = true,
+    event = 'VimEnter',
+    config = function()
+      require 'plugins.config.tokyonight'
     end,
   },
 }
