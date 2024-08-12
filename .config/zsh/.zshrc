@@ -21,10 +21,10 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 fpath+=~/.local/share/zsh/site-functions
 autoload -Uz colors edit-command-line
-autoload -Uz compinit && compinit
 # Smart Url
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
+autoload -Uz compinit && compinit
 zt(){ zinit depth3 lucid ${1/#[0-9][a-c]/wait${1}} ${@:2}; }
 # Add in zsh plugins
 zinit light zdharma-continuum/fast-syntax-highlighting
@@ -41,10 +41,11 @@ zinit light starship/starship
 
 zinit ice trigger-load!npm wait'0' lucid; zinit light lukechilds/zsh-better-npm-completion
 zinit ice trigger-load!man wait'0' lucid; zinit snippet OMZP::colored-man-pages
+
 zinit ice wait"2" as"command" from"gh-r" lucid \
   mv"zoxide*/zoxide -> zoxide" \
   atclone"./zoxide init zsh > zo_init.zsh" \
-  atpull"%atclone" src"zo_init.zsh" nocompile'!'
+  atpull"%atclone" src"zo_init.sh"
 zinit light ajeetdsouza/zoxide
 # zinit ice wait"2" as"command" from"gh-r" lucid \
 #   atclone"./fnm env --use-on-cd > fnmenv.zsh" \
@@ -96,10 +97,10 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
 # Shell integrations
 # eval "$(fnm env --use-on-cd)"
-smartcache eval fzf --zsh
-smartcache eval register-python-argcomplete pipx
-smartcache eval $HOME/.local/bin/mise activate zsh
-smartcache comp rustup completions zsh
+[ -x "$(which fzf)" ] && smartcache eval fzf --zsh
+[ -x "$(which register-python-argcomplete)" ] && smartcache eval register-python-argcomplete pipx
+[ -x "$(which mise)" ] && smartcache eval $HOME/.local/bin/mise activate zsh
+[ -x "$(which rustup)" ] && smartcache comp rustup completions zsh
 
 # Ensure unique path
 typeset -gU cdpath fpath mailpath path

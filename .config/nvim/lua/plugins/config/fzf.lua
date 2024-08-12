@@ -108,7 +108,8 @@ fzf.setup({
       ['ctrl-q'] = actions.buf_edit_or_qf,
     }),
   },
-  helptags = { winopts = { height = 0.55, width = 1.0, row = 1.0 } },
+  keymaps = { winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } } },
+  helptags = { winopts = { height = 0.55, width = 1.0, row = 1.0, preview = { horizontal = 'left:40%' } } },
   grep = {
     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
     actions = m_keys,

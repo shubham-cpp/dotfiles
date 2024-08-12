@@ -5,26 +5,99 @@ local session_manager = require "session-manager"
 -- This table will hold the configuration.
 local config = {}
 local keys = {}
+local alt_keys = {}
 -- In newer versions of wezterm, use the config_builder which will
 -- help provide clearer error messages
 if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 -- For example, changing the color scheme:
-config.color_scheme = "Gruber (base16)"
+config.color_scheme = "Github Dark (Gogh)"
 config.colors = {
-  background = "#181818",
+  -- background = "#181818",
+  tab_bar = {
+    -- The color of the strip that goes along the top of the window
+    -- (does not apply when fancy tab bar is in use)
+    background = "#14131A",
+
+    -- The active tab is the one that has focus in the window
+    active_tab = {
+      -- The color of the background area for the tab
+      bg_color = "#161725",
+      -- The color of the text for the tab
+      fg_color = "hsl(30, 30%, 75%)",
+
+      -- Specify whether you want "Half", "Normal" or "Bold" intensity for the
+      -- label shown for this tab.
+      -- The default is "Normal"
+      intensity = "Bold",
+
+      -- Specify whether you want "None", "Single" or "Double" underline for
+      -- label shown for this tab.
+      -- The default is "None"
+      underline = "None",
+
+      -- Specify whether you want the text to be italic (true) or not (false)
+      -- for this tab.  The default is false.
+      italic = false,
+
+      -- Specify whether you want the text to be rendered with strikethrough (true)
+      -- or not for this tab.  The default is false.
+      strikethrough = false,
+    },
+
+    -- Inactive tabs are the tabs that do not have focus
+    inactive_tab = {
+      bg_color = "hsl(234, 19%, 20%)",
+      fg_color = "hsl(234, 55%, 80%)",
+
+      -- The same options that were listed under the `active_tab` section above
+      -- can also be used for `inactive_tab`.
+    },
+
+    -- You can configure some alternate styling when the mouse pointer
+    -- moves over inactive tabs
+    inactive_tab_hover = {
+      bg_color = "#181818",
+      fg_color = "#909090",
+      italic = true,
+
+      -- The same options that were listed under the `active_tab` section above
+      -- can also be used for `inactive_tab_hover`.
+    },
+
+    -- The new tab button that let you create new tabs
+    new_tab = {
+      bg_color = "#1b1032",
+      fg_color = "#808080",
+
+      -- The same options that were listed under the `active_tab` section above
+      -- can also be used for `new_tab`.
+    },
+
+    -- You can configure some alternate styling when the mouse pointer
+    -- moves over the new tab button
+    new_tab_hover = {
+      bg_color = "#3b3052",
+      fg_color = "#909090",
+      italic = true,
+
+      -- The same options that were listed under the `active_tab` section above
+      -- can also be used for `new_tab_hover`.
+    },
+  },
 }
 -- Spawn a fish shell in login mode
 -- config.default_prog = { "/bin/fish", "-l" }
 
 config.font_size = 11.5
 config.font = wezterm.font_with_fallback({
-  -- "FiraCode Nerd Font",
+  "FiraCode Nerd Font",
   "JetBrainsMono Nerd Font",
   "FontAwesome",
 })
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
+config.switch_to_last_active_tab_when_closing_tab = true
 
 -- default is true, has more "native" look
 config.use_fancy_tab_bar = false
@@ -59,6 +132,52 @@ end)
 wezterm.on("restore_session", function(window)
   session_manager.restore_state(window)
 end)
+
+table.insert(alt_keys, { key = "q", mods = "ALT", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
+table.insert(alt_keys, { key = "c", mods = "ALT", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
+table.insert(alt_keys, { key = "x", mods = "ALT", action = wezterm.action.CloseCurrentTab({ confirm = false }) })
+table.insert(alt_keys, { key = "j", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Down" })
+table.insert(alt_keys, { key = "k", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Up" })
+table.insert(alt_keys, { key = "l", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Right" })
+table.insert(alt_keys, { key = "h", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Left" })
+table.insert(alt_keys, { key = "z", mods = "ALT", action = wezterm.action.TogglePaneZoomState })
+table.insert(alt_keys, { key = "t", mods = "ALT", action = wezterm.action.SpawnTab "CurrentPaneDomain" })
+table.insert(alt_keys, { key = "g", mods = "ALT", action = wezterm.action.ShowTabNavigator })
+table.insert(alt_keys, { key = "o", mods = "ALT", action = wezterm.action.ActivateLastTab })
+table.insert(alt_keys, { key = ")", mods = "SHIFT|ALT", action = wezterm.action.PaneSelect })
+table.insert(
+  alt_keys,
+  { key = "0", mods = "ALT", action = wezterm.action.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) }
+)
+table.insert(
+  alt_keys,
+  { key = "v", mods = "ALT", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) }
+)
+table.insert(
+  alt_keys,
+  { key = "s", mods = "ALT", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) }
+)
+-- table.insert(alt_keys, { key = "j", mods = "ALT|SHIFT", action = wezterm.action.ActivatePaneDirection "Next" })
+-- table.insert(alt_keys, { key = "k", mods = "ALT|SHIFT", action = wezterm.action.ActivatePaneDirection "Prev" })
+
+table.insert(alt_keys, { key = "p", mods = "SHIFT|ALT", action = wezterm.action.MoveTabRelative(-1) })
+table.insert(alt_keys, { key = "n", mods = "SHIFT|ALT", action = wezterm.action.MoveTabRelative(1) })
+table.insert(alt_keys, { key = "p", mods = "ALT", action = wezterm.action.ActivateTabRelative(-1) })
+table.insert(alt_keys, { key = "n", mods = "ALT", action = wezterm.action.ActivateTabRelative(1) })
+table.insert(alt_keys, { key = ".", mods = "ALT", action = wezterm.action.ActivateCommandPalette })
+
+table.insert(alt_keys, { key = "q", mods = "SHIFT|ALT", action = wezterm.action.QuickSelect })
+table.insert(alt_keys, { key = "c", mods = "SHIFT|ALT", action = wezterm.action.ActivateCopyMode })
+
+table.insert(alt_keys, { key = "c", mods = "SHIFT|ALT", action = wezterm.action.ActivateCopyMode })
+
+-- table.insert(alt_keys, { key = "j", mods = "SHIFT|ALT", action = wezterm.action.RotatePanes "Clockwise" })
+-- table.insert(alt_keys, { key = "k", mods = "SHIFT|ALT", action = wezterm.action.RotatePanes "CounterClockwise" })
+
+table.insert(alt_keys, { key = "h", mods = "SHIFT|ALT", action = wezterm.action.AdjustPaneSize({ "Left", 5 }) })
+table.insert(alt_keys, { key = "j", mods = "SHIFT|ALT", action = wezterm.action.AdjustPaneSize({ "Down", 5 }) })
+table.insert(alt_keys, { key = "k", mods = "SHIFT|ALT", action = wezterm.action.AdjustPaneSize({ "Up", 5 }) })
+table.insert(alt_keys, { key = "l", mods = "SHIFT|ALT", action = wezterm.action.AdjustPaneSize({ "Right", 5 }) })
 
 table.insert(keys, { key = "s", mods = "LEADER|CTRL", action = wezterm.action({ EmitEvent = "save_session" }) })
 table.insert(keys, { key = "r", mods = "LEADER|CTRL", action = wezterm.action({ EmitEvent = "restore_session" }) })
@@ -209,9 +328,15 @@ for i = 1, 8 do
     mods = "ALT",
     action = wezterm.action.ActivateTab(i - 1),
   })
+  table.insert(alt_keys, {
+    key = tostring(i),
+    mods = "ALT",
+    action = wezterm.action.ActivateTab(i - 1),
+  })
 end
 
 config.leader = { key = "s", mods = "CTRL", timeout_milliseconds = 1000 }
-config.keys = keys
+-- config.keys = keys
+config.keys = alt_keys
 
 return config

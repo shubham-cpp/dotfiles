@@ -5,6 +5,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
         'phpcbf',
+        'phpstan',
         'phpcs',
         'php-cs-fixer',
         'blade-formatter',
@@ -85,7 +86,8 @@ return {
         },
       },
       handlers = {
-        phpactor = false,
+        -- phpactor = false,
+        intelephense = false,
         blade = false,
       },
     },

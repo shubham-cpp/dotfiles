@@ -30,8 +30,8 @@ bind \cw backward-kill-bigword
 bind \e\[1\;5D backward-bigword
 # C-Right
 bind \e\[1\;5C forward-bigword
-# M-k
-bind -M insert \ek accept-autosuggestion
+# C-j
+bind -M insert \n accept-autosuggestion
 # C-backspace
 bind -M insert \b backward-kill-word
 bind -M insert \cl 'history merge; commandline -f clear-screen'
