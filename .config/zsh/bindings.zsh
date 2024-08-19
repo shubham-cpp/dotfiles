@@ -48,7 +48,7 @@ bindkey -M viins -M viins '^[[B' history-substring-search-down
 bindkey -M viins -M viins '^[OA' history-substring-search-up
 bindkey -M viins -M viins '^[OB' history-substring-search-down
 # C-j to accept autosuggest
-bindkey -M viins -M viins '^j' autosuggest-accept
+bindkey -M viins '^J' autosuggest-accept
 
 # bindkey -M menuselect 'h' vi-backward-char
 # bindkey -M menuselect 'k' vi-up-line-or-history

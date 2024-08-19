@@ -103,6 +103,27 @@ cmp.setup({
     ['<C-x><C-x>'] = cmp.mapping.complete({
       config = { sources = { { name = snippet } } },
     }),
+    ['<C-x><C-e>'] = cmp.mapping.complete({
+      config = {
+        sources = {
+          {
+            name = 'nvim_lsp',
+            entry_filter = function(entry)
+              vim.print(entry.source:get_debug_name())
+              if
+                (
+                  entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
+                  or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
+                ) and entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
+              then
+                return true
+              end
+              return false
+            end,
+          },
+        },
+      },
+    }),
     -- ['<C-x><C-f>'] = cmp.mapping.complete({
     --   config = { sources = { { name = 'path' } } },
     -- }),

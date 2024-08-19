@@ -50,7 +50,7 @@ alias se="sudoedit nvim"
 alias xcp="xclip -i -r -sel clip"
 alias rg="rg -i"
 alias r="ranger"
-alias mci="make -j4 && sudo make install clean"
+alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
 
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 

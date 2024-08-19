@@ -3,6 +3,7 @@ local heirline = require 'heirline'
 local lib = require 'heirline-components.all'
 local hl = require 'heirline-components.core.hl'
 -- Setup
+vim.opt.laststatus = 3
 lib.init.subscribe_to_events()
 heirline.load_colors(lib.hl.get_colors())
 heirline.setup({
@@ -18,9 +19,27 @@ heirline.setup({
   },
   tabline = { -- UI upper bar
     lib.component.tabline_conditional_padding(),
-    lib.component.tabline_buffers(),
-    lib.component.fill({ hl = { bg = 'tabline_bg' } }),
-    lib.component.tabline_tabpages(),
+    lib.component.tabline_buffers({
+      hl = function(self)
+        local tab_type = self.tab_type
+        if self._show_picker and self.tab_type ~= 'buffer_active' then
+          tab_type = 'buffer_visible'
+        end
+        if tab_type == 'buffer_active' then
+          -- tokyonight
+          -- local fg = '#7ca1f2'
+          -- local bg = '#393d56'
+          -- rose-pine
+          local fg = '#f2e9e1'
+          local bg = '#286983'
+          return vim.tbl_extend('force', hl.get_attributes(tab_type), { fg = fg, bg = bg })
+        else
+          return hl.get_attributes(tab_type)
+        end
+      end,
+    }),
+    lib.component.fill(),
+    lib.component.tabline_tabpages({}),
   },
   winbar = { -- UI breadcrumbs bar
     init = function(self)
@@ -60,11 +79,8 @@ heirline.setup({
     lib.component.git_diff(),
     lib.component.diagnostics(),
     lib.component.fill(),
-    lib.component.cmd_info(),
     lib.component.fill(),
     lib.component.lsp(),
-    lib.component.compiler_state(),
-    lib.component.virtual_env(),
     lib.component.nav(),
     lib.component.mode({ surround = { separator = 'right' } }),
   },

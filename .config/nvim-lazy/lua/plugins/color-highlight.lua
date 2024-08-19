@@ -3,7 +3,11 @@ return {
   "brenoprata10/nvim-highlight-colors",
   event = "BufReadPost",
   enabled = true,
+  lazy = true,
   opts = {
+    ---Render style
+    ---@type 'background'|'foreground'|'virtual'
+    render = "virtual",
     enable_tailwind = true,
   },
 }

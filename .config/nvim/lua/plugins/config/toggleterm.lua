@@ -12,21 +12,17 @@ local function lazygit_toggle()
   lazygit:toggle()
 end
 
-local file_manager = Terminal:new({
-  cmd = 'yazi',
-  shell = vim.o.shell == '/bin/fish' and '/bin/zsh' or vim.o.shell,
-  direction = 'float',
-  float_opts = { border = 'curved' },
-})
-
-local function file_manager_toggle()
-  file_manager:toggle()
-end
-
 toggleterm.setup({
   shell = vim.o.shell == '/bin/fish' and '/bin/zsh' or vim.o.shell,
   direction = 'float',
   open_mapping = [[<c-\>]],
+  highlights = {
+    Normal = {
+      guibg = '#080818',
+    },
+    NormalFloat = {
+      guibg = '#080818',
+    },
+  },
 })
 vim.keymap.set('n', '<Space>tl', lazygit_toggle, { desc = '[T]erminal [L]azygit' })
-vim.keymap.set('n', '<Space>tf', file_manager_toggle, { desc = '[T]erminal [F]ile manager' })

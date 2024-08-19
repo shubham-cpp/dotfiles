@@ -1,12 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 gui:
+  nerdFontsVersion: "3"
   scrollHeight: 2
   scrollPastBottom: true
   mouseEvents: true
+  border: rounded
 git:
+  merging:
+    # If true, run merges in a subprocess so that if a commit message is required, Lazygit will not hang
+    # Only applicable to unix users.
+    manualCommit: true
   paging:
     colorArg: always
     # useConfig: true
     pager: delta --dark --paging=never
-  os:
-    openCommand: 'open {{filename}}'
-    openLinkCommand: 'open {{link}}'
+
+os:
+  # Command for editing a file. Should contain "{{filename}}".
+  editPreset: nvim

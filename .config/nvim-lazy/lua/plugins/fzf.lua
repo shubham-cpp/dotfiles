@@ -1,3 +1,6 @@
+local rg_cmd =
+  'rg --files -l ".*" --follow --color=never --sortr=modified -g "!.git/" -g "!*.png"  -g "!node_modules/" -g "!*.jpeg" -g "!*.jpg" -g "!*.ico" -g "!*.exe" -g "!*.out"'
+
 local function fzf_create_file()
   local fzf = require("fzf-lua")
   local path = require("fzf-lua.path")
@@ -18,6 +21,24 @@ local function fzf_create_file()
     end
     return fullpath
   end
+
+  --- This will create a file in the selected directory
+  ---@param split_dir ?"e" | "vs" | "sp" | "tabe" Default is "e"
+  ---@return function
+  local function perform_action(split_dir)
+    split_dir = split_dir or "e"
+    return function(selected)
+      local fullpath = get_full_path(selected)
+      vim.ui.input({ prompt = "File Name: " }, function(name)
+        if name == nil then
+          return
+        end
+        vim.cmd(string.format("%s %s%s", split_dir, fullpath, name))
+        vim.cmd("w ++p")
+      end)
+    end
+  end
+
   fzf.fzf_exec(cmd, {
     defaults = {},
     prompt = "Create> ",
@@ -42,18 +63,37 @@ local function fzf_create_file()
       return fzf.make_entry.file(x, { file_icons = true, color_icons = true, cwd = uv.cwd() })
     end,
     actions = {
-      ["default"] = function(selected)
-        local fullpath = get_full_path(selected)
-        vim.ui.input({ prompt = "File Name: " }, function(name)
-          if name == nil then
-            return
-          end
-          vim.cmd("e " .. fullpath .. name)
-          vim.cmd("w ++p")
-        end)
-      end,
+      ["default"] = perform_action(),
+      ["ctrl-x"] = perform_action("sp"),
+      ["ctrl-v"] = perform_action("vs"),
+      ["ctrl-t"] = perform_action("tabe"),
     },
   })
+end
+
+local function project_files(default_opts)
+  local opts = vim.tbl_extend("force", {
+    fzf_opts = {
+      ["--layout"] = "reverse",
+      ["--info"] = "inline-right",
+      ["--tiebreak"] = "index",
+    },
+  }, default_opts or {})
+  local fzf = require("fzf-lua")
+  if vim.b.gitsigns_head then
+    -- Either use one of the following .local/bin/myscripts/sort_file.rs or .local/bin/myscripts/sorting_filev3.cpp
+    -- compile and then add to `PATH`
+    --`sort_files` is a program that sorts files based on modified time, recently modified files will be shown first
+    if vim.fn.executable("sort_files") == 1 then
+      opts.cmd = "git ls-files --exclude-standard --cached --others | sort_files" -- '--others' is used to show untracked files
+    else
+      vim.cmd('echohl WarningMsg | echo "`sort_files` not found in `PATH`. Please compile the program" | echohl None')
+    end
+    fzf.git_files(opts)
+  else
+    opts.cmd = rg_cmd
+    fzf.files(opts)
+  end
 end
 
 ---@type LazySpec
@@ -62,7 +102,7 @@ return {
   keys = {
     {
       "<C-p>",
-      LazyVim.pick("files"),
+      project_files,
       desc = "[F]iles",
     },
     {
@@ -93,6 +133,20 @@ return {
       ["ctrl-q"] = actions.file_edit_or_qf,
     }
     opts.defaults = { formatter = "path.filename_first" }
+    opts.keymap = vim.tbl_deep_extend("force", opts.keymap or {}, {
+      fzf = {
+        ["alt-a"] = "toggle-all",
+        ["alt-p"] = "toggle-preview",
+        ["alt-j"] = "preview-down",
+        ["alt-k"] = "preview-up",
+        ["ctrl-q"] = "select-all+accept",
+      },
+    })
+    opts.winopts = vim.tbl_extend("force", opts.winopts or {}, {
+      preview = {
+        default = "bat", -- override the default previewer?
+      },
+    })
     opts.fzf_opts = vim.tbl_extend("force", opts.fzf_opts or {}, {
       ["--layout"] = "reverse",
       ["--info"] = "inline-right",
@@ -108,9 +162,13 @@ return {
         width = 0.65,
         row = 0.52,
         col = 0.47,
+        preview = {
+          ---@type 'wrap'|'nowrap'
+          wrap = "nowrap",
+          ---@type 'hidden'|'nohidden'
+          hidden = "hidden",
+        },
       },
-      -- preview = { default = false, horizontal = 'right:45%' },
-      previewer = false,
       actions = m_keys,
     })
     opts.git = vim.tbl_deep_extend("force", opts.git or {}, {
@@ -159,6 +217,10 @@ return {
     opts.blines = vim.tbl_deep_extend("force", opts.blines or {}, {
       actions = m_keys,
       no_term_buffers = false,
+      winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
+    })
+    opts.lines = vim.tbl_deep_extend("force", opts.lines or {}, {
+      actions = m_keys,
       winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
     })
     opts.lsp = vim.tbl_deep_extend("force", opts.lsp or {}, {

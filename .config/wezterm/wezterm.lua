@@ -12,7 +12,7 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 -- For example, changing the color scheme:
-config.color_scheme = "Github Dark (Gogh)"
+config.color_scheme = "Tokyo Night" -- Everforest Dark Hard (Gogh)
 config.colors = {
   -- background = "#181818",
   tab_bar = {
@@ -133,7 +133,7 @@ wezterm.on("restore_session", function(window)
   session_manager.restore_state(window)
 end)
 
-table.insert(alt_keys, { key = "q", mods = "ALT", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
+-- table.insert(alt_keys, { key = "q", mods = "ALT", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
 table.insert(alt_keys, { key = "c", mods = "ALT", action = wezterm.action.CloseCurrentPane({ confirm = false }) })
 table.insert(alt_keys, { key = "x", mods = "ALT", action = wezterm.action.CloseCurrentTab({ confirm = false }) })
 table.insert(alt_keys, { key = "j", mods = "ALT", action = wezterm.action.ActivatePaneDirection "Down" })
@@ -335,7 +335,7 @@ for i = 1, 8 do
   })
 end
 
-config.leader = { key = "s", mods = "CTRL", timeout_milliseconds = 1000 }
+-- config.leader = { key = "s", mods = "CTRL", timeout_milliseconds = 1000 }
 -- config.keys = keys
 config.keys = alt_keys
 

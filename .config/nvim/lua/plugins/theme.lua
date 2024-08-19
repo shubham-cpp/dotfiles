@@ -1,28 +1,6 @@
 ---@type LazySpec
 return {
   {
-    'sainnhe/gruvbox-material',
-    event = 'VimEnter',
-    enabled = false,
-    init = function()
-      vim.g.gruvbox_material_background = 'hard' -- 'hard', 'medium'(default), 'soft'
-      vim.g.gruvbox_material_enable_bold = 1
-      vim.g.gruvbox_material_dim_inactive_windows = 1
-      vim.g.gruvbox_material_transparent_background = 2 -- 0, 1, 2
-      vim.g.gruvbox_material_better_performance = 1
-    end,
-    config = function()
-      local configuration = vim.fn['gruvbox_material#get_configuration']()
-      local palette = vim.fn['gruvbox_material#get_palette'](
-        configuration.background,
-        configuration.foreground,
-        configuration.colors_override
-      )
-      vim.cmd.colorscheme 'gruvbox-material'
-      vim.cmd(string.format('hi! MiniTablineCurrent guifg=%s guibg=%s gui=bold', palette.bg0[1], palette.grey2[1]))
-    end,
-  },
-  {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
@@ -40,14 +18,6 @@ return {
     end,
   },
   {
-    'rmehri01/onenord.nvim',
-    enabled = false,
-    event = 'VimEnter',
-    config = function()
-      require 'plugins.config.onenord'
-    end,
-  },
-  {
     'blazkowolf/gruber-darker.nvim',
     enabled = false,
     event = 'VimEnter',
@@ -57,10 +27,44 @@ return {
   },
   {
     'folke/tokyonight.nvim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.tokyonight'
+    end,
+  },
+  {
+    'rose-pine/neovim',
+    enabled = true,
+    event = 'VimEnter',
+    name = 'rose-pine',
+    config = function()
+      require('rose-pine').setup({
+        styles = {
+          transparency = true,
+        },
+      })
+      vim.cmd.colorscheme 'rose-pine'
+    end,
+  },
+  {
+    'scottmckendry/cyberdream.nvim',
+    enabled = false,
+    event = 'VimEnter',
+    config = function()
+      require('cyberdream').setup({
+        transparent = true,
+        cache = true,
+
+        theme = {
+          highlights = {
+            QuickScopePrimary = { fg = '#5eff6c', bg = '#181818', bold = true, underline = true },
+            QuickScopeSecondary = { fg = '#ffbd5e', bg = '#181818', bold = true, underline = true },
+          },
+        },
+      })
+
+      vim.cmd.colorscheme 'cyberdream'
     end,
   },
 }

@@ -3,7 +3,7 @@ return {
   {
     "LazyVim",
     opts = {
-      colorscheme = "gruber-darker",
+      colorscheme = "cyberdream",
     },
   },
   {
@@ -15,8 +15,25 @@ return {
     end,
   },
   {
-    "blazkowolf/gruber-darker.nvim",
+    "scottmckendry/cyberdream.nvim",
     enabled = true,
+    event = "VimEnter",
+    config = function()
+      require("cyberdream").setup({
+        transparent = true,
+        cache = true,
+        theme = {
+          highlights = {
+            QuickScopePrimary = { fg = "#5eff6c", bg = "#181818", bold = true, underline = true },
+            QuickScopeSecondary = { fg = "#ffbd5e", bg = "#181818", bold = true, underline = true },
+          },
+        },
+      })
+    end,
+  },
+  {
+    "blazkowolf/gruber-darker.nvim",
+    enabled = false,
     event = "VimEnter",
     config = function()
       require("config.gruber-darker")

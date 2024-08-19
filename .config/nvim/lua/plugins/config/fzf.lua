@@ -1,5 +1,10 @@
 local fzf = require 'fzf-lua'
 local actions = require 'fzf-lua.actions'
+local utils = require 'fzf-lua.utils'
+
+local function hl_validate(hl)
+  return not utils.is_hl_cleared(hl) and hl or nil
+end
 
 local rg_cmd =
   'rg --files -l ".*" --follow --color=never --sortr=modified -g "!.git/" -g "!*.png"  -g "!node_modules/" -g "!*.jpeg" -g "!*.jpg" -g "!*.ico" -g "!*.exe" -g "!*.out"'
@@ -11,7 +16,6 @@ local m_keys = {
 }
 -- calling `setup` is optional for customization
 fzf.setup({
-  'borderless_full',
   defaults = {
     formatter = { 'path.filename_first', 2 },
   },
@@ -24,6 +28,21 @@ fzf.setup({
     preview = {
       default = 'bat', -- override the default previewer?
     },
+  },
+  hls = {
+    normal = hl_validate 'TelescopeNormal',
+    border = hl_validate 'TelescopeBorder',
+    title = hl_validate 'TelescopePromptTitle',
+    help_normal = hl_validate 'TelescopeNormal',
+    help_border = hl_validate 'TelescopeBorder',
+    preview_normal = hl_validate 'TelescopeNormal',
+    preview_border = hl_validate 'TelescopeBorder',
+    preview_title = hl_validate 'TelescopePreviewTitle',
+    -- builtin preview only
+    cursor = hl_validate 'Cursor',
+    cursorline = hl_validate 'TelescopeSelection',
+    cursorlinenr = hl_validate 'TelescopeSelection',
+    search = hl_validate 'IncSearch',
   },
   keymap = {
     fzf = {
@@ -160,7 +179,6 @@ vim.lsp.handlers['textDocument/codeAction'] = fzf.lsp_code_actions
 vim.lsp.handlers['textDocument/references'] = function()
   fzf.lsp_references({
     jump_to_single_result = true,
-
     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
   })
 end
@@ -276,7 +294,11 @@ local function project_files(default_opts)
     -- Either use one of the following .local/bin/myscripts/sort_file.rs or .local/bin/myscripts/sorting_filev3.cpp
     -- compile and then add to `PATH`
     --`sort_files` is a program that sorts files based on modified time, recently modified files will be shown first
-    opts.cmd = 'git ls-files --exclude-standard --cached --others | sort_files' -- '--others' is used to show untracked files
+    if vim.fn.executable 'sort_files' == 1 then
+      opts.cmd = 'git ls-files --exclude-standard --cached --others | sort_files' -- '--others' is used to show untracked files
+    else
+      vim.cmd 'echohl WarningMsg | echo "`sort_files` not found in `PATH`. Please compile the program" | echohl None'
+    end
     fzf.git_files(opts)
   else
     opts.cmd = rg_cmd
