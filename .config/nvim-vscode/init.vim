@@ -1,3 +1,21 @@
+function! Cond(Cond, ...)
+  let opts = get(a:000, 0, {})
+  return a:Cond ? opts : extend(opts, { 'on': [], 'for': [] })
+endfunction
+
+call plug#begin(stdpath('data') . '/plugged')
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'unblevable/quick-scope'
+Plug 'svermeulen/vim-subversive'
+if !exists('g:vscode')
+  Plug 'olivercederborg/poimandres.nvim'
+  Plug 'windwp/nvim-autopairs'
+endif
+
+call plug#end()
 set nocompatible
 set tabstop=2
 set shiftwidth=2
@@ -20,7 +38,12 @@ if !exists('g:vscode')
   endif
   set splitbelow splitright
   set background=dark
-  colorscheme habamax
+  set softtabstop=-1
+  set swapfile
+  set undofile undolevels=10000
+  set wildmode=longest:full,full
+  set wildignorecase
+  colorscheme poimandres
 endif
 set ignorecase
 set smartcase
@@ -32,20 +55,6 @@ let g:mapleader = " "
 
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_lazy_highlight = 1
-
-function! Cond(Cond, ...)
-  let opts = get(a:000, 0, {})
-  return a:Cond ? opts : extend(opts, { 'on': [], 'for': [] })
-endfunction
-
-call plug#begin(stdpath('data') . '/plugged')
-Plug 'junegunn/vim-easy-align'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'unblevable/quick-scope'
-Plug 'svermeulen/vim-subversive'
-call plug#end()
 
 if exists('g:vscode')
   map ze <Cmd>call VSCodeNotify('scrollLineDown')<CR>
@@ -166,3 +175,20 @@ augroup highlight_yank
   autocmd!
   autocmd TextYankPost * silent! lua vim.highlight.on_yank { higroup="IncSearch", timeout=100 }
 augroup END
+
+lua << EOF
+if vim.g.vscode == nil then
+  local o = vim.opt
+  o.undodir = { vim.fn.stdpath 'state' .. '/undodir//' }
+  o.directory = { vim.fn.stdpath 'state' .. '/swap//' }
+  o.backupdir = { vim.fn.stdpath 'state' .. '/backup//' }
+  o.sessionoptions:append({
+  'globals',
+  })
+  o.sessionoptions:remove 'folds'
+  local ok_pairs, pairs = pcall(require,"nvim-autopairs")
+  if ok_pairs then
+    pairs.setup{  map_cr = true,  fast_wrap = {},}
+  end
+end
+EOF

@@ -23,6 +23,9 @@ vim.api.nvim_create_autocmd("FileType", {
   desc = "Set spaces to 2",
   pattern = {
     "lua",
+    "php",
+    "blade",
+    "heex",
     "jsonc",
     "json",
     "json5",

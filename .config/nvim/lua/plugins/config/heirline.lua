@@ -31,7 +31,7 @@ heirline.setup({
           -- local bg = '#393d56'
           -- rose-pine
           local fg = '#f2e9e1'
-          local bg = '#286983'
+          local bg = '#214655'
           return vim.tbl_extend('force', hl.get_attributes(tab_type), { fg = fg, bg = bg })
         else
           return hl.get_attributes(tab_type)

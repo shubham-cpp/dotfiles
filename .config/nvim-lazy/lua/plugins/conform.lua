@@ -3,14 +3,14 @@ local prettier = { "prettierd", "prettier" }
 return {
   {
     "williamboman/mason.nvim",
-    opts = function(_, opts)
-      opts.PATH = "append"
-      opts.ensure_installed = vim.tbl_extend("force", opts.ensure_installed, {
+    opts = {
+      PATH = "append",
+      ensure_installed = {
         "prettierd",
         "prettier",
         "shfmt",
-      })
-    end,
+      },
+    },
   },
   {
     "stevearc/conform.nvim",

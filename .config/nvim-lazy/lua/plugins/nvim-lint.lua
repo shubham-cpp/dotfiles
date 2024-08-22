@@ -2,14 +2,14 @@
 return {
   {
     "williamboman/mason.nvim",
-    opts = function(_, opts)
-      opts.PATH = "append"
-      opts.ensure_installed = vim.tbl_extend("force", opts.ensure_installed, {
+    opts = {
+      PATH = "append",
+      ensure_installed = {
         "eslint_d",
         "shellcheck",
         "golangci-lint",
-      })
-    end,
+      },
+    },
   },
 
   {

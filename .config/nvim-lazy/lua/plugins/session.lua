@@ -40,20 +40,20 @@ return {
           return name
         end
       end
-      vim.api.nvim_create_autocmd("UIEnter", {
-        desc = "Load session on VimEnter",
-        group = au_group,
-        callback = function()
-          -- Only load the session if nvim was started with no args
-          if vim.fn.argc(-1) == 0 then
-            vim.schedule(function()
-              require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
-            end)
-          end
-        end,
-        nested = true,
-      })
-      vim.api.nvim_create_autocmd("ExitPre", {
+      -- vim.api.nvim_create_autocmd("UIEnter", {
+      --   desc = "Load session on VimEnter",
+      --   group = au_group,
+      --   callback = function()
+      --     -- Only load the session if nvim was started with no args
+      --     if vim.fn.argc(-1) == 0 then
+      --       vim.schedule(function()
+      --         require("resession").load(get_session_name(), { dir = "dirsession", silence_errors = true })
+      --       end)
+      --     end
+      --   end,
+      --   nested = true,
+      -- })
+      vim.api.nvim_create_autocmd("VimLeavePre", {
         desc = "Save session on VimLeavePre",
         group = au_group,
         callback = function()
