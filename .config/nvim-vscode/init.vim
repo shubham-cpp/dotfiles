@@ -10,8 +10,11 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'unblevable/quick-scope'
 Plug 'svermeulen/vim-subversive'
+Plug 'folke/flash.nvim'
+Plug 'monaqa/dial.nvim'
+Plug 'tpope/vim-abolish'
 if !exists('g:vscode')
-  Plug 'olivercederborg/poimandres.nvim'
+  Plug 'tiagovla/tokyodark.nvim'
   Plug 'windwp/nvim-autopairs'
 endif
 
@@ -19,6 +22,7 @@ call plug#end()
 set nocompatible
 set tabstop=2
 set shiftwidth=2
+set softtabstop=-1
 set expandtab
 set number
 set relativenumber
@@ -38,12 +42,15 @@ if !exists('g:vscode')
   endif
   set splitbelow splitright
   set background=dark
-  set softtabstop=-1
   set swapfile
   set undofile undolevels=10000
   set wildmode=longest:full,full
   set wildignorecase
-  colorscheme poimandres
+
+  nnoremap <C-j> <C-w><C-j>
+  nnoremap <C-k> <C-w><C-k>
+  nnoremap <C-h> <C-w><C-h>
+  nnoremap <C-l> <C-w><C-l>
 endif
 set ignorecase
 set smartcase
@@ -186,9 +193,5 @@ if vim.g.vscode == nil then
   'globals',
   })
   o.sessionoptions:remove 'folds'
-  local ok_pairs, pairs = pcall(require,"nvim-autopairs")
-  if ok_pairs then
-    pairs.setup{  map_cr = true,  fast_wrap = {},}
-  end
 end
 EOF

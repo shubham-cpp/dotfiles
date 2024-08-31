@@ -1,6 +1,6 @@
 ---@diagnostic disable-next-line: missing-fields
 require("gruber-darker").setup({})
-vim.cmd.colorscheme("gruber-darker")
+-- vim.cmd.colorscheme("gruber-darker")
 local c = require("gruber-darker.palette")
 
 vim.api.nvim_set_hl(0, "MatchParenCur", { bold = true })

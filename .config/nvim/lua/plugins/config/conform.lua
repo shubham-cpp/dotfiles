@@ -49,7 +49,9 @@ require('conform').setup({
     vue = prettier_eslint,
     nim = { 'nimpretty' },
     zig = { 'zigfmt' },
-    php = { 'phpcbf', 'php_cs_fixer' },
+    php = function(bufnr)
+      return { first(bufnr, 'pint', 'php-cs-fixer', 'phpcbf') }
+    end,
     blade = { 'blade-formatter' },
     gleam = { 'gleam' },
     -- You can use a function here to determine the formatters dynamically

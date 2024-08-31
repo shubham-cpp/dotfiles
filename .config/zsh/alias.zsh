@@ -79,4 +79,5 @@ alias gcl='git clone'
 alias gch='git checkout'
 
 alias p="pnpm"
-alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+# alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+alias y='yazi'

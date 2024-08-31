@@ -1,3 +1,10 @@
+local cmp = require 'cmp'
+local types = require 'cmp.types'
+local sources = require 'cmp.config.sources'
+local lspkind = require 'lspkind'
+local snippet = 'luasnip'
+local luasnip = require 'luasnip'
+
 local function feedkey(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
@@ -6,12 +13,33 @@ local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
 end
+local priority_map = {
+  [types.lsp.CompletionItemKind.EnumMember] = 1,
+  [types.lsp.CompletionItemKind.Variable] = 2,
+  [types.lsp.CompletionItemKind.Text] = 100,
+}
 
-local cmp = require 'cmp'
-local sources = require 'cmp.config.sources'
-local lspkind = require 'lspkind'
-local snippet = 'luasnip'
-local luasnip = require 'luasnip'
+local kind = function(entry1, entry2)
+  local kind1 = entry1:get_kind()
+  local kind2 = entry2:get_kind()
+  kind1 = priority_map[kind1] or kind1
+  kind2 = priority_map[kind2] or kind2
+  if kind1 ~= kind2 then
+    if kind1 == types.lsp.CompletionItemKind.Snippet then
+      return true
+    end
+    if kind2 == types.lsp.CompletionItemKind.Snippet then
+      return false
+    end
+    local diff = kind1 - kind2
+    if diff < 0 then
+      return true
+    elseif diff > 0 then
+      return false
+    end
+  end
+end
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -160,8 +188,8 @@ cmp.setup({
   sources = sources({
     {
       name = 'nvim_lsp',
-      priority = 1000,
-      max_item_count = 12,
+      priority = 100,
+      max_item_count = 20,
       entry_filter = function(entry)
         if
           (
@@ -174,44 +202,73 @@ cmp.setup({
         return true
       end,
     },
-    { name = 'lazydev', priority = 850 },
-    { name = snippet, priority = 750 },
+    { name = 'lazydev', priority = 95 },
+    { name = snippet, priority = 90 },
     {
       name = 'buffer',
       max_item_count = 10,
+      entry_filter = function(entry)
+        return not entry.exact
+      end,
       option = {
         keyword_length = 2,
-        get_bufnrs = function()
-          local bufIsSmall = function(bufnr)
-            return vim.api.nvim_buf_line_count(bufnr) < 2000
-          end
-          return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
-        end,
+        -- get_bufnrs = function()
+        --   local bufIsSmall = function(bufnr)
+        --     return vim.api.nvim_buf_line_count(bufnr) < 2000
+        --   end
+        --   return vim.tbl_filter(bufIsSmall, vim.api.nvim_list_bufs())
+        -- end,
       },
-      priority = 400,
+      priority = 40,
     },
-    { name = 'path', priority = 250 },
+    {
+      name = 'rg',
+      keyword_length = 4,
+      max_item_count = 10,
+      priority_weight = 50,
+      option = {
+        additional_arguments = '--smart-case --hidden',
+        set_filetype = true,
+        marker = ' ❰❰❰',
+      },
+      entry_filter = function(entry)
+        return not entry.exact
+      end,
+    },
+    { name = 'path', priority = 50 },
+    {
+      name = 'look',
+      keyword_length = 4,
+      priority = 30,
+      option = {
+        convert_case = true,
+        loud = true,
+        --dict = '/usr/share/dict/words'
+      },
+    },
   }),
-  -- sorting = {
-  --   priority_weight = 2,
-  --   comparators = {
-  --     cmp.config.compare.offset,
-  --     cmp.config.compare.exact,
-  --     cmp.config.compare.score,
-  --     cmp.config.compare.recently_used,
-  --     cmp.config.compare.locality,
-  --     cmp.config.compare.kind,
-  --     cmp.config.compare.sort_text,
-  --     cmp.config.compare.length,
-  --     cmp.config.compare.order,
-  --   },
-  -- },
+  sorting = {
+    priority_weight = 100,
+    comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.score,
+      require('cmp-under-comparator').under,
+      kind,
+      cmp.config.compare.recently_used,
+      cmp.config.compare.locality,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
+  },
+  ---@diagnostic disable-next-line: missing-fields
   formatting = {
     -- fields = { 'kind', 'abbr', 'menu' },
     -- format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
     format = function(entry, item)
       local color_item = require('nvim-highlight-colors').format(entry, { kind = item.kind })
-      item = require('lspkind').cmp_format({
+      item = lspkind.cmp_format({
         -- any lspkind format settings here
       })(entry, item)
       if color_item.abbr_hl_group then

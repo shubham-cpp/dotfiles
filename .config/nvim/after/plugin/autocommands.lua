@@ -82,6 +82,24 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
   end,
 })
+vim.api.nvim_create_autocmd('FileType', {
+  group = augroup 'webdev',
+  desc = 'Some extra settings',
+  pattern = {
+    'typescriptreact',
+    'typescript',
+    'typescript.tsx',
+    'typescript.jsx',
+    'javascriptreact',
+    'javascript',
+    'javascript.jsx',
+  },
+  callback = function()
+    vim.opt_local.path:append '$PWD/node_modules'
+    vim.opt_local.suffixesadd:append({ '.js', '.jsx', '.tsx' })
+    vim.opt_local.cinoptions:append({ 'j1', 'J1' })
+  end,
+})
 
 vim.api.nvim_create_autocmd('FileType', {
   group = augroup 'webdev',
@@ -90,6 +108,7 @@ vim.api.nvim_create_autocmd('FileType', {
     'lua',
     'jsonc',
     'json',
+    'yaml',
     'json5',
     'typescriptreact',
     'typescript',

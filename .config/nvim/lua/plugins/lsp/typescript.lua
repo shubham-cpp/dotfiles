@@ -112,12 +112,17 @@ return {
             end
 
             map('gD', function()
-              require('vtsls').commands.goto_source_definition(buffer)
+              -- require('vtsls').commands.goto_source_definition(buffer)
+              vim.cmd 'VtsExec goto_source_definition'
             end, 'Goto Source Definition')
 
             map('gR', function()
               require('vtsls').commands.file_references(buffer)
             end, 'File References')
+
+            map('go', function()
+              require('vtsls').commands.organize_imports(buffer)
+            end, 'Organize Imports')
             map('<leader>lo', function()
               require('vtsls').commands.organize_imports(buffer)
               -- require('vtsls').commands.add_missing_imports(buffer)

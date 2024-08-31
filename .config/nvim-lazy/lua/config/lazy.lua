@@ -50,6 +50,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.go" },
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.rust" },
+    { import = "lazyvim.plugins.extras.lang.php" },
 
     { import = "lazyvim.plugins.extras.editor.fzf" },
     -- import/override with your plugins

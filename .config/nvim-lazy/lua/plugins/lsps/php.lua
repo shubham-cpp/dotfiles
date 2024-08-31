@@ -40,27 +40,27 @@ return {
       return opts
     end,
   },
-  {
-    "mfussenegger/nvim-dap",
-    optional = true,
-    opts = function()
-      local dap = require("dap")
-
-      dap.adapters.php = {
-        type = "executable",
-        command = require("mason-registry").get_package("php-debug-adapter"):get_install_path() .. "php-debug-adapter",
-        -- command = 'node',
-        -- args = { require('mason-registry').get_package('php-debug-adapter'):get_install_path() .. '/out/phpDebug.js' }
-      }
-
-      dap.configurations.php = {
-        {
-          type = "php",
-          request = "launch",
-          name = "Listen for Xdebug",
-          port = 9000,
-        },
-      }
-    end,
-  },
+  -- {
+  --   "mfussenegger/nvim-dap",
+  --   optional = true,
+  --   opts = function()
+  --     local dap = require("dap")
+  --
+  --     dap.adapters.php = {
+  --       type = "executable",
+  --       command = require("mason-registry").get_package("php-debug-adapter"):get_install_path() .. "php-debug-adapter",
+  --       -- command = 'node',
+  --       -- args = { require('mason-registry').get_package('php-debug-adapter'):get_install_path() .. '/out/phpDebug.js' }
+  --     }
+  --
+  --     dap.configurations.php = {
+  --       {
+  --         type = "php",
+  --         request = "launch",
+  --         name = "Listen for Xdebug",
+  --         port = 9000,
+  --       },
+  --     }
+  --   end,
+  -- },
 }
