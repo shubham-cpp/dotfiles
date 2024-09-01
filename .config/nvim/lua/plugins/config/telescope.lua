@@ -86,7 +86,7 @@ M.keys = function()
     { '<leader>fS', builtin.current_buffer_fuzzy_find, desc = 'Search(Buffer)' },
     -- { '<leader>fs', builtin.live_grep, desc = 'Search(Project)' },
     { '<leader>fs', '<cmd>Telescope egrepify<cr>', desc = 'Search(Project)' },
-    { '<leader>fw', builtin.grep_string, desc = 'Search Current Word' },
+    { '<leader>fw', builtin.grep_string, desc = 'Search Current Word', mode = { 'n', 'x' } },
     { '<leader>fb', builtin.buffers, desc = 'Buffers' },
     { '<leader>fh', builtin.help_tags, desc = 'Help' },
     { '<leader>fR', builtin.oldfiles, desc = 'Old Files' },
@@ -297,6 +297,9 @@ M.config = function()
       git_bcommits = dropdown,
       lsp_document_symbols = dropdown,
       lsp_workspace_symbols = dropdown,
+      grep_string = vim.tbl_extend('force', dropdown, {
+        path_display = { 'truncate' },
+      }),
     },
     extensions = {
       ['zf-native'] = {

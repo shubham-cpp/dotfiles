@@ -128,3 +128,7 @@ end, { silent = true, desc = 'Goto Context' })
 vim.keymap.set('n', '<leader><up>', function()
   require('treesitter-context').go_to_context(vim.v.count1)
 end, { silent = true, desc = 'Goto Context' })
+
+-- for _, v in ipairs(vim.fn.readdir(vim.g.base46_cache)) do
+--   dofile(vim.g.base46_cache .. v)
+-- end

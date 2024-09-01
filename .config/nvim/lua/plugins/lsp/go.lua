@@ -32,7 +32,18 @@ return {
           settings = {
             gopls = {
               experimentalPostfixCompletions = true,
-              analyses = { unusedparams = true, shadow = true, nilness = true, unusedwrite = true },
+              analyses = {
+                ST1003 = true,
+                fillreturns = true,
+                nilness = true,
+                nonewvars = true,
+                shadow = true,
+                undeclaredname = true,
+                unreachable = true,
+                unusedparams = true,
+                unusedwrite = true,
+                useany = true,
+              },
               hints = {
                 assignVariableTypes = true,
                 compositeLiteralFields = true,
@@ -42,14 +53,24 @@ return {
                 parameterNames = true,
                 rangeVariableTypes = true,
               },
+              buildFlags = { '-tags', 'integration' },
+              completeUnimported = true,
+              diagnosticsDelay = '500ms',
+              gofumpt = true,
+              matcher = 'Fuzzy',
+              semanticTokens = true,
+              symbolMatcher = 'fuzzy',
+              usePlaceholders = true,
               staticcheck = true,
-              -- ui = {
-              --   completion = {
-              --     usePlaceholders = true,
-              --   },
-              -- },
               codelenses = {
                 usePlaceholders = true,
+                gc_details = true, -- Show a code lens toggling the display of gc's choices.
+                generate = true, -- show the `go generate` lens.
+                regenerate_cgo = true,
+                test = true,
+                tidy = true,
+                upgrade_dependency = true,
+                vendor = true,
               },
             },
           },

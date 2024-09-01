@@ -44,12 +44,10 @@ alias va="env NVIM_APPNAME=nvim-astro nvim"
 alias vl="env NVIM_APPNAME=nvim-lazy nvim"
 alias vv="env NVIM_APPNAME=nvim-test nvim"
 alias vc="env NVIM_APPNAME=nvim-chad nvim"
-alias se="sudoedit nvim"
+alias se="sudoedit"
 
 
 alias xcp="xclip -i -r -sel clip"
-alias rg="rg -i"
-alias r="ranger"
 alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
 
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
@@ -79,5 +77,7 @@ alias gcl='git clone'
 alias gch='git checkout'
 
 alias p="pnpm"
-# alias y='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 alias y='yazi'
+
+alias sc="./vendor/bin/sail composer"
+alias sa="./vendor/bin/sail artisan"

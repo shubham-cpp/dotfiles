@@ -84,17 +84,15 @@ return {
               },
             },
             typescript = {
+              suggest = { completeFunctionCalls = true },
               updateImportsOnFileMove = { enabled = 'always' },
-              suggest = {
-                completeFunctionCalls = true,
-              },
               inlayHints = {
-                enumMemberValues = { enabled = true },
-                functionLikeReturnTypes = { enabled = true },
-                parameterNames = { enabled = 'literals' },
+                parameterNames = { enabled = 'all' },
                 parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
                 propertyDeclarationTypes = { enabled = true },
-                variableTypes = { enabled = false },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
               },
             },
           }
@@ -144,13 +142,54 @@ return {
     },
   },
   {
-    'dmmulroy/ts-error-translator.nvim',
-    ft = {
-      'typescript',
-      'typescriptreact',
-      'javascript',
-      'javascriptreact',
-    },
+    'vuki656/package-info.nvim',
+    dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {},
+    event = 'BufRead package.json',
+  },
+  -- {
+  --   'dmmulroy/ts-error-translator.nvim',
+  --   ft = {
+  --     'typescript',
+  --     'typescriptreact',
+  --     'javascript',
+  --     'javascriptreact',
+  --   },
+  --   opts = {},
+  -- },
+  {
+    'dmmulroy/ts-error-translator.nvim',
+    lazy = true,
+    dependencies = {
+      'AstroNvim/astrolsp',
+      ---@param opts AstroLSPOpts
+      opts = function(_, opts)
+        if not opts.lsp_handlers then
+          opts.lsp_handlers = {}
+        end
+        local event = 'textDocument/publishDiagnostics'
+        local orig = opts.lsp_handlers[event] or vim.lsp.handlers[event]
+        opts.lsp_handlers[event] = function(err, result, ctx, config)
+          local client = vim.lsp.get_client_by_id(ctx.client_id)
+          if
+            client
+            and vim.tbl_contains({
+              'astro',
+              'svelte',
+              'tsserver',
+              'typescript-tools',
+              'volar',
+              'vtsls',
+            }, client.name)
+          then
+            vim.tbl_map(require('ts-error-translator').translate, result.diagnostics)
+          end
+          orig(err, result, ctx, config)
+        end
+      end,
+    },
+    opts = function()
+      return { auto_override_publish_diagnostics = not require('astrocore').is_available 'astrolsp' }
+    end,
   },
 }

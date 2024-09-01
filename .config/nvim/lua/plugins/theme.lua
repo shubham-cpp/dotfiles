@@ -19,7 +19,7 @@ return {
   },
   {
     'blazkowolf/gruber-darker.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.gruber-darker'
@@ -35,7 +35,7 @@ return {
   },
   {
     'rose-pine/neovim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     name = 'rose-pine',
     config = function()
@@ -45,26 +45,6 @@ return {
         },
       })
       vim.cmd.colorscheme 'rose-pine'
-    end,
-  },
-  {
-    'scottmckendry/cyberdream.nvim',
-    enabled = false,
-    event = 'VimEnter',
-    config = function()
-      require('cyberdream').setup({
-        transparent = true,
-        cache = true,
-
-        theme = {
-          highlights = {
-            QuickScopePrimary = { fg = '#5eff6c', bg = '#181818', bold = true, underline = true },
-            QuickScopeSecondary = { fg = '#ffbd5e', bg = '#181818', bold = true, underline = true },
-          },
-        },
-      })
-
-      vim.cmd.colorscheme 'cyberdream'
     end,
   },
 }

@@ -4,7 +4,6 @@ alias free="/bin/free -h"
 
 # alias curl="/bin/curl -O -L -C -"
 alias grep="/bin/grep -Ei --color=auto"
-alias rg="rg -i"
 
 # Changing "ls" to "exa"
 alias ls="eza -l --color=auto --icons --group-directories-first"
@@ -15,7 +14,6 @@ alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
 alias rm="trash-put"
-alias rmd="trash-put -rf"
 alias tls="trash-list"
 alias cls="clear"
 alias xcp="xclip -i -r -sel clip"
@@ -44,13 +42,12 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias merge="xrdb ~/.config/X11/Xresources"
 alias v="nvim"
-alias v="nvim"
 alias va="env NVIM_APPNAME=nvim-astro nvim"
 alias vl="env NVIM_APPNAME=nvim-lazy nvim"
 alias vv="env NVIM_APPNAME=nvim-test nvim"
 alias vc="env NVIM_APPNAME=nvim-chad nvim"
-alias se="sudoedit nvim"
-alias mci="make -j5 && sudo make install clean"
+alias se="sudoedit"
+alias mci="make -j(expr (nproc) - 1) && sudo make install clean"
 
 #get fastest mirrors in your neighborhood
 # alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
@@ -86,8 +83,10 @@ alias gcl="git clone"
 alias gclr="git clone --recurse-submodules"
 
 alias p="pnpm"
-# alias y='y --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 alias y='yazi'
+
+alias sc="./vendor/bin/sail composer"
+alias sa="./vendor/bin/sail artisan"
 # if /bin/grep -iq void /etc/issue*
 #     alias reboot="loginctl reboot"
 #     alias poweroff="loginctl poweroff"

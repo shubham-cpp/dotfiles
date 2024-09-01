@@ -75,6 +75,19 @@ return {
   },
   {
     'AstroNvim/astrolsp',
+    dependencies = {
+      {
+        'gbprod/phpactor.nvim',
+        enabled = false,
+        dependencies = {
+          'nvim-lua/plenary.nvim',
+        },
+        ft = 'php',
+        build = function()
+          require 'phpactor.handler.update'()
+        end,
+      },
+    },
     opts = {
       config = {
         blade = {
@@ -86,8 +99,27 @@ return {
         },
       },
       handlers = {
-        -- phpactor = false,
-        intelephense = false,
+        phpactor = false,
+        -- phpactor = function(_, opts)
+        --   require('phpactor').setup({
+        --     install = {
+        --       -- path = os.getenv('HOME') .. '',
+        --       bin = vim.fn.expand '~/Downloads/GitClones/phpactor/bin/phpactor',
+        --     },
+        --     lspconfig = {
+        --       enabled = true,
+        --       options = {
+        --         -- capabilities = opts.capabilities,
+        --         on_attach = opts.on_attach,
+        --         init_options = {
+        --           ['language_server_phpstan.enabled'] = true,
+        --           ['phpunit.enabled'] = true,
+        --         },
+        --       },
+        --     },
+        --   })
+        -- end,
+        -- intelephense = false,
         blade = false,
       },
     },
