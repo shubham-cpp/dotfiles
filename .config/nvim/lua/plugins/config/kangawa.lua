@@ -18,6 +18,13 @@ require('kanagawa').setup({
       PmenuSel = { fg = 'NONE', bg = theme.ui.bg_p2 },
       PmenuSbar = { bg = theme.ui.bg_m1 },
       PmenuThumb = { bg = theme.ui.bg_p2 },
+      QuickScopePrimary = { fg = theme.palette.autumnGreen, bg = theme.palette.sumiInk2, underline = true, bold = true },
+      QuickScopeSecondary = {
+        fg = theme.palette.autumnYellow,
+        bg = theme.palette.sumiInk2,
+        underline = true,
+        bold = true,
+      },
     }
   end,
 })

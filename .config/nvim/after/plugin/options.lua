@@ -11,6 +11,8 @@ o.shiftwidth = 2
 o.smarttab = true
 o.autoindent = true
 o.smartindent = true
+o.cindent = true
+o.complete = '.,w,b,u,t,k'
 o.smartcase = true
 o.ignorecase = true
 o.hlsearch = true
@@ -21,6 +23,8 @@ o.cursorline = true
 o.inccommand = 'split'
 o.scrolloff = 16
 o.sidescrolloff = 8
+o.autoread = true
+o.exrc = true
 o.shortmess:append({ W = true, I = true, c = true })
 o.showmode = false -- Dont show mode since we have a statusline
 o.showtabline = 2
@@ -84,7 +88,7 @@ o.iskeyword:append '-'
 -- o.statuscolumn='%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? " " : " ") : "") : " " }%=%l%s'
 -- o.statuscolumn =
 --   '%{foldlevel(v:lnum) > 0 ? (foldlevel(v:lnum) > foldlevel(v:lnum - 1) ? (foldclosed(v:lnum) == -1 ? "" : "") : "|") : " " }%=%{v:relnum?v:relnum:v:lnum}%s '
-o.fillchars:append({ foldclose = '', foldopen = '',foldsep = '|' })
+-- o.fillchars:append({ foldclose = '', foldopen = '',foldsep = '|' })
 
 if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'

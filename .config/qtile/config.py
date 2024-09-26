@@ -28,8 +28,7 @@ layouts: List[Layout] = [
         new_client_position="top",
         **layout_theme,
     ),
-    MonadWide(change_size=10, single_border_width=0,
-              single_margin=0, **layout_theme),
+    MonadWide(change_size=10, single_border_width=0, single_margin=0, **layout_theme),
     Max(),
     Floating(),
     Zoomy(),
@@ -184,3 +183,14 @@ def floating_to_top(client: WindowType):
 def remove_sticky_windows(window: WindowType):
     if window in sticky_windows:
         sticky_windows.remove(window)
+
+
+# Below is an example how to make Firefox Picture-in-Picture windows automatically sticky.
+@hook.subscribe.client_managed
+def auto_sticky_windows(window):
+    info = window.info()
+    if (
+        info["wm_class"] == ["Toolkit", "firefox"]
+        and info["name"] == "Picture-in-Picture"
+    ):
+        sticky_windows.append(window)
