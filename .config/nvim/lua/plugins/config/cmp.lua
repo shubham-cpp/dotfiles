@@ -1,6 +1,7 @@
 local cmp = require 'cmp'
 local types = require 'cmp.types'
 local sources = require 'cmp.config.sources'
+local compare = require 'cmp.config.compare'
 local lspkind = require 'lspkind'
 local snippet = 'luasnip'
 local luasnip = require 'luasnip'
@@ -14,8 +15,11 @@ local function has_words_before()
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
 end
 local priority_map = {
+  [types.lsp.CompletionItemKind.Snippet] = 0, -- top
+  [types.lsp.CompletionItemKind.Keyword] = 0, -- top
   [types.lsp.CompletionItemKind.EnumMember] = 1,
-  [types.lsp.CompletionItemKind.Variable] = 2,
+  [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method,
+  -- [types.lsp.CompletionItemKind.Variable] = 2,
   [types.lsp.CompletionItemKind.Text] = 100,
 }
 
@@ -252,19 +256,50 @@ cmp.setup({
       },
     },
   }),
+  matching = {
+    disallow_fuzzy_matching = false, -- fmodify -> fnamemodify
+    disallow_fullfuzzy_matching = true,
+    disallow_partial_fuzzy_matching = true,
+    disallow_partial_matching = false, -- fb -> foo_bar
+    disallow_prefix_unmatching = true, -- bar -> foo_bar
+    disallow_symbol_nonprefix_matching = true, -- _bar -> foo_bar
+  },
   sorting = {
-    priority_weight = 100,
+    priority_weight = 10,
+    -- comparators = {
+    --   cmp.config.compare.offset,
+    --   cmp.config.compare.exact,
+    --   cmp.config.compare.score,
+    --   require('cmp-under-comparator').under,
+    --   kind,
+    --   cmp.config.compare.recently_used,
+    --   cmp.config.compare.locality,
+    --   cmp.config.compare.sort_text,
+    --   cmp.config.compare.length,
+    --   cmp.config.compare.order,
+    -- },
     comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
+      compare.offset,
+      compare.exact,
+      function(entry1, entry2) -- sort by length ignoring "=~"
+        local len1 = string.len(string.gsub(entry1.completion_item.label, '[=~()_]', ''))
+        local len2 = string.len(string.gsub(entry2.completion_item.label, '[=~()_]', ''))
+        if len1 ~= len2 then
+          return len1 - len2 < 0
+        end
+      end,
       require('cmp-under-comparator').under,
+      compare.recently_used, ---@diagnostic disable-line
       kind,
-      cmp.config.compare.recently_used,
-      cmp.config.compare.locality,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
+      function(entry1, entry2) -- score by lsp, if available
+        local t1 = entry1.completion_item.sortText
+        local t2 = entry2.completion_item.sortText
+        if t1 ~= nil and t2 ~= nil and t1 ~= t2 then
+          return t1 < t2
+        end
+      end,
+      compare.score,
+      compare.order,
     },
   },
   ---@diagnostic disable-next-line: missing-fields

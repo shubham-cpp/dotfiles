@@ -4,7 +4,9 @@ return {
     'williamboman/mason.nvim',
     opts = function(_, opts)
       opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+        'cspell',
         'html-lsp',
+        'stylelint',
         'css-lsp',
         'prettierd',
         'emmet-language-server',

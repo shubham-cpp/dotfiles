@@ -40,6 +40,7 @@ return {
     opts = {
       handlers = {
         tsserver = false,
+        ts_ls = false,
         eslint = false,
         vtsls = function(server, opts)
           require('lspconfig.configs').vtsls = require('vtsls').lspconfig

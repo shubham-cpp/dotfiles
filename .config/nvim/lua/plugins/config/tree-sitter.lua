@@ -11,6 +11,7 @@ configs.setup({
       end
     end,
   },
+  indent = { enable = false },
   matchup = { enable = true },
   ensure_installed = {
     'bash',
