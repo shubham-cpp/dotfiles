@@ -45,7 +45,11 @@ return {
   {
     'ricardoramirezr/blade-nav.nvim',
     dependencies = {
-      'hrsh7th/nvim-cmp', -- if using nvim-cmp
+      -- 'hrsh7th/nvim-cmp',
+      {
+        'iguanacucumber/magazine.nvim',
+        name = 'nvim-cmp', -- Otherwise highlighting gets messed up
+      },
     },
     ft = { 'blade', 'php' },
   },

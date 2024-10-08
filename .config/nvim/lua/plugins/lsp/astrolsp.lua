@@ -16,7 +16,11 @@ return {
       },
     },
     'williamboman/mason-lspconfig.nvim',
-    'hrsh7th/nvim-cmp',
+    -- 'hrsh7th/nvim-cmp',
+    {
+      'iguanacucumber/magazine.nvim',
+      name = 'nvim-cmp', -- Otherwise highlighting gets messed up
+    },
   },
   opts = require('plugins.config.astrolsp').opts,
   -- config = require('plugins.config.astrolsp').config,

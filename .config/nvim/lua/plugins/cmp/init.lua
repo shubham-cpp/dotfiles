@@ -1,11 +1,13 @@
 ---@type LazySpec
 return {
-  'hrsh7th/nvim-cmp',
-  event = 'BufReadPre',
-  version = false,
-  commit = 'b356f2c',
-  pin = true,
+  -- 'hrsh7th/nvim-cmp',
   -- commit = 'b356f2c',
+  -- pin = true,
+  -- version = false,
+  'iguanacucumber/magazine.nvim',
+  name = 'nvim-cmp', -- Otherwise highlighting gets messed up
+  enabled = true,
+  event = 'BufReadPre',
   dependencies = {
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',

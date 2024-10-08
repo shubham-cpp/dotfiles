@@ -4,7 +4,7 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
-    enabled = false,
+    enabled = true,
     config = function()
       require 'plugins.config.catppuccin'
     end,
@@ -45,21 +45,6 @@ return {
         },
       })
       vim.cmd.colorscheme 'rose-pine'
-    end,
-  },
-  {
-    'gmr458/vscode_modern_theme.nvim',
-    enabled = true,
-    event = 'VimEnter',
-    config = function()
-      require('vscode_modern').setup({
-        cursorline = true,
-        transparent_background = false,
-      })
-      vim.cmd.colorscheme 'vscode_modern'
-
-      vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#E5C324', bg = '#121212', underline = true, bold = true })
-      vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#53D14E', bg = '#121212', underline = true, bold = true })
     end,
   },
 }

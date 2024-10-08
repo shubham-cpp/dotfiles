@@ -191,7 +191,10 @@ M.opts = {
 
   handlers = {
     function(server, opts)
-      opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+      local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+      if ok then
+        opts.capabilities = cmp_nvim_lsp.default_capabilities(opts.capabilities)
+      end
       require('lspconfig')[server].setup(opts)
     end,
     efm = false,
