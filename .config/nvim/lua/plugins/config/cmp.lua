@@ -14,32 +14,14 @@ local function has_words_before()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
 end
-local priority_map = {
-  -- [types.lsp.CompletionItemKind.Snippet] = 0, -- top
-  -- [types.lsp.CompletionItemKind.Keyword] = 0, -- top
-  [types.lsp.CompletionItemKind.EnumMember] = 1,
-  -- [types.lsp.CompletionItemKind.Variable] = types.lsp.CompletionItemKind.Method,
-  [types.lsp.CompletionItemKind.Variable] = 2,
-  [types.lsp.CompletionItemKind.Text] = 100,
-}
 
-local kind = function(entry1, entry2)
-  local kind1 = entry1:get_kind()
-  local kind2 = entry2:get_kind()
-  kind1 = priority_map[kind1] or kind1
-  kind2 = priority_map[kind2] or kind2
-  if kind1 ~= kind2 then
-    if kind1 == types.lsp.CompletionItemKind.Snippet then
-      return true
-    end
-    if kind2 == types.lsp.CompletionItemKind.Snippet then
+local function deprio(kind)
+  return function(e1, e2)
+    if e1:get_kind() == kind then
       return false
     end
-    local diff = kind1 - kind2
-    if diff < 0 then
+    if e2:get_kind() == kind then
       return true
-    elseif diff > 0 then
-      return false
     end
   end
 end
@@ -47,21 +29,11 @@ end
 cmp.setup({
   snippet = {
     expand = function(args)
-      -- vim.fn['vsnip#anonymous'](args.body)
       luasnip.lsp_expand(args.body)
     end,
   },
-  experimental = {
-    ghost_text = false,
-    native_menu = false,
-  },
+  experimental = { ghost_text = false, native_menu = false },
   window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
-  -- window = {
-  --   documentation = cmp.config.window.bordered({
-  --     winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
-  --   }),
-  -- },
-
   duplicates = {
     nvim_lsp = 1,
     lazydev = 1,
@@ -70,13 +42,10 @@ cmp.setup({
     buffer = 1,
     path = 1,
   },
+
   mapping = {
-    ['<C-d>'] = cmp.mapping({
-      i = cmp.mapping.scroll_docs(-4),
-    }),
-    ['<C-u>'] = cmp.mapping({
-      i = cmp.mapping.scroll_docs(4),
-    }),
+    ['<C-d>'] = cmp.mapping({ i = cmp.mapping.scroll_docs(-4) }),
+    ['<C-u>'] = cmp.mapping({ i = cmp.mapping.scroll_docs(4) }),
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-e>'] = cmp.mapping.close(),
     ['<CR>'] = cmp.mapping({
@@ -161,9 +130,6 @@ cmp.setup({
         },
       },
     }),
-    -- ['<C-x><C-f>'] = cmp.mapping.complete({
-    --   config = { sources = { { name = 'path' } } },
-    -- }),
     ['<Tab>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.select_next_item()
@@ -177,7 +143,7 @@ cmp.setup({
       elseif has_words_before() then
         cmp.complete()
       else
-        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
+        fallback()
       end
     end, { 'i', 's' }),
 
@@ -256,51 +222,21 @@ cmp.setup({
       },
     },
   }),
-  -- matching = {
-  --   disallow_fuzzy_matching = false, -- fmodify -> fnamemodify
-  --   disallow_fullfuzzy_matching = true,
-  --   disallow_partial_fuzzy_matching = true,
-  --   disallow_partial_matching = false, -- fb -> foo_bar
-  --   disallow_prefix_unmatching = true, -- bar -> foo_bar
-  --   disallow_symbol_nonprefix_matching = true, -- _bar -> foo_bar
-  -- },
   sorting = {
     priority_weight = 100,
     comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.score,
-      require('cmp-under-comparator').under,
-      kind,
-      cmp.config.compare.recently_used,
-      cmp.config.compare.locality,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
+      deprio(types.lsp.CompletionItemKind.Text),
+      compare.exact,
+      compare.offset,
+      compare.score,
+      -- require('cmp-under-comparator').under,
+      compare.recently_used,
+      compare.kind,
+      compare.locality,
+      -- compare.sort_text,
+      compare.length,
+      compare.order,
     },
-    -- comparators = {
-    --   compare.offset,
-    --   compare.exact,
-    --   function(entry1, entry2) -- sort by length ignoring "=~"
-    --     local len1 = string.len(string.gsub(entry1.completion_item.label, '[=~()_]', ''))
-    --     local len2 = string.len(string.gsub(entry2.completion_item.label, '[=~()_]', ''))
-    --     if len1 ~= len2 then
-    --       return len1 - len2 < 0
-    --     end
-    --   end,
-    --   require('cmp-under-comparator').under,
-    --   compare.recently_used, ---@diagnostic disable-line
-    --   kind,
-    --   function(entry1, entry2) -- score by lsp, if available
-    --     local t1 = entry1.completion_item.sortText
-    --     local t2 = entry2.completion_item.sortText
-    --     if t1 ~= nil and t2 ~= nil and t1 ~= t2 then
-    --       return t1 < t2
-    --     end
-    --   end,
-    --   compare.score,
-    --   compare.order,
-    -- },
   },
   ---@diagnostic disable-next-line: missing-fields
   formatting = {
@@ -309,23 +245,8 @@ cmp.setup({
       mode = 'symbol',
       maxwidth = 50,
       ellipsis_char = '...',
-      symbol_map = {
-        Copilot = '',
-      },
+      symbol_map = { Copilot = '' },
     }),
-    -- fields = { 'kind', 'abbr', 'menu' },
-    -- format = lspkind.cmp_format({ with_text = true, maxwidth = 50 }),
-    -- format = function(entry, item)
-    --   local color_item = require('nvim-highlight-colors').format(entry, { kind = item.kind })
-    --   item = lspkind.cmp_format({
-    --     -- any lspkind format settings here
-    --   })(entry, item)
-    --   if color_item.abbr_hl_group then
-    --     item.kind_hl_group = color_item.abbr_hl_group
-    --     item.kind = color_item.abbr
-    --   end
-    --   return item
-    -- end,
   },
 })
 cmp.setup.cmdline(':', {

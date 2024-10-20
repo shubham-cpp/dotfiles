@@ -5,9 +5,13 @@ return {
   branch = 'v0.6', --recommended as each new version will have breaking changes
   enabled = true,
   config = function()
-    require('ultimate-autopair').init({
+    local ok_cmp, _ = pcall(require, 'cmp')
+    local inits = {
       require('ultimate-autopair').extend_default({}),
-      { profile = require('ultimate-autopair.experimental.cmpair').init },
-    })
+    }
+    if ok_cmp then
+      table.insert(inits, { profile = require('ultimate-autopair.experimental.cmpair').init })
+    end
+    require('ultimate-autopair').init(inits)
   end,
 }
