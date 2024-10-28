@@ -16,19 +16,13 @@ local m_keys = {
 }
 -- calling `setup` is optional for customization
 fzf.setup({
-  defaults = {
-    formatter = { 'path.filename_first', 2 },
-  },
+  defaults = { formatter = { 'path.filename_first', 2 } },
   fzf_opts = {
     ['--layout'] = 'reverse',
     ['--info'] = 'inline-right',
     -- ['--tiebreak'] = 'end',
   },
-  winopts = {
-    preview = {
-      default = 'bat', -- override the default previewer?
-    },
-  },
+  winopts = { preview = { default = 'bat' } },
   hls = {
     normal = hl_validate 'TelescopeNormal',
     border = hl_validate 'TelescopeBorder',

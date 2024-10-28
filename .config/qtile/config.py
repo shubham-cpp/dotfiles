@@ -139,6 +139,8 @@ def assign_app_group(client: WindowType) -> None:
         "Thorium-browser",
         "thorium-browser",
         "vieb",
+        "io.github.ungoogled_software.ungoogled_chromium",
+        "Io.github.ungoogled_software.ungoogled_chromium",
     ]:
         client.togroup("2", switch_group=True)
     elif (wm_class[0] or wm_class[1]) in [

@@ -44,10 +44,11 @@ return {
       windows = { preview = true, width_preview = 45 },
     })
     require('lsp-file-operations').setup()
+
     local map_split = function(buf_id, lhs, direction, close_on_file)
       local rhs = function()
         local new_target_window
-        local cur_target_window = require('mini.files').get_target_window()
+        local cur_target_window = require('mini.files').get_explorer_state().target_window
         if cur_target_window ~= nil then
           vim.api.nvim_win_call(cur_target_window, function()
             vim.cmd('belowright ' .. direction .. ' split')
@@ -72,11 +73,17 @@ return {
       desc = 'Open in split(gs) or vsplit(gv)',
       callback = function(args)
         local buf_id = args.data.buf_id
+
         -- Tweak keys to your liking
         map_split(buf_id, 'gs', 'horizontal', false)
         map_split(buf_id, 'gv', 'vertical', false)
         map_split(buf_id, 'gS', 'horizontal', true)
         map_split(buf_id, 'gV', 'vertical', true)
+
+        map_split(buf_id, '<C-w>s', 'horizontal', false)
+        map_split(buf_id, '<C-w>v', 'vertical', false)
+        map_split(buf_id, '<C-w>S', 'horizontal', true)
+        map_split(buf_id, '<C-w>V', 'vertical', true)
       end,
     })
     local events = {

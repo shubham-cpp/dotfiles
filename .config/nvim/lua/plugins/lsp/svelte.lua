@@ -51,6 +51,11 @@ return {
               plugin = { svelte = { defaultScriptLanguage = 'typescript' } },
             },
           },
+          capabilities = {
+            workspace = {
+              didChangeWatchedFiles = vim.fn.has 'nvim-0.10' == 0 and { dynamicRegistration = true },
+            },
+          },
         },
       },
     },

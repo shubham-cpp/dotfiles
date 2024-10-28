@@ -198,7 +198,7 @@ cmp.setup({
     },
     {
       name = 'rg',
-      keyword_length = 4,
+      keyword_length = 3,
       max_item_count = 10,
       priority_weight = 50,
       option = {
@@ -206,11 +206,12 @@ cmp.setup({
         set_filetype = true,
         marker = ' ❰❰❰',
       },
-      entry_filter = function(entry)
-        return not entry.exact
-      end,
+      -- entry_filter = function(entry)
+      --   return not entry.exact
+      -- end,
     },
-    { name = 'path', priority = 50 },
+    -- { name = 'path', priority = 50 },
+    { name = 'async_path', priority = 50, option = { trailing_slash = false } },
     {
       name = 'look',
       keyword_length = 4,

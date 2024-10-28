@@ -4,7 +4,7 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
-    enabled = true,
+    enabled = false,
     config = function()
       require 'plugins.config.catppuccin'
     end,
@@ -45,6 +45,14 @@ return {
         },
       })
       vim.cmd.colorscheme 'rose-pine'
+    end,
+  },
+  {
+    'AlexvZyl/nordic.nvim',
+    enabled = true,
+    event = 'VimEnter',
+    config = function()
+      require 'plugins.config.nordic'
     end,
   },
 }
