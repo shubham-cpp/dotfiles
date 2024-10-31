@@ -132,7 +132,7 @@ return {
       ["ctrl-x"] = actions.file_split,
       ["ctrl-q"] = actions.file_edit_or_qf,
     }
-    opts.defaults = { formatter = "path.filename_first" }
+    opts.defaults = { formatter = { "path.filename_first", 2 } }
     opts.keymap = vim.tbl_deep_extend("force", opts.keymap or {}, {
       fzf = {
         ["alt-a"] = "toggle-all",
@@ -153,10 +153,7 @@ return {
       -- ['--tiebreak'] = 'end',
     })
     opts.files = vim.tbl_deep_extend("force", opts.files or {}, {
-      fzf_opts = {
-        ["--layout"] = "reverse",
-        ["--tiebreak"] = "chunk",
-      },
+      fzf_opts = { ["--layout"] = "reverse", ["--tiebreak"] = "chunk" },
       winopts = {
         height = 0.55,
         width = 0.65,
@@ -175,22 +172,11 @@ return {
       files = {
         cmd = "git ls-files --exclude-standard --cached --others", -- '--others' is used to show untracked files
         actions = m_keys,
-        winopts = {
-          height = 0.55,
-          width = 0.65,
-          row = 0.52,
-          col = 0.47,
-        },
+        winopts = { height = 0.55, width = 0.65, row = 0.52, col = 0.47 },
         previewer = false,
       },
-      bcommits = {
-        actions = m_keys,
-        winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      },
-      commits = {
-        actions = m_keys,
-        winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      },
+      bcommits = { actions = m_keys, winopts = { preview = { layout = "vertical", vertical = "up:60%" } } },
+      commits = { actions = m_keys, winopts = { preview = { layout = "vertical", vertical = "up:60%" } } },
       branches = {
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
         cmd = "git branch --all --color | sed 's#remotes/origin/##g'",
@@ -224,26 +210,16 @@ return {
       winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
     })
     opts.lsp = vim.tbl_deep_extend("force", opts.lsp or {}, {
-      definitions = {
-        jump_to_single_result = true,
-        actions = m_keys,
-      },
-      references = {
-        ignore_current_line = true,
-        actions = m_keys,
-      },
-      symbols = {
-        actions = m_keys,
-        winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      },
-      finder = {
-        actions = m_keys,
-        winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      },
-      code_actions = {
-        actions = m_keys,
-        winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-      },
+      definitions = { jump_to_single_result = true, actions = m_keys },
+      references = { ignore_current_line = true, actions = m_keys },
+      symbols = { actions = m_keys, winopts = { preview = { layout = "vertical", vertical = "up:60%" } } },
+      finder = { actions = m_keys, winopts = { preview = { layout = "vertical", vertical = "up:60%" } } },
+      code_actions = { actions = m_keys, winopts = { preview = { layout = "vertical", vertical = "up:60%" } } },
     })
+
+    local ok_dressing, _ = pcall(require, "dressing")
+    if not ok_dressing then
+      require("fzf-lua").register_ui_select()
+    end
   end,
 }

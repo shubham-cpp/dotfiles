@@ -167,7 +167,10 @@ fzf.setup({
   },
   lines = { actions = m_keys },
 })
-fzf.register_ui_select()
+local ok_dressing, _ = pcall(require, 'dressing')
+if not ok_dressing then
+  fzf.register_ui_select()
+end
 
 vim.lsp.handlers['textDocument/codeAction'] = fzf.lsp_code_actions
 vim.lsp.handlers['textDocument/references'] = function()

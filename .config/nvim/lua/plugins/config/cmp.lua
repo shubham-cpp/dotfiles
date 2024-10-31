@@ -182,9 +182,6 @@ cmp.setup({
     {
       name = 'buffer',
       max_item_count = 10,
-      entry_filter = function(entry)
-        return not entry.exact
-      end,
       option = {
         keyword_length = 2,
         -- get_bufnrs = function()

@@ -2,9 +2,7 @@
 return {
   {
     "LazyVim",
-    opts = {
-      colorscheme = "gruber-darker",
-    },
+    opts = { colorscheme = "nordic" },
   },
   {
     "rebelot/kanagawa.nvim",
@@ -16,10 +14,18 @@ return {
   },
   {
     "blazkowolf/gruber-darker.nvim",
-    enabled = true,
+    enabled = false,
     event = "VimEnter",
     config = function()
       require("config.gruber-darker")
+    end,
+  },
+  {
+    "AlexvZyl/nordic.nvim",
+    enabled = true,
+    event = "VimEnter",
+    config = function()
+      require("config.nordic")
     end,
   },
 }
