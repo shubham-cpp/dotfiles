@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     "*.test.tsx",
     "*.spec.tsx",
   },
-  description = "Neotest binds",
+  desc = "Neotest binds",
   callback = function(args)
     local bufnr = args.buf
     vim.keymap.set("n", "<leader>tw", function()

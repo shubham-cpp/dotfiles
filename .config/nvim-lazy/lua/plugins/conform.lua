@@ -1,4 +1,22 @@
-local prettier = { "prettierd", "prettier" }
+local prettier = { "prettierd", "prettier", stop_after_first = true }
+---@param bufnr integer
+---@param ... string
+---@return string
+local function first(bufnr, ...)
+  local conform = require("conform")
+  for i = 1, select("#", ...) do
+    local formatter = select(i, ...)
+    if conform.get_formatter_info(formatter, bufnr).available then
+      return formatter
+    end
+  end
+  return select(1, ...)
+end
+
+local function prettier_eslint(bufnr)
+  return { first(bufnr, "prettierd", "prettier"), "eslint_d" }
+end
+
 ---@type LazySpec
 return {
   {
@@ -28,30 +46,33 @@ return {
     },
     opts = {
       formatters_by_ft = {
-        ["javascript"] = { prettier, "eslint_d" },
-        ["javascriptreact"] = { prettier, "eslint_d" },
-        ["typescript"] = { prettier, "eslint_d" },
-        ["typescriptreact"] = { prettier, "eslint_d" },
-        ["vue"] = { prettier, "eslint_d" },
-        ["svelte"] = { prettier, "eslint_d" },
-        ["astro"] = { prettier, "eslint_d" },
-        ["css"] = { prettier },
-        ["scss"] = { prettier },
-        ["less"] = { prettier },
-        ["html"] = { prettier },
-        ["json"] = { prettier },
-        ["jsonc"] = { prettier },
-        ["yaml"] = { prettier },
-        ["markdown"] = { prettier },
-        ["markdown.mdx"] = { prettier },
-        ["graphql"] = { prettier, "eslint_d" },
-        ["handlebars"] = { prettier },
+        css = prettier,
+        scss = prettier,
+        less = prettier,
+        html = prettier,
+        json = prettier,
+        jsonc = prettier,
+        yaml = prettier,
+        markdown = prettier,
+        handlebars = prettier,
+        ["markdown.mdx"] = prettier,
+        ["graphql"] = prettier_eslint,
+        ["javascript"] = prettier_eslint,
+        ["javascriptreact"] = prettier_eslint,
+        ["typescript"] = prettier_eslint,
+        ["typescriptreact"] = prettier_eslint,
+        ["vue"] = prettier_eslint,
+        ["svelte"] = prettier_eslint,
+        ["astro"] = prettier_eslint,
         fish = { "fish_indent" },
         nim = { "nimpretty" },
         zig = { "zigfmt" },
         bash = { "shfmt" },
         php = { "phpcbf", "php_cs_fixer" },
         blade = { "blade-formatter" },
+        go = function(bufnr)
+          return { "goimports", first(bufnr, "gofumpt", "gofmt") }
+        end,
       },
     },
   },
