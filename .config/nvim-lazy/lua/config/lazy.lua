@@ -53,6 +53,8 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.php" },
 
     { import = "lazyvim.plugins.extras.editor.fzf" },
+
+    { import = "lazyvim.plugins.extras.test.core" },
     -- import/override with your plugins
     { import = "plugins" },
     { import = "plugins.lsps" },
