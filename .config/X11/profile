@@ -13,9 +13,9 @@ export PATH
 export EDITOR=nvim
 export VISUAL=nvim
 
-export TERMINAL=/usr/bin/alacritty
+export TERMINAL=alacritty
 export FILE_BROWSER=thunar
-export BROWSER=zen-browser
+export BROWSER=brave
 export READER=zathura
 
 if [ $DESKTOP_SESSION != "plasma" ]; then

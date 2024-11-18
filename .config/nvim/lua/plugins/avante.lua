@@ -3,77 +3,54 @@ return {
   'yetone/avante.nvim',
   event = 'VeryLazy',
   version = false, -- set this if you want to always pull the latest change
-  -- keys = function(_, keys)
-  --   ---@type avante.Config
-  --   local opts =
-  --     require('lazy.core.plugin').values(require('lazy.core.config').spec.plugins['avante.nvim'], 'opts', false)
-  --
-  --   local mappings = {
-  --     {
-  --       opts.mappings.ask,
-  --       function()
-  --         require('avante.api').ask()
-  --       end,
-  --       desc = 'avante: ask',
-  --       mode = { 'n', 'v' },
-  --     },
-  --     {
-  --       opts.mappings.refresh,
-  --       function()
-  --         require('avante.api').refresh()
-  --       end,
-  --       desc = 'avante: refresh',
-  --       mode = 'v',
-  --     },
-  --     {
-  --       opts.mappings.edit,
-  --       function()
-  --         require('avante.api').edit()
-  --       end,
-  --       desc = 'avante: edit',
-  --       mode = { 'n', 'v' },
-  --     },
-  --   }
-  --   mappings = vim.tbl_filter(function(m)
-  --     return m[1] and #m[1] > 0
-  --   end, mappings)
-  --   return vim.list_extend(mappings, keys)
-  -- end,
-  opts = {
-    -- add any opts here
-    ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
-    provider = 'ollama',
-    vendors = {
-      ---@type AvanteProvider
-      ollama = {
-        ['local'] = true,
-        endpoint = '127.0.0.1:11434/v1',
-        model = 'llama3.2',
-        parse_curl_args = function(opts, code_opts)
-          return {
-            url = opts.endpoint .. '/chat/completions',
-            headers = {
-              ['Accept'] = 'application/json',
-              ['Content-Type'] = 'application/json',
-            },
-            body = {
-              model = opts.model,
-              messages = require('avante.providers').copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
-              max_tokens = 2048,
-              stream = true,
-            },
-          }
-        end,
-        parse_response_data = function(data_stream, event_state, opts)
-          require('avante.providers').openai.parse_response(data_stream, event_state, opts)
-        end,
+  opts = function()
+    local identity = vim.fn.expand '$HOME/.config/age/identity.txt'
+    local secret = vim.fn.expand '$HOME/.config/age/gemini_api.age'
+    vim.env.GEMINI_API_KEY = require('age').get(secret, identity) -- Get secret
+    local ollama_setup = {
+      -- add any opts here
+      ---@alias Provider "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
+      provider = 'gemini',
+      vendors = {
+        ---@type AvanteProvider
+        ollama = {
+          ['local'] = true,
+          endpoint = '127.0.0.1:11434/v1',
+          model = 'llama3.2',
+          parse_curl_args = function(opts, code_opts)
+            return {
+              url = opts.endpoint .. '/chat/completions',
+              headers = {
+                ['Accept'] = 'application/json',
+                ['Content-Type'] = 'application/json',
+              },
+              body = {
+                model = opts.model,
+                messages = require('avante.providers').copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
+                max_tokens = 2048,
+                stream = true,
+              },
+            }
+          end,
+          parse_response_data = function(data_stream, event_state, opts)
+            require('avante.providers').openai.parse_response(data_stream, event_state, opts)
+          end,
+        },
       },
-    },
-  },
+    }
+    if not vim.env.GEMINI_API_KEY then
+      return ollama_setup
+    end
+    return {
+      ---@type "claude" | "openai" | "azure" | "gemini" | "cohere" | "copilot" | string
+      provider = 'gemini',
+    }
+  end,
   -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
   build = 'make',
   -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   dependencies = {
+    'KingMichaelPark/age.nvim', -- Add age dependency
     'nvim-treesitter/nvim-treesitter',
     {
       'stevearc/dressing.nvim',

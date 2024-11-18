@@ -1,10 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
 # Set the directory we want to store zinit and plugins
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 # Download Zinit, if it's not there yet
@@ -45,7 +38,7 @@ zinit ice trigger-load!man wait'0' lucid; zinit snippet OMZP::colored-man-pages
 zinit ice wait"2" as"command" from"gh-r" lucid \
   mv"zoxide*/zoxide -> zoxide" \
   atclone"./zoxide init zsh > zo_init.zsh" \
-  atpull"%atclone" src"zo_init.sh"
+  atpull"%atclone" src"zo_init.zsh"
 zinit light ajeetdsouza/zoxide
 # zinit ice wait"2" as"command" from"gh-r" lucid \
 #   atclone"./fnm env --use-on-cd > fnmenv.zsh" \
@@ -104,3 +97,6 @@ zinit snippet ~/Documents/dotfiles/.config/zsh/mfunctions.zsh
 
 # Ensure unique path
 typeset -gU cdpath fpath mailpath path
+
+# bun completions
+[ -s "/home/shubham/.local/share/bun/_bun" ] && source "/home/shubham/.local/share/bun/_bun"

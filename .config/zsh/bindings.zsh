@@ -58,6 +58,9 @@ bindkey -M viins '^J' autosuggest-accept
 # bindkey -M vicmd "b" backward-word
 # bindkey -M vicmd "w" forward-word
 
+# C-x a to expand alias
+bindkey "^Xa" _expand_alias
+
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
     if [[ ${KEYMAP} == vicmd ]] ||

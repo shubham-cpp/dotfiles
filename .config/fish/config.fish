@@ -37,3 +37,7 @@ bind -M insert \b backward-kill-word
 bind -M insert \cl 'history merge; commandline -f clear-screen'
 bind -M visual \cl 'history merge; commandline -f clear-screen'
 complete -c dnf5 -w dnf
+
+# bun
+set --export BUN_INSTALL "$HOME/.local/share/bun"
+set --export PATH $BUN_INSTALL/bin $PATH

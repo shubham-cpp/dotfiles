@@ -4,7 +4,7 @@ return {
     'catppuccin/nvim',
     name = 'catppuccin',
     event = 'VimEnter',
-    enabled = false,
+    enabled = true,
     config = function()
       require 'plugins.config.catppuccin'
     end,
@@ -49,7 +49,7 @@ return {
   },
   {
     'AlexvZyl/nordic.nvim',
-    enabled = true,
+    enabled = false,
     event = 'VimEnter',
     config = function()
       require 'plugins.config.nordic'

@@ -14,7 +14,7 @@ Plug 'folke/flash.nvim'
 Plug 'monaqa/dial.nvim'
 Plug 'tpope/vim-abolish'
 if !exists('g:vscode')
-  Plug 'tiagovla/tokyodark.nvim'
+  Plug 'masar3141/mono-jade'
   Plug 'windwp/nvim-autopairs'
 endif
 

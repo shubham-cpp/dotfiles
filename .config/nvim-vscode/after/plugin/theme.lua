@@ -11,4 +11,7 @@ if vim.g.vscode == nil then
     })
     vim.cmd.colorscheme "tokyodark"
   end
+  if vim.fn.isdirectory(vim.fn.stdpath('data') .. '/plugged/mono-jade') == 1 then
+    vim.cmd("colo mono-jade")
+  end
 end
