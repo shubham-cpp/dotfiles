@@ -1,15 +1,21 @@
+local function get_age_credentials(secret_file)
+  if not vim.fn.filereadable '$HOME/.config/age/identity.txt' then
+    return nil
+  end
+  local identity = vim.fn.expand '$HOME/.config/age/identity.txt'
+  local secret = vim.fn.expand('$HOME/.config/age/' .. secret_file)
+  return require('age').get(identity, secret)
+end
+
 ---@type LazySpec
 return {
   {
     'yetone/avante.nvim',
     event = 'VeryLazy',
-    version = false, -- set this if you want to always pull the latest change
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
+    version = false,
     build = 'make',
     opts = function()
-      local identity = vim.fn.expand '$HOME/.config/age/identity.txt'
-      local secret = vim.fn.expand '$HOME/.config/age/gemini_api.age'
-      vim.env.GEMINI_API_KEY = require('age').get(secret, identity) -- Get secret
+      vim.env.GEMINI_API_KEY = get_age_credentials 'gemini_api.age'
       local ollama_setup = {
         -- add any opts here
         ---@type Provider
@@ -127,20 +133,26 @@ return {
       },
     },
     config = function()
-      local identity = vim.fn.expand '$HOME/.config/age/identity.txt'
-      local secret = vim.fn.expand '$HOME/.config/age/glhf.age'
       require('codecompanion').setup({
-        display = {
-          chat = { render_headers = false },
+        display = { chat = { render_headers = false } },
+        strategies = {
+          --NOTE: Change the adapter as required
+          chat = { adapter = 'openai_compatible' },
+          inline = { adapter = 'openai_compatible' },
         },
         adapters = {
-          ollama = function()
+          openai_compatible = function()
             return require('codecompanion.adapters').extend('openai_compatible', {
               env = {
-                url = 'https://glhf.chat/api/openai/v1',
-                api_key = require('age').get(secret, identity), -- Get secret -- optional: if your endpoint is authenticated
-                chat_url = '/chat/completions',
-                model = 'hf:Qwen/Qwen2.5-Coder-32B-Instruct',
+                url = 'https://glhf.chat',
+                api_key = function()
+                  get_age_credentials 'glhf.age'
+                end,
+                chat_url = '/api/openai/v1/chat/completions',
+              },
+              schema = {
+                model = { default = 'hf:Qwen/Qwen2.5-Coder-32B-Instruct' },
+                num_ctx = { default = 32768 },
               },
             })
           end,
