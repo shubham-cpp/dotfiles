@@ -38,7 +38,7 @@ super + alt + {c,g}
     flameshot {gui,full,launcher} || notify-send "Failed" "Flameshot is not installed." -u critical
 
 control + alt + {p,c,v,e}
-    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+    {get-class-name,sh -c 'xcolor -s && notify-send "Color Copied" "Hex: $(xclip -o -sel clip) copied to clipboard"',pavucontrol || pavucontrol-qt,rofie}
 
 super +{_,shift + } Escape
     {pkill -USR1 -x sxhkd && notify-send -t 1000 "BSPWM" "SXHKD Restarted",xkill}

@@ -51,7 +51,7 @@ vim.keymap.set(
   { silent = false, desc = 'Edit in same dir(Split)' }
 )
 
-vim.keymap.set('n', '<leader>x', function()
+vim.keymap.set('n', '<leader>R', function()
   vim.cmd 'source %'
   local file = vim.fn.substitute(vim.fn.expand '%:r', 'lua/', '', '')
   local ok, mod = pcall(require, file)

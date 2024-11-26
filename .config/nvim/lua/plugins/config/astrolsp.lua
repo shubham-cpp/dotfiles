@@ -28,7 +28,6 @@ M.opts = {
       },
     },
   },
-  -- Configure buffer local user commands to add when attaching a language server
   commands = {
     Format = {
       function()
@@ -38,35 +37,32 @@ M.opts = {
       desc = 'Format file with LSP',
     },
   },
-  -- Configure default capabilities for language servers (`:h vim.lsp.protocol.make_client.capabilities()`)
   capabilities = {
     textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } },
     workspace = {
       didChangeWatchedFiles = vim.fn.has 'nvim-0.10' == 0 and { dynamicRegistration = true },
     },
   },
-  -- Configure language servers for `lspconfig` (`:h lspconfig-setup`)
   config = {
     bashls = {
       settings = { bashIde = { highlightParsingErrors = true } },
     },
   },
-  -- Configuration of mappings added when attaching a language server during the core `on_attach` function
-  -- The first key into the table is the vim map mode (`:h map-modes`), and the value is a table of entries to be passed to `vim.keymap.set` (`:h vim.keymap.set`):
-  --   - The key is the first parameter or the vim mode (only a single mode supported) and the value is a table of keymaps within that mode:
-  --     - The first element with no key in the table is the action (the 2nd parameter) and the rest of the keys/value pairs are options for the third parameter.
-  --       There is also a special `cond` key which can either be a string of a language server capability or a function with `client` and `bufnr` parameters that returns a boolean of whether or not the mapping is added.
   mappings = {
-    -- map mode (:h map-modes)
     n = {
       K = { vim.lsp.buf.hover, desc = 'Hover', cond = 'textDocument/hover' },
-      gl = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
+      ['<leader>le'] = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
+      ['<leader>ld'] = {
+        vim.lsp.buf.definition,
+        desc = 'Goto definition',
+        cond = 'textDocument/definition',
+      },
       gd = {
         vim.lsp.buf.definition,
         desc = 'Goto definition',
         cond = 'textDocument/definition',
       },
-      gs = {
+      ['<leader>lo'] = {
         function()
           vim.lsp.buf.code_action({
             context = { only = { 'source.organizeImports' } },
@@ -77,19 +73,19 @@ M.opts = {
         desc = 'Oraganize imports',
         cond = 'textDocument/codeAction',
       },
-      gi = {
+      ['<leader>li'] = {
         vim.lsp.buf.implementation,
         desc = 'Goto implementation',
         cond = 'textDocument/implementation',
       },
       -- condition for only server with declaration capabilities
-      gD = { vim.lsp.buf.declaration, desc = 'Goto Declaration', cond = 'textDocument/declaration' },
-      gt = {
+      ['<leader>lD'] = { vim.lsp.buf.declaration, desc = 'Goto Declaration', cond = 'textDocument/declaration' },
+      ['<leader>lt'] = {
         vim.lsp.buf.type_definition,
         desc = 'Type definition',
         cond = 'textDocument/typeDefinition',
       },
-      ['g='] = {
+      ['<leader>F'] = {
         function()
           vim.cmd [[EslintFixAll]]
         end,
@@ -98,6 +94,11 @@ M.opts = {
         end,
       },
       gr = {
+        vim.lsp.buf.references,
+        desc = 'Goto references',
+        cond = 'textDocument/references',
+      },
+      ['<leader>lR'] = {
         vim.lsp.buf.references,
         desc = 'Goto references',
         cond = 'textDocument/references',
@@ -122,12 +123,12 @@ M.opts = {
         vim.diagnostic.goto_prev,
         desc = 'Goto Next diagnostic',
       },
-      gw = {
+      ['<leader>lw'] = {
         vim.lsp.buf.document_symbol,
         desc = 'Document symbols',
         cond = 'textDocument/documentSymbol',
       },
-      gW = {
+      ['<leader>lW'] = {
         vim.lsp.buf.workspace_symbol,
         desc = 'Workspace symbols',
         cond = 'workspace/symbol',
@@ -188,7 +189,6 @@ M.opts = {
       },
     },
   },
-
   handlers = {
     function(server, opts)
       local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')

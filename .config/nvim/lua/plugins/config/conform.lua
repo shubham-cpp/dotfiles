@@ -57,7 +57,7 @@ require('conform').setup({
     -- You can use a function here to determine the formatters dynamically
     python = function(bufnr)
       if require('conform').get_formatter_info('ruff_format', bufnr).available then
-        return { 'ruff_format' }
+        return { 'ruff_format', 'ruff_fix', 'ruff_organize_imports' }
       else
         return { 'isort', 'black' }
       end

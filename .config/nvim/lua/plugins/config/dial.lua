@@ -127,15 +127,17 @@ function M.config()
 
   local opts = {
     dials_by_ft = {
-      css = 'css',
-      javascript = 'typescript',
-      javascriptreact = 'typescript',
-      json = 'json',
       lua = 'lua',
+      json = 'json',
+      jsonc = 'json',
+      json5 = 'json',
       markdown = 'markdown',
       python = 'python',
+      css = 'css',
       sass = 'css',
       scss = 'css',
+      javascript = 'typescript',
+      javascriptreact = 'typescript',
       typescript = 'typescript',
       typescriptreact = 'typescript',
     },
@@ -171,6 +173,7 @@ function M.config()
       },
       json = {
         augend.integer.alias.decimal, -- nonnegative and negative decimal number
+        augend.constant.alias.bool, -- boolean value (true <-> false)
         augend.semver.alias.semver, -- versioning (v1.1.2)
       },
       lua = {

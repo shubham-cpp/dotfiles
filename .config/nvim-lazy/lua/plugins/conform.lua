@@ -73,6 +73,7 @@ return {
         go = function(bufnr)
           return { "goimports", first(bufnr, "gofumpt", "gofmt") }
         end,
+        python = { "ruff_format", "ruff_fix", "ruff_organize_imports" },
       },
     },
   },

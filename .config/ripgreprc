@@ -9,7 +9,7 @@ test:*.spec.ts,*.spec.js,*.jest.ts,*.jest.js,*.spec.tsx,*.spec.jsx,*.jest.tsx,*.
 vue:*.vue
 
 --type-add
-svelte:*.svelte
+svelte:*.svelte,*.svelte.ts
 
 --type-add
 prisma:*.prisma

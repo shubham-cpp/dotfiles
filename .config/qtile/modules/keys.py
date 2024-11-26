@@ -287,8 +287,7 @@ keys = [
     ),
     Key(
         "M-d",
-        lazy.spawn(
-            "rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
         desc="Spawn Run Prompt(Rofi)",
     ),
     Key(
@@ -416,7 +415,13 @@ keys = [
     # Custom Scripts {{{
     Key("C-A-e", lazy.spawn("rofie"), desc="Launch Emoji Selector"),
     Key("C-A-v", lazy.spawn("pavucontrol"), desc="Launch Pavucontrol"),
-    Key("C-A-c", lazy.spawn("xcolor -s"), desc="Launch Color Picker"),
+    Key(
+        "C-A-c",
+        lazy.spawn(
+            'sh -c \'xcolor -s && notify-send "Color Copied" "Hex: $(xclip -o -sel clip) copied to clipboard"\''
+        ),
+        desc="Launch Color Picker",
+    ),
     Key("C-A-p", lazy.spawn("get-class-name"), desc="Copy WM_CLASS name"),
     Key("<Print>", lazy.spawn("flameshot gui"), desc="Take screenshot(FULL)"),
     Key("S-<Print>", lazy.spawn("flameshot full"), desc="Take screenshot(FOCUS)"),

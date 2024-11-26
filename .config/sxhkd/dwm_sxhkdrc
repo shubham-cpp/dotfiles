@@ -24,7 +24,7 @@ super + alt + {c,g}
     {open-rcs,open-games}
 
 control + alt + {p,c,v,e}
-    {get-class-name,xcolor -s,pavucontrol || pavucontrol-qt,rofie}
+    {get-class-name,sh -c 'xcolor -s && notify-send "Color Copied" "Hex: $(xclip -o -sel clip) copied to clipboard"',pavucontrol || pavucontrol-qt,rofie}
 
 super + control + {s,l,m}
     {logout_prompt,betterlockscreen -l,load_monitors}

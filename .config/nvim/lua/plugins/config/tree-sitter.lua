@@ -57,6 +57,8 @@ configs.setup({
         ['ac'] = '@class.outer',
         ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
         ['al'] = { query = '@scope', query_group = 'locals', desc = 'Select language scope' },
+        ['a/'] = { query = '@comment.outer', desc = 'Select outer comment' },
+        ['i/'] = { query = '@comment.inner', desc = 'Select inner comment' },
       },
       selection_modes = {
         ['@parameter.outer'] = 'v', -- charwise
@@ -70,7 +72,7 @@ configs.setup({
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
         [']m'] = '@function.outer',
-        [']]'] = { query = '@class.outer', desc = 'Next class start' },
+        [']C'] = { query = '@class.outer', desc = 'Next class start' },
         [']l'] = '@loop.*',
         -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
         [']s'] = { query = '@scope', query_group = 'locals', desc = 'Next scope' },
@@ -82,7 +84,7 @@ configs.setup({
       },
       goto_previous_start = {
         ['[m'] = '@function.outer',
-        ['[['] = '@class.outer',
+        ['[C'] = '@class.outer',
       },
       goto_previous_end = {
         ['[M'] = '@function.outer',
@@ -98,14 +100,14 @@ configs.setup({
     swap = {
       enable = true,
       swap_next = {
-        ['>K'] = { query = '@block.outer', desc = 'Swap next block' },
-        ['>F'] = { query = '@function.outer', desc = 'Swap next function' },
-        ['>A'] = { query = '@parameter.inner', desc = 'Swap next argument' },
+        ['<localleader>k'] = { query = '@block.outer', desc = 'Swap next block' },
+        ['<localleader>f'] = { query = '@function.outer', desc = 'Swap next function' },
+        ['<localleader>a'] = { query = '@parameter.inner', desc = 'Swap next argument' },
       },
       swap_previous = {
-        ['<K'] = { query = '@block.outer', desc = 'Swap previous block' },
-        ['<F'] = { query = '@function.outer', desc = 'Swap previous function' },
-        ['<A'] = { query = '@parameter.inner', desc = 'Swap previous argument' },
+        ['<localleader>K'] = { query = '@block.outer', desc = 'Swap previous block' },
+        ['<localleader>F'] = { query = '@function.outer', desc = 'Swap previous function' },
+        ['<localleader>A'] = { query = '@parameter.inner', desc = 'Swap previous argument' },
       },
     },
   },
