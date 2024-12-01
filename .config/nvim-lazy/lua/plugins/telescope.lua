@@ -123,7 +123,29 @@ return {
     end)
   end,
   keys = {
-    { "<c-p>", LazyVim.pick("files"), desc = "Find Files (Root Dir)" },
+    {
+      "<c-p>",
+      function()
+        LazyVim.pick.open(
+          "files",
+          {
+            find_command = {
+              "rg",
+              "--files",
+              "--color",
+              "never",
+              "--ignore",
+              "--hidden",
+              "--sortr",
+              "modified",
+              "--glob",
+              "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
+            },
+          }
+        )
+      end,
+      desc = "Find Files (Root Dir)",
+    },
     { "<leader>fn", LazyVim.pick.config_files(), desc = "Find Config File" },
     {
       "<leader>fd",

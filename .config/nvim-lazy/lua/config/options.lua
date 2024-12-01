@@ -4,3 +4,32 @@
 vim.opt.wrap = true
 vim.opt.showbreak = "󰄾 "
 vim.opt.iskeyword:append("-")
+vim.opt.scrolloff = 8
+
+vim.opt.wildignore:append({
+  "*.o",
+  "*.obj",
+  "*.out",
+  "*.class",
+
+  "*.jpg",
+  "*.jpeg",
+  "*.png",
+  "*.gif",
+
+  "*.zip",
+  "*.tar.gz",
+  "*.tar.xz",
+  "*.tar.bz2",
+  "*.rar",
+
+  "*.pyc",
+  "*.pyo",
+
+  "*.DS_Store",
+  "*.swp",
+
+  "node_modules",
+  "vendor",
+  ".git",
+})
