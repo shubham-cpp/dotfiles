@@ -9,7 +9,7 @@ function M.get_age_credentials(secret_file)
   end
   local identity = vim.fn.expand("$HOME/.config/age/identity.txt")
   local secret = vim.fn.expand("$HOME/.config/age/" .. secret_file)
-  return require("age").get(identity, secret)
+  return require("age").get(secret, identity)
 end
 
 return M

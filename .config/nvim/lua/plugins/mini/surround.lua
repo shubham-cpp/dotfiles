@@ -2,17 +2,27 @@
 return {
   'echasnovski/mini.surround',
   version = '*',
-  enabled = false,
+  enabled = true,
   keys = {
-    { 'sa', mode = { 'n', 'v' }, desc = 'Surround add' },
-    { 'sd', mode = { 'n' }, desc = 'Surround delete' },
-    { 'sr', mode = { 'n' }, desc = 'Surround replace' },
-    { 'sf', mode = { 'n' }, desc = 'Surround find' },
-    { 'sh', mode = { 'n' }, desc = 'Surround highlight' },
+    { 'gz', '', desc = '+surround' },
+    { 'ys', mode = { 'n', 'v' }, desc = 'Surround add' },
+    { 'ds', mode = { 'n' }, desc = 'Surround delete' },
+    { 'cs', mode = { 'n' }, desc = 'Surround replace' },
+    { 'gzf', mode = { 'n' }, desc = 'Surround find' },
+    { 'gzh', mode = { 'n' }, desc = 'Surround highlight' },
   },
   opts = {
     search_method = 'cover_or_prev',
-    n_lines = 200,
+    n_lines = 500,
+    mappings = {
+      add = 'ys', -- Add surrounding in Normal and Visual modes
+      delete = 'ds', -- Delete surrounding
+      replace = 'cs', -- Replace surrounding
+      find = 'gzf', -- Find surrounding (to the right)
+      find_left = 'sF', -- Find surrounding (to the left)
+      highlight = 'gzh', -- Highlight surrounding
+      update_n_lines = 'gzn', -- Update `n_lines`
+    },
   },
   config = function(_, opts)
     require('mini.surround').setup(opts)

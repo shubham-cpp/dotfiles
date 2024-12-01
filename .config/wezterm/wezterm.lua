@@ -17,12 +17,11 @@ config.colors = {
   background = "#14131A",
 }
 -- Spawn a fish shell in login mode
-config.default_prog = { "/bin/fish", "-l" }
+-- config.default_prog = { "/bin/fish", "-l" }
 
 config.font_size = 11.5
 config.font = wezterm.font_with_fallback({
-  -- "Iosevka Custom Extended",
-  -- "FiraCode Nerd Font",
+  "FiraCode Nerd Font",
   "JetBrainsMono Nerd Font",
   "FontAwesome",
 })

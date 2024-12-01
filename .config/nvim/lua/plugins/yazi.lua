@@ -7,9 +7,9 @@ return {
   },
   cmd = 'Yazi',
   keys = {
-    { '<leader>-', '<cmd>Yazi<cr>', desc = 'Open the file manager' },
-    { '<leader>of', '<cmd>Yazi toggle<cr>', desc = 'Toggle Yazi' },
-    { '<leader>\\', '<cmd>Yazi cwd<cr>', desc = 'File Manager in cwd' },
+    { '<C-y>', '<cmd>Yazi toggle<cr>', desc = 'Togggle Yazi' },
+    { '<leader>-', '<cmd>Yazi<cr>', desc = 'Open Yazi at the current file' },
+    { '<leader>tf', '<cmd>Yazi cwd<cr>', desc = 'File Manager in cwd(Yazi)' },
   },
   ---@type YaziConfig
   opts = {

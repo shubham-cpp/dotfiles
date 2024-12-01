@@ -328,11 +328,36 @@ M.config = function()
         },
       },
       ['ui-select'] = require('telescope.themes').get_dropdown({}),
+      egrepify = {
+        prefixes = {
+          ['>'] = {
+            flag = 'type',
+            cb = function(input)
+              -- check if the input has any commas
+              if string.find(input, ',') then
+                return string.format([[{%s}]], input)
+              end
+              return string.format([[%s]], input)
+            end,
+          },
+          ['<'] = {
+            flag = 'type-not',
+            cb = function(input)
+              -- check if the input has any commas
+              if string.find(input, ',') then
+                return string.format([[{%s}]], input)
+              end
+              return string.format([[%s]], input)
+            end,
+          },
+        },
+      },
     },
   })
   require('telescope').load_extension 'zf-native'
   require('telescope').load_extension 'ui-select'
   require('telescope').load_extension 'egrepify'
+
   vim.lsp.handlers['textDocument/definition'] = builtin.lsp_definitions
   vim.lsp.handlers['textDocument/typeDefinition'] = builtin.lsp_type_definitions
   vim.lsp.handlers['textDocument/implementation'] = builtin.lsp_implementations

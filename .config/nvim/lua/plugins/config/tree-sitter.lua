@@ -48,25 +48,25 @@ configs.setup({
     },
   },
   textobjects = {
-    select = {
-      enable = true,
-      lookahead = true,
-      keymaps = {
-        ['af'] = '@function.outer',
-        ['if'] = '@function.inner',
-        ['ac'] = '@class.outer',
-        ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
-        ['al'] = { query = '@scope', query_group = 'locals', desc = 'Select language scope' },
-        ['a/'] = { query = '@comment.outer', desc = 'Select outer comment' },
-        ['i/'] = { query = '@comment.inner', desc = 'Select inner comment' },
-      },
-      selection_modes = {
-        ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V', -- linewise
-        ['@class.outer'] = '<c-v>', -- blockwise
-      },
-      include_surrounding_whitespace = true,
-    },
+    -- select = {
+    --   enable = true,
+    --   lookahead = true,
+    --   keymaps = {
+    --     ['af'] = '@function.outer',
+    --     ['if'] = '@function.inner',
+    --     ['ac'] = '@class.outer',
+    --     ['ic'] = { query = '@class.inner', desc = 'Select inner part of a class region' },
+    --     ['al'] = { query = '@scope', query_group = 'locals', desc = 'Select language scope' },
+    --     ['a/'] = { query = '@comment.outer', desc = 'Select outer comment' },
+    --     ['i/'] = { query = '@comment.inner', desc = 'Select inner comment' },
+    --   },
+    --   selection_modes = {
+    --     ['@parameter.outer'] = 'v', -- charwise
+    --     ['@function.outer'] = 'V', -- linewise
+    --     ['@class.outer'] = '<c-v>', -- blockwise
+    --   },
+    --   include_surrounding_whitespace = true,
+    -- },
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist

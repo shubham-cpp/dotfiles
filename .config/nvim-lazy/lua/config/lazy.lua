@@ -22,11 +22,11 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.editor.refactoring" },
     { import = "lazyvim.plugins.extras.editor.dial" },
     { import = "lazyvim.plugins.extras.coding.luasnip" },
-    -- { import = "lazyvim.plugins.extras.coding.copilot" },
+    -- { import = "lazyvim.plugins.extras.coding.blink" },
 
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
-
     { import = "lazyvim.plugins.extras.dap.core" },
+    { import = "lazyvim.plugins.extras.test.core" },
 
     { import = "lazyvim.plugins.extras.lang.clangd" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
@@ -52,14 +52,10 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.rust" },
     { import = "lazyvim.plugins.extras.lang.php" },
 
-    { import = "lazyvim.plugins.extras.editor.fzf" },
-
-    { import = "lazyvim.plugins.extras.test.core" },
     -- import/override with your plugins
     { import = "plugins" },
-    { import = "plugins.lsps" },
+    { import = "plugins.lsp" },
     { import = "plugins.mini" },
-    { import = "plugins.ai" },
   },
   defaults = {
     -- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
@@ -70,12 +66,11 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "habamax" } },
+  install = { colorscheme = { "default" } },
   checker = {
-    enabled = false, -- check for plugin updates periodically
+    enabled = true, -- check for plugin updates periodically
     notify = false, -- notify on update
   }, -- automatically check for plugin updates
-  change_detection = { enabled = true, notify = false },
   performance = {
     rtp = {
       -- disable some rtp plugins

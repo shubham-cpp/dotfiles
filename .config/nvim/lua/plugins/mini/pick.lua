@@ -2,16 +2,39 @@
 return {
   {
     'echasnovski/mini.pick',
-    enabled = false,
+    enabled = true,
     dependencies = {
-      { 'echasnovski/mini.extra', version = '*' },
+      {
+        'echasnovski/mini.extra',
+        version = '*',
+        config = function()
+          require('mini.extra').setup()
+        end,
+      },
     },
     version = '*',
     keys = function()
       local pick = require 'mini.pick'
 
       return {
+        { '<leader>p', '', desc = '+pick' },
+        {
+          '<leader>pb',
+          function()
+            pick.builtin.buffers({ include_current = false })
+          end,
+          desc = '[B]uffer',
+        },
         { '<leader>pf', pick.builtin.files, desc = '[F]ile' },
+        {
+          '<leader>pn',
+          function()
+            local opts = { source = { cwd = vim.fn.stdpath 'config' } }
+            local local_opts = { cwd = nil, tool = 'fd' }
+            pick.builtin.files(local_opts, opts)
+          end,
+          desc = '[N]eovim config',
+        },
       }
     end,
     config = function()
@@ -32,7 +55,6 @@ return {
           use_cache = true,
         },
       })
-      require('mini.extra').setup()
     end,
   },
 }

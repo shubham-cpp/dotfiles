@@ -51,6 +51,7 @@ M.opts = {
   mappings = {
     n = {
       K = { vim.lsp.buf.hover, desc = 'Hover', cond = 'textDocument/hover' },
+      gl = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
       ['<leader>le'] = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
       ['<leader>ld'] = {
         vim.lsp.buf.definition,

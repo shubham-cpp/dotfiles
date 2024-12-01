@@ -1,15 +1,15 @@
 ---@type LazySpec
 return {
-  'mikavilpas/yazi.nvim',
+  "mikavilpas/yazi.nvim",
   version = false,
   dependencies = {
-    'nvim-lua/plenary.nvim',
+    "nvim-lua/plenary.nvim",
   },
-  cmd = 'Yazi',
+  cmd = "Yazi",
   keys = {
-    { '<leader>-', '<cmd>Yazi<cr>', desc = 'Open the file manager' },
-    { '<leader>of', '<cmd>Yazi toggle<cr>', desc = 'Toggle Yazi' },
-    { '<leader>\\', '<cmd>Yazi cwd<cr>', desc = 'File Manager in cwd' },
+    { "<C-y>", "<cmd>Yazi toggle<cr>", desc = "Togggle Yazi" },
+    { "<leader>-", "<cmd>Yazi<cr>", desc = "Open Yazi at the current file" },
+    { "<leader>tf", "<cmd>Yazi cwd<cr>", desc = "File Manager in cwd(Yazi)" },
   },
   ---@type YaziConfig
   opts = {
@@ -21,8 +21,8 @@ return {
       --- What should be done when the user wants to grep in a directory
       ---@param directory string
       grep_in_directory = function(directory)
-        require('fzf-lua').live_grep_native({
-          prompt = 'Search in ' .. directory,
+        require("telescope.builtin").live_grep({
+          prompt = "Search in " .. directory,
           cwd = directory,
         })
       end,

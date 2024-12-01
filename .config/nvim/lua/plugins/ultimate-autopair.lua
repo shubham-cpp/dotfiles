@@ -3,7 +3,7 @@ return {
   'altermo/ultimate-autopair.nvim',
   event = { 'InsertEnter', 'CmdlineEnter' },
   branch = 'v0.6', --recommended as each new version will have breaking changes
-  enabled = true,
+  enabled = false,
   config = function()
     local ok_cmp, _ = pcall(require, 'cmp')
     local inits = {

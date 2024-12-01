@@ -36,7 +36,7 @@ return {
   },
   {
     'stevearc/resession.nvim',
-    enabled = true,
+    enabled = false,
     lazy = true,
     init = function()
       local function get_session_name()
@@ -90,6 +90,23 @@ return {
         end,
         desc = '[S]ession [L]ist',
       },
+    },
+  },
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+    ---enables autocomplete for opts
+    ---@module "auto-session"
+    ---@type AutoSession.Config
+    opts = {
+      suppressed_dirs = { '~/', '~/Projects', '~/Downloads', '/' },
+      use_git_branch = true,
+    },
+    keys = {
+      { '<leader>s', '', desc = '+[S]ession' },
+      { '<leader>ss', '<cmd>SessionSave<CR>', desc = '[S]ave' },
+      { '<leader>sl', '<cmd>AutoSession search<cr>', desc = '[L]ist' },
+      { '<leader>sd', '<cmd>AutoSession delete<cr>', desc = '[D]elte' },
     },
   },
 }

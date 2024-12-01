@@ -2,11 +2,19 @@ local cmd = "trash"
 if vim.fn.executable("trash-put") == 1 then
   cmd = "trash-put"
 end
+
 ---@type LazySpec
 return {
   "nvim-neo-tree/neo-tree.nvim",
   dependencies = {
-    "antosha417/nvim-lsp-file-operations",
+    {
+      "antosha417/nvim-lsp-file-operations",
+      config = function()
+        LazyVim.on_load("neo-tree.nvim", function()
+          require("lsp-file-operations").setup({})
+        end)
+      end,
+    },
     {
       "s1n7ax/nvim-window-picker",
       version = "2.*",
@@ -29,6 +37,7 @@ return {
       end,
     },
   },
+
   opts = function(_, opts)
     opts.window.mappings["l"] = "open"
     -- opts.window.mappings['l'] = 'open'
@@ -63,10 +72,5 @@ return {
       end,
     })
     return opts
-  end,
-  config = function(_, opts)
-    require("neo-tree").setup(opts)
-
-    require("lsp-file-operations").setup({})
   end,
 }
