@@ -2,7 +2,7 @@
 return {
   'echasnovski/mini.surround',
   version = '*',
-  enabled = true,
+  enabled = false,
   keys = {
     { 'gz', '', desc = '+surround' },
     { 'ys', mode = { 'n', 'v' }, desc = 'Surround add' },

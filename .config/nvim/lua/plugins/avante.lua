@@ -146,7 +146,7 @@ return {
               env = {
                 url = 'https://glhf.chat',
                 api_key = function()
-                  get_age_credentials 'glhf.age'
+                  return get_age_credentials 'glhf.age'
                 end,
                 chat_url = '/api/openai/v1/chat/completions',
               },

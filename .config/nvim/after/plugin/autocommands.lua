@@ -41,6 +41,16 @@ vim.api.nvim_create_autocmd('TermOpen', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
+  group = au_term,
+  pattern = 'toggleterm',
+  desc = 'fix: to disable foldexpr for terminal to fix this issue. Takes too much time to open terminal.',
+  callback = function()
+    vim.opt_local.foldexpr = ''
+    vim.opt_local.foldmethod = 'manual'
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
   group = au_buffer,
   pattern = 'lazy',
   callback = function()

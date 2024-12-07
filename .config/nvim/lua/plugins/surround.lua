@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
   'kylechui/nvim-surround',
-  enabled = false,
+  enabled = true,
   config = true,
   -- config = function()
   --   require("nvim-surround").setup()

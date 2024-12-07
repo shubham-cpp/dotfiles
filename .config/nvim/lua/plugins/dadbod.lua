@@ -12,7 +12,7 @@ return {
     'DBUIFindBuffer',
   },
   keys = {
-    { '<leader>td', '<cmd>DBUIToggle<CR>', desc = 'Toggle DBUI' },
+    { '<leader>tD', '<cmd>DBUIToggle<CR>', desc = 'Toggle DBUI' },
   },
   init = function()
     -- Your DBUI configuration

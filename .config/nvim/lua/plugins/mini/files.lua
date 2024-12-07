@@ -87,7 +87,7 @@ return {
       end,
     })
     local events = {
-      ['lsp-file-operations.did-rename'] = { { 'MiniFilesActionRename', 'MiniFilesActionMove' }, 'Renamed' },
+      -- ['lsp-file-operations.did-rename'] = { { 'MiniFilesActionRename', 'MiniFilesActionMove' }, 'Renamed' },
       ['lsp-file-operations.will-create'] = { 'MiniFilesActionCreate', 'Create' },
       ['lsp-file-operations.will-delete'] = { 'MiniFilesActionDelete', 'Delete' },
     }
@@ -113,17 +113,16 @@ return {
       })
     end
 
-    -- vim.api.nvim_create_autocmd('User', {
-    --   pattern = 'MiniFilesActionRename',
-    --   group = au_group,
-    --   desc = 'LSP Rename file',
-    --   callback = function(event)
-    --     local ok, rename = pcall(require, 'lsp-file-operations.did-rename')
-    --     if not ok then
-    --       return
-    --     end
-    --     rename.callback({ old_name = event.data.from, new_name = event.data.to })
-    --   end,
-    -- })
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'MiniFilesActionRename',
+      group = au_group,
+      desc = 'LSP Rename file',
+      callback = function(event)
+        if not Snacks then
+          return
+        end
+        Snacks.rename.on_rename_file(event.data.from, event.data.to)
+      end,
+    })
   end,
 }
