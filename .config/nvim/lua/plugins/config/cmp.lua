@@ -211,7 +211,7 @@ cmp.setup({
     { name = 'async_path', priority = 50, option = { trailing_slash = false } },
     {
       name = 'look',
-      keyword_length = 4,
+      keyword_length = 5,
       priority = 30,
       option = {
         convert_case = true,
@@ -227,12 +227,10 @@ cmp.setup({
       compare.exact,
       compare.offset,
       compare.score,
-      -- require('cmp-under-comparator').under,
+      compare.length,
       compare.recently_used,
       compare.kind,
       compare.locality,
-      -- compare.sort_text,
-      compare.length,
       compare.order,
     },
   },

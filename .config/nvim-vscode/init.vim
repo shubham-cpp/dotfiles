@@ -67,14 +67,23 @@ if exists('g:vscode')
   map ze <Cmd>call VSCodeNotify('scrollLineDown')<CR>
   map zy <Cmd>call VSCodeNotify('scrollLineUp')<CR>
 
-  map [f <Cmd>call VSCodeNotify('search.action.focusPrevSearchResult')<CR>
-  map ]f <Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<CR>
-  map [q <Cmd>call VSCodeNotify('search.action.focusPrevSearchResult')<CR>
-  map ]q <Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<CR>
+  map [d <Cmd>call VSCodeNotify('editor.action.marker.prev')<CR>
+  map ]d <Cmd>call VSCodeNotify('editor.action.marker.next')<CR>
+  map [D <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
+  map ]D <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
   map [e <Cmd>call VSCodeNotify('editor.action.marker.prev')<CR>
   map ]e <Cmd>call VSCodeNotify('editor.action.marker.next')<CR>
   map [E <Cmd>call VSCodeNotify('editor.action.marker.prevInFiles')<CR>
   map ]E <Cmd>call VSCodeNotify('editor.action.marker.nextInFiles')<CR>
+
+  map [c <Cmd>call VSCodeNotify('workbench.action.editor.previousChange')<CR>
+  map ]c <Cmd>call VSCodeNotify('workbench.action.editor.nextChange')<CR>
+
+  map [f <Cmd>call VSCodeNotify('search.action.focusPrevSearchResult')<CR>
+  map ]f <Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<CR>
+  map [q <Cmd>call VSCodeNotify('search.action.focusPrevSearchResult')<CR>
+  map ]q <Cmd>call VSCodeNotify('search.action.focusNextSearchResult')<CR>
+
   map [b <Cmd>call VSCodeNotify('workbench.action.previousEditor')<cr>
   map ]b <Cmd>call VSCodeNotify('workbench.action.nextEditor')<cr>
 

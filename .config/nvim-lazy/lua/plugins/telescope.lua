@@ -47,6 +47,9 @@ return {
               ["<a-t>"] = function(...)
                 require("telescope.actions").select_tab(...)
               end,
+              ["<a-cr>"] = function(...)
+                require("telescope.actions").select_tab(...)
+              end,
               ["<C-c>"] = function(...)
                 require("telescope.actions").close(...)
               end,
@@ -126,23 +129,20 @@ return {
     {
       "<c-p>",
       function()
-        LazyVim.pick.open(
-          "files",
-          {
-            find_command = {
-              "rg",
-              "--files",
-              "--color",
-              "never",
-              "--ignore",
-              "--hidden",
-              "--sortr",
-              "modified",
-              "--glob",
-              "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
-            },
-          }
-        )
+        LazyVim.pick.open("files", {
+          find_command = {
+            "rg",
+            "--files",
+            "--color",
+            "never",
+            "--ignore",
+            "--hidden",
+            "--sortr",
+            "modified",
+            "--glob",
+            "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
+          },
+        })
       end,
       desc = "Find Files (Root Dir)",
     },

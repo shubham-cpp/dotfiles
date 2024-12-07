@@ -105,7 +105,6 @@ return {
       opts.sources = cmp.config.sources({
         {
           name = "nvim_lsp",
-          max_item_count = 20,
           entry_filter = function(entry)
             if
               (

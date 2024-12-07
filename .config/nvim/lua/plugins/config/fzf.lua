@@ -39,6 +39,10 @@ fzf.setup({
     search = hl_validate 'IncSearch',
   },
   keymap = {
+    builtin = {
+      true,
+      ['<esc>'] = 'hide',
+    },
     fzf = {
       ['ctrl-j'] = 'down',
       ['ctrl-k'] = 'up',
@@ -65,7 +69,7 @@ fzf.setup({
     fzf_opts = {
       ['--layout'] = 'reverse',
       -- ['--tiebreak'] = 'end',
-      ['--tiebreak'] = 'chunk',
+      ['--tiebreak'] = 'length',
     },
     winopts = {
       height = 0.55,

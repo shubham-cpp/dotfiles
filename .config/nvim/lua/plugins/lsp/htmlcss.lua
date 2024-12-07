@@ -8,6 +8,8 @@ return {
         'html-lsp',
         'stylelint',
         'css-lsp',
+        'cssmodules_ls',
+        'css_variables',
         'prettierd',
         'emmet-language-server',
       })
@@ -33,6 +35,8 @@ return {
     opts = function(_, opts)
       opts.config = vim.tbl_extend('force', opts.config or {}, {
         html = {},
+        css_variables = {},
+        cssmodules_ls = {},
         cssls = {
           settings = {
             css = {
