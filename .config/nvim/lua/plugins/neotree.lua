@@ -1,9 +1,20 @@
+--- if current buffer is a neotree buffer, toggle it
+--- if we're currently not in focused for neotree then focus on the neotree buffer
+local function better_toggle_neotree()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local bufname = vim.fn.bufname(bufnr)
+  if bufname ~= '' and string.match(bufname, 'neo.tree %w+') ~= nil then
+    vim.cmd 'Neotree toggle'
+  else
+    vim.cmd 'Neotree reveal focus'
+  end
+end
 ---@type LazySpec
 return {
   'nvim-neo-tree/neo-tree.nvim',
   version = 'v3.x',
   cmd = 'Neotree',
-  enabled = false,
+  enabled = true,
   dependencies = {
     'nvim-lua/plenary.nvim',
     'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
@@ -34,15 +45,7 @@ return {
   keys = {
     {
       '<leader>e',
-      function()
-        local bufnr = vim.api.nvim_get_current_buf()
-        local bufname = vim.fn.bufname(bufnr)
-        if bufname ~= '' and string.match(bufname, 'neo.tree %w+') ~= nil then
-          vim.cmd 'Neotree toggle'
-        else
-          vim.cmd 'Neotree reveal focus'
-        end
-      end,
+      better_toggle_neotree,
       desc = 'Open File [E]xplorer(Reveal)',
     },
     { '<leader>E', '<cmd>Neotree focus<cr>', desc = 'Open File [E]xplorer' },

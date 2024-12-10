@@ -2,7 +2,7 @@
 return {
   "rmagatti/auto-session",
   lazy = false,
-
+  cmd = { "AutoSession", "SessionManager" },
   ---enables autocomplete for opts
   ---@module "auto-session"
   ---@type AutoSession.Config

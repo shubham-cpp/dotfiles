@@ -8,8 +8,8 @@ return {
         'html-lsp',
         'stylelint',
         'css-lsp',
-        'cssmodules_ls',
-        'css_variables',
+        'css-variables-language-server',
+        'cssmodules-language-server',
         'prettierd',
         'emmet-language-server',
       })

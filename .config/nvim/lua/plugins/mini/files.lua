@@ -20,7 +20,7 @@ return {
     { 'antosha417/nvim-lsp-file-operations', dependencies = { 'nvim-lua/plenary.nvim' } },
   },
   version = '*',
-  enabled = true,
+  enabled = false,
   keys = {
     {
       '<leader>e',

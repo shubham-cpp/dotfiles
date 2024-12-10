@@ -50,8 +50,7 @@ return {
     }
   end,
   dependencies = {
-    -- 'KingMichaelPark/age.nvim', -- Add age dependency
-    { dir = "~/Downloads/GitClones/age.nvim" }, -- Add age dependency
+    "KingMichaelPark/age.nvim",
     "nvim-treesitter/nvim-treesitter",
     {
       "stevearc/dressing.nvim",

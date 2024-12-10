@@ -40,13 +40,12 @@ return {
 
   opts = function(_, opts)
     opts.window.mappings["l"] = "open"
-    -- opts.window.mappings['l'] = 'open'
 
     opts.filesystem.commands = vim.tbl_extend("force", opts.filesystem.commands or {}, {
       ["delete"] = function(state)
         local inputs = require("neo-tree.ui.inputs")
         local path = state.tree:get_node().path
-        local msg = "Are you sure you want to trash " .. path
+        local msg = "Trash " .. path
         inputs.confirm(msg, function(confirmed)
           if not confirmed then
             return
@@ -59,7 +58,7 @@ return {
       ["delete_visual"] = function(state, selected_nodes)
         local inputs = require("neo-tree.ui.inputs")
         local count = #selected_nodes
-        local msg = "Are you sure you want to trash " .. count .. " files ?"
+        local msg = "Trash " .. count .. " files ?"
         inputs.confirm(msg, function(confirmed)
           if not confirmed then
             return
