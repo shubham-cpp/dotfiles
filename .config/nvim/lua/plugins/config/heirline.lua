@@ -149,14 +149,14 @@ heirline.setup({
     -- lib.component.compiler_redo(),
     -- lib.component.aerial(),
   },
-  statuscolumn = { -- UI left column
-    init = function(self)
-      self.bufnr = vim.api.nvim_get_current_buf()
-    end,
-    lib.component.foldcolumn(),
-    lib.component.numbercolumn(),
-    lib.component.signcolumn(),
-  } or nil,
+  -- statuscolumn = { -- UI left column
+  --   init = function(self)
+  --     self.bufnr = vim.api.nvim_get_current_buf()
+  --   end,
+  --   lib.component.foldcolumn(),
+  --   lib.component.numbercolumn(),
+  --   lib.component.signcolumn(),
+  -- } or nil,
   statusline = { -- UI statusbar
     hl = { fg = 'fg', bg = 'bg' },
     lib.component.mode(),

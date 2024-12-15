@@ -54,12 +54,32 @@ M.opts = {
       gl = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
       ['<leader>le'] = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
       ['<leader>ld'] = {
-        vim.lsp.buf.definition,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.definition()
+          else
+            fzf.lsp_definitions({
+              jump_to_single_result = true,
+              winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+            })
+          end
+        end,
         desc = 'Goto definition',
         cond = 'textDocument/definition',
       },
       gd = {
-        vim.lsp.buf.definition,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.definition()
+          else
+            fzf.lsp_definitions({
+              jump_to_single_result = true,
+              winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+            })
+          end
+        end,
         desc = 'Goto definition',
         cond = 'textDocument/definition',
       },
@@ -75,14 +95,42 @@ M.opts = {
         cond = 'textDocument/codeAction',
       },
       ['<leader>li'] = {
-        vim.lsp.buf.implementation,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.implementation()
+          else
+            fzf.lsp_implementations()
+          end
+        end,
         desc = 'Goto implementation',
         cond = 'textDocument/implementation',
       },
       -- condition for only server with declaration capabilities
-      ['<leader>lD'] = { vim.lsp.buf.declaration, desc = 'Goto Declaration', cond = 'textDocument/declaration' },
+      ['<leader>lD'] = {
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.declaration()
+          else
+            fzf.lsp_declarations({
+              jump_to_single_result = true,
+              winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+            })
+          end
+        end,
+        desc = 'Goto Declaration',
+        cond = 'textDocument/declaration',
+      },
       ['<leader>lt'] = {
-        vim.lsp.buf.type_definition,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.type_definition()
+          else
+            fzf.lsp_typedefs()
+          end
+        end,
         desc = 'Type definition',
         cond = 'textDocument/typeDefinition',
       },
@@ -95,12 +143,32 @@ M.opts = {
         end,
       },
       gr = {
-        vim.lsp.buf.references,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.references()
+          else
+            fzf.lsp_references({
+              jump_to_single_result = true,
+              winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+            })
+          end
+        end,
         desc = 'Goto references',
         cond = 'textDocument/references',
       },
       ['<leader>lR'] = {
-        vim.lsp.buf.references,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.references()
+          else
+            fzf.lsp_references({
+              jump_to_single_result = true,
+              winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+            })
+          end
+        end,
         desc = 'Goto references',
         cond = 'textDocument/references',
       },
@@ -125,12 +193,26 @@ M.opts = {
         desc = 'Goto Next diagnostic',
       },
       ['<leader>lw'] = {
-        vim.lsp.buf.document_symbol,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.document_symbol()
+          else
+            fzf.lsp_document_symbols()
+          end
+        end,
         desc = 'Document symbols',
         cond = 'textDocument/documentSymbol',
       },
       ['<leader>lW'] = {
-        vim.lsp.buf.workspace_symbol,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.workspace_symbol()
+          else
+            fzf.lsp_workspace_symbols()
+          end
+        end,
         desc = 'Workspace symbols',
         cond = 'workspace/symbol',
       },
@@ -145,7 +227,14 @@ M.opts = {
         cond = 'textDocument/rename',
       },
       ['<leader>la'] = {
-        vim.lsp.buf.code_action,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.code_action()
+          else
+            fzf.lsp_code_actions()
+          end
+        end,
         desc = 'Code actions',
         cond = 'textDocument/codeAction',
       },
@@ -184,7 +273,14 @@ M.opts = {
     },
     x = {
       ['<leader>la'] = {
-        vim.lsp.buf.code_action,
+        function()
+          local ok, fzf = pcall(require, 'fzf-lua')
+          if not ok then
+            vim.lsp.buf.code_action()
+          else
+            fzf.lsp_code_actions()
+          end
+        end,
         desc = 'Code actions',
         cond = 'textDocument/codeAction',
       },

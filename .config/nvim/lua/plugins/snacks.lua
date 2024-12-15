@@ -7,8 +7,30 @@ return {
     bigfile = { enabled = true },
     notifier = { enabled = true },
     quickfile = { enabled = true },
-    statuscolumn = { enabled = false },
+    statuscolumn = {
+      enabled = true,
+      folds = {
+        open = true, -- show open fold icons
+      },
+    },
     words = { enabled = true },
+    scope = { enabled = true },
+    indent = {
+      enabled = true,
+      indent = {
+        only_current = true,
+        chunk = {
+          -- when enabled, scopes will be rendered as chunks, except for the
+          -- top-level scope which will be rendered as a scope.
+          enabled = true,
+        },
+      },
+      chunk = {
+        -- when enabled, scopes will be rendered as chunks, except for the
+        -- top-level scope which will be rendered as a scope.
+        enabled = true,
+      },
+    },
   },
 
   keys = {
@@ -25,6 +47,13 @@ return {
         Snacks.git.blame_line()
       end,
       desc = 'Git Blame Line',
+    },
+    {
+      '<leader>go',
+      function()
+        Snacks.gitbrowse.open()
+      end,
+      desc = 'Git Open Line',
     },
     {
       ']]',

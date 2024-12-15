@@ -176,42 +176,43 @@ if not ok_dressing then
   fzf.register_ui_select()
 end
 
-vim.lsp.handlers['textDocument/codeAction'] = fzf.lsp_code_actions
-vim.lsp.handlers['textDocument/references'] = function()
-  fzf.lsp_references({
-    jump_to_single_result = true,
-    winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
-  })
-end
+-- vim.lsp.handlers['textDocument/codeAction'] = fzf.lsp_code_actions
+-- vim.lsp.handlers['textDocument/references'] = function()
+--   fzf.lsp_references({
+--     jump_to_single_result = true,
+--     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+--   })
+-- end
+--
+-- vim.lsp.handlers['textDocument/definition'] = function()
+--   fzf.lsp_definitions({
+--     jump_to_single_result = true,
+--     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+--   })
+-- end
+-- vim.lsp.handlers['textDocument/declaration'] = function()
+--   fzf.lsp_declarations({
+--     jump_to_single_result = true,
+--     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+--   })
+-- end
+-- vim.lsp.handlers['textDocument/typeDefinition'] = fzf.lsp_typedefs
+-- vim.lsp.handlers['textDocument/implementation'] = fzf.lsp_implementations
+--
+-- vim.lsp.handlers['textDocument/documentSymbol'] = fzf.lsp_document_symbols
+-- vim.lsp.handlers['workspace/symbol'] = fzf.lsp_workspace_symbols
+--
+-- vim.lsp.handlers['callHierarchy/incomingCalls'] = function()
+--   fzf.lsp_incoming_calls({
+--     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+--   })
+-- end
+-- vim.lsp.handlers['callHierarchy/outgoingCalls'] = function()
+--   fzf.lsp_outgoing_calls({
+--     winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+--   })
+-- end
 
-vim.lsp.handlers['textDocument/definition'] = function()
-  fzf.lsp_definitions({
-    jump_to_single_result = true,
-    winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
-  })
-end
-vim.lsp.handlers['textDocument/declaration'] = function()
-  fzf.lsp_declarations({
-    jump_to_single_result = true,
-    winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
-  })
-end
-vim.lsp.handlers['textDocument/typeDefinition'] = fzf.lsp_typedefs
-vim.lsp.handlers['textDocument/implementation'] = fzf.lsp_implementations
-
-vim.lsp.handlers['textDocument/documentSymbol'] = fzf.lsp_document_symbols
-vim.lsp.handlers['workspace/symbol'] = fzf.lsp_workspace_symbols
-
-vim.lsp.handlers['callHierarchy/incomingCalls'] = function()
-  fzf.lsp_incoming_calls({
-    winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
-  })
-end
-vim.lsp.handlers['callHierarchy/outgoingCalls'] = function()
-  fzf.lsp_outgoing_calls({
-    winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
-  })
-end
 local function fzf_create_file()
   local fzf = require 'fzf-lua'
   local path = require 'fzf-lua.path'

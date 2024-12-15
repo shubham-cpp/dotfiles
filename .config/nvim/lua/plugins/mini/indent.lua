@@ -4,7 +4,7 @@ local au_group = vim.api.nvim_create_augroup('sp_indent', { clear = true })
 return {
   'echasnovski/mini.indentscope',
   version = false,
-  enabled = true,
+  enabled = false,
   event = 'BufReadPost',
   config = function()
     require('mini.indentscope').setup({

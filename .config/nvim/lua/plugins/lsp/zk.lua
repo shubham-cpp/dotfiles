@@ -31,8 +31,19 @@ local config = {
       },
     },
     config = function()
+      local picker = 'select'
+      local ok_fzf, _ = pcall(require, 'fzf-lua')
+      if ok_fzf then
+        picker = 'fzf_lua'
+      else
+        local ok_telescope, _ = pcall(require, 'telescope')
+        if ok_telescope then
+          picker = 'telescope'
+        end
+      end
+
       require('zk').setup({
-        picker = 'telescope', -- "telescope", "fzf", "fzf_lua" or "select"
+        picker = picker, -- "telescope", "fzf", "fzf_lua" or "select"
         lsp = {
           config = {
             on_attach = function(_, bufnr)

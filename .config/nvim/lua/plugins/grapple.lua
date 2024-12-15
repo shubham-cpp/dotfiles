@@ -12,7 +12,8 @@ return {
     status = false,
   },
   keys = {
-    { '<leader>a', '<cmd>Grapple toggle<cr>', desc = 'Tag a file' },
+    { '<leader>A', '<cmd>Grapple toggle<cr>', desc = 'Tag a file' },
+    { '<leader>`', '<cmd>Grapple toggle<cr>', desc = 'Tag a file' },
     { '<c-e>', '<cmd>Grapple toggle_tags<cr>', desc = 'Toggle tags menu' },
 
     { "'1", '<cmd>Grapple select index=1<cr>', desc = 'Select first tag' },
