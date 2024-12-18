@@ -31,8 +31,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
     vim.keymap.set('n', 'A', 'A<C-k>', { buffer = true })
     vim.keymap.set('n', 'D', 'A<C-k><C-\\><C-n>', { buffer = true })
     vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
-    vim.keymap.set('n', 'cc', 'A<C-e><C-u>', { buffer = true })
-    vim.keymap.set('n', 'dd', 'A<C-e><C-u><C-><C-n>', { buffer = true })
+    vim.keymap.set('n', 'dd', 'A<C-e><C-u><C-\\><C-n>', { buffer = true })
 
     vim.opt_local.signcolumn = 'no'
     vim.opt_local.relativenumber = false
@@ -242,7 +241,7 @@ vim.filetype.add({
     ['*profile'] = 'sh',
     ['*.postcss'] = 'css',
     ['*.kbd'] = 'lisp',
-    ['.eslintrc.*'] = 'jsonc',
+    ['.eslintrc'] = 'jsonc',
     ['tsconfig.*.json'] = 'jsonc',
     ['.*/hyprland%.conf'] = 'hyprlang',
   },

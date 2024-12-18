@@ -26,6 +26,20 @@ local function deprio(kind)
   end
 end
 
+--- detect if the current completion item is an emmet completion item
+--- @param entry cmp.Entry
+--- @return boolean
+local function isEmmet(entry)
+  return (
+    entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
+    or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
+  )
+    and (
+      entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
+      or entry.source:get_debug_name() == 'nvim_lsp:emmet_ls'
+    )
+end
+
 cmp.setup({
   snippet = {
     expand = function(args)
@@ -115,16 +129,7 @@ cmp.setup({
           {
             name = 'nvim_lsp',
             entry_filter = function(entry)
-              vim.print(entry.source:get_debug_name())
-              if
-                (
-                  entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
-                  or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
-                ) and entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
-              then
-                return true
-              end
-              return false
+              return isEmmet(entry)
             end,
           },
         },
@@ -166,15 +171,7 @@ cmp.setup({
       priority = 100,
       max_item_count = 20,
       entry_filter = function(entry)
-        if
-          (
-            entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
-            or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
-          ) and entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
-        then
-          return false
-        end
-        return true
+        return not isEmmet(entry)
       end,
     },
     { name = 'lazydev', priority = 95 },
