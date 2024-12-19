@@ -3,24 +3,24 @@ return {
   "echasnovski/mini.surround",
   enabled = true,
   keys = {
-    { "s", "", desc = "+surround" },
-    { "sa", mode = { "n", "v" }, desc = "Surround add" },
-    { "sd", mode = { "n" }, desc = "Surround delete" },
-    { "sr", mode = { "n" }, desc = "Surround replace" },
-    { "sf", mode = { "n" }, desc = "Surround find" },
-    { "sh", mode = { "n" }, desc = "Surround highlight" },
+    { "gz", "", desc = "+surround" },
+    { "ys", mode = { "n", "v" }, desc = "Surround add" },
+    { "ds", mode = { "n" }, desc = "Surround delete" },
+    { "cs", mode = { "n" }, desc = "Surround replace" },
+    { "gzf", mode = { "n" }, desc = "Surround find" },
+    { "gzh", mode = { "n" }, desc = "Surround highlight" },
   },
   opts = {
     search_method = "cover_or_prev",
     n_lines = 500,
     mappings = {
-      add = "sa", -- Add surrounding in Normal and Visual modes
-      delete = "sd", -- Delete surrounding
-      replace = "sr", -- Replace surrounding
-      find = "sf", -- Find surrounding (to the right)
-      find_left = "sF", -- Find surrounding (to the left)
-      highlight = "sh", -- Highlight surrounding
-      update_n_lines = "sn", -- Update `n_lines`
+      add = "ys", -- Add surrounding in Normal and Visual modes
+      delete = "ds", -- Delete surrounding
+      replace = "cs", -- Replace surrounding
+      find = "gzf", -- Find surrounding (to the right)
+      find_left = "gzF", -- Find surrounding (to the left)
+      highlight = "gzh", -- Highlight surrounding
+      update_n_lines = "gzn", -- Update `n_lines`
     },
   },
 }
