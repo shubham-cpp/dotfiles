@@ -120,6 +120,38 @@ return {
           },
         },
       },
+      commands = {
+        ImportsOrganize = {
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.organizeImports" } },
+              apply = true,
+            }
+          end,
+          cond = "textDocument/codeAction",
+          desc = "Organize Imports",
+        },
+        ImportsRemove = {
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.removeUnused" } },
+              apply = true,
+            }
+          end,
+          cond = "textDocument/codeAction",
+          desc = "Remove Unused Imports",
+        },
+        FixAll = {
+          function()
+            vim.lsp.buf.code_action {
+              context = { only = { "source.fixAll" } },
+              apply = true,
+            }
+          end,
+          cond = "textDocument/codeAction",
+          desc = "Fix All fixable diagnostics",
+        },
+      },
       -- mappings to be set up on attaching of a language server
       mappings = {
         n = {
@@ -217,6 +249,26 @@ return {
           ["<leader>="] = {
             vim.lsp.buf.format,
             desc = "Format buffer",
+          },
+          ["<leader>lo"] = {
+            function()
+              vim.lsp.buf.code_action {
+                context = { only = { "source.organizeImports" } },
+                apply = true,
+              }
+            end,
+            desc = "Oraganize imports",
+            cond = "textDocument/codeAction",
+          },
+          ["<leader>lF"] = {
+            function()
+              vim.lsp.buf.code_action {
+                context = { only = { "source.fixAll" } },
+                apply = true,
+              }
+            end,
+            desc = "Fix All",
+            cond = "textDocument/codeAction",
           },
         },
         i = {

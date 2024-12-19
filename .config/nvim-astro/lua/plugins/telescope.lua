@@ -62,6 +62,27 @@ return {
         },
       },
     },
+    keys = {
+      { "<c-p>", function() require("telescope.builtin").find_files() end, desc = "Find files" },
+      {
+        "<leader>fn",
+        function() require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" } end,
+        desc = "Neovim Config",
+      },
+      {
+        "<leader>fd",
+        function()
+          require("telescope.builtin").find_files { cwd = vim.fn.expand "~/Documents/dotfiles", hidden = true }
+        end,
+        desc = "Dotfiles",
+      },
+      {
+        "<leader>fl",
+        function() require("telescope.builtin").find_files { cwd = vim.fn.stdpath "data" .. "/lazy" } end,
+        desc = "All Plugins",
+      },
+      { "<leader>fN", "<cmd>Telescope notify<CR>", desc = "Notification" },
+    },
   },
   {
     "fdschmidt93/telescope-egrepify.nvim",
@@ -78,25 +99,6 @@ return {
               mappings = {
                 n = {
                   ["<Leader>fs"] = { "<Cmd>Telescope egrepify<CR>", desc = "Search" },
-                  ["<c-p>"] = { function() require("telescope.builtin").find_files() end, desc = "Find files" },
-                  ["<leader>fn"] = {
-                    function() require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" } end,
-                    desc = "Neovim Config",
-                  },
-                  ["<leader>fd"] = {
-                    function()
-                      require("telescope.builtin").find_files {
-                        cwd = vim.fn.expand "~/Documents/dotfiles",
-                        hidden = true,
-                      }
-                    end,
-                    desc = "Dotfiles",
-                  },
-                  ["<leader>fl"] = {
-                    function() require("telescope.builtin").find_files { cwd = vim.fn.stdpath "data" .. "lazy" } end,
-                    desc = "All Plugins",
-                  },
-                  ["<leader>fN"] = { "<cmd>Telescope notify<CR>", desc = "Notification" },
                 },
               },
             },
@@ -106,18 +108,18 @@ return {
       },
     },
   },
-  {
-    "natecraddock/telescope-zf-native.nvim",
-    lazy = true,
-    specs = {
-      {
-        "nvim-telescope/telescope.nvim",
-        dependencies = {
-          "natecraddock/telescope-zf-native.nvim",
-          { "nvim-telescope/telescope-fzf-native.nvim", build = "make", enabled = false },
-        },
-        opts = function() require("telescope").load_extension "zf-native" end,
-      },
-    },
-  },
+  -- {
+  --   "natecraddock/telescope-zf-native.nvim",
+  --   lazy = true,
+  --   specs = {
+  --     {
+  --       "nvim-telescope/telescope.nvim",
+  --       dependencies = {
+  --         "natecraddock/telescope-zf-native.nvim",
+  --         { "nvim-telescope/telescope-fzf-native.nvim", build = "make", enabled = false },
+  --       },
+  --       opts = function() require("telescope").load_extension "zf-native" end,
+  --     },
+  --   },
+  -- },
 }

@@ -36,6 +36,36 @@ M.opts = {
       cond = 'textDocument/formatting',
       desc = 'Format file with LSP',
     },
+    ImportsOrganize = {
+      function()
+        vim.lsp.buf.code_action({
+          context = { only = { 'source.organizeImports' } },
+          apply = true,
+        })
+      end,
+      cond = 'textDocument/codeAction',
+      desc = 'Organize Imports',
+    },
+    ImportsRemove = {
+      function()
+        vim.lsp.buf.code_action({
+          context = { only = { 'source.removeUnused' } },
+          apply = true,
+        })
+      end,
+      cond = 'textDocument/codeAction',
+      desc = 'Remove Unused Imports',
+    },
+    FixAll = {
+      function()
+        vim.lsp.buf.code_action({
+          context = { only = { 'source.fixAll' } },
+          apply = true,
+        })
+      end,
+      cond = 'textDocument/codeAction',
+      desc = 'Fix All fixable diagnostics',
+    },
   },
   capabilities = {
     textDocument = { foldingRange = { dynamicRegistration = false, lineFoldingOnly = true } },
@@ -82,6 +112,16 @@ M.opts = {
         end,
         desc = 'Goto definition',
         cond = 'textDocument/definition',
+      },
+      ['<leader>lf'] = {
+        function()
+          vim.lsp.buf.code_action({
+            context = { only = { 'source.fixAll' } },
+            apply = true,
+          })
+        end,
+        desc = 'Fix All',
+        cond = 'textDocument/codeAction',
       },
       ['<leader>lo'] = {
         function()
