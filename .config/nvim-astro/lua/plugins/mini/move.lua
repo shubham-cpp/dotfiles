@@ -5,7 +5,7 @@ return {
     { ">", mode = "v" },
     { "<", mode = "v" },
     { "K", mode = "v" },
-    { "L", mode = "v" },
+    { "J", mode = "v" },
     "<M-h>",
     "<M-j>",
     "<M-k>",

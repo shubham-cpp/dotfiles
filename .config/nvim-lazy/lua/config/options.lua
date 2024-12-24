@@ -33,3 +33,7 @@ vim.opt.wildignore:append({
   "vendor",
   ".git",
 })
+
+if vim.fn.executable("rg") == 1 then
+  vim.opt.grepprg = "rg --vimgrep --smart-case" -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+end

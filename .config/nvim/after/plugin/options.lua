@@ -92,7 +92,7 @@ o.iskeyword:append '-'
 
 if vim.fn.executable 'rg' == 1 then
   o.grepformat = '%f:%l:%c:%m'
-  o.grepprg = 'rg --vimgrep --no-heading --smart-case' -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+  o.grepprg = 'rg --vimgrep --smart-case' -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 end
 
 vim.schedule(function()

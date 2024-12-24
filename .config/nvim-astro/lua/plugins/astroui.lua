@@ -5,7 +5,7 @@ return {
   opts = {
     status = {
       colors = {
-        buffer_active_bg = "#173063",
+        buffer_active_bg = "#182b3f",
       },
     },
   },

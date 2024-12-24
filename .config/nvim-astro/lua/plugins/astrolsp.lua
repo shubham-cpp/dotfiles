@@ -50,7 +50,6 @@ return {
         -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
         emmet_ls = function(_, opts)
           opts.on_attach = function(client, bufnr)
-            vim.print "in the on_attach of emmet"
             vim.keymap.set("i", "<C-t>", function()
               client.request(
                 "textDocument/completion",
