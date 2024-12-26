@@ -2,10 +2,24 @@ local cmd = "trash"
 if vim.fn.executable("trash-put") == 1 then
   cmd = "trash-put"
 end
+--- if current buffer is a neotree buffer, toggle it
+--- if we're currently not in focused for neotree then focus on the neotree buffer
+local function better_toggle_neotree()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local bufname = vim.fn.bufname(bufnr)
+  if bufname ~= "" and string.match(bufname, "neo.tree %w+") ~= nil then
+    vim.cmd("Neotree toggle")
+  else
+    vim.cmd("Neotree reveal focus")
+  end
+end
 
 ---@type LazySpec
 return {
   "nvim-neo-tree/neo-tree.nvim",
+  keys = {
+    { "<leader>e", better_toggle_neotree, desc = "[E]xplorer neotree" },
+  },
   dependencies = {
     {
       "antosha417/nvim-lsp-file-operations",

@@ -14,9 +14,11 @@ end
 ---@type LazySpec
 return {
   "fdschmidt93/telescope-egrepify.nvim",
+  enabled = vim.g.lazyvim_picker == "telescope",
   dependencies = {
     {
       "nvim-telescope/telescope.nvim",
+      enabled = vim.g.lazyvim_picker == "telescope",
       opts = {
         defaults = {
           sorting_strategy = "ascending",

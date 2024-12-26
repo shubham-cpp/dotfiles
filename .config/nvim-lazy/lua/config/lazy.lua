@@ -21,8 +21,8 @@ require("lazy").setup({
 
     { import = "lazyvim.plugins.extras.editor.refactoring" },
     { import = "lazyvim.plugins.extras.editor.dial" },
+    -- { import = "lazyvim.plugins.extras.editor.telescope" },
     { import = "lazyvim.plugins.extras.coding.luasnip" },
-    -- { import = "lazyvim.plugins.extras.coding.blink" },
 
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
     { import = "lazyvim.plugins.extras.dap.core" },

@@ -29,3 +29,6 @@ vim.keymap.set("n", "C", '"_C')
 for i = 1, 9 do
   vim.keymap.set("n", "<leader>" .. i, i .. "gt", { desc = "Goto Tab " .. i })
 end
+if _G.Snacks then
+  Snacks.toggle.zoom():map("<C-w>m")
+end

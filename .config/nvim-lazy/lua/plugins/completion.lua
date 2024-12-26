@@ -15,17 +15,79 @@ end
 
 ---@type LazySpec
 return {
-  --   "saghen/blink.cmp",
-  --   opts = {
-  --     keymap = {
-  --       preset = "enter",
-  --       ["<C-y>"] = { "accept", "fallback" },
-  --       ["<C-k>"] = { "select_prev", "fallback" },
-  --       ["<C-j>"] = { "select_next", "fallback" },
-  --     },
-  --   },
+  {
+    "saghen/blink.cmp",
+    enabled = vim.g.lazyvim_cmp == "blink.cmp" or vim.g.lazyvim_cmp == "auto",
+    dependencies = {
+      "mikavilpas/blink-ripgrep.nvim",
+    },
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      keymap = {
+        preset = "enter",
+        ["<C-y>"] = { "select_and_accept", "fallback" },
+        ["<C-k>"] = { "select_prev", "fallback" },
+        ["<C-j>"] = { "select_next", "fallback" },
+        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+        ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+        cmdline = {
+          preset = "enter",
+          ["<Up>"] = {},
+          ["<Down>"] = {},
+          ["<C-k>"] = { "select_prev", "fallback" },
+          ["<C-j>"] = { "select_next", "fallback" },
+          ["<Tab>"] = { "select_next", "fallback" },
+          ["<S-Tab>"] = { "select_prev", "fallback" },
+        },
+      },
+      completion = {
+        menu = { border = "rounded" },
+        documentation = { window = { border = "rounded" } },
+        list = {
+          selection = function(ctx)
+            return ctx.mode == "cmdline" and "auto_insert" or "preselect"
+          end,
+        },
+      },
+      sources = {
+        default = {
+          "lsp",
+          "path",
+          "snippets",
+          "buffer",
+          "ripgrep",
+        },
+        providers = {
+          ripgrep = {
+            module = "blink-ripgrep",
+            name = "Ripgrep",
+            ---@module "blink-ripgrep"
+            ---@type blink-ripgrep.Options
+            opts = {
+              prefix_min_len = 4,
+              score_offset = 1, -- should be lower priority
+              max_filesize = "300K",
+              search_casing = "--smart-case",
+            },
+          },
+        },
+        cmdline = function()
+          local type = vim.fn.getcmdtype()
+          if type == ":" then
+            return { "path", "cmdline" }
+          end
+          if type == "/" or type == "?" then
+            return { "buffer" }
+          end
+          return {}
+        end,
+      },
+    },
+  },
   {
     "hrsh7th/nvim-cmp",
+    enabled = vim.g.lazyvim_cmp == "nvim-cmp",
     dependencies = {
       { "hrsh7th/cmp-path", enabled = false },
       "lukas-reineke/cmp-rg",

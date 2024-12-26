@@ -175,7 +175,6 @@ return {
               else
                 builtin.lsp_definitions()
               end
-              print(ok)
             end,
             desc = "Goto references",
             cond = "textDocument/definition",
