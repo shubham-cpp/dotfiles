@@ -42,6 +42,7 @@ return {
         },
       },
       completion = {
+        ghost_text = { enabled = false },
         menu = { border = "rounded" },
         documentation = { window = { border = "rounded" } },
         list = {
@@ -66,7 +67,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = 1, -- should be lower priority
+              score_offset = 10, -- should be lower priority
               max_filesize = "300K",
               search_casing = "--smart-case",
             },

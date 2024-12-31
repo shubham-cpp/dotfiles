@@ -1,0 +1,50 @@
+# vim: commentstring=#\ %s
+window-padding-color = background
+font-family = "FiraCode Nerd Font"
+font-feature = -liga
+theme = "catppuccin-mocha"
+
+background =#0f0f11
+background-opacity=0.95
+
+# disable default bindings
+keybind = ctrl+comma=unbind
+keybind = super+ctrl+shift+up=unbind
+keybind = super+ctrl+shift+equal=unbind
+keybind = super+ctrl+shift+left=unbind
+keybind = super+ctrl+shift+down=unbind
+keybind = super+ctrl+shift+right=unbind
+keybind = super+ctrl+right_bracket=unbind
+keybind = super+ctrl+left_bracket=unbind
+keybind = ctrl+shift+e=unbind
+keybind = ctrl+shift+o=unbind
+keybind = ctrl+shift+i=unbind
+
+keybind = ctrl+shift+w=close_window
+keybind = ctrl+shift+page_up=move_tab:1
+keybind = ctrl+shift+page_down=move_tab:-1
+
+keybind = alt+left_bracket=goto_split:previous
+keybind = alt+right_bracket=goto_split:next
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:bottom
+keybind = alt+k=goto_split:top
+keybind = alt+l=goto_split:right
+keybind = alt+shift+h=resize_split:left,10
+keybind = alt+shift+j=resize_split:down,10
+keybind = alt+shift+k=resize_split:up,10
+keybind = alt+shift+l=resize_split:right,10
+
+keybind = alt+d=close_window
+keybind = alt+x=close_surface
+keybind = alt+c=close_surface
+keybind = alt+s=new_split:down
+keybind = alt+v=new_split:right
+
+keybind = alt+m=equalize_splits
+keybind = alt+n=next_tab
+keybind = alt+p=previous_tab
+keybind = alt+shift+n=move_tab:1
+keybind = alt+shift+p=move_tab:-1
+
+keybind = alt+z=toggle_split_zoom

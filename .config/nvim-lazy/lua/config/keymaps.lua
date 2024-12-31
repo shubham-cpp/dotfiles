@@ -31,4 +31,8 @@ for i = 1, 9 do
 end
 if _G.Snacks then
   Snacks.toggle.zoom():map("<C-w>m")
+  vim.keymap.set("n", "<c-\\>", function()
+    Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
+  end, { desc = "Terminal (Root dir)" })
+  vim.keymap.set("t", "<c-\\>", "<cmd>close<cr>", { desc = "Hide Terminal" })
 end

@@ -17,6 +17,6 @@ return {
   },
   config = function(_, opts)
     require('mini.operators').setup(opts)
-    vim.keymap.set('n', 'X', 'x$', { desc = 'Replace to end of line' })
+    vim.keymap.set('n', 'X', 'x$', { desc = 'Replace to end of line', remap = true })
   end,
 }

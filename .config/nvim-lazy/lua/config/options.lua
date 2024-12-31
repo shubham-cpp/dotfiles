@@ -6,6 +6,9 @@ vim.opt.showbreak = "󰄾 "
 vim.opt.iskeyword:append("-")
 vim.opt.scrolloff = 8
 
+vim.opt.sessionoptions:append({ "globals" })
+vim.opt.sessionoptions:remove("folds")
+
 vim.opt.wildignore:append({
   "*.o",
   "*.obj",
