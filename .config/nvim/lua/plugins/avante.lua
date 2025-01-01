@@ -1,12 +1,3 @@
-local function get_age_credentials(secret_file)
-  if not vim.fn.filereadable '$HOME/.config/age/identity.txt' then
-    return nil
-  end
-  local identity = vim.fn.expand '$HOME/.config/age/identity.txt'
-  local secret = vim.fn.expand('$HOME/.config/age/' .. secret_file)
-  return require('age').get(secret, identity)
-end
-
 ---@type LazySpec
 return {
   {
@@ -15,7 +6,7 @@ return {
     version = false,
     build = 'make',
     opts = function()
-      vim.env.GEMINI_API_KEY = get_age_credentials 'gemini_api.age'
+      vim.env.GEMINI_API_KEY = require('plugins.config.util').get_age_credentials 'gemini_api.age'
       local ollama_setup = {
         -- add any opts here
         ---@type Provider
@@ -53,6 +44,9 @@ return {
       return {
         ---@type Provider
         provider = 'gemini',
+        gemini = {
+          model = 'gemini-2.0-flash-exp',
+        },
       }
     end,
     dependencies = {
@@ -146,7 +140,7 @@ return {
               env = {
                 url = 'https://glhf.chat',
                 api_key = function()
-                  return get_age_credentials 'glhf.age'
+                  return require('plugins.config.util').get_age_credentials 'glhf.age'
                 end,
                 chat_url = '/api/openai/v1/chat/completions',
               },

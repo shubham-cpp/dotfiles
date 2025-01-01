@@ -3,18 +3,26 @@ function! Cond(Cond, ...)
   return a:Cond ? opts : extend(opts, { 'on': [], 'for': [] })
 endfunction
 
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:qs_lazy_highlight = 1
+
 call plug#begin(stdpath('data') . '/plugged')
-Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-abolish'
 Plug 'unblevable/quick-scope'
-Plug 'svermeulen/vim-subversive'
+" Plug 'svermeulen/vim-subversive'
+Plug 'machakann/vim-swap'
 Plug 'folke/flash.nvim'
 Plug 'monaqa/dial.nvim'
-Plug 'tpope/vim-abolish'
+Plug 'echasnovski/mini.nvim'
 if !exists('g:vscode')
-  Plug 'masar3141/mono-jade'
+  " Plug 'masar3141/mono-jade'
+  " Plug 'AlexvZyl/nordic.nvim', { 'branch': 'main' }
+  " Plug 'mellow-theme/mellow.nvim', { 'branch': 'main' }
+  Plug 'blazkowolf/gruber-darker.nvim', { 'branch': 'main' }
   Plug 'windwp/nvim-autopairs'
 endif
 
@@ -30,7 +38,6 @@ set autoindent
 set smartindent
 set mouse=a
 set iskeyword+=-
-set clipboard+=unnamedplus
 if !exists('g:vscode')
   " filetype plugin indent on
   " syntax on
@@ -56,12 +63,9 @@ set ignorecase
 set smartcase
 if executable('rg')
   set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
-  set grepformat+=%f:%l:%c:%m
+  " set grepformat+=%f:%l:%c:%m
 endif
 let g:mapleader = " "
-
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-let g:qs_lazy_highlight = 1
 
 if exists('g:vscode')
   map ze <Cmd>call VSCodeNotify('scrollLineDown')<CR>
@@ -162,12 +166,11 @@ else
   nnoremap ,W <cmd>noautocmd w!<cr>
   nnoremap zp vaBo^<Esc>
 endif
+
+" for quick-scope plugin
 highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
 highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
 
-nmap x <plug>(SubversiveSubstitute)
-nmap xx <plug>(SubversiveSubstituteLine)
-nmap X <plug>(SubversiveSubstituteToEndOfLine)
 nmap 0 ^
 nnoremap <Esc> <cmd>nohl<cr>
 
@@ -178,21 +181,24 @@ nnoremap dl "_dl
 nnoremap <silent> ,s :let @/='\<'.expand('<cword>').'\>'<CR>cgn
 vnoremap ,s "sy:let @/=@s<CR>cgn
 vnoremap <expr> p 'pgv"'.v:register.'y'
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-vnoremap > >gv
-vnoremap < <gv
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
 onoremap <silent> ie :exec "normal! ggVG"<cr>
 onoremap <silent> iv :exec "normal! HVL"<cr>
+" from vim-swap plugin
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
 
 augroup highlight_yank
   autocmd!
   autocmd TextYankPost * silent! lua vim.highlight.on_yank { higroup="IncSearch", timeout=100 }
 augroup END
 
+" set clipboard+=unnamedplus
 lua << EOF
+vim.schedule(function()
+  vim.opt.clipboard:append(vim.env.SSH_TTY and '' or 'unnamedplus') -- Sync with system clipboard
+end)
 if vim.g.vscode == nil then
   local o = vim.opt
   o.undodir = { vim.fn.stdpath 'state' .. '/undodir//' }

@@ -14,6 +14,7 @@ return {
   },
   keys = {
     { "<leader>A", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
+    { "<leader>`", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
     { "<c-m>", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
     { "<c-e>", "<cmd>Grapple toggle_tags<cr>", desc = "Toggle tags menu" },
 

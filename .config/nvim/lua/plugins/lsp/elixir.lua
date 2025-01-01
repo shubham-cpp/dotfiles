@@ -48,9 +48,9 @@ return {
               }),
               on_attach = function(client, bufnr)
                 opts.on_attach(client, bufnr)
-                vim.keymap.set('n', '<space>lp', ':ElixirFromPipe<cr>', { buffer = true, noremap = true })
-                vim.keymap.set('n', '<space>lP', ':ElixirToPipe<cr>', { buffer = true, noremap = true })
-                vim.keymap.set('v', '<space>lm', ':ElixirExpandMacro<cr>', { buffer = true, noremap = true })
+                vim.keymap.set('n', '<space>lp', ':ElixirFromPipe<cr>', { buffer = bufnr, noremap = true })
+                vim.keymap.set('n', '<space>lP', ':ElixirToPipe<cr>', { buffer = bufnr, noremap = true })
+                vim.keymap.set('v', '<space>lm', ':ElixirExpandMacro<cr>', { buffer = bufnr, noremap = true })
               end,
             },
           })

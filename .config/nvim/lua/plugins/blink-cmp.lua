@@ -2,73 +2,95 @@
 return {
   'Saghen/blink.cmp',
   enabled = false,
-  lazy = false, -- lazy loading handled internally
+  -- use a release tag to download pre-built binaries
+  version = '*',
   -- optional: provides snippets for the snippet source
   dependencies = {
     'rafamadriz/friendly-snippets',
+    'mikavilpas/blink-ripgrep.nvim',
     {
       'folke/lazydev.nvim',
       ft = 'lua', -- only load on lua files
       opts = {
         library = {
           'lazy.nvim',
-          { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+          -- See the configuration section for more details
+          -- Load luvit types when the `vim.uv` word is found
+          { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         },
       },
     },
     { 'Bilal2453/luvit-meta', lazy = true },
   },
-
-  -- use a release tag to download pre-built binaries
-  version = 'v0.*',
-  -- OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-  -- build = 'cargo build --release',
-
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
   opts = {
     keymap = {
-      hide = '<C-e>',
-      accept = '<C-y>',
+      preset = 'enter',
+      ['<C-y>'] = { 'select_and_accept', 'fallback' },
+      ['<C-k>'] = { 'select_prev', 'fallback' },
+      ['<C-j>'] = { 'select_next', 'fallback' },
+      ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+      ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+      cmdline = {
+        preset = 'enter',
+        ['<Up>'] = {},
+        ['<Down>'] = {},
+        ['<C-k>'] = { 'select_prev', 'fallback' },
+        ['<C-j>'] = { 'select_next', 'fallback' },
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+      },
     },
-    highlight = { use_nvim_cmp_as_default = true },
-    -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-    -- adjusts spacing to ensure icons are aligned
-    nerd_font_variant = 'mono',
-    -- experimental auto-brackets support
-    accept = { auto_brackets = { enabled = true } },
-    -- experimental signature help support
-    trigger = { signature_help = { enabled = true } },
+    completion = {
+      ghost_text = { enabled = false },
+      menu = { border = 'rounded' },
+      documentation = { window = { border = 'rounded' } },
+      list = {
+        selection = function(ctx)
+          return ctx.mode == 'cmdline' and 'auto_insert' or 'preselect'
+        end,
+      },
+    },
     sources = {
+      default = {
+        'lazydev',
+        'lsp',
+        'path',
+        'snippets',
+        'buffer',
+        'ripgrep',
+      },
       providers = {
-        { 'blink.cmp.sources.lsp', name = 'LSP', score_offset = 1 },
-        {
-          'blink.cmp.sources.snippets',
-          name = 'Snippets',
-          -- keyword_length = 1, -- not supported yet
+        ripgrep = {
+          module = 'blink-ripgrep',
+          name = 'Ripgrep',
+          ---@module "blink-ripgrep"
+          ---@type blink-ripgrep.Options
+          opts = {
+            prefix_min_len = 4,
+            score_offset = 10, -- should be lower priority
+            max_filesize = '300K',
+            search_casing = '--smart-case',
+          },
         },
-        {
-          'blink.cmp.sources.path',
-          name = 'Path',
-          score_offset = 3,
-          opts = { get_cwd = vim.uv.cwd },
-        },
-        {
-          'blink.cmp.sources.buffer',
-          name = 'Buffer',
-          keyword_length = 3,
-          score_offset = -1,
-          fallback_for = { 'Path' }, -- PENDING https://github.com/Saghen/blink.cmp/issues/122
+        lazydev = {
+          name = 'LazyDev',
+          module = 'lazydev.integrations.blink',
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 100,
         },
       },
-    },
-    windows = {
-      documentation = {
-        min_width = 15,
-        max_width = 50,
-        max_height = 15,
-        border = 'single',
-        auto_show = true,
-        auto_show_delay_ms = 200,
-      },
+      cmdline = function()
+        local type = vim.fn.getcmdtype()
+        if type == ':' then
+          return { 'path', 'cmdline' }
+        end
+        if type == '/' or type == '?' then
+          return { 'buffer' }
+        end
+        return {}
+      end,
     },
   },
 }

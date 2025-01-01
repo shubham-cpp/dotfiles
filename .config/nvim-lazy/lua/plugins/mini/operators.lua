@@ -9,6 +9,7 @@ return {
     { "gm", mode = { "n", "x" }, desc = "Duplicate" },
     { "x", mode = { "n", "x" }, desc = "Replace with register" },
     { "gs", mode = { "n", "x" }, desc = "Sort" },
+    "X",
   },
   opts = {
     -- Exchange text regions

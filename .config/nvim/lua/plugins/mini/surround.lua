@@ -12,7 +12,7 @@ return {
     { 'gzh', mode = { 'n' }, desc = 'Surround highlight' },
   },
   opts = {
-    search_method = 'cover_or_prev',
+    search_method = 'cover_or_next',
     n_lines = 500,
     mappings = {
       add = 'ys', -- Add surrounding in Normal and Visual modes
