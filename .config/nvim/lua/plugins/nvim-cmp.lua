@@ -285,14 +285,12 @@ return {
         comparators = {
           deprio(types.lsp.CompletionItemKind.Text),
           compare.exact,
-          compare.offset,
-          compare.recently_used,
           compare.score,
+          compare.offset,
           compare.kind,
+          compare.recently_used,
           compare.length,
           compare.locality,
-          compare.order,
-          compare.sort_text,
         },
       },
       ---@diagnostic disable-next-line: missing-fields
