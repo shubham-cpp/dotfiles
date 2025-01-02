@@ -1,6 +1,6 @@
 # vim: commentstring=#\ %s
 window-padding-color = background
-font-family = "FiraCode Nerd Font"
+font-family = "RecMonoDuotone Nerd Font"
 font-feature = -liga
 theme = "catppuccin-mocha"
 
