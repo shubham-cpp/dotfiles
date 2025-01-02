@@ -35,7 +35,6 @@ keybind = alt+shift+j=resize_split:down,10
 keybind = alt+shift+k=resize_split:up,10
 keybind = alt+shift+l=resize_split:right,10
 
-keybind = alt+d=close_window
 keybind = alt+x=close_surface
 keybind = alt+c=close_surface
 keybind = alt+s=new_split:down

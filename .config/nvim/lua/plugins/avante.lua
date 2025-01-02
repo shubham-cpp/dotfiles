@@ -1,3 +1,38 @@
+local function get_ollama_setup()
+  local ollama_setup = {
+    -- add any opts here
+    ---@type Provider
+    provider = 'gemini',
+    vendors = {
+      ---@type AvanteProvider
+      ollama = {
+        ['local'] = true,
+        endpoint = '127.0.0.1:11434/v1',
+        model = 'llama3.2',
+        parse_curl_args = function(opts, code_opts)
+          return {
+            url = opts.endpoint .. '/chat/completions',
+            headers = {
+              ['Accept'] = 'application/json',
+              ['Content-Type'] = 'application/json',
+            },
+            body = {
+              model = opts.model,
+              messages = require('avante.providers').copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
+              max_tokens = 2048,
+              stream = true,
+            },
+          }
+        end,
+        parse_response_data = function(data_stream, event_state, opts)
+          require('avante.providers').openai.parse_response(data_stream, event_state, opts)
+        end,
+      },
+    },
+  }
+  return ollama_setup
+end
+
 ---@type LazySpec
 return {
   {
@@ -7,39 +42,8 @@ return {
     build = 'make',
     opts = function()
       vim.env.GEMINI_API_KEY = require('plugins.config.util').get_age_credentials 'gemini_api.age'
-      local ollama_setup = {
-        -- add any opts here
-        ---@type Provider
-        provider = 'gemini',
-        vendors = {
-          ---@type AvanteProvider
-          ollama = {
-            ['local'] = true,
-            endpoint = '127.0.0.1:11434/v1',
-            model = 'llama3.2',
-            parse_curl_args = function(opts, code_opts)
-              return {
-                url = opts.endpoint .. '/chat/completions',
-                headers = {
-                  ['Accept'] = 'application/json',
-                  ['Content-Type'] = 'application/json',
-                },
-                body = {
-                  model = opts.model,
-                  messages = require('avante.providers').copilot.parse_message(code_opts), -- you can make your own message, but this is very advanced
-                  max_tokens = 2048,
-                  stream = true,
-                },
-              }
-            end,
-            parse_response_data = function(data_stream, event_state, opts)
-              require('avante.providers').openai.parse_response(data_stream, event_state, opts)
-            end,
-          },
-        },
-      }
       if not vim.env.GEMINI_API_KEY then
-        return ollama_setup
+        return get_ollama_setup()
       end
       return {
         ---@type Provider
@@ -131,8 +135,8 @@ return {
         display = { chat = { render_headers = false } },
         strategies = {
           --NOTE: Change the adapter as required
-          chat = { adapter = 'openai_compatible' },
-          inline = { adapter = 'openai_compatible' },
+          chat = { adapter = 'gemini' },
+          inline = { adapter = 'gemini' },
         },
         adapters = {
           openai_compatible = function()
@@ -147,6 +151,15 @@ return {
               schema = {
                 model = { default = 'hf:Qwen/Qwen2.5-Coder-32B-Instruct' },
                 num_ctx = { default = 32768 },
+              },
+            })
+          end,
+          gemini = function()
+            return require('codecompanion.adapters').extend('gemini', {
+              schema = {
+                model = {
+                  default = 'gemini-2.0-flash-exp',
+                },
               },
             })
           end,
