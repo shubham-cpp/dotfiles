@@ -14,13 +14,13 @@ local languages = {
   sass = { 'stylelint', 'cspell' },
   less = { 'stylelint', 'cspell' },
   python = { 'ruff', 'cspell' },
-  astro = { 'eslint_d', 'cspell' },
-  svelte = { 'eslint_d', 'cspell' },
-  javascript = { 'eslint_d', 'cspell' },
-  javascriptreact = { 'eslint_d', 'cspell' },
-  typescript = { 'eslint_d', 'cspell' },
-  typescriptreact = { 'eslint_d', 'cspell' },
-  vue = { 'eslint_d', 'cspell' },
+  astro = { 'cspell' },
+  svelte = { 'cspell' },
+  javascript = { 'cspell' },
+  javascriptreact = { 'cspell' },
+  typescript = { 'cspell' },
+  typescriptreact = { 'cspell' },
+  vue = { 'cspell' },
   yaml = { 'yamllint', 'cspell' },
   php = { 'php', 'phpstan', 'phpcs', 'cspell' },
 }
@@ -59,6 +59,7 @@ return {
   ft = vim.tbl_keys(languages),
   config = function(_, opts)
     local lint = require 'lint'
+    vim.env.ESLINT_D_PPID = vim.fn.getpid()
     languages = vim.tbl_deep_extend('force', languages, opts.languages or {})
     linters = vim.tbl_deep_extend('force', linters, opts.linters or {})
 

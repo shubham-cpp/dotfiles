@@ -41,7 +41,20 @@ return {
       handlers = {
         tsserver = false,
         ts_ls = false,
-        eslint = false,
+        eslint = function(server, opts)
+          local default_attach = opts.on_attach
+          opts.on_attach = function(client, bufnr)
+            default_attach(client, bufnr)
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = bufnr,
+              desc = 'Run Eslint fix before save',
+              callback = function()
+                vim.cmd 'EslintFixAll'
+              end,
+            })
+          end
+          require('lspconfig')[server].setup(opts)
+        end,
         vtsls = function(server, opts)
           require('lspconfig.configs').vtsls = require('vtsls').lspconfig
           local default_attach = opts.on_attach

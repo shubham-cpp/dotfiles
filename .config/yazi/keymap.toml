@@ -30,5 +30,10 @@ prepend_keymap = [
   { on= ["g","l","f"],run="cd ~/.local/share/fonts", desc = "Goto fonts" },
   { on= ["g","l","t"],run="cd ~/.local/share/Trash/files", desc = "Goto Trash" },
 
-  { on = [ "l" ], run = 'plugin --sync smart-enter', desc = "Enter the child directory, or open the file" },
+  { on = [ "l" ], run = 'plugin smart-enter', desc = "Enter the child directory, or open the file" },
+  { on   = [ "c", "a" ], run  = "plugin compress", desc = "Archive selected files" }
+]
+append_keymap = [
+  { on = "<Space>", run = "toggle" },
+  { on = "<C-a>", run = "toggle_all --state=on" },
 ]

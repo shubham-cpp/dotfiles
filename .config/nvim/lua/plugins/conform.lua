@@ -18,6 +18,7 @@ return {
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   end,
   config = function()
+    vim.env.ESLINT_D_PPID = vim.fn.getpid()
     local prettier = { 'prettierd', 'prettier', stop_after_first = true }
     local slow_format_filetypes = {}
 

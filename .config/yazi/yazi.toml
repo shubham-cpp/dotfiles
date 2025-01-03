@@ -9,7 +9,11 @@ show_hidden = true
 show_symlink = true
 scrolloff = 12
 
-[opener]
-archive = [
-	{ run = 'atool -x "$1"', desc = "Extract here" },
+[open]
+append_rules = [
+	{ name = "application/zip", use = "plugin archive" },
+	{ name = "application/x-tar", use = "plugin archive" },
+	{ name = "application/x-archive", use = "plugin archive" },
+	{ name = "application/x-archive", use = "plugin archive" },
+	{ name = "application/x-xz", use = "plugin archive" },
 ]
