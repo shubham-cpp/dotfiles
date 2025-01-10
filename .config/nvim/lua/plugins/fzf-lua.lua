@@ -1,3 +1,44 @@
+--- ivy fzf
+--[[
+local fzf_lua = require("fzf-lua")
+fzf_lua.files{
+  prompt = "Files",
+  fzf_opts = { ["--layout"] = "reverse" },
+  winopts = {
+    height = 0.35,
+    width = 1.00,
+    row = 1,
+    col = 1,
+    border = { " ", " ", " ", " ", " ", " ", " ", " " },
+    preview = {
+      layout = "flex",
+      hidden = "nohidden",
+      flip_columns = 130,
+      scrollbar = "float",
+      scrolloff = "-1",
+      scrollchars = { "█", "░" },
+    },
+  },
+}
+--]]
+
+---Dropdown fzf
+--[[
+local fzf_lua = require("fzf-lua")
+fzf_lua.files{
+  prompt = "Files",
+fzf_opts = { ["--layout"] = "reverse" },
+    winopts = {
+      height = 0.70,
+      width = 0.45,
+      row = 0.1,
+      col = 0.5,
+      preview = { hidden = "hidden", layout = "vertical", vertical = "up:50%" },
+    },
+}
+--]]
+
+---@type LazySpec
 return {
   'ibhagwan/fzf-lua',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -50,6 +91,7 @@ return {
       ['alt-enter'] = actions.file_tabedit,
       ['ctrl-t'] = actions.file_tabedit,
       ['ctrl-x'] = actions.file_split,
+      ['ctrl-g'] = fzf.actions.grep_lgrep,
       -- ['ctrl-q'] = actions.file_edit_or_qf,
     }
     -- calling `setup` is optional for customization
@@ -167,10 +209,21 @@ return {
       helptags = { winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } } },
       grep = {
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
+        multiprocess = true,
+        prompt = ' ',
         actions = m_keys,
+        rg_opts = "--hidden --column --line-number --no-ignore-vcs --no-heading --color=always --smart-case -g '!{.git,node_modules,android,ios,.env,.next,dist,package-lock.json,yarn.lock,pnpm-lock.yaml,.svelte-kit,*.aider.*}'",
+
         rg_glob = true,
-        glob_flah = '--glob',
         glob_separator = '%s%-%-',
+        glob_flag = '--iglob', -- for case sensitive globs use '--glob'
+        rg_glob_fn = function(query, opts)
+          -- this enables all `rg` arguments to be passed in after the `--` glob separator
+          local search_query, glob_str = query:match('(.*)' .. opts.glob_separator .. '(.*)')
+          local glob_args = glob_str:gsub('^%s+', ''):gsub('-', '%-') .. ' '
+
+          return search_query, glob_args
+        end,
       },
       blines = {
         actions = m_keys,
@@ -325,7 +378,7 @@ return {
         { desc = '[F]iles' },
       },
       ['<leader>fr'] = { fzf.resume, { desc = '[R]esume' } },
-      ['<leader>fs'] = { fzf.live_grep_native, { desc = '[S]earch(Project)' } },
+      ['<leader>fs'] = { fzf.live_grep, { desc = '[S]earch(Project)' } },
       ['<leader>fc'] = { fzf_create_file, { desc = 'Create File' } },
       ['<leader>fS'] = {
         function()

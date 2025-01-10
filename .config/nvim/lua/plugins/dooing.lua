@@ -2,6 +2,7 @@
 return {
   'atiladefreitas/dooing',
   keys = { '<leader>td' },
+  enabled = false,
   cmd = { 'Dooing' },
   opts = {
     -- Keymaps

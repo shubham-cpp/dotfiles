@@ -1,6 +1,5 @@
 .config/tmux/plugins
 .config/nvim/plugin/packer_compiled.*
-.config/nvim/snippets/
 .config/nvim/spell/
 .config/nvim/tmp_dirs/
 .local/share/nvim/*

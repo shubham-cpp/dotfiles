@@ -20,16 +20,14 @@ end
 
 --- detect if the current completion item is an emmet completion item
 --- @param entry cmp.Entry
---- @return boolean
+---@return boolean
 local function isEmmet(entry)
-  return (
-    entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
+  local isTextOrSnippet = entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Text
     or entry:get_kind() == require('cmp.types').lsp.CompletionItemKind.Snippet
-  )
-    and (
-      entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
-      or entry.source:get_debug_name() == 'nvim_lsp:emmet_ls'
-    )
+  local isEmmetls = entry.source:get_debug_name() == 'nvim_lsp:emmet_language_server'
+    or entry.source:get_debug_name() == 'nvim_lsp:emmet_ls'
+
+  return isTextOrSnippet and isEmmetls
 end
 
 ---@type LazySpec
@@ -62,6 +60,7 @@ return {
         vim.tbl_map(function(type)
           require('luasnip.loaders.from_' .. type).lazy_load()
         end, { 'vscode', 'snipmate', 'lua' })
+        require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.fn.stdpath 'config' .. '/snippets' } })
 
         local extends = {
           typescript = { 'tsdoc' },

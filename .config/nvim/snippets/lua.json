@@ -1,0 +1,74 @@
+{
+  "mod": {
+    "prefix": "mod",
+    "body": ["---@type LazySpec", "return {", "\t'$1'", "\topts = {}", "}"],
+    "description": "Create a lazy plugin spec"
+  },
+  "modConfig": {
+    "prefix": "modc",
+    "body": [
+      "---@type LazySpec",
+      "return {",
+      "\t'$1'",
+      "\tconfig = function()\n$0\n\tend",
+      "}"
+    ],
+    "description": "Create a lazy plugin spec - config"
+  },
+  "plugin": {
+    "prefix": "plug",
+    "body": ["---@type LazySpec", "return {", "\t'$1'", "\topts = {$2}", "}"],
+    "description": "Create a lazy plugin spec"
+  },
+  "pluginConfig": {
+    "prefix": "plugc",
+    "body": [
+      "---@type LazySpec",
+      "return {",
+      "\t'$1'",
+      "\tconfig = function()\n$0\n\tend",
+      "}"
+    ],
+    "description": "Create a lazy plugin spec - config"
+  },
+  "autocmd (Filetype)": {
+    "prefix": "autocmd (Filetype)",
+    "body": [
+      "vim.api.nvim_create_autocmd('FileType', {",
+      "\t-- desc = '',",
+      "\t-- group = '',",
+      "\tpattern = { '${1:ft}' },",
+      "\tcallback = function()",
+      "\t\t$0",
+      "\tend,",
+      "})"
+    ],
+    "description": "Create an autocmd for FileType"
+  },
+  "autocmd (any)": {
+    "prefix": "autocmd (any)",
+    "body": [
+      "vim.api.nvim_create_autocmd('$1', {",
+      "\t-- desc = '',",
+      "\t-- group = '',",
+      "\tpattern = { '${2:event}' },",
+      "\tcallback = function()",
+      "\t\t$0",
+      "\tend,",
+      "})"
+    ],
+    "description": "Create an autocmd for FileType"
+  },
+  "augroup": {
+    "prefix": "augroup",
+    "body": [
+      "local ${1:augroup} = vim.api.nvim_create_augroup('sp_${1}', {})$0"
+    ],
+    "description": "Create an augroup"
+  },
+  "executable": {
+    "prefix": "exe",
+    "body": ["vim.fn.executable('${1:cmd}') == 1"],
+    "description": "Check if a command is executable"
+  }
+}

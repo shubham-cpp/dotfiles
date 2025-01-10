@@ -2,7 +2,7 @@
 return {
   'echasnovski/mini.comment',
   version = '*',
-  enabled = true,
+  enabled = false,
   keys = {
     { 'gc', mode = { 'n', 'x', 'o' } },
     { 'gcc' },

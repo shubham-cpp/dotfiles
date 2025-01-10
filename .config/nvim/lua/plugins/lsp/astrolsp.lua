@@ -278,11 +278,11 @@ return {
           desc = 'Workspace symbols',
           cond = 'workspace/symbol',
         },
-        ['<F2>'] = {
-          vim.lsp.buf.rename,
-          desc = 'Rename',
-          cond = 'textDocument/rename',
-        },
+        -- ['<F2>'] = {
+        --   vim.lsp.buf.rename,
+        --   desc = 'Rename',
+        --   cond = 'textDocument/rename',
+        -- },
         ['<leader>lr'] = {
           vim.lsp.buf.rename,
           desc = 'Rename',
@@ -350,9 +350,12 @@ return {
     },
     handlers = {
       function(server, opts)
-        local ok, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
-        if ok then
+        local ok_cmp, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+        local ok_blink, blink = pcall(require, 'blink.cmp')
+        if ok_cmp then
           opts.capabilities = cmp_nvim_lsp.default_capabilities(opts.capabilities)
+        elseif ok_blink then
+          opts.capabilities = blink.get_lsp_capabilities(opts.capabilities)
         end
         require('lspconfig')[server].setup(opts)
       end,
