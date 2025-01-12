@@ -85,13 +85,13 @@ return {
     end
 
     local rg_cmd =
-      'rg --files -l ".*" --follow --color=never --sortr=modified -g "!.git/" -g "!*.png"  -g "!node_modules/" -g "!*.jpeg" -g "!*.jpg" -g "!*.ico" -g "!*.exe" -g "!*.out"'
+      'rg --files -l ".*" --follow --color=never --sortr=modified -g "!{.git/,*.png,*.jpeg,*.jpg,*.ico,*.exe,*.out,node_modules/,}"'
 
     local m_keys = {
       ['alt-enter'] = actions.file_tabedit,
       ['ctrl-t'] = actions.file_tabedit,
       ['ctrl-x'] = actions.file_split,
-      ['ctrl-g'] = fzf.actions.grep_lgrep,
+      ['ctrl-i'] = fzf.actions.toggle_ignore,
       -- ['ctrl-q'] = actions.file_edit_or_qf,
     }
     -- calling `setup` is optional for customization
@@ -199,7 +199,7 @@ return {
         ignore_current_buffer = true,
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
         actions = vim.tbl_extend('force', m_keys, {
-          ['ctrl-d'] = actions.buf_delete,
+          ['ctrl-d'] = { fn = actions.buf_del, reload = true },
           ['ctrl-x'] = actions.buf_split,
           ['ctrl-v'] = actions.buf_vsplit,
           ['ctrl-q'] = actions.buf_edit_or_qf,
@@ -210,10 +210,10 @@ return {
       grep = {
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
         multiprocess = true,
-        prompt = ' ',
-        actions = m_keys,
-        rg_opts = "--hidden --column --line-number --no-ignore-vcs --no-heading --color=always --smart-case -g '!{.git,node_modules,android,ios,.env,.next,dist,package-lock.json,yarn.lock,pnpm-lock.yaml,.svelte-kit,*.aider.*}'",
-
+        actions = vim.tbl_extend('force', m_keys, {
+          ['ctrl-g'] = fzf.actions.grep_lgrep,
+        }),
+        rg_opts = "--hidden --column --line-number --no-ignore-vcs --no-heading --color=always --smart-case -g '!{.git,node_modules,venv,.venv,.idea,build,out,__pycache__,__pypackages__,.gradle,android,ios,.env,.next,dist,package-lock.json,yarn.lock,pnpm-lock.yaml,.svelte-kit,*.aider.*}'",
         rg_glob = true,
         glob_separator = '%s%-%-',
         glob_flag = '--iglob', -- for case sensitive globs use '--glob'
@@ -231,18 +231,10 @@ return {
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
       },
       lsp = {
-        definitions = {
-          jump_to_single_result = true,
-          actions = m_keys,
-        },
-        declarations = {
-          jump_to_single_result = true,
-          actions = m_keys,
-        },
-        references = {
-          ignore_current_line = true,
-          actions = m_keys,
-        },
+        jump_to_single_result = true,
+        definitions = { actions = m_keys },
+        declarations = { actions = m_keys },
+        references = { ignore_current_line = true, actions = m_keys },
         symbols = {
           actions = m_keys,
           winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },

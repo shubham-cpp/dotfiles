@@ -19,13 +19,13 @@ return {
     highlight_hovered_buffers_in_same_directory = false,
     integrations = {
       --- What should be done when the user wants to grep in a directory
-      ---@param directory string
-      grep_in_directory = function(directory)
-        require("telescope.builtin").live_grep({
-          prompt = "Search in " .. directory,
-          cwd = directory,
-        })
-      end,
+      ----@param directory string
+      -- grep_in_directory = function(directory)
+      --   require("telescope.builtin").live_grep({
+      --     prompt = "Search in " .. directory,
+      --     cwd = directory,
+      --   })
+      -- end,
     },
   },
 }

@@ -1,18 +1,22 @@
-local rg_cmd =
-  -- 'rg --files -l ".*" --follow --color=never --sortr=modified -g "!.git/" -g "!*.png" -g "!node_modules/" -g "!*.jpeg" -g "!*.jpg" -g "!*.ico" -g "!*.exe" -g "!*.out"'
-  {
-    "rg",
-    "--files",
-    "--color",
-    "never",
-    "--ignore",
-    "--hidden",
-    "--sortr",
-    "modified",
-    "--glob",
-    "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
-  }
+local rg_cmd = {
+  "rg",
+  "--files",
+  "--color",
+  "never",
+  "--ignore",
+  "--hidden",
+  "--sortr",
+  "modified",
+  "--glob",
+  "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
+}
 
+-- local keys = {
+--   ["alt-enter"] = { fnactions.file_tabedit },
+--   ["ctrl-t"] = actions.file_tabedit,
+--   ["ctrl-x"] = actions.file_split,
+--   ["ctrl-i"] = actions.toggle_ignore,
+-- }
 ---@type LazySpec
 return {
   {
@@ -30,7 +34,7 @@ return {
       { "<leader>fn", LazyVim.pick.config_files(), desc = "Find Config File" },
       {
         "<leader>fd",
-        LazyVim.pick("files", { cwd = vim.fn.expand("~/Documents/dotfiles/.config/") }),
+        LazyVim.pick("files", { find_command = rg_cmd, cwd = vim.fn.expand("~/Documents/dotfiles") }),
         desc = "Find Dotfiles",
       },
       {
@@ -150,9 +154,17 @@ return {
       grep = {
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
         -- actions = m_keys,
+        multiprocess = true,
         rg_glob = true,
         glob_flah = "--glob",
         glob_separator = "%s%-%-",
+        rg_glob_fn = function(query, opts)
+          -- this enables all `rg` arguments to be passed in after the `--` glob separator
+          local search_query, glob_str = query:match("(.*)" .. opts.glob_separator .. "(.*)")
+          local glob_args = glob_str:gsub("^%s+", ""):gsub("-", "%-") .. " "
+
+          return search_query, glob_args
+        end,
       },
       lsp = {
         smbols = {
@@ -167,32 +179,57 @@ return {
       },
     },
   },
-  -- {
-  --   "ibhagwan/fzf-lua",
-  --   opts = function()
-  --     local actions = require("fzf-lua.actions")
-  --     local keys = {
-  --       ["alt-enter"] = actions.file_tabedit,
-  --       ["ctrl-t"] = actions.file_tabedit,
-  --       ["ctrl-x"] = actions.file_split,
-  --     }
-  --     return {
-  --       files = { actions = keys },
-  --       buffers = { actions = keys },
-  --       grep = { actions = keys },
-  --       git = {
-  --         files = { actions = keys },
-  --         status = { actions = keys },
-  --         bcommits = { actions = keys },
-  --         commits = { actions = keys },
-  --       },
-  --       lsp = {
-  --         declarations = { actions = keys },
-  --         definitions = { actions = keys },
-  --         references = { actions = keys },
-  --         symbols = { actions = keys },
-  --       },
-  --     }
-  --   end,
-  -- },
+  {
+    "ibhagwan/fzf-lua",
+    cmd = "FzfLua",
+    opts = function(_, opts)
+      local fzf = require("fzf-lua")
+      local config = fzf.config
+      local actions = fzf.actions
+      local keys = {
+        ["alt-enter"] = actions.file_tabedit,
+        ["ctrl-t"] = actions.file_tabedit,
+        ["ctrl-x"] = actions.file_split,
+        ["ctrl-i"] = actions.toggle_ignore,
+      }
+
+      -- for _, value in pairs({ "files", "status", "bcommits", "commits" }) do
+      --   for key, binding in pairs(keys) do
+      --     config.defaults.actions.git[value][key] = binding
+      --   end
+      --   if LazyVim.has("trouble.nvim") then
+      --     config.defaults.actions.git[value]["ctrl-d"] = require("trouble.sources.fzf").actions.open
+      --   end
+      -- end
+      -- for _, value in pairs({ "declarations", "definitions", "references", "symbols" }) do
+      --   for key, binding in pairs(keys) do
+      --     config.defaults.actions.lsp[value][key] = binding
+      --   end
+      --   if LazyVim.has("trouble.nvim") then
+      --     config.defaults.actions.lsp[value]["ctrl-d"] = require("trouble.sources.fzf").actions.open
+      --   end
+      -- end
+
+      for key, binding in pairs(keys) do
+        config.defaults.actions.files[key] = binding
+      end
+      config.defaults.actions.files["alt-i"] = false
+      config.defaults.actions.files["alt-h"] = false
+      if LazyVim.has("trouble.nvim") then
+        config.defaults.actions.files["ctrl-d"] = require("trouble.sources.fzf").actions.open
+      end
+
+      -- for key, binding in pairs(keys) do
+      --   config.defaults.actions.buffers[key] = binding
+      -- end
+      -- config.defaults.actions.buffers["ctrl-d"] = { fn = actions.buf_del, reload = true }
+
+      -- for key, binding in pairs(keys) do
+      --   config.defaults.actions.grep[key] = binding
+      -- end
+      -- config.defaults.actions.grep["ctrl-g"] = actions.grep_lgrep
+
+      return opts
+    end,
+  },
 }

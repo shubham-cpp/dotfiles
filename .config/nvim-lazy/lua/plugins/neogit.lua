@@ -9,7 +9,7 @@ return {
     "nvim-lua/plenary.nvim", -- required
     { "sindrets/diffview.nvim", cmd = "DiffviewOpen", opts = {} }, -- optional - Diff integration
     -- Only one of these is needed, not both.
-    "nvim-telescope/telescope.nvim", -- optional
+    -- "nvim-telescope/telescope.nvim", -- optional
   },
   opts = {
     -- telescope_sorter = function()

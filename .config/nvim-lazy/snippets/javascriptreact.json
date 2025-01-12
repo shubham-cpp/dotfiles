@@ -1,0 +1,88 @@
+{
+  "useClient": {
+    "prefix": "uc",
+    "body": ["\"use client\";$0"],
+    "description": "use client for next.js"
+  },
+  "reactClientComponent": {
+    "prefix": "rnc",
+    "body": [
+      "\"use client\";",
+      "",
+      "const ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}} = () => {",
+      "  return (",
+      "    <div>$0</div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}"
+    ],
+    "description": "Creates a React Client Component"
+  },
+  "reactFunctionalComponent": {
+    "prefix": "rfc",
+    "body": [
+      "const ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}} = () => {",
+      "  return (",
+      "    <div>$0</div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}"
+    ],
+    "description": "Creates a React Functional Component with ES7 module system"
+  },
+  "reactFunctionalLayoutComponent": {
+    "prefix": "rlc",
+    "body": [
+      "const ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}Layout = ({children}) => {",
+      "  return (",
+      "    <div>$0",
+      "    \t{children}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}Layout"
+    ],
+    "description": "Creates a React Layout Functional Component with ES7 module system"
+  },
+  "reactNativeFC": {
+    "prefix": "rnf",
+    "body": [
+      "import { View } from 'react-native';",
+      "",
+      "const ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}} = () => {",
+      "  return <View>$0</View>",
+      "}",
+      "",
+      "export default ${1};"
+    ],
+    "description": "Create React Native Functional Component"
+  },
+  "reactNativeFCWithStyles": {
+    "prefix": "rnfs",
+    "body": [
+      "import { View, StyleSheet } from 'react-native';",
+      "",
+      "const ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}} = () => {",
+      "  return <View>$0</View>",
+      "}",
+      "",
+      "const styles = StyleSheet.create({$2})",
+      "",
+      "export default ${1};"
+    ],
+    "description": "Create React Native Functional Component(with styles)"
+  },
+  "jsx elements ternary": {
+    "prefix": "jc",
+    "body": "{${1:true} ? <div>$0</div> : ${2:null}}",
+    "description": "ternary jsx elements"
+  },
+  "jsx elements ternaryNative": {
+    "prefix": "jcn",
+    "body": "{${1:true} ? <View>$0</View> : ${2:null}}",
+    "description": "ternary jsx elements"
+  }
+}

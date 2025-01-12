@@ -1,0 +1,29 @@
+{
+  "name": "my-snippets",
+  "engines": {
+    "vscode": "^1.11.0"
+  },
+  "contributes": {
+    "snippets": [
+      {
+        "language": [
+          "lua"
+        ],
+        "path": "./lua.json"
+      },
+      {
+        "language": [
+          "javascriptreact",
+          "typescriptreact"
+        ],
+        "path": "./javascriptreact.json"
+      },
+      {
+        "language": [
+          "typescriptreact"
+        ],
+        "path": "./typescriptreact.json"
+      }
+    ]
+  }
+}

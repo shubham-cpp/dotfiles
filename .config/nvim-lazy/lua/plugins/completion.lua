@@ -46,9 +46,11 @@ return {
         menu = { border = "rounded" },
         documentation = { window = { border = "rounded" } },
         list = {
-          selection = function(ctx)
-            return ctx.mode == "cmdline" and "auto_insert" or "preselect"
-          end,
+          selection = {
+            preselect = function(ctx)
+              return ctx.mode ~= "cmdline"
+            end,
+          },
         },
       },
       sources = {
@@ -67,7 +69,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = 10, -- should be lower priority
+              -- score_offset = -3, -- should be lower priority
               max_filesize = "300K",
               search_casing = "--smart-case",
             },
