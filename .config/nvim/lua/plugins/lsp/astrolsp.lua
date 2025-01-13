@@ -350,13 +350,7 @@ return {
     },
     handlers = {
       function(server, opts)
-        local ok_cmp, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
-        local ok_blink, blink = pcall(require, 'blink.cmp')
-        if ok_cmp then
-          opts.capabilities = cmp_nvim_lsp.default_capabilities(opts.capabilities)
-        elseif ok_blink then
-          opts.capabilities = blink.get_lsp_capabilities(opts.capabilities)
-        end
+        opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
         require('lspconfig')[server].setup(opts)
       end,
       efm = false,

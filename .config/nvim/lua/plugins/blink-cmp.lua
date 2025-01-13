@@ -24,38 +24,34 @@ return {
       'L3MON4D3/LuaSnip',
       version = 'v2.*',
       build = 'make install_jsregexp',
-      dependencies = { 'rafamadriz/friendly-snippets' },
-      opts = { history = true, delete_check_events = 'TextChanged', region_check_events = 'CursorMoved' },
-      config = function(_, opts)
-        if opts then
-          require('luasnip').config.setup(opts)
-        end
+      dependencies = {
+        'rafamadriz/friendly-snippets',
+        config = function()
+          require('luasnip.loaders.from_vscode').lazy_load()
+          require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.fn.stdpath 'config' .. '/snippets' } })
 
-        vim.tbl_map(function(type)
-          require('luasnip.loaders.from_' .. type).lazy_load()
-        end, { 'vscode', 'snipmate', 'lua' })
-        require('luasnip.loaders.from_vscode').lazy_load({ paths = { vim.fn.stdpath 'config' .. '/snippets' } })
-
-        local extends = {
-          typescript = { 'tsdoc' },
-          javascript = { 'jsdoc' },
-          lua = { 'luadoc' },
-          python = { 'pydoc' },
-          rust = { 'rustdoc' },
-          cs = { 'csharpdoc' },
-          java = { 'javadoc' },
-          c = { 'cdoc' },
-          cpp = { 'cppdoc' },
-          php = { 'phpdoc' },
-          kotlin = { 'kdoc' },
-          ruby = { 'rdoc' },
-          sh = { 'shelldoc' },
-        }
-        -- friendly-snippets - enable standardized comments snippets
-        for ft, snips in pairs(extends) do
-          require('luasnip').filetype_extend(ft, snips)
-        end
-      end,
+          local extends = {
+            typescript = { 'tsdoc' },
+            javascript = { 'jsdoc' },
+            lua = { 'luadoc' },
+            python = { 'pydoc' },
+            rust = { 'rustdoc' },
+            cs = { 'csharpdoc' },
+            java = { 'javadoc' },
+            c = { 'cdoc' },
+            cpp = { 'cppdoc' },
+            php = { 'phpdoc' },
+            kotlin = { 'kdoc' },
+            ruby = { 'rdoc' },
+            sh = { 'shelldoc' },
+          }
+          -- friendly-snippets - enable standardized comments snippets
+          for ft, snips in pairs(extends) do
+            require('luasnip').filetype_extend(ft, snips)
+          end
+        end,
+      },
+      opts = { history = true, delete_check_events = 'TextChanged' },
     },
   },
   ---@module 'blink.cmp'
@@ -83,9 +79,11 @@ return {
       menu = { border = 'rounded' },
       documentation = { window = { border = 'rounded' } },
       list = {
-        selection = function(ctx)
-          return ctx.mode == 'cmdline' and 'auto_insert' or 'preselect'
-        end,
+        selection = {
+          preselect = function(ctx)
+            return ctx.mode ~= 'cmdline'
+          end,
+        },
       },
     },
     sources = {
@@ -105,7 +103,7 @@ return {
           ---@type blink-ripgrep.Options
           opts = {
             prefix_min_len = 4,
-            score_offset = -3, -- should be lower priority
+            score_offset = 10, -- should be lower priority
             max_filesize = '300K',
             search_casing = '--smart-case',
           },
@@ -142,7 +140,7 @@ return {
           name = 'Buffer',
           enabled = true,
           module = 'blink.cmp.sources.buffer',
-          min_keyword_length = 4,
+          min_keyword_length = 3,
           score_offset = 15, -- the higher the number, the higher the priority
         },
         snippets = {
@@ -197,23 +195,6 @@ return {
         return {}
       end,
     },
-    snippets = {
-      preset = 'luasnip',
-      -- This comes from the luasnip extra, if you don't add it, won't be able to
-      -- jump forward or backward in luasnip snippets
-      -- https://www.lazyvim.org/extras/coding/luasnip#blinkcmp-optional
-      expand = function(snippet)
-        require('luasnip').lsp_expand(snippet)
-      end,
-      active = function(filter)
-        if filter and filter.direction then
-          return require('luasnip').jumpable(filter.direction)
-        end
-        return require('luasnip').in_snippet()
-      end,
-      jump = function(direction)
-        require('luasnip').jump(direction)
-      end,
-    },
+    snippets = { preset = 'luasnip' },
   },
 }

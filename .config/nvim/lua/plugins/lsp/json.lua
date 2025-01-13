@@ -26,7 +26,7 @@ return {
     opts = {
       handlers = {
         jsonls = function(server, opts)
-          opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
           opts.on_new_config = function(new_config)
             new_config.settings.json.schemas = new_config.settings.json.schemas or {}
             vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())

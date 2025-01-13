@@ -28,4 +28,16 @@ M.get_age_credentials = function(secret_file)
   return require('age').get(secret, identity_file)
 end
 
+function M.get_lsp_capabilities(override)
+  local ok_cmp, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
+  local ok_blink, blink = pcall(require, 'blink.cmp')
+  local capabilities
+  if ok_cmp then
+    capabilities = cmp_nvim_lsp.default_capabilities(override)
+  elseif ok_blink then
+    capabilities = blink.get_lsp_capabilities(override)
+  end
+  return capabilities
+end
+
 return M

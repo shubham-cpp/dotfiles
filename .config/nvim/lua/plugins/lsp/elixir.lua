@@ -34,7 +34,7 @@ return {
         elixir_ls = function(_, opts)
           local elixir = require 'elixir'
           local elixirls = require 'elixir.elixirls'
-          opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
 
           elixir.setup({
             nextls = { enable = false },

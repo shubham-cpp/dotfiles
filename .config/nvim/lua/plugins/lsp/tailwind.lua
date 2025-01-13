@@ -23,7 +23,7 @@ return {
     opts = {
       handlers = {
         tailwindcss = function(server, opts)
-          opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
           opts.init_options = {
             userLanguages = {
               eelixir = 'html-eex',

@@ -119,11 +119,8 @@ return {
         search = hl_validate 'IncSearch',
       },
       keymap = {
-        builtin = {
-          true,
-          ['<esc>'] = 'hide',
-        },
         fzf = {
+          true,
           ['ctrl-j'] = 'down',
           ['ctrl-k'] = 'up',
           ['ctrl-f'] = 'half-page-down',
@@ -210,10 +207,7 @@ return {
       grep = {
         winopts = { preview = { layout = 'vertical', vertical = 'up:60%' } },
         multiprocess = true,
-        actions = vim.tbl_extend('force', m_keys, {
-          ['ctrl-g'] = fzf.actions.grep_lgrep,
-        }),
-        rg_opts = "--hidden --column --line-number --no-ignore-vcs --no-heading --color=always --smart-case -g '!{.git,node_modules,venv,.venv,.idea,build,out,__pycache__,__pypackages__,.gradle,android,ios,.env,.next,dist,package-lock.json,yarn.lock,pnpm-lock.yaml,.svelte-kit,*.aider.*}'",
+        rg_opts = "--hidden --column --line-number --no-ignore-vcs --no-heading --color=always --smart-case --multiline --max-columns=512 -g '!{.git,node_modules,venv,.venv,.idea,build,out,__pycache__,__pypackages__,.gradle,android,ios,.env,.next,dist,package-lock.json,yarn.lock,pnpm-lock.yaml,.svelte-kit,*.aider.*}'",
         rg_glob = true,
         glob_separator = '%s%-%-',
         glob_flag = '--iglob', -- for case sensitive globs use '--glob'

@@ -1,3 +1,4 @@
+local augroup = vim.api.nvim_create_augroup('sp_eslint', {})
 ---@type LazySpec
 return {
   {
@@ -48,6 +49,7 @@ return {
             vim.api.nvim_create_autocmd('BufWritePre', {
               buffer = bufnr,
               desc = 'Run Eslint fix before save',
+              group = augroup,
               callback = function()
                 vim.cmd 'EslintFixAll'
               end,
@@ -58,7 +60,7 @@ return {
         vtsls = function(server, opts)
           require('lspconfig.configs').vtsls = require('vtsls').lspconfig
           local default_attach = opts.on_attach
-          opts.capabilities = require('cmp_nvim_lsp').default_capabilities(opts.capabilities)
+          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
           opts.filetypes = {
             'javascript',
             'javascriptreact',
