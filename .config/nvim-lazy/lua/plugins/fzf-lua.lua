@@ -92,6 +92,7 @@ return {
     },
     opts = {
       defaults = {
+        formatter = { "path.filename_first", 2 },
         keymap = {
           fzf = {
             ["ctrl-d"] = "preview-page-down",
@@ -100,7 +101,6 @@ return {
         },
       },
       files = {
-        formatter = "path.filename_first",
         fzf_opts = {
           ["--layout"] = "reverse",
           ["--tiebreak"] = "length",
@@ -186,50 +186,52 @@ return {
       local fzf = require("fzf-lua")
       local config = fzf.config
       local actions = fzf.actions
+
       local keys = {
         ["alt-enter"] = actions.file_tabedit,
         ["ctrl-t"] = actions.file_tabedit,
         ["ctrl-x"] = actions.file_split,
         ["ctrl-i"] = actions.toggle_ignore,
       }
-
-      -- for _, value in pairs({ "files", "status", "bcommits", "commits" }) do
-      --   for key, binding in pairs(keys) do
-      --     config.defaults.actions.git[value][key] = binding
-      --   end
-      --   if LazyVim.has("trouble.nvim") then
-      --     config.defaults.actions.git[value]["ctrl-d"] = require("trouble.sources.fzf").actions.open
-      --   end
-      -- end
-      -- for _, value in pairs({ "declarations", "definitions", "references", "symbols" }) do
-      --   for key, binding in pairs(keys) do
-      --     config.defaults.actions.lsp[value][key] = binding
-      --   end
-      --   if LazyVim.has("trouble.nvim") then
-      --     config.defaults.actions.lsp[value]["ctrl-d"] = require("trouble.sources.fzf").actions.open
-      --   end
-      -- end
+      opts.git = opts.git or {}
+      for _, sub_map in pairs({ "files", "status", "bcommits", "commits" }) do
+        for key, binding in pairs(keys) do
+          opts.git[sub_map] = vim.tbl_deep_extend("force", opts.git[sub_map] or {}, { actions = { [key] = binding } })
+        end
+        if LazyVim.has("trouble.nvim") then
+          opts.git[sub_map].actions["ctrl-d"] = require("trouble.sources.fzf").actions.open
+        end
+      end
+      opts.lsp = opts.lsp or {}
+      for _, sub_map in pairs({ "declarations", "definitions", "references", "symbols" }) do
+        for key, binding in pairs(keys) do
+          opts.lsp[sub_map] = vim.tbl_deep_extend("force", opts.lsp[sub_map] or {}, { actions = { [key] = binding } })
+        end
+        if LazyVim.has("trouble.nvim") then
+          opts.lsp[sub_map].actions["ctrl-d"] = require("trouble.sources.fzf").actions.open
+        end
+      end
 
       for key, binding in pairs(keys) do
-        config.defaults.actions.files[key] = binding
+        opts.files = vim.tbl_deep_extend("force", opts.files, { actions = { [key] = binding } })
       end
-      config.defaults.actions.files["alt-i"] = false
-      config.defaults.actions.files["alt-h"] = false
       if LazyVim.has("trouble.nvim") then
-        config.defaults.actions.files["ctrl-d"] = require("trouble.sources.fzf").actions.open
+        opts.files.actions["ctrl-d"] = require("trouble.sources.fzf").actions.open
       end
+      opts.files.actions["alt-i"] = false
+      opts.files.actions["alt-h"] = false
 
+      -- opts.buffers = opts.buffers or { actions = {} }
       -- for key, binding in pairs(keys) do
-      --   config.defaults.actions.buffers[key] = binding
+      --   opts.buffers.actions[key] = binding
       -- end
-      -- config.defaults.actions.buffers["ctrl-d"] = { fn = actions.buf_del, reload = true }
+      -- opts.buffers.actions["ctrl-d"] = { fn = actions.buf_del, reload = true }
 
-      -- for key, binding in pairs(keys) do
-      --   config.defaults.actions.grep[key] = binding
-      -- end
-      -- config.defaults.actions.grep["ctrl-g"] = actions.grep_lgrep
-
-      return opts
+      opts.grep = opts.grep or { actions = {} }
+      for key, binding in pairs(keys) do
+        opts.grep.actions[key] = binding
+      end
+      opts.grep.actions["ctrl-g"] = actions.grep_lgrep
     end,
   },
 }

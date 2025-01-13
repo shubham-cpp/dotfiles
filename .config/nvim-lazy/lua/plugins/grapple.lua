@@ -3,7 +3,7 @@ return {
   "cbochs/grapple.nvim",
   enabled = true,
   dependencies = {
-    "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+    "echasnovski/mini.icons",
   },
   cmd = "Grapple",
   opts = {
