@@ -4,7 +4,7 @@ return {
   {
     'williamboman/mason.nvim',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'vtsls',
         'css-lsp',
         'prettierd',
@@ -17,7 +17,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'astro',
         'javascript',
         'typescript',
@@ -60,7 +60,7 @@ return {
         vtsls = function(server, opts)
           require('lspconfig.configs').vtsls = require('vtsls').lspconfig
           local default_attach = opts.on_attach
-          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
+          opts.capabilities = require('my_config.util').get_lsp_capabilities(opts.capabilities)
           opts.filetypes = {
             'javascript',
             'javascriptreact',

@@ -180,7 +180,7 @@ return {
         },
         lua = {
           augend.integer.alias.decimal, -- nonnegative and negative decimal number
-          augend.constant.alias.bool, -- boolean value (true <-> false)
+          augend.constant.alias.bool,
           augend.constant.new({
             elements = { 'and', 'or' },
             word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.

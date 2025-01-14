@@ -83,7 +83,7 @@ local config = {
   {
     'williamboman/mason.nvim',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'zk',
       })
       return opts
@@ -93,7 +93,7 @@ local config = {
   {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'markdown',
         'markdown_inline',
         'comment',

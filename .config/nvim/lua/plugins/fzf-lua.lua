@@ -103,21 +103,21 @@ return {
         -- ['--tiebreak'] = 'end',
       },
       winopts = { preview = { default = 'bat' } },
-      hls = {
-        normal = hl_validate 'TelescopeNormal',
-        border = hl_validate 'TelescopeBorder',
-        title = hl_validate 'TelescopePromptTitle',
-        help_normal = hl_validate 'TelescopeNormal',
-        help_border = hl_validate 'TelescopeBorder',
-        preview_normal = hl_validate 'TelescopeNormal',
-        preview_border = hl_validate 'TelescopeBorder',
-        preview_title = hl_validate 'TelescopePreviewTitle',
-        -- builtin preview only
-        cursor = hl_validate 'Cursor',
-        cursorline = hl_validate 'TelescopeSelection',
-        cursorlinenr = hl_validate 'TelescopeSelection',
-        search = hl_validate 'IncSearch',
-      },
+      -- hls = {
+      --   normal = hl_validate 'TelescopeNormal',
+      --   border = hl_validate 'TelescopeBorder',
+      --   title = hl_validate 'TelescopePromptTitle',
+      --   help_normal = hl_validate 'TelescopeNormal',
+      --   help_border = hl_validate 'TelescopeBorder',
+      --   preview_normal = hl_validate 'TelescopeNormal',
+      --   preview_border = hl_validate 'TelescopeBorder',
+      --   preview_title = hl_validate 'TelescopePreviewTitle',
+      --   -- builtin preview only
+      --   cursor = hl_validate 'Cursor',
+      --   cursorline = hl_validate 'TelescopeSelection',
+      --   cursorlinenr = hl_validate 'TelescopeSelection',
+      --   search = hl_validate 'IncSearch',
+      -- },
       keymap = {
         fzf = {
           true,

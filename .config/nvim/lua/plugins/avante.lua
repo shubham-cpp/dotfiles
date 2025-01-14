@@ -41,7 +41,7 @@ return {
     version = false,
     build = 'make',
     opts = function()
-      vim.env.GEMINI_API_KEY = require('plugins.config.util').get_age_credentials 'gemini_api.age'
+      vim.env.GEMINI_API_KEY = require('my_config.util').get_age_credentials 'gemini_api.age'
       if not vim.env.GEMINI_API_KEY then
         return get_ollama_setup()
       end
@@ -144,7 +144,7 @@ return {
               env = {
                 url = 'https://glhf.chat',
                 api_key = function()
-                  return require('plugins.config.util').get_age_credentials 'glhf.age'
+                  return require('my_config.util').get_age_credentials 'glhf.age'
                 end,
                 chat_url = '/api/openai/v1/chat/completions',
               },

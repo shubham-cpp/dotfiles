@@ -6,7 +6,7 @@ return {
     event = 'VimEnter',
     enabled = true,
     config = function()
-      require 'plugins.config.catppuccin'
+      require 'my_config.catppuccin'
     end,
   },
   {
@@ -14,7 +14,7 @@ return {
     event = 'VimEnter',
     enabled = false,
     config = function()
-      require 'plugins.config.kangawa'
+      require 'my_config.kangawa'
     end,
   },
   {
@@ -22,7 +22,7 @@ return {
     enabled = false,
     event = 'VimEnter',
     config = function()
-      require 'plugins.config.gruber-darker'
+      require 'my_config.gruber-darker'
     end,
   },
   {
@@ -30,7 +30,7 @@ return {
     enabled = false,
     event = 'VimEnter',
     config = function()
-      require 'plugins.config.tokyonight'
+      require 'my_config.tokyonight'
     end,
   },
   {
@@ -52,7 +52,7 @@ return {
     enabled = false,
     event = 'VimEnter',
     config = function()
-      require 'plugins.config.nordic'
+      require 'my_config.nordic'
     end,
   },
 }

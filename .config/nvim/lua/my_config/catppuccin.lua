@@ -7,6 +7,13 @@ require('catppuccin').setup({
     shade = 'dark',
     percentage = 0.15, -- percentage of the shade to apply to the inactive window
   },
+  integrations = {
+    navic = {
+      enabled = true,
+    },
+    blink_cmp = true,
+    fzf = true,
+  },
   custom_highlights = function(colors)
     return {
       QuickScopePrimary = { fg = '#dfbb78', bg = '#505050', style = { 'underline', 'bold' } },

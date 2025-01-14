@@ -350,7 +350,7 @@ return {
     },
     handlers = {
       function(server, opts)
-        opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
+        opts.capabilities = require('my_config.util').get_lsp_capabilities(opts.capabilities)
         require('lspconfig')[server].setup(opts)
       end,
       efm = false,

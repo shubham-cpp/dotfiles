@@ -3,7 +3,7 @@ return {
   {
     'williamboman/mason.nvim',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'elixir-ls',
       })
       return opts
@@ -12,7 +12,7 @@ return {
   {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
-      opts.ensure_installed = require('plugins.config.util').unique_append_table(opts.ensure_installed, {
+      opts.ensure_installed = require('my_config.util').unique_append_table(opts.ensure_installed, {
         'elixir',
         'erlang',
         'eex',
@@ -34,7 +34,7 @@ return {
         elixir_ls = function(_, opts)
           local elixir = require 'elixir'
           local elixirls = require 'elixir.elixirls'
-          opts.capabilities = require('plugins.config.util').get_lsp_capabilities(opts.capabilities)
+          opts.capabilities = require('my_config.util').get_lsp_capabilities(opts.capabilities)
 
           elixir.setup({
             nextls = { enable = false },

@@ -32,7 +32,6 @@ return {
       },
     },
   },
-
   keys = {
     {
       '<leader>gg',
@@ -74,4 +73,12 @@ return {
 
     -- { "<leader>lR", function() Snacks.rename.rename_file() end, desc = "Rename File" },
   },
+  init = function()
+    vim.api.nvim_create_user_command('NotificationHistory', function()
+      if not _G.Snacks then
+        return
+      end
+      Snacks.notifier.show_history()
+    end, { desc = 'Show Notification History' })
+  end,
 }
