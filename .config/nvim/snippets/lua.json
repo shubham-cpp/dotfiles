@@ -1,31 +1,30 @@
 {
+  "localRequire": {
+    "prefix": ["preq", "lpca"],
+    "body": [
+      "local ok_${1/.*\\.(.*)|.*/$1/}, ${1/.*\\.(.*)|.*/$1/} = pcall(require, '${1:module}')"
+    ],
+    "description": "Pcall require"
+  },
+  "localRequireWithIf": {
+    "prefix": ["preqi", "lpcai"],
+    "body": [
+      "local ok_${1}, ${1/.*\\.(.*)|.*/$1/} = pcall(require, '${1:module}')",
+      "if ok_${1} then\n\t${2:return}\nend"
+    ],
+    "description": "Pcall require(with if)"
+  },
   "mod": {
-    "prefix": "mod",
-    "body": ["---@type LazySpec", "return {", "\t'$1'", "\topts = {}", "}"],
+    "prefix": ["mod", "plug"],
+    "body": ["---@type LazySpec", "return {", "\t'$1',", "\topts = {}", "}"],
     "description": "Create a lazy plugin spec"
   },
   "modConfig": {
-    "prefix": "modc",
+    "prefix": ["modc", "plugc"],
     "body": [
       "---@type LazySpec",
       "return {",
-      "\t'$1'",
-      "\tconfig = function()\n$0\n\tend",
-      "}"
-    ],
-    "description": "Create a lazy plugin spec - config"
-  },
-  "plugin": {
-    "prefix": "plug",
-    "body": ["---@type LazySpec", "return {", "\t'$1'", "\topts = {$2}", "}"],
-    "description": "Create a lazy plugin spec"
-  },
-  "pluginConfig": {
-    "prefix": "plugc",
-    "body": [
-      "---@type LazySpec",
-      "return {",
-      "\t'$1'",
+      "\t'$1',",
       "\tconfig = function()\n$0\n\tend",
       "}"
     ],

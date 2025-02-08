@@ -12,8 +12,8 @@ alias lt="eza -aT --color=auto --icons --group-directories-first" # tree listing
 alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
-alias rm="trash-put"
-alias rmd="trash-put -rf"
+alias rm="trash"
+alias rmd="trash -rf"
 alias tls="trash-list"
 
 alias cls="clear"

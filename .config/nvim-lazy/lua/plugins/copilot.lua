@@ -4,7 +4,7 @@ return {
   cmd = "Copilot",
   build = ":Copilot auth",
   event = "InsertEnter",
-  enabled = true,
+  enabled = false,
   config = function()
     require("copilot").setup({
       suggestion = {

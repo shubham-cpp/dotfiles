@@ -2,31 +2,19 @@ local function feedkey(key, mode)
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
 end
 
-local function deprio(kind)
-  return function(e1, e2)
-    if e1:get_kind() == kind then
-      return false
-    end
-    if e2:get_kind() == kind then
-      return true
-    end
-  end
-end
-
 ---@type LazySpec
 return {
   {
     "saghen/blink.cmp",
     enabled = vim.g.lazyvim_cmp == "blink.cmp" or vim.g.lazyvim_cmp == "auto",
-    dependencies = {
-      "mikavilpas/blink-ripgrep.nvim",
-    },
+    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
       keymap = {
         preset = "enter",
         ["<C-y>"] = { "select_and_accept", "fallback" },
+        ["<CR>"] = { "select_and_accept", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
@@ -69,7 +57,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              -- score_offset = -3, -- should be lower priority
+              score_offset = -3, -- should be lower priority
               max_filesize = "300K",
               search_casing = "--smart-case",
             },

@@ -5,17 +5,12 @@ fish_add_path -aP $HOME/.config/emacs/bin $HOME/Programming/Flutter/flutter/bin
 fish_add_path -aP $HOME/.local/share/zinit/plugins/ajeetdsouza---zoxide/
 
 set -x EDITOR nvim
-
-# pyenv init --path | source
-# pyenv init - | source
-# zoxide init fish --cmd j | source
-
 set -g fish_cursor_default block
 set -g fish_cursor_insert line
 set -g fish_cursor_visual underscore
 set fish_prompt_pwd_full_dirs 2
-
 set -U SXHKD_SHELL /usr/bin/sh
+
 starship init fish | source
 zoxide init fish | source
 #fnm env --use-on-cd | source

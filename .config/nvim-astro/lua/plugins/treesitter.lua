@@ -1,15 +1,21 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- Customize Treesitter
-
 ---@type LazySpec
 return {
   "nvim-treesitter/nvim-treesitter",
   opts = {
-    ensure_installed = {
-      "lua",
-      "vim",
-      -- add more arguments for adding more treesitter parsers
+    textobjects = {
+      swap = {
+        enable = true,
+        swap_next = {
+          ["<localleader>k"] = { query = "@block.outer", desc = "Swap next block" },
+          ["<localleader>f"] = { query = "@function.outer", desc = "Swap next function" },
+          ["<localleader>a"] = { query = "@parameter.inner", desc = "Swap next argument" },
+        },
+        swap_previous = {
+          ["<localleader>K"] = { query = "@block.outer", desc = "Swap previous block" },
+          ["<localleader>F"] = { query = "@function.outer", desc = "Swap previous function" },
+          ["<localleader>A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+        },
+      },
     },
   },
 }

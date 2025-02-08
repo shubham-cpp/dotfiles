@@ -106,6 +106,17 @@ if exists('g:vscode')
   map <C-d> 15jzz
   map <C-u> 15kzz
 
+  nnoremap <C-w>o <cmd>call VSCodeNotify('workbench.action.closeOtherEditors')<cr>
+  nnoremap <C-w>C <cmd>call VSCodeNotify('workbench.action.closeEditorsToTheRight')<cr>
+
+  nnoremap <leader>1 <Cmd>call VSCodeNotify('workbench.action.openEditorAtIndex1')<CR>
+  nnoremap <leader>2 <Cmd>call VSCodeNotify('workbench.action.openEditorAtIndex2')<CR>
+  nnoremap <leader>3 <cmd>call VSCodeNotify('workbench.action.openEditorAtIndex3')<cr>
+  nnoremap <leader>4 <cmd>call VSCodeNotify('workbench.action.openEditorAtIndex4')<cr>
+  nnoremap <leader>5 <cmd>call VSCodeNotify('workbench.action.openEditorAtIndex5')<cr>
+  nnoremap <leader>6 <cmd>call VSCodeNotify('workbench.action.openEditorAtIndex6')<cr>
+
+  nnoremap <leader>- <Cmd>call VSCodeNotify('eslint.executeAutofix')<CR>
   nnoremap <leader>= <Cmd>call VSCodeNotify('editor.action.formatSelection')<CR>
   vnoremap <leader>= <Cmd>call VSCodeNotifyRangePos('editor.action.formatSelection', line("v"), line("."), col("v"), col("."), 1)<CR>
   nnoremap g= <Cmd>call VSCodeNotify('eslint.executeAutofix')<CR>

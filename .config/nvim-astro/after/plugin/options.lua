@@ -1,22 +1,6 @@
-local o = vim.opt
-
-o.iskeyword:append "-"
-o.path:append "**"
-
-o.scrolloff = 9
-
-o.exrc = true
-
-o.wrap = true
-o.showbreak = "󰄾 "
-
-o.backupdir = { vim.fn.stdpath "state" .. "/backup//" }
-
-o.sessionoptions:append { "globals" }
-o.sessionoptions:remove "folds"
-
-o.wildignorecase = true
-o.wildignore:append {
+vim.opt.path:append "**"
+vim.opt.iskeyword:append "-" -- for css make 'is-active' as one word
+vim.opt.wildignore:append {
   "**/node_modules/*",
   "**/.git/*",
   "**/dist/*",
@@ -44,7 +28,6 @@ o.wildignore:append {
   "*.tar.gz",
   "*.tar.bz2",
 }
-
-if vim.fn.executable "rg" == 1 then
-  o.grepprg = "rg --vimgrep --smart-case" -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+for i = 1, 9 do
+  vim.keymap.set("n", "<leader>" .. i, i .. "gt", { desc = "Goto tab " .. i })
 end

@@ -14,6 +14,8 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.g.lazyvim_python_lsp = "basedpyright"
+
 require("lazy").setup({
   spec = {
     -- add LazyVim and import its plugins
@@ -21,7 +23,8 @@ require("lazy").setup({
 
     { import = "lazyvim.plugins.extras.editor.refactoring" },
     { import = "lazyvim.plugins.extras.editor.dial" },
-    -- { import = "lazyvim.plugins.extras.editor.telescope" },
+    { import = "lazyvim.plugins.extras.editor.snacks_picker" },
+    { import = "lazyvim.plugins.extras.editor.navic" },
     { import = "lazyvim.plugins.extras.coding.luasnip" },
 
     { import = "lazyvim.plugins.extras.ui.treesitter-context" },
@@ -43,6 +46,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.markdown" },
 
     { import = "lazyvim.plugins.extras.lang.prisma" },
+    { import = "lazyvim.plugins.extras.lang.sql" },
 
     { import = "lazyvim.plugins.extras.lang.gleam" },
     { import = "lazyvim.plugins.extras.lang.elixir" },
@@ -51,6 +55,8 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.python" },
     { import = "lazyvim.plugins.extras.lang.rust" },
     { import = "lazyvim.plugins.extras.lang.php" },
+    { import = "lazyvim.plugins.extras.lang.zig" },
+    { import = "lazyvim.plugins.extras.lang.elixir" },
 
     -- import/override with your plugins
     { import = "plugins" },

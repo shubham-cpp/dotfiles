@@ -11,16 +11,11 @@ local rg_cmd = {
   "!{" .. vim.iter(vim.opt.wildignore:get()):join(",") .. "}",
 }
 
--- local keys = {
---   ["alt-enter"] = { fnactions.file_tabedit },
---   ["ctrl-t"] = actions.file_tabedit,
---   ["ctrl-x"] = actions.file_split,
---   ["ctrl-i"] = actions.toggle_ignore,
--- }
 ---@type LazySpec
 return {
   {
     "ibhagwan/fzf-lua",
+    enabled = vim.g.lazyvim_picker == "fzf",
     keys = {
       {
         "<c-p>",
@@ -121,7 +116,6 @@ return {
       git = {
         files = {
           cmd = "git ls-files --exclude-standard --cached --others", -- '--others' is used to show untracked files
-          -- actions = m_keys,
           winopts = {
             height = 0.55,
             width = 0.65,
@@ -131,11 +125,9 @@ return {
           previewer = false,
         },
         bcommits = {
-          -- actions = m_keys,
           winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
         },
         commits = {
-          -- actions = m_keys,
           winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
         },
         branches = {
@@ -153,7 +145,6 @@ return {
       },
       grep = {
         winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
-        -- actions = m_keys,
         multiprocess = true,
         rg_glob = true,
         glob_flah = "--glob",
@@ -167,7 +158,7 @@ return {
         end,
       },
       lsp = {
-        smbols = {
+        symbols = {
           winopts = { preview = { layout = "vertical", vertical = "up:60%" } },
         },
         finder = {
@@ -182,6 +173,7 @@ return {
   {
     "ibhagwan/fzf-lua",
     cmd = "FzfLua",
+    enabled = vim.g.lazyvim_picker == "fzf",
     opts = function(_, opts)
       local fzf = require("fzf-lua")
       local config = fzf.config

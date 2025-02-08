@@ -1,0 +1,91 @@
+{
+  "typescriptReactFunctionalComponent": {
+    "prefix": "tfc",
+    "body": [
+      "import { FunctionComponent } from 'react'",
+      "",
+      "type ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}Props = {}",
+      "",
+      "const ${1}:FunctionComponent<${1}Props> = ({$2}) => {",
+      "  return (",
+      "    <div>$0</div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}"
+    ],
+    "description": "Creates a React Functional Component with TypeScript interface"
+  },
+  "typescriptReactFunctionalLayoutComponent": {
+    "prefix": "tlc",
+    "body": [
+      "import { FunctionComponent, ReactNode } from 'react'",
+      "",
+      "type ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}LayoutProps = {\n\tchildren: ReactNode\n}",
+      "",
+      "const ${1}Layout:FunctionComponent<${1}LayoutProps> = ({children}) => {",
+      "  return (",
+      "    <div>$0",
+      "    \t{children}",
+      "    </div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}Layout"
+    ],
+    "description": "Creates a React Layout Functional Component with TypeScript interface"
+  },
+  "typescriptReactClientComponent": {
+    "prefix": "tnc",
+    "body": [
+      "\"use client\";",
+      "",
+      "import { FunctionComponent } from 'react'",
+      "",
+      "type ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}Props = {}",
+      "",
+      "const ${1}:FunctionComponent<${1}Props> = ({$2}) => {",
+      "  return (",
+      "    <div>$0</div>",
+      "  )",
+      "}",
+      "",
+      "export default ${1}"
+    ],
+    "description": "Creates a React Client Component with TypeScript interface"
+  },
+  "typescriptReactNativeFC": {
+    "prefix": "tnf",
+    "body": [
+      "import { FunctionComponent } from 'react'",
+      "import { View } from 'react-native';",
+      "",
+      "type ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}Props = {}",
+      "",
+      "const ${1}: FunctionComponent<${1}Props> = () => {",
+      "  return <View>$0</View>",
+      "}",
+      "",
+      "export default ${1};"
+    ],
+    "description": "Create React Native Functional Component"
+  },
+  "typescriptReactNativeFCWithStyles": {
+    "prefix": "tnfs",
+    "body": [
+      "import { FunctionComponent } from 'react'",
+      "import { View, StyleSheet } from 'react-native';",
+      "",
+      "type ${1:${TM_FILENAME_BASE/(?:^|[-_])(\\w)/${1:/upcase}/g}}Props = {}",
+      "",
+      "const ${1}: FunctionComponent<${1}Props> = () => {",
+      "  return <View>$0</View>",
+      "}",
+      "",
+      "const styles = StyleSheet.create({$2})",
+      "",
+      "export default ${1};"
+    ],
+    "description": "Create React Native Functional Component(with styles)"
+  }
+}

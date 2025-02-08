@@ -1,41 +1,55 @@
--- AstroCommunity: import any community modules here
--- We import this file in `lazy_setup.lua` before the `plugins/` folder.
--- This guarantees that the specs are processed before any user plugins.
-
 ---@type LazySpec
 return {
   "AstroNvim/astrocommunity",
-  -- languages
+  { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.astro" },
   { import = "astrocommunity.pack.bash" },
+  { import = "astrocommunity.pack.blade" },
+  { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.docker" },
+  { import = "astrocommunity.pack.elixir-phoenix" },
   { import = "astrocommunity.pack.fish" },
   { import = "astrocommunity.pack.go" },
-  { import = "astrocommunity.pack.full-dadbod" },
+  { import = "astrocommunity.pack.gleam" },
+  { import = "astrocommunity.pack.haskell" },
   { import = "astrocommunity.pack.html-css" },
   { import = "astrocommunity.pack.json" },
+  { import = "astrocommunity.pack.laravel" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.prisma" },
   { import = "astrocommunity.pack.python-ruff" },
+  { import = "astrocommunity.pack.rust" },
+  { import = "astrocommunity.pack.sql" },
   { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.tailwindcss" },
+  { import = "astrocommunity.pack.templ" },
   { import = "astrocommunity.pack.typescript" },
   { import = "astrocommunity.pack.vue" },
   { import = "astrocommunity.pack.yaml" },
-  { import = "astrocommunity.pack.lua" },
-  { import = "astrocommunity.pack.rust" },
-  { import = "astrocommunity.pack.elixir-phoenix" },
+  { import = "astrocommunity.pack.hyprlang" },
+  { import = "astrocommunity.pack.full-dadbod" },
 
-  { import = "astrocommunity.lsp.nvim-lsp-file-operations" },
-  { import = "astrocommunity.lsp.ts-error-translator-nvim" },
+  { import = "astrocommunity.quickfix.quicker-nvim" },
+  { import = "astrocommunity.file-explorer.mini-files" },
 
-  { import = "astrocommunity.editing-support.conform-nvim" },
-  { import = "astrocommunity.editing-support.mini-operators" },
+  { import = "astrocommunity.completion.magazine-nvim" },
+
+  { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
+  { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
+  { import = "astrocommunity.debugging.persistent-breakpoints-nvim" },
+
+  { import = "astrocommunity.editing-support.dial-nvim" },
+  -- { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.refactoring-nvim" },
 
-  { import = "astrocommunity.quickfix.quicker-nvim" },
-  { import = "astrocommunity.test.neotest" },
+  { import = "astrocommunity.fuzzy-finder.snacks-picker" },
+  { import = "astrocommunity.lsp.ts-error-translator-nvim" },
+  { import = "astrocommunity.lsp.nvim-lsp-file-operations" },
 
-  { import = "astrocommunity.recipes.telescope-nvchad-theme" },
-  { import = "astrocommunity.recipes.telescope-lsp-mappings" },
+  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
+  { import = "astrocommunity.motion.flash-nvim" },
+  { import = "astrocommunity.motion.nvim-surround" },
+  { import = "astrocommunity.motion.vim-matchup" },
+  { import = "astrocommunity.motion.vim-matchup" },
 }
