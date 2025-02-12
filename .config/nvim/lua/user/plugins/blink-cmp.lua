@@ -65,25 +65,6 @@ return {
       end,
       opts = { history = true, delete_check_events = 'TextChanged' },
     },
-    {
-      'echasnovski/mini.snippets',
-      enabled = false,
-      dependencies = { 'rafamadriz/friendly-snippets' },
-      init = function()
-        snippet_preset = 'mini_snippets'
-      end,
-      config = function()
-        local gen_loader = require('mini.snippets').gen_loader
-        require('mini.snippets').setup({
-          mappings = { expand = '', jump_next = '', jump_prev = '' },
-          snippets = {
-            -- Load snippets based on current language by reading files from
-            -- "snippets/" subdirectories from 'runtimepath' directories.
-            gen_loader.from_lang(),
-          },
-        })
-      end,
-    },
   },
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
@@ -107,8 +88,8 @@ return {
     },
     completion = {
       accept = { auto_brackets = { enabled = true } },
-      menu = { border = 'rounded', draw = { treesitter = { 'lsp' } } },
-      documentation = { window = { border = 'rounded' }, auto_show = true, auto_show_delay_ms = 200 },
+      menu = { draw = { treesitter = { 'lsp' } } },
+      documentation = { auto_show = true, auto_show_delay_ms = 200 },
       list = {
         selection = {
           preselect = function(ctx)
@@ -119,12 +100,12 @@ return {
     },
     sources = {
       default = {
+        'lazydev',
         'lsp',
         'snippets',
         'path',
         'buffer',
         'ripgrep',
-        'lazydev',
         'markdown',
         'dadbod',
       },
@@ -145,6 +126,8 @@ return {
         lazydev = {
           name = 'LazyDev',
           module = 'lazydev.integrations.blink',
+          -- make lazydev completions top priority (see `:h blink.cmp`)
+          score_offset = 100,
         },
         markdown = {
           name = 'RenderMarkdown',
@@ -154,7 +137,7 @@ return {
         lsp = {
           name = 'LSP',
           module = 'blink.cmp.sources.lsp',
-          fallbacks = { 'lazydev' },
+          -- fallbacks = { 'lazydev' },
           score_offset = 150, -- the higher the number, the higher the priority
           -- Filter text items from the LSP provider, since we have the buffer provider for that
           transform_items = function(_, items)

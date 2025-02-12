@@ -21,7 +21,7 @@ return {
   {
     'brenton-leighton/multiple-cursors.nvim',
     version = '*',
-    enabled = false,
+    enabled = true,
     cmd = {
       'MultipleCursorsAddDown',
       'MultipleCursorsAddUp',
@@ -52,22 +52,6 @@ return {
       },
       { '<Leader>mN', '<Cmd>MultipleCursorsJumpNextMatch<CR>', mode = { 'n', 'x' }, desc = 'Jump to next cword' },
       { '<Leader>ml', '<Cmd>MultipleCursorsLock<CR>', mode = { 'n', 'x' }, desc = 'Lock virtual cursors' },
-    },
-  },
-  {
-    'smoka7/multicursors.nvim',
-    dependencies = {
-      'nvimtools/hydra.nvim',
-    },
-    opts = {},
-    cmd = { 'MCstart', 'MCvisual', 'MCclear', 'MCpattern', 'MCvisualPattern', 'MCunderCursor' },
-    keys = {
-      {
-        mode = { 'v', 'n' },
-        '<Leader>m',
-        '<cmd>MCstart<cr>',
-        desc = 'Create a selection for selected text or word under the cursor',
-      },
     },
   },
 }

@@ -172,18 +172,16 @@ return {
     ---@param opts AstroLSPOpts
     opts = function(_, opts)
       if opts.mappings.n.gd then
-        opts.mappings.n.gd[1] = function()
-          require("snacks").picker.lsp_definitions { layout = { preset = "ivy_split" } }
-        end
+        opts.mappings.n.gd[1] = function() require("snacks").picker.lsp_definitions { layout = { preset = "vertical" } } end
       end
       if opts.mappings.n.gI then
         opts.mappings.n.gI[1] = function()
-          require("snacks").picker.lsp_implementations { layout = { preset = "ivy_split" } }
+          require("snacks").picker.lsp_implementations { layout = { preset = "vertical" } }
         end
       end
       if opts.mappings.n.gy then
         opts.mappings.n.gy[1] = function()
-          require("snacks").picker.lsp_type_definitions { layout = { preset = "ivy_split" } }
+          require("snacks").picker.lsp_type_definitions { layout = { preset = "vertical" } }
         end
       end
       if opts.mappings.n["<Leader>lG"] then
@@ -191,14 +189,13 @@ return {
       end
       if opts.mappings.n["<Leader>lR"] then
         opts.mappings.n["<Leader>lR"][1] = function()
-          require("snacks").picker.lsp_references { layout = { preset = "ivy_split" } }
+          require("snacks").picker.lsp_references { layout = { preset = "vertical" } }
         end
       end
       opts.mappings.n["grr"] = {
-        function() require("snacks").picker.lsp_references { layout = { preset = "ivy_split" } } end,
+        function() require("snacks").picker.lsp_references { layout = { preset = "vertical" } } end,
         desc = "LSP References",
       }
-      -- opts.mappings.n["gra"][1] = require("snacks").picker.lsp_references
     end,
   },
 }

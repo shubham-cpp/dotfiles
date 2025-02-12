@@ -5,6 +5,7 @@ return {
     ---@type AstroLSPConfig
     opts = {
       handlers = {
+        pyright = false,
         ruff = function(server, opts)
           local default_attach = opts.on_attach
           opts.on_attach = function(client, _)

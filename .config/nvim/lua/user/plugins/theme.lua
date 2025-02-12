@@ -98,7 +98,7 @@ return {
   },
   {
     'EdenEast/nightfox.nvim',
-    enabled = false,
+    enabled = true,
     priority = 1000,
     opts = {
       options = {
@@ -110,12 +110,12 @@ return {
     },
     config = function(_, opts)
       require('nightfox').setup(opts)
-      vim.cmd.colorscheme 'Duskfox'
+      vim.cmd.colorscheme 'duskfox'
     end,
   },
   {
     'wtfox/jellybeans.nvim',
-    enabled = true,
+    enabled = false,
     priority = 1000,
     opts = {
       style = 'dark', -- "dark" or "light"

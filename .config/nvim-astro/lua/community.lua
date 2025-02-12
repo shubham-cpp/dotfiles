@@ -33,13 +33,14 @@ return {
   { import = "astrocommunity.file-explorer.mini-files" },
 
   { import = "astrocommunity.completion.magazine-nvim" },
+  -- { import = "astrocommunity.completion.blink-cmp" },
 
   { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
   { import = "astrocommunity.debugging.persistent-breakpoints-nvim" },
 
   { import = "astrocommunity.editing-support.dial-nvim" },
-  -- { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
+  { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.refactoring-nvim" },
 
@@ -51,5 +52,6 @@ return {
   { import = "astrocommunity.motion.flash-nvim" },
   { import = "astrocommunity.motion.nvim-surround" },
   { import = "astrocommunity.motion.vim-matchup" },
-  { import = "astrocommunity.motion.vim-matchup" },
+
+  { import = "astrocommunity.recipes.heirline-vscode-winbar" },
 }

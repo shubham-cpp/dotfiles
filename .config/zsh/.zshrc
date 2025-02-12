@@ -84,6 +84,8 @@ if ! zgenom saved; then
 
   zgenom save
 fi
+setopt appendhistory
+setopt sharehistory
 
 source "$HOME/Documents/dotfiles/.config/zsh/alias.zsh"
 source "$HOME/Documents/dotfiles/.config/zsh/bindings.zsh"

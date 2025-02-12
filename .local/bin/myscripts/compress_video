@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+set -xe
+
+input=${1:?"Specify a input file to be compressed"}
+filename=$(basename "$input")
+extension="${filename##*.}"
+output="${filename%.*}-compressed.${extension}"
+
+ffmpeg -i "$input" -vf "scale=trunc(iw/4)*2:trunc(ih/4)*2" "$output"

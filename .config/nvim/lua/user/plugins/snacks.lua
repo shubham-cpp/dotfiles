@@ -49,10 +49,10 @@ return {
             win = {
               list = {
                 keys = {
+                  ['/'] = false,
+                  ['f'] = { 'toggle_focus', mode = { 'n' } },
                   ['Y'] = { 'copy_path_full', mode = { 'n' } },
                   ['gy'] = { 'copy_path_relative', mode = { 'n' } },
-                  -- ['g.'] = { 'toggle_hidden', mode = { 'n' } },
-                  -- ['gI'] = { 'toggle_hidden', mode = { 'n' } },
                 },
               },
             },
@@ -315,7 +315,14 @@ return {
         function()
           Snacks.explorer()
         end,
-        desc = 'explorer',
+        desc = '+explorer',
+      },
+      {
+        '<leader>-',
+        function()
+          Snacks.explorer()
+        end,
+        desc = '+explorer',
       },
     },
     init = function()
