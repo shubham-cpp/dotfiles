@@ -94,6 +94,10 @@ return {
           desc = "Paste without overriding clipboard",
         },
       },
+      o = {
+        ie = { ':exec "normal! ggVG"<cr>', desc = "Entire File" },
+        iv = { ':exec "normal! HVL"<cr>', desc = "Entire Visible screen" },
+      },
     },
     filetypes = {
       filename = {

@@ -67,7 +67,7 @@ return {
     },
     keys = {
       {
-        "<C-g>",
+        "<leader>gn",
         function() Snacks.lazygit() end,
         desc = "Toggle Lazygit",
       },
@@ -78,7 +78,13 @@ return {
       },
       {
         "<C-p>",
-        function() Snacks.picker.files { layout = { preset = "vscode" } } end,
+        function()
+          if vim.b.gitsigns_head or vim.b.gitsigns_head then
+            Snacks.picker.git_files { layout = { preset = "vscode" } }
+          else
+            Snacks.picker.files { layout = { preset = "vscode" } }
+          end
+        end,
         desc = "Find Files",
       },
       {
@@ -110,7 +116,7 @@ return {
       },
       {
         "<leader>fg",
-        function() Snacks.picker.git_files { layout = { preset = "vscode" } } end,
+        function() Snacks.picker.git_files { untracked = true, layout = { preset = "vscode" } } end,
         desc = "Find Git Files",
       },
       {

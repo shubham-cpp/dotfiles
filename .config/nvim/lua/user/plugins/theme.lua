@@ -52,14 +52,30 @@ return {
   },
   {
     'vague2k/vague.nvim',
-    branch = '1.3',
     enabled = false,
     priority = 1000,
     opts = { transparent = false },
     config = function(_, opts)
-      require('vague').setup(opts)
+      local vague = require 'vague'
+      vague.setup(opts)
+      local palette = vague.get_palette()
+
       vim.cmd.colorscheme 'vague'
       vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#181818' })
+
+      vim.api.nvim_set_hl(0, '@tag.attribute', { bg = palette.property })
+      vim.api.nvim_set_hl(0, 'WinBar', { bg = palette.bg })
+      vim.api.nvim_set_hl(0, 'SnacksPickerMatch', { fg = palette.delta })
+      vim.api.nvim_set_hl(
+        0,
+        'QuickScopePrimary',
+        { fg = palette.delta, bg = palette.visual, bold = true, undercurl = true }
+      )
+      vim.api.nvim_set_hl(
+        0,
+        'QuickScopeSecondary',
+        { fg = palette.hint, bg = palette.visual, bold = true, undercurl = true }
+      )
     end,
   },
   {

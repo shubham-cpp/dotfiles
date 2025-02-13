@@ -40,7 +40,7 @@ return {
   { import = "astrocommunity.debugging.persistent-breakpoints-nvim" },
 
   { import = "astrocommunity.editing-support.dial-nvim" },
-  { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
+  -- { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.refactoring-nvim" },
 
@@ -54,4 +54,5 @@ return {
   { import = "astrocommunity.motion.vim-matchup" },
 
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
+  { import = "astrocommunity.icon.mini-icons" },
 }
