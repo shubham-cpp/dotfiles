@@ -1,3 +1,4 @@
+local branch = nil
 ---@type LazySpec
 return {
   "folke/snacks.nvim",
@@ -42,7 +43,19 @@ return {
     {
       "<C-p>",
       function()
-        Snacks.picker.files({ layout = { preset = "vscode" } })
+        -- if branch == nil then
+        --   local obj = vim.system({ "git", "branch", "--show-current" }, { text = true }):wait()
+        --   if obj.stderr == "" and obj.stdout ~= "" then
+        --     branch = obj.stdout
+        --   end
+        -- else
+        branch = vim.g.gitsigns_head or vim.b.gitsigns_head or nil
+        -- end
+        if branch ~= nil or branch ~= "" then
+          Snacks.picker.git_files({ layout = { preset = "vscode" } })
+        else
+          Snacks.picker.files({ layout = { preset = "vscode" } })
+        end
       end,
       desc = "Find Files",
     },
@@ -89,13 +102,4 @@ return {
       desc = "Zoxided",
     },
   },
-
-  -- init = function()
-  --   vim.api.nvim_create_user_command("NotificationHistory", function()
-  --     if not _G.Snacks then
-  --       return
-  --     end
-  --     Snacks.notifier.show_history()
-  --   end, { desc = "Show Notification History" })
-  -- end,
 }

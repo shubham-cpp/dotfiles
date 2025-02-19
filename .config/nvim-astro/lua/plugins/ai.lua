@@ -100,6 +100,7 @@ return {
   },
   {
     "yetone/avante.nvim",
+    enabled = false,
     version = false,
     build = "make",
     event = "InsertEnter",

@@ -6,6 +6,7 @@ local function deprio(kind)
     if e2:get_kind() == kind then return true end
   end
 end
+
 ---@type LazySpec
 return {
   -- {
@@ -26,8 +27,36 @@ return {
       { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
       { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
       { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
-      "lukas-reineke/cmp-rg",
       "https://codeberg.org/FelipeLema/cmp-async-path",
+      "lukas-reineke/cmp-rg",
+      {
+        "milanglacier/minuet-ai.nvim",
+        enabled = false,
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+          provider = "openai_fim_compatible",
+          n_completions = 1, -- recommend for local model for resource saving
+          -- I recommend beginning with a small context window size and incrementally
+          -- expanding it, depending on your local computing power. A context window
+          -- of 512, serves as an good starting point to estimate your computing
+          -- power. Once you have a reliable estimate of your local computing power,
+          -- you should adjust the context window to a larger value.
+          context_window = 512,
+          provider_options = {
+            openai_fim_compatible = {
+              api_key = "TERM",
+              name = "Ollama",
+              end_point = "http://localhost:11434/v1/completions",
+              model = "starcoder2:latest",
+              optional = {
+                max_tokens = 256,
+                top_p = 0.9,
+              },
+            },
+          },
+        },
+        config = function(_, opts) require("minuet").setup(opts) end,
+      },
     },
     opts = function(_, opts)
       local cmp = require "cmp"
@@ -45,6 +74,7 @@ return {
         i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true },
         c = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
       }
+      -- opts.mapping["<A-y>"] = require("minuet").make_cmp_map()
       -- modify the sources part of the options table
       opts.sources = cmp.config.sources {
         { name = "nvim_lsp", priority = 1000 },
@@ -58,7 +88,16 @@ return {
           priority = 200,
           option = { additional_arguments = "--smart-case" },
         },
+        -- { name = "minuet" },
       }
+      -- opts.performance = require("astrocore").extend_tbl(opts.performance or {}, {
+      --   -- It is recommended to increase the timeout duration due to
+      --   -- the typically slower response speed of LLMs compared to
+      --   -- other completion sources. This is not needed when you only
+      --   -- need manual completion.
+      --   fetching_timeout = 2000,
+      -- })
+
       opts.sorting = {
         priority_weight = defaults.sorting.priority_weight,
         comparators = vim.tbl_extend("keep", {
@@ -68,10 +107,8 @@ return {
     end,
     config = function(_, opts)
       local cmp = require "cmp"
-      -- run cmp setup
       cmp.setup(opts)
 
-      -- configure `cmp-cmdline` as described in their repo: https://github.com/hrsh7th/cmp-cmdline#setup
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
@@ -102,11 +139,9 @@ return {
     end,
   },
   {
-    "Saghen/blink.cmp",
+    "blink.cmp",
     optional = true,
     dependencies = { "mikavilpas/blink-ripgrep.nvim" },
-    ---@module 'blink.cmp'
-    ---@type blink.cmp.Config
     opts = {
       sources = {
         default = { "ripgrep" },
@@ -114,6 +149,8 @@ return {
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
+            ---@module "blink-ripgrep"
+            ---@type blink-ripgrep.Options
             opts = {},
           },
         },

@@ -1,3 +1,4 @@
+local branch = nil
 ---@param picker snacks.Picker
 local function copy_path_full(picker)
   local selected = picker:selected({ fallback = true })[1]
@@ -34,7 +35,7 @@ return {
         formatters = { file = { filename_first = true } },
         sources = {
           explorer = {
-            layout = { layout = { position = "right" }, cycle = false },
+            layout = { cycle = false },
             actions = {
               copy_path_full = copy_path_full,
               copy_path_relative = copy_path_relative,
@@ -64,10 +65,11 @@ return {
         },
       },
       lazygit = {},
+      notifier = {},
     },
     keys = {
       {
-        "<leader>gn",
+        "<leader>gg",
         function() Snacks.lazygit() end,
         desc = "Toggle Lazygit",
       },
@@ -79,7 +81,15 @@ return {
       {
         "<C-p>",
         function()
-          if vim.b.gitsigns_head or vim.b.gitsigns_head then
+          -- vim.notify("Branch value " .. (branch or "nil"))
+          -- if branch == nil then
+          --   local obj = vim.system({ "git", "branch", "--show-current" }, { text = true }):wait()
+          --   if obj.stderr == "" and obj.stdout ~= "" then branch = obj.stdout end
+          --   vim.notify "calling vim.system"
+          -- else
+          branch = vim.g.gitsigns_head or vim.b.gitsigns_head or nil
+          -- end
+          if branch ~= nil or branch ~= "" then
             Snacks.picker.git_files { layout = { preset = "vscode" } }
           else
             Snacks.picker.files { layout = { preset = "vscode" } }
@@ -167,9 +177,24 @@ return {
         mode = { "n", "x" },
       },
       {
-        "<leader>-",
+        "<leader>e",
         function() Snacks.explorer() end,
         desc = "Explorer",
+      },
+    },
+    dependencies = {
+      {
+        "AstroNvim/astrocore",
+        opts = {
+          mappings = {
+            n = {
+              ["<Leader>un"] = {
+                function() require("snacks.notifier").show_history() end,
+                desc = "Notification History",
+              },
+            },
+          },
+        },
       },
     },
   },

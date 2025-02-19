@@ -43,7 +43,7 @@ return {
         opts = {
           mappings = {
             n = {
-              ["<Leader>e"] = { minifiles_toggle, desc = "Explorer" },
+              ["<Leader>-"] = { minifiles_toggle, desc = "Explorer" },
               ["<Leader>E"] = {
                 function() minifiles_toggle(vim.api.nvim_buf_get_name(0), false) end,
                 desc = "Explorer(current file)",
