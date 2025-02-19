@@ -6,6 +6,19 @@ local function deprio(kind)
     if e2:get_kind() == kind then return true end
   end
 end
+
+---@return cmp.ComparatorFunction
+local function lower_emmet()
+  return function(e1, e2)
+    local is_e1_emmet = e1.source:get_debug_name() == "nvim_lsp:emmet_ls"
+      or e1.source:get_debug_name() == "nvim_lsp:emmet_language_server"
+    local is_e2_emmet = e2.source:get_debug_name() == "nvim_lsp:emmet_ls"
+      or e2.source:get_debug_name() == "nvim_lsp:emmet_language_server"
+    if is_e1_emmet then return false end
+    if is_e2_emmet then return true end
+  end
+end
+
 ---@type LazySpec
 return {
   -- {
@@ -19,15 +32,12 @@ return {
     optional = true,
     keys = { ":", "/", "?" }, -- lazy load cmp on more keys along with insert mode
     dependencies = {
-      -- { "hrsh7th/cmp-path", enabled = false },
-      -- { "hrsh7th/cmp-nvim-lsp", enabled = false },
-      -- { "hrsh7th/cmp-buffer", enabled = false },
       { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
       { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
       { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
       { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
-      "lukas-reineke/cmp-rg",
       "https://codeberg.org/FelipeLema/cmp-async-path",
+      "lukas-reineke/cmp-rg",
     },
     opts = function(_, opts)
       local cmp = require "cmp"
@@ -36,7 +46,6 @@ return {
       opts.mapping["<C-x><C-x>"] = cmp.mapping.complete {
         config = { sources = { { name = "luasnip" } } },
       }
-      -- opts.completion = { completeopt = "menu,menuone,preview" }
       opts.mapping["<C-y>"] = cmp.mapping {
         i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true },
         c = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
@@ -45,33 +54,34 @@ return {
         i = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = true },
         c = cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Replace, select = false },
       }
-      -- modify the sources part of the options table
+
       opts.sources = cmp.config.sources {
-        { name = "nvim_lsp", priority = 1000 },
-        { name = "luasnip", priority = 750 },
-        { name = "buffer", priority = 300 },
-        { name = "async_path", priority = 600 },
+        { name = "nvim_lsp", priority = 1000, group_index = 1 },
+        { name = "luasnip", priority = 750, group_index = 1 },
+        { name = "async_path", priority = 600, group_index = 2 },
+        { name = "buffer", priority = 300, group_index = 2 },
         {
           name = "rg",
           keyword_length = 3,
           max_item_count = 10,
+          group_index = 2,
           priority = 200,
           option = { additional_arguments = "--smart-case" },
         },
       }
+
       opts.sorting = {
         priority_weight = defaults.sorting.priority_weight,
         comparators = vim.tbl_extend("keep", {
           deprio(types.lsp.CompletionItemKind.Text),
+          lower_emmet(),
         }, defaults.sorting.comparators),
       }
     end,
     config = function(_, opts)
       local cmp = require "cmp"
-      -- run cmp setup
       cmp.setup(opts)
 
-      -- configure `cmp-cmdline` as described in their repo: https://github.com/hrsh7th/cmp-cmdline#setup
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
@@ -102,11 +112,9 @@ return {
     end,
   },
   {
-    "Saghen/blink.cmp",
+    "blink.cmp",
     optional = true,
     dependencies = { "mikavilpas/blink-ripgrep.nvim" },
-    ---@module 'blink.cmp'
-    ---@type blink.cmp.Config
     opts = {
       sources = {
         default = { "ripgrep" },
@@ -114,6 +122,8 @@ return {
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
+            ---@module "blink-ripgrep"
+            ---@type blink-ripgrep.Options
             opts = {},
           },
         },

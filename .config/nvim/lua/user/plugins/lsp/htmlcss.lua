@@ -79,9 +79,9 @@ return {
         --   end,
         -- },
       },
-      handlers = {
-        emmet_language_server = false,
-      },
+      -- handlers = {
+      --   emmet_language_server = false,
+      -- },
     },
   },
   {
@@ -101,7 +101,8 @@ return {
         'css-variables-language-server',
         'cssmodules-language-server',
         'prettierd',
-        'emmet-language-server',
+        -- 'emmet-language-server',
+        'emmet-ls',
       },
     },
   },

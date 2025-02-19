@@ -1,15 +1,43 @@
+---@param picker snacks.Picker
+local function copy_path_full(picker)
+  local selected = picker:selected({ fallback = true })[1]
+  if not selected or selected == nil then
+    return
+  end
+  vim.schedule(function()
+    local full_path = vim.fn.fnamemodify(selected.file, ":p")
+    vim.fn.setreg("+", full_path)
+    vim.notify(full_path, vim.log.levels.INFO, { title = "File Path Copied" })
+  end)
+end
 ---@type LazySpec
 return {
   "folke/snacks.nvim",
+  optional = true,
   ---@type snacks.Config
   opts = {
+    dashboard = { enabled = false },
     picker = {
       enabled = true,
       ui_select = true,
       layout = { preset = "dropdown" },
-      matcher = { frecency = true },
+      matcher = { frecency = true, history_bonus = true },
       formatters = { file = { filename_first = true } },
-      -- jump = { reuse_win = true },
+      sources = {
+        explorer = {
+          layout = { cycle = false },
+          actions = { copy_path_full = copy_path_full },
+          win = {
+            list = {
+              keys = {
+                ["/"] = false,
+                ["f"] = { "toggle_focus", mode = { "n" } },
+                ["Y"] = { "copy_path_full", mode = { "n" } },
+              },
+            },
+          },
+        },
+      },
       win = {
         -- input window
         input = {
@@ -25,24 +53,14 @@ return {
   },
   keys = {
     {
-      "<leader>uN",
-      function()
-        Snacks.notifier.show_history()
-      end,
-      desc = "Notification History",
-    },
-    {
-      "<C-Y>",
-      function()
-        Snacks.terminal({ "yazi" }, { cwd = vim.uv.cwd() })
-      end,
-      desc = "Toggle Yazi",
-      mode = { "n", "t" },
-    },
-    {
       "<C-p>",
       function()
-        Snacks.picker.files({ layout = { preset = "vscode" } })
+        local branch = vim.b.gitsigns_head or nil
+        if branch ~= nil and branch ~= "" then
+          Snacks.picker.git_files({ layout = { preset = "vscode" }, untracked = true })
+        else
+          Snacks.picker.files({ layout = { preset = "vscode" } })
+        end
       end,
       desc = "Find Files",
     },
@@ -56,7 +74,7 @@ return {
     {
       "<leader>fg",
       function()
-        Snacks.picker.git_files({ layout = { preset = "vscode" } })
+        Snacks.picker.git_files({ untracked = true, layout = { preset = "vscode" } })
       end,
       desc = "Find Files(git)",
     },
@@ -88,14 +106,32 @@ return {
       end,
       desc = "Zoxided",
     },
+    {
+      "<leader>uN",
+      function()
+        Snacks.notifier.show_history()
+      end,
+      desc = "Notification History",
+    },
+    {
+      "<c-w>m",
+      function()
+        Snacks.zen.zoom()
+      end,
+      desc = "Toggle Zoom",
+    },
+    {
+      "<C-\\>",
+      function()
+        Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
+      end,
+      desc = "Toggle terminal",
+    },
+    {
+      "<C-\\>",
+      "<cmd>close<cr>",
+      mode = "t",
+      desc = "Hide terminal",
+    },
   },
-
-  -- init = function()
-  --   vim.api.nvim_create_user_command("NotificationHistory", function()
-  --     if not _G.Snacks then
-  --       return
-  --     end
-  --     Snacks.notifier.show_history()
-  --   end, { desc = "Show Notification History" })
-  -- end,
 }

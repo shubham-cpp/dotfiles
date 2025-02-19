@@ -10,3 +10,8 @@ function Status:name()
   end
   return ui.Span(" " .. h.name .. linked)
 end
+
+require("bookmarks"):setup({
+  last_directory = { enable = true, persist = true },
+  persist = "vim",
+})

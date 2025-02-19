@@ -1,3 +1,4 @@
+local branch = nil
 ---@param picker snacks.Picker
 local function copy_path_full(picker)
   local selected = picker:selected({ fallback = true })[1]
@@ -26,6 +27,9 @@ return {
     "snacks.nvim",
     ---@type snacks.Config
     opts = {
+      bigfile = {},
+      lazygit = {},
+      notifier = {},
       picker = {
         enabled = true,
         layout = { preset = "dropdown" },
@@ -34,7 +38,7 @@ return {
         formatters = { file = { filename_first = true } },
         sources = {
           explorer = {
-            layout = { layout = { position = "right" }, cycle = false },
+            layout = { cycle = false },
             actions = {
               copy_path_full = copy_path_full,
               copy_path_relative = copy_path_relative,
@@ -63,11 +67,10 @@ return {
           list = { keys = { ["<c-x>"] = "edit_split" } },
         },
       },
-      lazygit = {},
     },
     keys = {
       {
-        "<leader>gn",
+        "<leader>gg",
         function() Snacks.lazygit() end,
         desc = "Toggle Lazygit",
       },
@@ -79,8 +82,9 @@ return {
       {
         "<C-p>",
         function()
-          if vim.b.gitsigns_head or vim.b.gitsigns_head then
-            Snacks.picker.git_files { layout = { preset = "vscode" } }
+          branch = vim.b.gitsigns_head or nil
+          if branch ~= nil and branch ~= "" then
+            Snacks.picker.git_files { layout = { preset = "vscode" }, untracked = true }
           else
             Snacks.picker.files { layout = { preset = "vscode" } }
           end
@@ -170,6 +174,21 @@ return {
         "<leader>-",
         function() Snacks.explorer() end,
         desc = "Explorer",
+      },
+    },
+    dependencies = {
+      {
+        "AstroNvim/astrocore",
+        opts = {
+          mappings = {
+            n = {
+              ["<Leader>un"] = {
+                function() require("snacks.notifier").show_history() end,
+                desc = "Notification History",
+              },
+            },
+          },
+        },
       },
     },
   },

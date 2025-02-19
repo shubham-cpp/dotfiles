@@ -3,7 +3,7 @@ return {
   "yujinyuz/gitpad.nvim",
   opts = {
     on_attach = function(bufnr)
-      vim.keymap.set("n", "q", "<cmd>wq<cr>", { silent = true, bufnr = bufnr })
+      vim.keymap.set("n", "q", "<cmd>wq<cr>", { silent = true, buffer = bufnr })
     end,
     floating_win_opts = {
       ---@type 'single'| 'double'| 'shadow'| 'rounded'

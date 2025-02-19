@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
   "chrisgrieser/nvim-scissors",
+  enabled = false,
   opts = {
     snippetDir = vim.fn.stdpath("config") .. "/snippets/", -- this is already the default, but I want to be explicit
     ---@type "yq"|"jq"|"none"|string[]

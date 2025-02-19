@@ -1,3 +1,5 @@
+# [general]
+# import = ["~/.config/alacritty/themes/default.toml"]
 
 [colors]
 draw_bold_text_with_bright_colors = true
@@ -402,18 +404,15 @@ mouse = "Left"
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-# [terminal.shell]
-# args = ["--login"]
+# [terminal]
+# args = ["-l", "-i"]
 # program = "/bin/fish"
 
 [window]
 opacity = 0.9
 title = "Alacritty"
+option_as_alt = "OnlyLeft"
 
 [window.class]
 general = "Alacritty"
 instance = "Alacritty"
-
-[general]
-live_config_reload = true
-import = ["~/.config/alacritty/themes/default.toml"]

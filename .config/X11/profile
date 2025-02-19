@@ -1,14 +1,33 @@
 #!/usr/bin/env bash
 
-PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
-PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
-PATH="$PATH:$HOME/.local/share/nim-2.0.4/bin:$HOME/Downloads/GitClones/roc_nightly:$HOME/.nimble/bin:$HOME/.cache/rebar3/bin"
-PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/:$HOME/.local/share/python/bin/:$HOME/.nimble/bin"
-PATH="$PATH:$HOME/.turso"
-# Deduplicate entries in PATH
-PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
+append_path() {
+  case ":$PATH:" in
+  *":$1:"*) : ;; # already there
+  *)
+    if [ "$2" = "check" ]; then
+      [ -d "$1" ] && PATH="$PATH:$1"
+    else
+      PATH="$PATH:$1"
+    fi
+    ;;
+  esac
+}
+paths=(
+  "$HOME/.local/bin/"
+  "$HOME/.local/bin/myscripts/"
+  "$HOME/.local/share/npm/bin/"
+  "$HOME/.config/suckless/dwm/status/scripts/"
+  "$HOME/.turso"
+)
 
-export PATH
+for p in "${paths[@]}"; do
+  append_path "$p"
+done
+# PATH="$PATH:$HOME/.local/bin/:$HOME/.local/bin/myscripts/"
+# PATH="$PATH:$HOME/.local/share/luarocks/bin/:$HOME/.local/share/golib/bin/:$HOME/.local/share/npm/bin/"
+# PATH="$PATH:$HOME/.config/suckless/dwm/status/scripts/"
+# PATH="$PATH:$HOME/.turso"
+# [ -d "$HOME/.local/share/bob/nvim-bin" ] && PATH="$PATH:$HOME/.local/share/bob/nvim-bin"
 
 export EDITOR=nvim
 export VISUAL=nvim
@@ -31,7 +50,7 @@ export XDG_CACHE_HOME="$HOME/.cache"
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
   export MOZ_ENABLE_WAYLAND=1
   export _JAVA_AWT_WM_NONREPARENTING=1
-  export XCURSOR_SIZE=24
+  # export XCURSOR_SIZE=24
 fi
 export GTK_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-1.0/gtkrc
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc":"${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc.mine"
@@ -53,7 +72,7 @@ export ASDF_DATA_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/asdf"
 # export PATH=$PATH:$ANDROID_HOME/platform-tools
 # export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin
 export ANDROID_HOME="$HOME/Android/Sdk"
-export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/cmdline-tools/latest:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
+# [ -d "$ANDROID_HOME" ] && export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/cmdline-tools/latest:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH"
 export MYSQL_HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/mysql_history"
 export PSQLRC="$XDG_CONFIG_HOME/pg/psqlrc"
 export PSQL_HISTORY="$XDG_STATE_HOME/psql_history"
@@ -97,29 +116,25 @@ export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
 export MACHINE_STORAGE_PATH="${XDG_DATA_HOME:-$HOME/.local/share}"/docker-machine
 export LEIN_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/lein"
 export LESSHISTFILE=-
-export DENO_INSTALL="/home/shubham/.config/deno"
-[ -s "$DENO_INSTALL" ] && export PATH="$PATH:$DENO_INSTALL/bin"
+export DENO_INSTALL="${XDG_CONFIG_HOME:-$HOME/.config}/deno"
+# [ -d "$DENO_INSTALL" ] && export PATH="$PATH:$DENO_INSTALL/bin"
 export BUN_INSTALL="${XDG_DATA_HOME:-$HOME/.local/share}/bun"
-[ -s "$BUN_INSTALL" ] && export PATH="$BUN_INSTALL/bin:$PATH"
+# [ -d "$BUN_INSTALL" ] && export PATH="$BUN_INSTALL/bin:$PATH"
 # export LESSOPEN="| /usr/bin/highlight -O xterm256 --style=leo %s 2>/dev/null"
 # export LESS='-q -F -i -J -M -W -x4 -z-4 -R --use-color'
 export LESS='-R --use-color -Dd+r$Du+b'
 # export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
 export _JAVA_AWT_WM_NONREPARENTING=1
 # export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}"/gnupg
-export _ZL_DATA="$XDG_CACHE_HOME/zlua"
-export _ZL_DATA_DIR="$XDG_CACHE_HOME/zlua"
-export RANGER_ZLUA="$HOME/Downloads/GitClones/z.lua/z.lua"
-export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
-export PATH="$PATH:$XDG_CACHE_HOME/fnm-install:$HOME/Documents/Programming/Flutter/flutter/bin"
-export FZF_DEFAULT_COMMAND="fd -t f --hidden --follow --ignore-file node_modules --ignore-file .git --ignore-file .github --ignore-file dist"
-# export FZF_DEFAULT_COMMAND="rg --files --hidden --follow --glob '!Git*' --iglob '!void-*' --iglob '!.git*' --iglob '!venv' --iglob '!__pycache__' --iglob '!*.out'"
+# [ -d "$HOME/Downloads/GitClones/void-packages" ] && export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
+# [ -d "$XDG_CACHE_HOME/fnm-install" ] && export PATH="$PATH:$XDG_CACHE_HOME/fnm-install:$HOME/Documents/Programming/Flutter/flutter/bin"
+export FZF_DEFAULT_COMMAND="rg --files --hidden --follow -g '!{node_modules/,.venv/,venv,.git/,.github,dist,android/,ios/,build/,vendor/}'"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd -t d -H -L --ignore-file ~/.config/git/ignore"
 export FZF_DEFAULT_OPTS="--cycle --marker='+' --keep-right"
 # remember --bind KEY:ACTION or EVENT:ACTION
 # eval $(dircolors "$XDG_CONFIG_HOME"/dir_colors)
-export XCURSOR_PATH=${XCURSOR_PATH}:~/.local/share/icons
+# export XCURSOR_PATH=${XCURSOR_PATH}:~/.local/share/icons
 export GHCUP_USE_XDG_DIRS="$HOME"/.config
 export STACK_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/stack"
 export CABAL_CONFIG="$XDG_CONFIG_HOME"/cabal/config
@@ -130,9 +145,30 @@ export CABAL_DIR="$XDG_CACHE_HOME"/cabal
 # Ignore certain files while completing
 export FIGNORE=".class:.out:.hi:.o"
 export MICRO_TRUECOLOR=1
-export ZK_NOTEBOOK_DIR="$HOME/Documents/Notes/Refrens"
+export ZK_NOTEBOOK_DIR="$HOME/Documents/Notes"
 export MIX_XDG="true"
 export FFMPEG_DATADIR="$XDG_CONFIG_HOME"/ffmpeg
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgreprc"
 export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion
+
+checked_paths=(
+  "$HOME/.local/share/bob/nvim-bin"
+  "$HOME/Downloads/GitClones/void-packages"
+  "$XDG_CACHE_HOME/fnm-install"
+  "$HOME/Documents/Programming/Flutter/flutter/bin"
+  "$DENO_INSTALL/bin"
+  "$BUN_INSTALL/bin"
+  "$ANDROID_HOME/emulator"
+  "$ANDROID_HOME/tools"
+  "$ANDROID_HOME/tools/bin"
+  "$ANDROID_HOME/cmdline-tools/latest"
+  "$ANDROID_HOME/cmdline-tools/latest/bin"
+  "$ANDROID_HOME/platform-tools"
+)
+for p in "${checked_paths[@]}"; do
+  append_path "$p" "check"
+done
 # [ -r /etc/profile.d/flatpak.sh ] && . /etc/profile.d/flatpak.sh
+# Deduplicate entries in PATH
+# PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
+export PATH

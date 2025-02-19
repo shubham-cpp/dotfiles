@@ -11,7 +11,7 @@ local mappings = {
 ---@type LazySpec
 return {
   'echasnovski/mini.surround',
-  enabled = true,
+  enabled = false,
   keys = {
     { 'gz', '', desc = '+surround' },
     { mappings.add, mode = { 'n', 'v' }, desc = 'Surround add' },

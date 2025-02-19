@@ -2,47 +2,22 @@
 return {
   {
     "LazyVim",
-    opts = { colorscheme = "nordic" },
+    opts = { colorscheme = "vague" },
   },
-  -- {
-  --   "lualine.nvim",
-  --   opts = {
-  --     options = {
-  --       theme = "iceberg_dark",
-  --     },
-  --   },
-  -- },
   {
     "vague2k/vague.nvim",
-    enabled = false,
-    event = "VimEnter",
+    enabled = true,
+    -- branch = "issue-20",
     opts = { transparent = false },
     config = function(_, opts)
       require("vague").setup(opts)
-    end,
-  },
-  {
-    "AlexvZyl/nordic.nvim",
-    enabled = true,
-    event = "VimEnter",
-    config = function()
-      require("config.nordic")
-    end,
-  },
-  {
-    "rebelot/kanagawa.nvim",
-    enabled = false,
-    event = "VimEnter",
-    config = function()
-      require("config.kangawa")
-    end,
-  },
-  {
-    "blazkowolf/gruber-darker.nvim",
-    enabled = false,
-    event = "VimEnter",
-    config = function()
-      require("config.gruber-darker")
+      local c = require("vague").get_palette()
+
+      vim.api.nvim_set_hl(0, "@tag.attribute", { fg = c.property })
+      vim.api.nvim_set_hl(0, "WinBar", { bg = "#141415" })
+      vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = c.delta, bold = true })
+      vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = c.delta, bg = c.visual, bold = true, undercurl = true })
+      vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = c.hint, bg = c.visual, bold = true, undercurl = true })
     end,
   },
 }

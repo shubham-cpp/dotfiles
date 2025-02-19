@@ -52,6 +52,7 @@ end
 ---@type LazySpec
 return {
   'echasnovski/mini.files',
+  enabled = false,
   dependencies = {
     'echasnovski/mini.icons',
     {

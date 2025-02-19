@@ -18,4 +18,4 @@ prisma:*.prisma
 astro:*.astro
 
 --glob
-!.git/*
+!{.git/*,node_modules/*,.venv/*,android/*,ios/*,build/*,dist/*,vendor/*}

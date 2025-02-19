@@ -3,6 +3,7 @@ local snippet_preset = 'luasnip'
 ---@type LazySpec
 return {
   'saghen/blink.cmp',
+  enabled = false,
   event = 'InsertEnter',
   version = '*',
   dependencies = {
@@ -60,9 +61,6 @@ return {
           end,
         },
       },
-      init = function()
-        snippet_preset = 'mini_snippets'
-      end,
       opts = { history = true, delete_check_events = 'TextChanged' },
     },
   },
@@ -76,7 +74,9 @@ return {
       ['<C-j>'] = { 'select_next', 'fallback' },
       ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
       ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
-      cmdline = {
+    },
+    cmdline = {
+      keymap = {
         preset = 'enter',
         ['<Up>'] = {},
         ['<Down>'] = {},
@@ -175,5 +175,18 @@ return {
       },
     },
     snippets = { preset = snippet_preset },
+    -- fuzzy = {
+    --   sorts = {
+    --     function(a, b)
+    --       if a.client_name == nil or b.client_name == nil then
+    --         return
+    --       end
+    --       return b.client_name == 'emmet_ls' or b.client_name == 'emmet_language_server'
+    --     end,
+    --     -- default sorts
+    --     'score',
+    --     'sort_text',
+    --   },
+    -- },
   },
 }

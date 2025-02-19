@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
   'kylechui/nvim-surround',
-  enabled = false,
-  config = true,
+  enabled = true,
+  opts = {},
   keys = { 'ys', 'ds', 'cs', { 'S', mode = 'x', silent = false } },
 }

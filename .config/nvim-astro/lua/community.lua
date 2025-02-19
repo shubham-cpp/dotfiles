@@ -30,7 +30,7 @@ return {
   { import = "astrocommunity.pack.full-dadbod" },
 
   { import = "astrocommunity.quickfix.quicker-nvim" },
-  { import = "astrocommunity.file-explorer.mini-files" },
+  -- { import = "astrocommunity.file-explorer.mini-files" },
 
   { import = "astrocommunity.completion.magazine-nvim" },
   -- { import = "astrocommunity.completion.blink-cmp" },
@@ -40,7 +40,6 @@ return {
   { import = "astrocommunity.debugging.persistent-breakpoints-nvim" },
 
   { import = "astrocommunity.editing-support.dial-nvim" },
-  -- { import = "astrocommunity.editing-support.multiple-cursors-nvim" },
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.refactoring-nvim" },
 

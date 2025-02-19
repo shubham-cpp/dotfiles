@@ -1,0 +1,98 @@
+---@type LazySpec
+return {
+  {
+    "jake-stewart/multicursor.nvim",
+    branch = "1.0",
+    opts = {},
+    keys = function()
+      local mc = require("multicursor-nvim")
+      return {
+        {
+          "<leader>mj",
+          function()
+            mc.lineAddCursor(1)
+          end,
+          desc = "add cursor dowm",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mk",
+          function()
+            mc.lineAddCursor(-1)
+          end,
+          desc = "add cursor up",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mJ",
+          function()
+            mc.lineSkipCursor(1)
+          end,
+          desc = "skip cursor down",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mK",
+          function()
+            mc.lineSkipCursor(-1)
+          end,
+          desc = "skip cursor up",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mn",
+          function()
+            mc.matchAddCursor(1)
+          end,
+          desc = "add cursor to next match",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mp",
+          function()
+            mc.matchAddCursor(-1)
+          end,
+          desc = "add cursor to prev match",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mN",
+          function()
+            mc.matchSkipCursor(1)
+          end,
+          desc = "skip cursor to next match",
+          mode = { "n", "x" },
+        },
+        {
+          "<leader>mP",
+          function()
+            mc.matchSkipCursor(-1)
+          end,
+          desc = "skip cursor to prev match",
+          mode = { "n", "x" },
+        },
+        { "<leader>ma", mc.matchAllAddCursors, desc = "all matches", mode = { "n", "x" } },
+        { "<c-leftmouse>", mc.handleMouse, desc = "multicursor using mouse" },
+        { "<leader>mt", mc.toggleCursor, desc = "toggle cursor" },
+        { "<leader>mh", mc.prevCursor, desc = "goto prev cursor" },
+        { "<leader>ml", mc.nextCursor, desc = "goto next cursor" },
+        { "<leader>md", mc.deleteCursor, desc = "delete cursor" },
+        {
+          "<esc>",
+          function()
+            if not mc.cursorsEnabled() then
+              mc.enableCursors()
+            elseif mc.hasCursors() then
+              mc.clearCursors()
+            else
+              vim.cmd("nohl")
+              return "<esc>"
+            end
+          end,
+          desc = "Escape cursor, No-Highlight",
+          expr = true,
+        },
+      }
+    end,
+  },
+}

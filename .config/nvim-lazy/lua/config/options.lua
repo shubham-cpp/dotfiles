@@ -5,9 +5,7 @@ vim.opt.wrap = true
 vim.opt.showbreak = "󰄾 "
 vim.opt.iskeyword:append("-")
 vim.opt.scrolloff = 8
-
-vim.opt.sessionoptions:append({ "globals" })
-vim.opt.sessionoptions:remove("folds")
+vim.opt.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,skiprtp"
 
 vim.opt.wildignore:append({
   "*.o",

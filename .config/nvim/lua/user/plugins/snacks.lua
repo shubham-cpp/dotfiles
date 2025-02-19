@@ -41,11 +41,8 @@ return {
         formatters = { file = { filename_first = true } },
         sources = {
           explorer = {
-            layout = { layout = { position = 'right' }, cycle = false },
-            actions = {
-              copy_path_full = copy_path_full,
-              copy_path_relative = copy_path_relative,
-            },
+            layout = { cycle = false },
+            actions = { copy_path_full = copy_path_full, copy_path_relative = copy_path_relative },
             win = {
               list = {
                 keys = {
@@ -71,11 +68,7 @@ return {
           list = { keys = { ['<c-x>'] = 'edit_split' } },
         },
       },
-      indent = {
-        enabled = true,
-        char = '│',
-        only_current = true,
-      },
+      indent = { enabled = true, char = '│', only_current = true },
       scope = { enabled = true },
       explorer = { enabled = true },
       quickfile = { enabled = true },
@@ -133,6 +126,20 @@ return {
         desc = 'Git Branches',
       },
       {
+        '<leader>gc',
+        function()
+          Snacks.picker.git_log()
+        end,
+        desc = 'Git commits(project)',
+      },
+      {
+        '<leader>gC',
+        function()
+          Snacks.picker.git_log_line()
+        end,
+        desc = 'Git commits(current file)',
+      },
+      {
         '<leader>bc',
         function()
           Snacks.bufdelete.other()
@@ -154,14 +161,6 @@ return {
         desc = 'Close All(Buffer)',
       },
       {
-        '<C-/>',
-        function()
-          Snacks.terminal({ 'yazi' }, { cwd = vim.uv.cwd() })
-        end,
-        desc = 'Toggle Yazi',
-        mode = { 'n', 't' },
-      },
-      {
         '<c-\\>',
         function()
           Snacks.terminal(nil, { win = { style = 'float', border = 'rounded' } })
@@ -172,7 +171,12 @@ return {
       {
         '<C-p>',
         function()
-          Snacks.picker.files({ layout = { preset = 'vscode' } })
+          local branch = vim.b.gitsigns_head or nil
+          if branch ~= nil and branch ~= '' then
+            Snacks.picker.git_files({ layout = { preset = 'vscode' }, untracked = true })
+          else
+            Snacks.picker.files({ layout = { preset = 'vscode' } })
+          end
         end,
         desc = 'Find Files',
       },
@@ -214,7 +218,7 @@ return {
       {
         '<leader>fg',
         function()
-          Snacks.picker.git_files({ layout = { preset = 'vscode' } })
+          Snacks.picker.git_files({ layout = { preset = 'vscode' }, untracked = true })
         end,
         desc = 'Find Git Files',
       },
@@ -285,6 +289,13 @@ return {
       {
         '<leader>fo',
         function()
+          Snacks.picker.smart({ layout = { preset = 'vertical' } })
+        end,
+        desc = 'Find buffers/recent/files',
+      },
+      {
+        '<leader>fO',
+        function()
           Snacks.picker.recent({ layout = { preset = 'vertical' } })
         end,
         desc = 'Old Files(recent)',
@@ -309,13 +320,6 @@ return {
           Snacks.picker.diagnostics()
         end,
         desc = 'Diagnostics',
-      },
-      {
-        '<C-y>',
-        function()
-          Snacks.explorer()
-        end,
-        desc = '+explorer',
       },
       {
         '<leader>-',

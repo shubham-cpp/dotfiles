@@ -1,4 +1,4 @@
-colorscheme dracula
+colorscheme afterglow
 
 " Essentials    {{{
 set number
@@ -186,34 +186,61 @@ fileviewer *.iso
             \ iso-info %c
 
 " VIFMIMG settings for Video,Image,etc preview {{{
+" fileviewer *.pdf
+"         \ vifm-sixel pdf %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
+" fileviewer *.epub
+"         \ vifm-sixel epub %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
+"
+" fileviewer <video/*>
+"         \ vifm-sixel video %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
+"
+" fileviewer <image/*>
+"         \ vifm-sixel draw %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
+"
+" fileviewer <audio/*>
+"         \ vifm-sixel audio %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
+"
+" fileviewer <font/*>
+"         \ vifm-sixel font %pw %ph %c %pd
+"         \ %pc
+"         \ vifm-sixel clear
 fileviewer *.pdf
-        \ vifmimg pdf %px %py %pw %ph %c
-        \ %pc
-        \ vifmimg clear
-
-    fileviewer *.epub
+         \ vifmimg pdf %px %py %pw %ph %c
+         \ %pc
+         \ vifmimg clear
+fileviewer *.epub
         \ epub2txt %c
         " \ vifmimg epub %px %py %pw %ph %c
         " \ %pc
         " \ vifmimg clear
 
-    fileviewer <video/*>
+fileviewer <video/*>
         \ mediainfo %c
         " \ vifmimg video %px %py %pw %ph %c
         " \ %pc
         " \ vifmimg clear
 
-    fileviewer <image/*>
+fileviewer <image/*>
         \ vifmimg draw %px %py %pw %ph %c
         \ %pc
         \ vifmimg clear
 
-    fileviewer <audio/*>
+fileviewer <audio/*>
         \ vifmimg audio %px %py %pw %ph %c
         \ %pc
         \ vifmimg clear
 
-    fileviewer <font/*>
+fileviewer <font/*>
         \ vifmimg font %px %py %pw %ph %c
         \ %pc
         \ vifmimg clear
@@ -319,5 +346,5 @@ nnoremap A cw
 "All the Marks
 mark h ~/
 " Set icons in Vifm
-source ~/Downloads/GitClones/vifm_devicons/favicons.vifm
+source ~/.config/vifm/favicons.vifm
 source ~/.config/vifm/vifm_bindings.vifm
