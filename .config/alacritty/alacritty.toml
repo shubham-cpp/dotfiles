@@ -404,9 +404,9 @@ mouse = "Left"
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-# [terminal]
-# args = ["-l", "-i"]
-# program = "/bin/fish"
+# [terminal.shell]
+# args = ["-l"]
+# program = "fish"
 
 [window]
 opacity = 0.9

@@ -1,5 +1,5 @@
 # vim: commentstring=#\ %s
-command = fish --login --interactive
+command = fish --login
 window-padding-color = background
 font-family = "RecMonoDuotone Nerd Font"
 font-feature = -liga

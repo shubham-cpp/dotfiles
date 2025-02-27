@@ -15,9 +15,10 @@ end
 
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 -- For example, changing the color scheme:
-config.color_scheme = "Ashes (dark) (terminal.sexy)"
+config.color_scheme = "iceberg-dark" -- "iceberg-dark" -- "Ashes (dark) (terminal.sexy)"
+
 -- config.colors = { background = "#14131A" }
-config.default_prog = { "/bin/fish", "-l", "-i" }
+config.default_prog = { "/bin/fish", "-l" }
 config.font = wezterm.font_with_fallback({
   "RecMonoCasual Nerd Font",
   "FiraCode Nerd Font",
@@ -44,7 +45,7 @@ for i = 1, 8 do
 end
 
 table.insert(alt_keys, { key = "c", mods = "ALT", action = act.CloseCurrentPane({ confirm = false }) })
-table.insert(alt_keys, { key = "x", mods = "ALT", action = act.CloseCurrentTab({ confirm = false }) })
+table.insert(alt_keys, { key = "x", mods = "ALT|SHIFT", action = act.CloseCurrentTab({ confirm = false }) })
 table.insert(alt_keys, { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" })
 table.insert(alt_keys, { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" })
 table.insert(alt_keys, { key = "l", mods = "ALT", action = act.ActivatePaneDirection "Right" })
