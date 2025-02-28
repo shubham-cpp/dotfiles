@@ -52,7 +52,7 @@ alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
 
 alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 
-alias tmux="TERM=xterm-256color /usr/bin/tmux"
+# alias tmux="TERM=xterm-256color /usr/bin/tmux"
 # some helpful git aliases
 alias g='git'
 

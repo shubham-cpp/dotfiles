@@ -2,7 +2,7 @@
 return {
   "tanvirtin/vgit.nvim",
   version = "*",
-  dependencies = { "nvim-lua/plenary.nvim", "nvim-tree/nvim-web-devicons" },
+  dependencies = { "nvim-lua/plenary.nvim", "mini.icons" },
   cmd = "VGit",
   enabled = false,
   opts = {

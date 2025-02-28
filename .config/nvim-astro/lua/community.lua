@@ -1,6 +1,9 @@
 ---@type LazySpec
 return {
+  -- {dir = "~/Downloads/GitClones/Contribute/astrocommunity"},
+  {
   "AstroNvim/astrocommunity",
+  -- "astrocommunity",
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.astro" },
   { import = "astrocommunity.pack.bash" },
@@ -54,4 +57,4 @@ return {
 
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   { import = "astrocommunity.icon.mini-icons" },
-}
+} }

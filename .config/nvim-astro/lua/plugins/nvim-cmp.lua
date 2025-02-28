@@ -16,6 +16,7 @@ local function lower_emmet()
       or e2.source:get_debug_name() == "nvim_lsp:emmet_language_server"
     if is_e1_emmet then return false end
     if is_e2_emmet then return true end
+    return nil
   end
 end
 
@@ -56,6 +57,7 @@ return {
       }
 
       opts.sources = cmp.config.sources {
+        { name = "lazydev", priority = 1000, group_index = 0 },
         { name = "nvim_lsp", priority = 1000, group_index = 1 },
         { name = "luasnip", priority = 750, group_index = 1 },
         { name = "async_path", priority = 600, group_index = 2 },

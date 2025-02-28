@@ -4,4 +4,5 @@ return {
   { "rcarriga/nvim-notify", enabled = false },
   { "stevearc/resession.nvim", enabled = false },
   { "nvim-neo-tree/neo-tree.nvim", enabled = false },
+  { "stevearc/dressing.nvim", enabled = false },
 }

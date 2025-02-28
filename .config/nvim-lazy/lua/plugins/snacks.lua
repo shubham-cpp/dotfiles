@@ -6,7 +6,7 @@ local function copy_path_full(picker)
   end
   vim.schedule(function()
     local full_path = vim.fn.fnamemodify(selected.file, ":p")
-    vim.fn.setreg("+", full_path)
+    vim.fn.setreg(vim.v.register, full_path)
     vim.notify(full_path, vim.log.levels.INFO, { title = "File Path Copied" })
   end)
 end
@@ -25,14 +25,16 @@ return {
       formatters = { file = { filename_first = true } },
       sources = {
         explorer = {
-          layout = { cycle = false },
+          layout = { cycle = false, layout = { position = "right" } },
           actions = { copy_path_full = copy_path_full },
           win = {
             list = {
               keys = {
                 ["/"] = false,
-                ["f"] = { "toggle_focus", mode = { "n" } },
-                ["Y"] = { "copy_path_full", mode = { "n" } },
+                ["f"] = { "toggle_focus" },
+                ["Y"] = { "copy_path_full" },
+                ["gf"] = { "picker_files", desc = "Open File Picker" },
+                ["<leader>f"] = { "picker_files", desc = "Open File Picker" },
               },
             },
           },
