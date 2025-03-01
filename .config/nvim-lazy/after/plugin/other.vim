@@ -1,3 +1,5 @@
+" lazy.nvim full config
+" require("lazy.core.config").plugins["conform.nvim"]
 function! Redir(cmd)
   if a:cmd =~ '^!'
     execute "let output = system('" . substitute(a:cmd, '^!', '', '') . "')"

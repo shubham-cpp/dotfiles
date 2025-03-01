@@ -54,12 +54,18 @@ return {
       local cmp = require("cmp")
       local types = require("cmp.types")
       local defaults = require("cmp.config.default")()
-
+      vim.opt.completeopt:append("noselect")
+      opts.completion = {
+        completeopt = "menu,menuone,noselect",
+      }
+      opts.preselect = cmp.PreselectMode.None
       opts.mapping["<C-x><C-x>"] = cmp.mapping.complete({
         config = { sources = { { name = "luasnip" } } },
       })
-      opts.mapping["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })
-      opts.mapping["<C-k>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+      opts.mapping["<C-j>"] =
+        cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { "i", "c" })
+      opts.mapping["<C-k>"] =
+        cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "c" })
       opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
         if is_visible(cmp) then
           cmp.select_next_item()

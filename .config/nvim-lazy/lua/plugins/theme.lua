@@ -2,12 +2,26 @@
 return {
   {
     "LazyVim",
-    opts = { colorscheme = "vague" },
+    opts = { colorscheme = "catppuccin" },
+  },
+  {
+    "catppuccin",
+    optional = true,
+    opts = {
+      ---@type "latte"| "frappe"| "macchiato"| "mocha" |"auto"
+      flavour = "mocha",
+      transparent_background = true,
+      custom_highlights = function(colors)
+        return {
+          QuickScopePrimary = { fg = colors.yellow, bg = colors.surface1, style = { "underline", "bold" } },
+          QuickScopeSecondary = { fg = colors.sapphire, bg = colors.surface1, style = { "underline", "bold" } },
+        }
+      end,
+    },
   },
   {
     "vague2k/vague.nvim",
-    enabled = true,
-    -- branch = "issue-20",
+    lazy = true,
     opts = { transparent = false },
     config = function(_, opts)
       require("vague").setup(opts)
