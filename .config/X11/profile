@@ -26,15 +26,10 @@ for p in "${paths[@]}"; do
 	append_path "$p"
 done
 
-export EDITOR=nvim
-export VISUAL=nvim
+# export BROWSER=brave
+# export READER=zathura
 
-export TERMINAL=alacritty
-export FILE_BROWSER=thunar
-export BROWSER=brave
-export READER=zathura
-
-if [ $DESKTOP_SESSION != "plasma" ]; then
+if test "$DESKTOP_SESSION" != "plasma"; then
 	export QT_QPA_PLATFORMTHEME="qt5ct"
 	export QT_AUTO_SCREEN_SCALE_FACTOR=0
 fi
@@ -152,3 +147,9 @@ done
 # Deduplicate entries in PATH
 # PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 export PATH
+
+export EDITOR=$(which nvim)
+export VISUAL=$(which nvim)
+
+export TERMINAL=$(which kitty)
+export FILE_BROWSER=$(which thunar)

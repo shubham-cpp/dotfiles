@@ -1,4 +1,39 @@
 ---@param picker snacks.Picker
+local function explorer_add_in_parent(picker)
+  local Tree = require 'snacks.explorer.tree'
+  local uv = vim.uv or vim.loop
+  local default_dir = ''
+  local parent = picker:current().parent
+  if parent.dir == false then
+    default_dir = picker:cwd()
+  else
+    default_dir = parent.file
+  end
+  Snacks.input({
+    prompt = 'Add a new file or directory (directories end with a "/")',
+    default = default_dir .. '/',
+  }, function(value)
+    if not value or value:find '^%s$' then
+      return
+    end
+    local path = vim.fs.normalize(value)
+    local is_file = value:sub(-1) ~= '/'
+    local dir = is_file and vim.fs.dirname(path) or path
+    if is_file and uv.fs_stat(path) then
+      Snacks.notify.warn('File already exists:\n- `' .. path .. '`')
+      return
+    end
+    vim.fn.mkdir(dir, 'p')
+    if is_file then
+      io.open(path, 'w'):close()
+    end
+    Tree:open(dir)
+    Tree:refresh(dir)
+    picker.update(picker, { target = path })
+  end)
+end
+
+---@param picker snacks.Picker
 local function copy_path_full(picker)
   local selected = picker:selected({ fallback = true })[1]
   if not selected or selected == nil then
@@ -6,23 +41,50 @@ local function copy_path_full(picker)
   end
   vim.schedule(function()
     local full_path = vim.fn.fnamemodify(selected.file, ':p')
-    vim.fn.setreg('+', full_path)
+    vim.fn.setreg(vim.v.register, full_path)
     vim.notify(full_path, vim.log.levels.INFO, { title = 'File Path Copied' })
   end)
 end
----FIXME: not working currently
+
 ---@param picker snacks.Picker
 local function copy_path_relative(picker)
-  local selected = picker:selected({ fallback = true })[1]
-  if not selected or selected == nil then
+  ---@type string[]
+  local paths = vim.tbl_map(Snacks.picker.util.path, picker:selected())
+  if #paths == 0 then
+    vim.notify(
+      'No files selected to move. Renaming instead.',
+      vim.log.levels.WARN,
+      { title = 'Invalid use of `copy_path_relative` function' }
+    )
     return
   end
-  vim.schedule(function()
-    local full_path = vim.fs.normalize(selected.file)
-    vim.fn.setreg('+', full_path)
-    vim.notify(full_path, vim.log.levels.INFO, { title = 'File Path Copied' })
-  end)
+  if #paths ~= 2 then
+    vim.notify(
+      'Exactly two files need to be selected.',
+      vim.log.levels.WARN,
+      { title = 'Invalid use of `copy_path_relative` function' }
+    )
+    return
+  end
+
+  local from_file = paths[2]
+  local to_file = paths[1]
+  local script = vim.fn.expand '~/.local/bin/myscripts/cal_relative_path.py'
+  local cmd = { script, from_file, to_file }
+
+  local on_done = function(obj)
+    if obj.stderr ~= '' or obj.stdout == '' then
+      Snacks.notify.warn('Some error while calculating relative paths ' .. obj.stderr)
+      return
+    end
+    vim.fn.setreg(vim.v.register, obj.stdout)
+    vim.notify(obj.stdout, vim.log.levels.INFO, { title = 'File Path Copied' })
+  end
+
+  local obj = vim.system(cmd, { text = true }):wait()
+  on_done(obj)
 end
+
 ---@type LazySpec
 return {
   {
@@ -42,14 +104,21 @@ return {
         sources = {
           explorer = {
             layout = { cycle = false },
-            actions = { copy_path_full = copy_path_full, copy_path_relative = copy_path_relative },
+            actions = {
+              explorer_add_in_parent = explorer_add_in_parent,
+              copy_path_full = copy_path_full,
+              copy_path_relative = copy_path_relative,
+            },
             win = {
               list = {
                 keys = {
                   ['/'] = false,
                   ['f'] = { 'toggle_focus', mode = { 'n' } },
-                  ['Y'] = { 'copy_path_full', mode = { 'n' } },
-                  ['gy'] = { 'copy_path_relative', mode = { 'n' } },
+                  ['A'] = { 'explorer_add_in_parent' },
+                  ['Y'] = { 'copy_path_full' },
+                  ['gy'] = { 'copy_path_relative' },
+                  ['gf'] = { 'picker_files', desc = 'Open File Picker' },
+                  ['<leader>f'] = { 'picker_files', desc = 'Open File Picker' },
                 },
               },
             },
