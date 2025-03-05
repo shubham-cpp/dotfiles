@@ -1,4 +1,5 @@
 local branch = nil
+vim.g.last_buffer = nil
 
 ---@param picker snacks.Picker
 local function explorer_add_in_parent(picker)
@@ -45,18 +46,18 @@ end
 ---@param picker snacks.Picker
 local function copy_path_relative(picker)
   ---@type string[]
-  local paths = vim.tbl_map(Snacks.picker.util.path, picker:selected())
+  local paths = vim.tbl_map(Snacks.picker.util.path, picker:selected { fallback = true })
   if #paths == 0 then
     vim.notify(
-      "No files selected to move. Renaming instead.",
+      "No files selected to move",
       vim.log.levels.WARN,
       { title = "Invalid use of `copy_path_relative` function" }
     )
     return
   end
-  if #paths ~= 2 then
+  if #paths ~= 2 and vim.g.last_buffer == nil then
     vim.notify(
-      "Exactly two files need to be selected.",
+      "Exactly two files need to be selected or `last_buffer` needs to be defined",
       vim.log.levels.WARN,
       { title = "Invalid use of `copy_path_relative` function" }
     )
@@ -65,6 +66,10 @@ local function copy_path_relative(picker)
 
   local from_file = paths[2]
   local to_file = paths[1]
+  if from_file == nil then
+    from_file = paths[1]
+    to_file = vim.g.last_buffer
+  end
   local script = vim.fn.expand "~/.local/bin/myscripts/cal_relative_path.py"
   local cmd = { script, from_file, to_file }
 
@@ -237,7 +242,17 @@ return {
       },
       {
         "<leader>e",
-        function() Snacks.explorer() end,
+        function()
+          local last_buffer_path = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+          if
+            last_buffer_path ~= ""
+            and string.match(last_buffer_path, "nvim/runtime/doc/") == nil
+            and string.match(last_buffer_path, "quickfix%-%d+") == nil
+          then
+            vim.g.last_buffer = last_buffer_path
+          end
+          Snacks.explorer()
+        end,
         desc = "Explorer",
       },
     },

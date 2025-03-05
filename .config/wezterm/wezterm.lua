@@ -44,8 +44,8 @@ for i = 1, 8 do
   })
 end
 
-table.insert(alt_keys, { key = "c", mods = "ALT", action = act.CloseCurrentPane({ confirm = false }) })
-table.insert(alt_keys, { key = "x", mods = "ALT|SHIFT", action = act.CloseCurrentTab({ confirm = false }) })
+table.insert(alt_keys, { key = "c", mods = "SHIFT|ALT", action = act.CloseCurrentPane({ confirm = false }) })
+table.insert(alt_keys, { key = "x", mods = "SHIFT|ALT", action = act.CloseCurrentTab({ confirm = false }) })
 table.insert(alt_keys, { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" })
 table.insert(alt_keys, { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" })
 table.insert(alt_keys, { key = "l", mods = "ALT", action = act.ActivatePaneDirection "Right" })
@@ -66,7 +66,7 @@ table.insert(alt_keys, { key = "n", mods = "ALT", action = act.ActivateTabRelati
 table.insert(alt_keys, { key = ".", mods = "ALT", action = act.ActivateCommandPalette })
 
 table.insert(alt_keys, { key = "q", mods = "SHIFT|ALT", action = act.QuickSelect })
-table.insert(alt_keys, { key = "c", mods = "SHIFT|ALT", action = act.ActivateCopyMode })
+table.insert(alt_keys, { key = "c", mods = "ALT", action = act.ActivateCopyMode })
 
 table.insert(alt_keys, { key = "h", mods = "SHIFT|ALT", action = act.AdjustPaneSize({ "Left", 2 }) })
 table.insert(alt_keys, { key = "j", mods = "SHIFT|ALT", action = act.AdjustPaneSize({ "Down", 2 }) })
