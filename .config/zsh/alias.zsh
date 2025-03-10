@@ -5,10 +5,10 @@ alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
-alias ls="eza -l --color=auto --icons --group-directories-first"  # long format
+alias ls="eza -l --color=auto --icons --group-directories-first"            # long format
 alias ll="eza -al --color=auto --icons --group-directories-first --no-user" # my preferred listing
-alias la="eza -a --color=auto --icons --group-directories-first"  # all files and dirs
-alias lt="eza -aT --color=auto --icons --group-directories-first" # tree listing
+alias la="eza -a --color=auto --icons --group-directories-first"            # all files and dirs
+alias lt="eza -aT --color=auto --icons --group-directories-first"           # tree listing
 alias l="ll --no-filesize --no-permissions --no-time"
 
 alias rr="/bin/rm -rf"
@@ -25,8 +25,8 @@ alias cls="clear"
 # alias dp="dnf provides"
 # alias ds="dnf search"
 # alias a="sudo nala"
-# alias ai="sudo nala install"
 # alias ar="sudo nala remove"
+# alias ai="sudo nala install"
 # alias au="sudo nala upgrade"
 # alias as="nala search"
 alias yay="paru"
@@ -42,10 +42,9 @@ alias ....="cd ../../.."
 alias v="nvim"
 alias va="env NVIM_APPNAME=nvim-astro nvim"
 alias vl="env NVIM_APPNAME=nvim-lazy nvim"
-alias vv="env NVIM_APPNAME=nvim-test nvim"
+alias vv="env NVIM_APPNAME=nvim-tt nvim"
 alias vc="env NVIM_APPNAME=nvim-chad nvim"
 alias se="sudoedit"
-
 
 alias xcp="xclip -i -r -sel clip"
 alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"

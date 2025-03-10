@@ -92,7 +92,7 @@ return {
     "snacks.nvim",
     ---@type snacks.Config
     opts = {
-      indent = {},
+      input = {},
       bigfile = {},
       lazygit = {},
       notifier = {},

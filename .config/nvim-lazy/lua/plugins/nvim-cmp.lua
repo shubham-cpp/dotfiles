@@ -67,8 +67,11 @@ return {
       opts.mapping["<C-k>"] =
         cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "c" })
       opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
+        local ok, luasnip = pcall(require, "luasnip")
         if is_visible(cmp) then
           cmp.select_next_item()
+        elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.expand_or_locally_jumpable() then
+          luasnip.expand_or_jump()
         elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = 1 }) then
           vim.schedule(function()
             vim.snippet.jump(1)
@@ -80,8 +83,11 @@ return {
         end
       end)
       opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
+        local ok, luasnip = pcall(require, "luasnip")
         if is_visible(cmp) then
           cmp.select_prev_item()
+        elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.jumpable(-1) then
+          luasnip.jump(-1)
         elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = -1 }) then
           vim.schedule(function()
             vim.snippet.jump(-1)

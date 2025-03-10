@@ -5,6 +5,6 @@ arg="$HOME"/.local/bin/myscripts/
 rg --files "$arg" -g '!.git*' -g '!*.bak' |
 	sed 's#'$arg'##g' |
 	fzf --reverse --preview="highlight -O xterm256 --style dante --line-range=1-40 '$arg'{}" |
-	xargs -ro -I {} nvim "$arg"{} ||
+	NVIM_APPNAME=nvim-tt xargs -ro -I {} nvim "$arg"{} ||
 	echo "Please provide a directory"
-	# xargs -ro -I {} env NVIM_APPNAME=nvim-try nvim "$arg"{} ||
+# xargs -ro -I {} env NVIM_APPNAME=nvim-try nvim "$arg"{} ||

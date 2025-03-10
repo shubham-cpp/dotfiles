@@ -2,6 +2,21 @@
 return {
   -- use mason-lspconfig to configure LSP installations
   {
+    "mason.nvim",
+    optional = true,
+    opts = {
+      ---@type '"prepend"' | '"append"' | '"skip"'
+      PATH = "append",
+      ui = {
+        icons = {
+          package_pending = " ",
+          package_installed = " ",
+          package_uninstalled = " ",
+        },
+      },
+    },
+  },
+  {
     "jay-babu/mason-nvim-dap.nvim",
     optional = true,
     opts = function(_, opts)

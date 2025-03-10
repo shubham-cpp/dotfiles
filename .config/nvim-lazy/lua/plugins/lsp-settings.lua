@@ -19,8 +19,14 @@ return {
     end,
   },
   {
-    "mason.nvim",
+    "williamboman/mason.nvim",
+    optional = true,
     opts = {
+      ---@type '"prepend"' | '"append"' | '"skip"'
+      PATH = "append",
+      ui = {
+        icons = { package_pending = " ", package_installed = " ", package_uninstalled = " " },
+      },
       ensure_installed = {
         "goimports",
         "gofumpt",

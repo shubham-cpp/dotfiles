@@ -5,23 +5,22 @@ options="awesome\nalacritty\nbspwm\nnvim\npolybar\nqtile\nsxhkd\nkitty\nXresourc
 
 myTerm=$([ -f $(which st) ] && printf "st" || printf "xterm")
 file_name=$(printf "$options" | dmenu -i -p "Which File ?")
-# editor=$(env NVIM_APPNAME=nvim-try nvim)
-editor=nvim
+editor=$(env NVIM_APPNAME=nvim-tt nvim)
+# editor=nvim
 
 [ -n "$file_name" ] &&
-	case        "$file_name" in
-	awesome)    "$myTerm" -e "$editor" "$HOME"/.config/awesome/rc.lua ;;
-	alacritty)  "$myTerm" -e "$editor" "$HOME"/.config/alacritty/alacritty.yml ;;
-	bspwm)      "$myTerm" -e "$editor" "$HOME"/.config/bspwm/bspwmrc ;;
-	polybar)    "$myTerm" -e "$editor" "$HOME"/.config/polybar/config.ini ;;
-	profile)    "$myTerm" -e "$editor" "$HOME"/.config/X11/profile ;;
-	qtile)      "$myTerm" -e "$editor" "$HOME"/.config/qtile/config.py ;;
-	kitty)      "$myTerm" -e "$editor" "$HOME"/.config/kitty/kitty.conf ;;
-	sxhkd)      "$myTerm" -e "$editor" "$HOME"/.config/sxhkd/sxhkdrc ;;
-	nvim)       "$myTerm" -e "$editor" "$HOME"/.config/nvim/init.vim ;;
-	xprofile)   "$myTerm" -e "$editor" "$HOME"/.config/X11/xprofile ;;
+	case "$file_name" in
+	awesome) "$myTerm" -e "$editor" "$HOME"/.config/awesome/rc.lua ;;
+	alacritty) "$myTerm" -e "$editor" "$HOME"/.config/alacritty/alacritty.yml ;;
+	bspwm) "$myTerm" -e "$editor" "$HOME"/.config/bspwm/bspwmrc ;;
+	polybar) "$myTerm" -e "$editor" "$HOME"/.config/polybar/config.ini ;;
+	profile) "$myTerm" -e "$editor" "$HOME"/.config/X11/profile ;;
+	qtile) "$myTerm" -e "$editor" "$HOME"/.config/qtile/config.py ;;
+	kitty) "$myTerm" -e "$editor" "$HOME"/.config/kitty/kitty.conf ;;
+	sxhkd) "$myTerm" -e "$editor" "$HOME"/.config/sxhkd/sxhkdrc ;;
+	nvim) "$myTerm" -e "$editor" "$HOME"/.config/nvim/init.vim ;;
+	xprofile) "$myTerm" -e "$editor" "$HOME"/.config/X11/xprofile ;;
 	Xresources) "$myTerm" -e "$editor" "$HOME"/.config/X11/Xresources ;;
-	zshrc)      "$myTerm" -e "$editor" "$HOME"/.config/zsh/.zshrc ;;
-	*)          notify-send -t 1500 "Invalid Option or Couldn\'t launch for some reason" ;;
+	zshrc) "$myTerm" -e "$editor" "$HOME"/.config/zsh/.zshrc ;;
+	*) notify-send -t 1500 "Invalid Option or Couldn\'t launch for some reason" ;;
 	esac
-

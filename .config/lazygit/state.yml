@@ -1,15 +1,10 @@
 lastupdatecheck: 0
 recentrepos:
-    - /home/shubham/Documents/Programming/WebDev/social-media-manager-app
     - /home/shubham/Documents/dotfiles
-    - /home/shubham/Documents/Programming/WebDev/invoice-genrator-nextjs
-    - /home/shubham/Documents/Programming/WebDev/vue3-chrome-ai
-    - /home/shubham/Documents/Programming/WebDev/demo-shadcn
-    - /home/shubham/Downloads/GitClones/srcbook
-    - /home/shubham/Documents/Programming/WebDev/page-form
-    - /home/shubham/Downloads/GitClones/lfimg
+    - /home/shubham/Documents/Programming/WebDev/invoice-generator-nextjs
+    - /home/shubham/.local/share/nvim-lazy/lazy/snacks.nvim
 startuppopupversion: 5
-lastversion: 0.44.1
+lastversion: 0.46.0
 customcommandshistory: []
 hidecommandlog: false
 ignorewhitespaceindiffview: false
