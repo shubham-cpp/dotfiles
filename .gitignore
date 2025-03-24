@@ -52,3 +52,4 @@ npm
 .config/qtile/modules/__pycache__
 .local/bin/myscripts/sorting_filev3
 .local/bin/myscripts/sort_files
+*.zwc

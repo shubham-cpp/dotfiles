@@ -1,6 +1,6 @@
 ---@type LazySpec
 return {
-  "toggleterm.nvim",
+  "akinsho/toggleterm.nvim",
   keys = { "<C-\\>" },
   opts = {
     open_mapping = [[<c-\>]],

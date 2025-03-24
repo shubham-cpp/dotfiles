@@ -89,7 +89,7 @@ end
 ---@type LazySpec
 return {
   {
-    "snacks.nvim",
+    "folke/snacks.nvim",
     ---@type snacks.Config
     opts = {
       input = {},

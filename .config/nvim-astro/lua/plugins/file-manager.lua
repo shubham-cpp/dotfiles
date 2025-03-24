@@ -2,7 +2,7 @@ return {
   {
     "mikavilpas/yazi.nvim",
     enabled = true,
-    dependencies = { "snacks.nvim" },
+    dependencies = { "folke/snacks.nvim" },
     ---@type YaziConfig | {}
     opts = {
       open_for_directories = false,
