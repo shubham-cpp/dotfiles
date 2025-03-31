@@ -3,17 +3,17 @@
 local function dial(increment, g)
   local mode = vim.fn.mode(true)
   -- Use visual commands for VISUAL 'v', VISUAL LINE 'V' and VISUAL BLOCK '\22'
-  local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
-  local func = (increment and 'inc' or 'dec') .. (g and '_g' or '_') .. (is_visual and 'visual' or 'normal')
-  local group = vim.g.dials_by_ft[vim.bo.filetype] or 'default'
-  return require('dial.map')[func](group)
+  local is_visual = mode == "v" or mode == "V" or mode == "\22"
+  local func = (increment and "inc" or "dec") .. (g and "_g" or "_") .. (is_visual and "visual" or "normal")
+  local group = vim.g.dials_by_ft[vim.bo.filetype] or "default"
+  return require("dial.map")[func](group)
 end
 
 ---@type LazySpec
 return {
-  'monaqa/dial.nvim',
+  "monaqa/dial.nvim",
   recommended = true,
-  desc = 'Increment and decrement numbers, dates, and more',
+  desc = "Increment and decrement numbers, dates, and more",
   -- stylua: ignore
   keys = {
     { "<C-a>", function() return dial(true) end, expr = true, desc = "Increment", mode = {"n", "v"} },
@@ -22,10 +22,10 @@ return {
     { "g<C-x>", function() return dial(false, true) end, expr = true, desc = "Decrement", mode = {"n", "v"} },
   },
   opts = function()
-    local augend = require 'dial.augend'
+    local augend = require "dial.augend"
 
     local logical_alias = augend.constant.new({
-      elements = { '&&', '||' },
+      elements = { "&&", "||" },
       word = false,
       cyclic = true,
     })
@@ -34,16 +34,16 @@ return {
       -- elements through which we cycle. When we increment, we go down
       -- On decrement we go up
       elements = {
-        'first',
-        'second',
-        'third',
-        'fourth',
-        'fifth',
-        'sixth',
-        'seventh',
-        'eighth',
-        'ninth',
-        'tenth',
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "sixth",
+        "seventh",
+        "eighth",
+        "ninth",
+        "tenth",
       },
       -- if true, it only matches strings with word boundary. firstDate wouldn't work for example
       word = false,
@@ -54,13 +54,13 @@ return {
 
     local weekdays = augend.constant.new({
       elements = {
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday',
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
       },
       word = true,
       cyclic = true,
@@ -68,18 +68,18 @@ return {
 
     local months = augend.constant.new({
       elements = {
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
       },
       word = true,
       cyclic = true,
@@ -87,8 +87,8 @@ return {
 
     local capitalized_boolean = augend.constant.new({
       elements = {
-        'True',
-        'False',
+        "True",
+        "False",
       },
       word = true,
       cyclic = true,
@@ -96,25 +96,25 @@ return {
 
     return {
       dials_by_ft = {
-        css = 'css',
-        vue = 'vue',
-        javascript = 'typescript',
-        typescript = 'typescript',
-        typescriptreact = 'typescript',
-        javascriptreact = 'typescript',
-        json = 'json',
-        lua = 'lua',
-        markdown = 'markdown',
-        sass = 'css',
-        scss = 'css',
-        python = 'python',
+        css = "css",
+        vue = "vue",
+        javascript = "typescript",
+        typescript = "typescript",
+        typescriptreact = "typescript",
+        javascriptreact = "typescript",
+        json = "json",
+        lua = "lua",
+        markdown = "markdown",
+        sass = "css",
+        scss = "css",
+        python = "python",
       },
       groups = {
         default = {
           augend.integer.alias.decimal, -- nonnegative decimal number (0, 1, 2, 3, ...)
           augend.integer.alias.decimal_int, -- nonnegative and negative decimal number
           augend.integer.alias.hex, -- nonnegative hex number  (0x01, 0x1a1f, etc.)
-          augend.date.alias['%Y/%m/%d'], -- date (2022/02/19, etc.)
+          augend.date.alias["%Y/%m/%d"], -- date (2022/02/19, etc.)
           ordinal_numbers,
           weekdays,
           months,
@@ -123,24 +123,24 @@ return {
           logical_alias,
         },
         vue = {
-          augend.constant.new({ elements = { 'let', 'const' } }),
-          augend.hexcolor.new({ case = 'lower' }),
-          augend.hexcolor.new({ case = 'upper' }),
+          augend.constant.new({ elements = { "let", "const" } }),
+          augend.hexcolor.new({ case = "lower" }),
+          augend.hexcolor.new({ case = "upper" }),
         },
         typescript = {
-          augend.constant.new({ elements = { 'let', 'const' } }),
+          augend.constant.new({ elements = { "let", "const" } }),
         },
         css = {
           augend.hexcolor.new({
-            case = 'lower',
+            case = "lower",
           }),
           augend.hexcolor.new({
-            case = 'upper',
+            case = "upper",
           }),
         },
         markdown = {
           augend.constant.new({
-            elements = { '[ ]', '[x]' },
+            elements = { "[ ]", "[x]" },
             word = false,
             cyclic = true,
           }),
@@ -151,14 +151,14 @@ return {
         },
         lua = {
           augend.constant.new({
-            elements = { 'and', 'or' },
+            elements = { "and", "or" },
             word = true, -- if false, "sand" is incremented into "sor", "doctor" into "doctand", etc.
             cyclic = true, -- "or" is incremented into "and".
           }),
         },
         python = {
           augend.constant.new({
-            elements = { 'and', 'or' },
+            elements = { "and", "or" },
           }),
         },
       },
@@ -167,11 +167,9 @@ return {
   config = function(_, opts)
     -- copy defaults to each group
     for name, group in pairs(opts.groups) do
-      if name ~= 'default' then
-        vim.list_extend(group, opts.groups.default)
-      end
+      if name ~= "default" then vim.list_extend(group, opts.groups.default) end
     end
-    require('dial.config').augends:register_group(opts.groups)
+    require("dial.config").augends:register_group(opts.groups)
     vim.g.dials_by_ft = opts.dials_by_ft
   end,
 }

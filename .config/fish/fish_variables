@@ -3,7 +3,7 @@
 SETUVAR --export FIGNORE:\x2eclass\x3a\x2eout
 SETUVAR --path PATH:/home/shubham/\x2epyenv/shims\x1e/usr/local/bin\x1e/usr/bin\x1e/bin\x1e/usr/local/sbin\x1e/usr/lib/jvm/default/bin\x1e/usr/bin/site_perl\x1e/usr/bin/vendor_perl\x1e/usr/bin/core_perl\x1e/home/shubham/\x2elocal/bin/\x1e/home/shubham/\x2elocal/bin/myscripts/\x1e/home/shubham/\x2elocal/share/luarocks/bin/\x1e/home/shubham/\x2elocal/share/golib/bin/\x1e/home/shubham/\x2elocal/share/npm/bin/\x1e/home/shubham/\x2elocal/share/suckless/dwm\x2d62/status\x2dbar/scripts/\x1e/home/shubham/\x2econfig/emacs/bin/\x1e/home/shubham/\x2epyenv/bin/\x1e/home/shubham/\x2econfig/emacs/bin
 SETUVAR SXHKD_SHELL:/usr/bin/sh
-SETUVAR __fish_initialized:3400
+SETUVAR __fish_initialized:3800
 SETUVAR _fish_abbr_chx:chmod\x20\x2bx
 SETUVAR _fish_abbr_emc:emacsclient\x20\x2dcn
 SETUVAR _fish_abbr_emd:emacs\x20\x2d\x2dbg\x2ddaemon

@@ -1,12 +1,22 @@
 ---@type LazySpec
 return {
-  'folke/ts-comments.nvim',
-  opts = {
-    lang = {
-      jsdoc = '/** %s */',
-      phpdoc = { '// %s' },
-    },
+  {
+    "numToStr/Comment.nvim",
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    event = "BufWinEnter",
+    config = function()
+      require("ts_context_commentstring").setup({
+        enable_autocmd = false,
+      })
+      require("Comment").setup({
+        ignore = "^$",
+        pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+      })
+    end,
   },
-  event = 'VeryLazy',
-  enabled = vim.fn.has 'nvim-0.10.0' == 1,
+  -- {
+  --   'JoosepAlviste/nvim-ts-context-commentstring',
+  --   lazy = true,
+  --   opts = { enable_autocmd = false, }
+  -- }
 }

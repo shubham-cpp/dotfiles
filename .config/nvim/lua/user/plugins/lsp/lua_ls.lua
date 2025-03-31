@@ -1,8 +1,14 @@
 ---@type LazySpec
 return {
   {
-    'AstroNvim/astrolsp',
-    ---@type AstroLSPConfig
+    "mason.nvim",
+    optional = true,
+    opts = { ensure_installed = { "lua-language-server", "stylua" } },
+  },
+  {
+    "astrolsp",
+    optional = true,
+    ---@type AstroLSPOpts
     opts = {
       -- Configure language servers for `lspconfig` (`:h lspconfig-setup`)
       config = {
@@ -14,8 +20,8 @@ return {
               },
               diagnostics = {
                 enable = true,
-                globals = { 'vim', 'describe', 'Snacks' },
-                disable = { 'lowercase-global' },
+                globals = { "vim", "describe", "Snacks" },
+                disable = { "lowercase-global" },
               },
               workspace = {
                 checkThirdParty = false,
@@ -23,15 +29,15 @@ return {
               },
               telemetry = { enable = false },
               codeLens = { enable = true },
-              completion = { callSnippet = 'Replace' },
-              doc = { privateName = { '^_' } },
+              completion = { callSnippet = "Replace" },
+              doc = { privateName = { "^_" } },
               hint = {
                 enable = true,
                 setType = false,
                 paramType = true,
-                paramName = 'Disable',
-                semicolon = 'Disable',
-                arrayIndex = 'Disable',
+                paramName = "Disable",
+                semicolon = "Disable",
+                arrayIndex = "Disable",
               },
             },
           },
@@ -40,15 +46,8 @@ return {
     },
   },
   {
-    'nvim-treesitter',
-    opts = {
-      ensure_installed = { 'lua', 'luadoc' },
-    },
-  },
-  {
-    'mason.nvim',
-    opts = {
-      ensure_installed = { 'lua-language-server' },
-    },
+    "nvim-treesitter",
+    optional = true,
+    opts = { ensure_installed = { "lua", "luadoc" } },
   },
 }

@@ -1,33 +1,31 @@
-if true then return end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
+vim.api.nvim_create_user_command("PrintConfig", function(opts)
+  local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
+  local args = opts.args
+  local function callback(plugin_name)
+    local cmd = "Redir lua =require('lazy.core.config').plugins['" .. plugin_name .. "']"
+    vim.notify(cmd, vim.log.levels.INFO, { title = "Command" })
+    vim.fn.execute(cmd)
+  end
+  if args ~= "" then
+    callback(args)
+    return
+  end
 
--- This will run last in the setup process and is a good place to configure
--- things like custom filetypes. This is just pure lua so anything that doesn't
--- fit in the normal config locations above can go here
-
--- Set up custom filetypes
-vim.filetype.add {
-  extension = {
-    foo = "fooscript",
-  },
-  filename = {
-    ["Foofile"] = "fooscript",
-  },
-  pattern = {
-    ["~/%.config/foo/.*"] = "fooscript",
-  },
-}
-vim.cmd [[function! Redir(cmd)
-  if a:cmd =~ '^!'
-    execute "let output = system('" . substitute(a:cmd, '^!', '', '') . "')"
-  else
-    redir => output
-    execute a:cmd
-    redir END
-  endif
-  tabnew
-  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
-  call setline(1, split(output, "\n"))
-  put! = a:cmd
-  put = '----'
-endfunction
-command! -nargs=1 Redir silent call Redir(<f-args>)]]
+  vim.ui.select(plugins, { prompt = "Select Config to print" }, function(item)
+    if not item then return end
+    callback(item)
+  end)
+end, {
+  desc = "Print final lazy config",
+  nargs = "?",
+  complete = function(prefix)
+    local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
+    return vim
+      .iter(plugins)
+      :filter(function(t)
+        if string.len(prefix:gsub("%s+", "")) > 0 then return t:match(prefix) end
+        return true
+      end)
+      :totable()
+  end,
+})

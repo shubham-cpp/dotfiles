@@ -56,6 +56,7 @@ return {
       n = {
         ["<Leader>le"] = {
           function() vim.cmd "EslintFixAll" end,
+          desc = "Eslint Fix",
           cond = function(client) return client.name == "eslint" end,
         },
         ["<Leader>lo"] = {
@@ -67,6 +68,30 @@ return {
           function() vim.cmd "VtsExec select_ts_version" end,
           desc = "Change TS version",
           cond = function(client) return client.name == "vtsls" end,
+        },
+        gro = {
+          function()
+            local ok, picker = pcall(require, "snacks.picker")
+            if ok then
+              picker.lsp_symbols()
+            else
+              vim.lsp.buf.document_symbol()
+            end
+          end,
+          desc = "Document symbols",
+          cond = "textDocument/documentSymbol",
+        },
+        grO = {
+          function()
+            local ok, picker = pcall(require, "snacks.picker")
+            if ok then
+              picker.lsp_workspace_symbols()
+            else
+              vim.lsp.buf.workspace_symbol()
+            end
+          end,
+          desc = "Workspace symbols",
+          cond = "workspace/symbol",
         },
       },
     },

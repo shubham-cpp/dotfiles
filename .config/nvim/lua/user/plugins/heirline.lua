@@ -4,6 +4,7 @@ return {
   'rebelot/heirline.nvim',
   event = 'VeryLazy',
   dependencies = { 'Zeioth/heirline-components.nvim' },
+  enabled = false,
   config = function()
     vim.opt.showtabline = 2
 

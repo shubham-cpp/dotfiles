@@ -152,4 +152,4 @@ export EDITOR=$(which nvim)
 export VISUAL=$(which nvim)
 
 export TERMINAL=$(which kitty)
-export FILE_BROWSER=$(which thunar)
+# export FILE_BROWSER=$(which thunar)

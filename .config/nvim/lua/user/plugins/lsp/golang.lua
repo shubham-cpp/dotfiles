@@ -1,16 +1,18 @@
 ---@type LazySpec
 return {
   {
-    'AstroNvim/astrolsp',
-    ---@type AstroLSPConfig
+    "AstroNvim/astrolsp",
+    optional = true,
+    ---@type AstroLSPOpts
     opts = {
+      ---@diagnostic disable: missing-fields
       config = {
         gopls = {
           settings = {
             gopls = {
-              experimentalPostfixCompletions = true,
               analyses = {
                 ST1003 = true,
+                fieldalignment = false,
                 fillreturns = true,
                 nilness = true,
                 nonewvars = true,
@@ -21,6 +23,15 @@ return {
                 unusedwrite = true,
                 useany = true,
               },
+              codelenses = {
+                gc_details = true, -- Show a code lens toggling the display of gc's choices.
+                generate = true, -- show the `go generate` lens.
+                regenerate_cgo = true,
+                test = true,
+                tidy = true,
+                upgrade_dependency = true,
+                vendor = true,
+              },
               hints = {
                 assignVariableTypes = true,
                 compositeLiteralFields = true,
@@ -30,41 +41,31 @@ return {
                 parameterNames = true,
                 rangeVariableTypes = true,
               },
-              buildFlags = { '-tags', 'integration' },
+              buildFlags = { "-tags", "integration" },
               completeUnimported = true,
-              diagnosticsDelay = '500ms',
+              diagnosticsDelay = "500ms",
               gofumpt = true,
-              matcher = 'Fuzzy',
+              matcher = "Fuzzy",
               semanticTokens = true,
-              symbolMatcher = 'fuzzy',
-              usePlaceholders = true,
               staticcheck = true,
-              codelenses = {
-                usePlaceholders = true,
-                gc_details = true, -- Show a code lens toggling the display of gc's choices.
-                generate = true, -- show the `go generate` lens.
-                regenerate_cgo = true,
-                test = true,
-                tidy = true,
-                upgrade_dependency = true,
-                vendor = true,
-              },
+              symbolMatcher = "fuzzy",
+              usePlaceholders = true,
             },
           },
         },
       },
     },
   },
-  { 'nvim-treesitter', opts = { ensure_installed = { 'go', 'gowork', 'gomod', 'gosum', 'gotmpl' } } },
   {
-    'mason.nvim',
+    "nvim-treesitter/nvim-treesitter",
+    optional = true,
+    opts = { ensure_installed = { "go", "gomod", "gosum", "gowork" } },
+  },
+  {
+    "williamboman/mason.nvim",
+    optional = true,
     opts = {
-      ensure_installed = { 'delve', 'gopls', 'golangci-lint', 'goimports', 'gofumpt' },
+      ensure_installed = { "gopls", "gofumpt", "goimports", "golangci-lint" },
     },
   },
-  { 'nvim-lint', opts = {
-    linters_by_ft = {
-      go = { 'golangcilint' },
-    },
-  } },
 }

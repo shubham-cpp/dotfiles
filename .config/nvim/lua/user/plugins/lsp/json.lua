@@ -1,29 +1,36 @@
 ---@type LazySpec
 return {
   {
-    'AstroNvim/astrolsp',
-    opts = {
-      handlers = {
-        jsonls = function(server, opts)
-          opts.capabilities = require('user.config.util').get_lsp_capabilities(opts.capabilities)
-          opts.on_new_config = function(new_config)
-            new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-            vim.list_extend(new_config.settings.json.schemas, require('schemastore').json.schemas())
-          end
-          opts.settings = { json = { validate = { enable = true }, format = { enable = false } } }
-          require('lspconfig')[server].setup(opts)
-        end,
+    "b0o/SchemaStore.nvim",
+    lazy = true,
+    specs = {
+      {
+        "AstroNvim/astrolsp",
+        optional = true,
+        ---@type AstroLSPOpts
+        opts = {
+          ---@diagnostic disable: missing-fields
+          config = {
+            jsonls = {
+              on_new_config = function(config)
+                if not config.settings.json.schemas then config.settings.json.schemas = {} end
+                vim.list_extend(config.settings.json.schemas, require("schemastore").json.schemas())
+              end,
+              settings = { json = { validate = { enable = true } } },
+            },
+          },
+        },
       },
     },
   },
-  { 'b0o/schemastore.nvim', lazy = true, version = false },
-  { 'nvim-treesitter', opts = { ensure_installed = { 'json', 'jsonc', 'json5' } } },
-  { 'mason.nvim', opts = { ensure_installed = { 'json-lsp', 'yamllint' } } },
-  { 'nvim-lint', opts = { linters_by_ft = { yaml = { 'yamllint' } } } },
   {
-    'vuki656/package-info.nvim',
-    dependencies = { 'MunifTanjim/nui.nvim' },
-    opts = {},
-    event = 'BufRead package.json',
+    "nvim-treesitter",
+    optional = true,
+    opts = { ensure_installed = { "json", "jsonc", "json5" } },
+  },
+  {
+    "williamboman/mason.nvim",
+    optional = true,
+    opts = { ensure_installed = { "json-lsp" } },
   },
 }

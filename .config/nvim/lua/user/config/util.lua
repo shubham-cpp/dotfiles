@@ -4,21 +4,22 @@ local M = {}
 ---@param secret_file string The secret file to read the credentials from(`secret_file` should be in location `$HOME/.config/age/`).
 ---@return string|nil secret The credentials from the identity file.
 M.get_age_credentials = function(secret_file)
-  local identity_file = vim.fn.expand '$HOME/.config/age/identity.txt'
+  local identity_file = vim.fn.expand "$HOME/.config/age/identity.txt"
 
-  if 0 == vim.fn.filereadable(identity_file) then
-    return nil
-  end
+  if 0 == vim.fn.filereadable(identity_file) then return nil end
 
-  local secret = vim.fn.expand('$HOME/.config/age/' .. secret_file)
-  return require('age').get(secret, identity_file)
+  local secret = vim.fn.expand("$HOME/.config/age/" .. secret_file)
+  return require("age").get(secret, identity_file)
 end
 
 ---@param override? lsp.ClientCapabilities
 ---@return lsp.ClientCapabilities
 function M.get_lsp_capabilities(override)
-  local ok_cmp, cmp_nvim_lsp = pcall(require, 'cmp_nvim_lsp')
-  local ok_blink, blink = pcall(require, 'blink.cmp')
+  local ok_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  local ok_blink, blink = pcall(require, "blink.cmp")
+  local ok_lsp_file, lsp_file = pcall(require, "lsp-file-operations")
+
+  if ok_lsp_file then override = vim.tbl_deep_extend("force", override, lsp_file.default_capabilities()) end
   local capabilities
   if ok_cmp then
     capabilities = cmp_nvim_lsp.default_capabilities(override or {})
@@ -64,12 +65,10 @@ end
 ---@param ... string
 ---@return string
 function M.first_formatter(bufnr, ...)
-  local conform = require 'conform'
-  for i = 1, select('#', ...) do
+  local conform = require "conform"
+  for i = 1, select("#", ...) do
     local formatter = select(i, ...)
-    if conform.get_formatter_info(formatter, bufnr).available then
-      return formatter
-    end
+    if conform.get_formatter_info(formatter, bufnr).available then return formatter end
   end
   return select(1, ...)
 end

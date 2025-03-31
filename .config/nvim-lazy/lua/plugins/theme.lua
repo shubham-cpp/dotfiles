@@ -28,7 +28,7 @@ return {
       local c = require("vague").get_palette()
 
       vim.api.nvim_set_hl(0, "@tag.attribute", { fg = c.property })
-      vim.api.nvim_set_hl(0, "WinBar", { bg = "#141415" })
+      vim.api.nvim_set_hl(0, "WinBar", { bg = c.bg })
       vim.api.nvim_set_hl(0, "SnacksPickerMatch", { fg = c.delta, bold = true })
       vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = c.delta, bg = c.visual, bold = true, undercurl = true })
       vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = c.hint, bg = c.visual, bold = true, undercurl = true })
