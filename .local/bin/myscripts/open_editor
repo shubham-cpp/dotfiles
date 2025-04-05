@@ -1,7 +1,0 @@
-#!/bin/sh
-
-if pgrep emacs >/dev/null; then
-	emacsclient -cn $@
-else
-	NVIM_APPNAME=nvim-tt nvim -p $@
-fi

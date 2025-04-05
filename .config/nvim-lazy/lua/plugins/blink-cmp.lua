@@ -7,6 +7,7 @@ return {
   {
     "saghen/blink.cmp",
     optional = true,
+    events = { "InsertEnter", "CmdlineEnter" },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -18,35 +19,16 @@ return {
         ["<Tab>"] = {
           "select_next",
           "snippet_forward",
-          function(cmp)
-            if has_words_before() or vim.api.nvim_get_mode().mode == "c" then
-              return cmp.show()
-            end
-          end,
           "fallback",
         },
         ["<S-Tab>"] = {
           "select_prev",
           "snippet_backward",
-          function(cmp)
-            if vim.api.nvim_get_mode().mode == "c" then
-              return cmp.show()
-            end
-          end,
           "fallback",
         },
       },
       cmdline = {
         enabled = true,
-        keymap = {
-          preset = "enter",
-          ["<Up>"] = {},
-          ["<Down>"] = {},
-          ["<C-k>"] = { "select_prev", "fallback" },
-          ["<C-j>"] = { "select_next", "fallback" },
-          ["<Tab>"] = { "select_next", "fallback" },
-          ["<S-Tab>"] = { "select_prev", "fallback" },
-        },
         sources = function()
           local type = vim.fn.getcmdtype()
           -- Search forward and backward
@@ -55,10 +37,28 @@ return {
           end
           -- Commands
           if type == ":" or type == "@" then
-            return { "path", "cmdline" }
+            return { "cmdline" }
           end
           return {}
         end,
+        keymap = {
+          preset = "cmdline",
+          -- ["<Up>"] = {},
+          -- ["<Down>"] = {},
+          ["<C-k>"] = { "select_prev", "fallback" },
+          ["<C-j>"] = { "select_next", "fallback" },
+          ["<Tab>"] = { "select_next", "fallback" },
+          ["<S-Tab>"] = { "select_prev", "fallback" },
+        },
+        completion = {
+          list = { selection = { preselect = false } },
+          menu = {
+            auto_show = function()
+              local type = vim.fn.getcmdtype()
+              return (type == ":" and not type:match("^[%%0-9,'<>%-]*!")) or type == "@" or type == "?" or type == "/"
+            end,
+          },
+        },
       },
       completion = {
         ghost_text = { enabled = false },

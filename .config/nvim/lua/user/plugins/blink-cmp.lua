@@ -106,16 +106,16 @@ return {
       ["<C-J>"] = { "select_next", "fallback" },
       ["<C-K>"] = { "select_prev", "fallback" },
       ["<Tab>"] = {
-        "snippet_forward",
         "select_next",
+        "snippet_forward",
         function(cmp)
           if has_words_before() or vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
         end,
         "fallback",
       },
       ["<S-Tab>"] = {
-        "snippet_backward",
         "select_prev",
+        "snippet_backward",
         function(cmp)
           if vim.api.nvim_get_mode().mode == "c" then return cmp.show() end
         end,

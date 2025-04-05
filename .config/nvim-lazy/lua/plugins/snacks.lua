@@ -91,6 +91,9 @@ return {
   ---@type snacks.Config
   opts = {
     dashboard = { enabled = false },
+    terminal = {
+      shell = vim.fn.exepath("fish") == "" and vim.o.shell or vim.fn.exepath("fish"),
+    },
     picker = {
       enabled = true,
       ui_select = true,

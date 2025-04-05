@@ -2,8 +2,10 @@
 ---@param secret_file string The secret file to read the credentials from(`secret_file` should be in location `$HOME/.config/age/`).
 ---@return string|nil secret The credentials from the identity file.
 local function get_age_credentials(secret_file)
-  if 0 == vim.fn.filereadable(vim.fn.expand "$HOME/.config/age/identity.txt") then return nil end
-  local identity = vim.fn.expand "$HOME/.config/age/identity.txt"
+  if 0 == vim.fn.filereadable(vim.fn.expand("$HOME/.config/age/identity.txt")) then
+    return nil
+  end
+  local identity = vim.fn.expand("$HOME/.config/age/identity.txt")
   local secret = vim.fn.expand("$HOME/.config/age/" .. secret_file)
   return require("age").get(secret, identity)
 end
@@ -54,10 +56,10 @@ return {
       "CodeCompanionActions",
     },
     keys = {
-      { "<leader>c", "", desc = "+codecompanion", mode = { "n", "x" } },
-      { "<leader>cc", "<cmd>CodeCompanionChat toggle<CR>", desc = "Chat Toggle", mode = { "n", "x" } },
-      { "<leader>cA", "<cmd>CodeCompanionChat add<CR>", desc = "Chat Add Selection", mode = "x" },
-      { "<leader>ca", "<cmd>CodeCompanionActions<CR>", desc = "Chat Actions", mode = { "n", "x" } },
+      { "<leader>C", "", desc = "+codecompanion", mode = { "n", "x" } },
+      { "<leader>Cc", "<cmd>CodeCompanionChat toggle<CR>", desc = "Chat Toggle", mode = { "n", "x" } },
+      { "<leader>CA", "<cmd>CodeCompanionChat add<CR>", desc = "Chat Add Selection", mode = "x" },
+      { "<leader>Ca", "<cmd>CodeCompanionActions<CR>", desc = "Chat Actions", mode = { "n", "x" } },
       { "<leader>cd", "<cmd>CodeCompanionCmd<space>/", desc = "Chat Cmd" },
     },
     dependencies = {
@@ -97,7 +99,9 @@ return {
         gemini = function()
           return require("codecompanion.adapters").extend("gemini", {
             env = {
-              api_key = function() return get_age_credentials "gemini_api.age" end,
+              api_key = function()
+                return get_age_credentials("gemini_api.age")
+              end,
             },
             schema = {
               model = {
@@ -112,13 +116,15 @@ return {
   },
   {
     "yetone/avante.nvim",
-    enabled = true,
+    enabled = false,
     version = false,
     build = "make",
     event = "InsertEnter",
     opts = function()
-      vim.env.GEMINI_API_KEY = get_age_credentials "gemini_api.age"
-      if not vim.env.GEMINI_API_KEY then return get_ollama_setup() end
+      vim.env.GEMINI_API_KEY = get_age_credentials("gemini_api.age")
+      if not vim.env.GEMINI_API_KEY then
+        return get_ollama_setup()
+      end
       return {
         ---@type Provider
         provider = "gemini",

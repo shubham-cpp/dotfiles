@@ -22,7 +22,7 @@ vim.filetype.add({
     ["*profile"] = "sh",
     ["*.postcss"] = "css",
     ["*.kbd"] = "lisp",
-    [".eslintrc.*"] = "jsonc",
+    [".eslintrc"] = "jsonc",
     ["tsconfig.*.json"] = "jsonc",
     [".*/hyprland%.conf"] = "hyprlang",
   },

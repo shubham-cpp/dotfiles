@@ -3,6 +3,9 @@ return {
   "AstroNvim/astrolsp",
   ---@type AstroLSPOpts
   opts = {
+    features = {
+      inlay_hints = true,
+    },
     -- enable servers that you already have installed without mason
     -- servers = { },
     -- customize language server configuration options passed to `lspconfig`
@@ -17,9 +20,10 @@ return {
             autoUseWorkspaceTsdk = true,
             experimental = {
               maxInlayHintLength = 30,
-              --   completion = {
-              --     enableServerSideFuzzyMatch = true,
-              --   },
+              completion = {
+                enableServerSideFuzzyMatch = true,
+                entriesLimit = 30,
+              },
             },
           },
           typescript = {

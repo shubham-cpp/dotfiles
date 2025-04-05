@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
-arg=$(readlink -f ~/.config/nvim | cut -d'.' -f1)
+arg=$(readlink -f ~/.config/X11/profile | cut -d'.' -f1)
 
 rg --hidden --files "$arg" --ignore-file="$HOME"/.config/git/ignore -g '!.git*' -g '!*.bak' |
 	sed "s#$arg##g" |
 	fzf --reverse |
-	NVIM_APPNAME=nvim-tt xargs -r -I {} nvim "$arg"{} ||
+	xargs -r -I {} nvim "$arg"{} ||
 	echo "Please provide a directory"
 # xargs -r -I {} env NVIM_APPNAME=nvim-try nvim "$arg"{} ||
