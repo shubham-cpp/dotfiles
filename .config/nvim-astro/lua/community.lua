@@ -35,8 +35,8 @@ return {
   { import = "astrocommunity.quickfix.quicker-nvim" },
   -- { import = "astrocommunity.file-explorer.mini-files" },
 
-  { import = "astrocommunity.completion.magazine-nvim" },
-  -- { import = "astrocommunity.completion.blink-cmp" },
+  -- { import = "astrocommunity.completion.magazine-nvim" },
+  { import = "astrocommunity.completion.blink-cmp" },
 
   { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },

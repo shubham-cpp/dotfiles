@@ -2,9 +2,10 @@
 command = fish --login
 window-padding-color = background
 font-family = "RecMonoDuotone Nerd Font"
+font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
-font-feature = -calt0
+font-feature = -clig
 theme = "catppuccin-mocha"
 # shell-integration = fish
 

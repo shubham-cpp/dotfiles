@@ -113,23 +113,4 @@ return {
       require("luasnip.loaders.from_vscode").lazy_load { paths = { vim.fn.stdpath "config" .. "/snippets" } }
     end,
   },
-  {
-    "blink.cmp",
-    optional = true,
-    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
-    opts = {
-      sources = {
-        default = { "ripgrep" },
-        providers = {
-          ripgrep = {
-            module = "blink-ripgrep",
-            name = "Ripgrep",
-            ---@module "blink-ripgrep"
-            ---@type blink-ripgrep.Options
-            opts = {},
-          },
-        },
-      },
-    },
-  },
 }

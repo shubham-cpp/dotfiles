@@ -9,10 +9,10 @@ return {
   {
     "echasnovski/mini.move",
     keys = {
-      { "H", mode = "v" },
+      { "<", mode = "v" },
       { "J", mode = "v" },
       { "K", mode = "v" },
-      { "L", mode = "v" },
+      { ">", mode = "v" },
       "<M-h>",
       "<M-j>",
       "<M-k>",
@@ -21,8 +21,8 @@ return {
     opts = {
       -- Move current line in Visual mode
       mappings = {
-        left = "H",
-        right = "L",
+        left = "<",
+        right = ">",
         down = "J",
         up = "K",
 

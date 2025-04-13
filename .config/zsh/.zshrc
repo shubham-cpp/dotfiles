@@ -1,4 +1,4 @@
-export ZGEN_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zgendir"
+export ZGEN_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zgenom"
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-cache"
 
 # WORDCHARS=${WORDCHARS//\/[&.;]}

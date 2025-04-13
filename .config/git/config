@@ -1,22 +1,34 @@
 [user]
 	name = Shubham Pawar
 	email = shubhampawar3007@gmail.com
+
 [core]
 	excludesfile = ~/.config/git/ignore
     pager = delta
 [init]
 	defaultBranch = main
+
 [alias]
 	logline = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	ll = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+
 [interactive]
     diffFilter = delta --color-only
 
 [delta]
     navigate = true    # use n and N to move between diff sections
     light = false
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+
 [merge]
   tool = diffview
+  conflictstyle = zdiff3
+  ; conflictstyle = diff3
 [mergetool]
   prompt = false
   keepBackup = false
@@ -25,3 +37,21 @@
 
 [push]
   autoSetupRemote = true
+  followTags = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+
+[column]
+  ui = auto
+[branch]
+  sort = -committerdate
+[tag]
+  sort = version:refname
+[help]
+  autocorrect = prompt
+[commit]
+  verbose = true
+

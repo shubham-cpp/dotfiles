@@ -86,137 +86,370 @@ local function copy_path_relative(picker)
 end
 ---@type LazySpec
 return {
-  "folke/snacks.nvim",
-  optional = true,
-  ---@type snacks.Config
-  opts = {
-    dashboard = { enabled = false },
-    terminal = {
-      shell = vim.fn.exepath("fish") == "" and vim.o.shell or vim.fn.exepath("fish"),
-    },
-    picker = {
-      enabled = true,
-      ui_select = true,
-      layout = { preset = "dropdown" },
-      matcher = { frecency = true, history_bonus = true },
-      formatters = { file = { filename_first = true } },
-      sources = {
-        explorer = {
-          layout = { cycle = false, layout = { position = "right" } },
-          actions = {
-            explorer_add_in_parent = explorer_add_in_parent,
-            copy_path_full = copy_path_full,
-            copy_path_relative = copy_path_relative,
-          },
-          win = {
-            list = {
-              keys = {
-                ["/"] = false,
-                ["f"] = { "toggle_focus" },
-                ["A"] = { "explorer_add_in_parent" },
-                ["Y"] = { "copy_path_full" },
-                ["gy"] = { "copy_path_relative" },
-                ["gf"] = { "picker_files", desc = "Open File Picker" },
-                ["<leader>f"] = { "picker_files", desc = "Open File Picker" },
+  {
+    "folke/snacks.nvim",
+    optional = true,
+    ---@type snacks.Config
+    opts = {
+      dashboard = { enabled = false },
+      terminal = {
+        shell = vim.fn.exepath("fish") == "" and vim.o.shell or vim.fn.exepath("fish"),
+      },
+      picker = {
+        enabled = true,
+        ui_select = true,
+        layout = { preset = "dropdown" },
+        matcher = { frecency = true, history_bonus = true },
+        formatters = { file = { filename_first = true } },
+        sources = {
+          explorer = {
+            layout = { cycle = false, layout = { position = "right" } },
+            actions = {
+              explorer_add_in_parent = explorer_add_in_parent,
+              copy_path_full = copy_path_full,
+              copy_path_relative = copy_path_relative,
+            },
+            win = {
+              list = {
+                keys = {
+                  ["/"] = false,
+                  ["f"] = { "toggle_focus" },
+                  ["A"] = { "explorer_add_in_parent" },
+                  ["Y"] = { "copy_path_full" },
+                  ["gy"] = { "copy_path_relative" },
+                  ["gf"] = { "picker_files", desc = "Open File Picker" },
+                  ["<leader>f"] = { "picker_files", desc = "Open File Picker" },
+                },
               },
             },
           },
         },
-      },
-      win = {
-        -- input window
-        input = {
-          keys = {
-            ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-            ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
-            ["<c-c>"] = { "copy", mode = { "i", "n" } },
+        win = {
+          -- input window
+          input = {
+            keys = {
+              ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
+              ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
+              ["<c-c>"] = { "copy", mode = { "i", "n" } },
+            },
           },
+          list = { keys = { ["<c-x>"] = "edit_split" } },
         },
-        list = { keys = { ["<c-x>"] = "edit_split" } },
+      },
+    },
+    keys = {
+      ---{{{ remove defaults. My musle memory is for pickers to have <leader>f as prefix
+      { "<leader>fc", false },
+      { "<leader>sb", false },
+      { "<leader>sB", false },
+      { "<leader>sg", false },
+      { "<leader>sG", false },
+      { "<leader>sp", false },
+      { "<leader>sw", false },
+      { "<leader>sW", false },
+      -- search
+      { '<leader>s"', false },
+      { "<leader>s/", false },
+      { "<leader>sa", false },
+      { "<leader>sc", false },
+      { "<leader>sC", false },
+      { "<leader>sd", false },
+      { "<leader>sD", false },
+      { "<leader>sh", false },
+      { "<leader>sH", false },
+      { "<leader>si", false },
+      { "<leader>sl", false },
+      { "<leader>sk", false },
+      { "<leader>sl", false },
+      { "<leader>sM", false },
+      { "<leader>sm", false },
+      { "<leader>sR", false },
+      { "<leader>sq", false },
+      { "<leader>su", false },
+      { "<leader>sj", false },
+      ---}}}
+      {
+        "<C-p>",
+        function()
+          local branch = vim.b.gitsigns_head or nil
+          if branch ~= nil and branch ~= "" then
+            Snacks.picker.git_files({ layout = { preset = "vscode" }, untracked = true })
+          else
+            Snacks.picker.files({ layout = { preset = "vscode" } })
+          end
+        end,
+        desc = "Find Files",
+      },
+      {
+        "<leader>ff",
+        LazyVim.pick("files", { layout = { preset = "vscode" } }),
+        desc = "Find Files (Root Dir)",
+      },
+      {
+        "<leader>fF",
+        LazyVim.pick("files", { layout = { preset = "vscode" }, root = false }),
+        desc = "Find Files (cwd)",
+      },
+      {
+        "<leader>fg",
+        function()
+          Snacks.picker.git_files({ untracked = true, layout = { preset = "vscode" } })
+        end,
+        desc = "Find Files(git)",
+      },
+      {
+        "<leader>fn",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.stdpath("config"), layout = { preset = "vscode" } })
+        end,
+        desc = "Find Config File",
+      },
+      {
+        "<leader>fN",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.stdpath("data") .. "/lazy", layout = { preset = "vscode" } })
+        end,
+        desc = "Neovim Data dir",
+      },
+      {
+        "<leader>fd",
+        function()
+          Snacks.picker.files({ cwd = vim.fn.expand("~/Documents/dotfiles/.config"), layout = { preset = "vscode" } })
+        end,
+        desc = "Find Dotfiles",
+      },
+      {
+        "<leader>fz",
+        function()
+          Snacks.picker.zoxide()
+        end,
+        desc = "Zoxided",
+      },
+      {
+        "<leader>uN",
+        function()
+          Snacks.notifier.show_history()
+        end,
+        desc = "Notification History",
+      },
+      {
+        "<c-w>m",
+        function()
+          Snacks.zen.zoom()
+        end,
+        desc = "Toggle Zoom",
+      },
+      {
+        "<C-\\>",
+        function()
+          Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
+        end,
+        desc = "Toggle terminal",
+      },
+      {
+        "<C-\\>",
+        "<cmd>close<cr>",
+        mode = "t",
+        desc = "Hide terminal",
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker.lines()
+        end,
+        desc = "Buffer Lines",
+      },
+      {
+        "<leader>fG",
+        function()
+          Snacks.picker.grep_buffers()
+        end,
+        desc = "Grep Open Buffers",
+      },
+      { "<leader>fs", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
+      { "<leader>fS", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
+      {
+        "<leader>fL",
+        function()
+          Snacks.picker.lazy()
+        end,
+        desc = "Search for Plugin Spec",
+      },
+      { "<leader>fw", LazyVim.pick("grep_word"), desc = "Visual selection or word (Root Dir)", mode = { "n", "x" } },
+      {
+        "<leader>fW",
+        LazyVim.pick("grep_word", { root = false }),
+        desc = "Visual selection or word (cwd)",
+        mode = { "n", "x" },
+      },
+      -- search
+      {
+        '<leader>f"',
+        function()
+          Snacks.picker.registers()
+        end,
+        desc = "Registers",
+      },
+      {
+        "<leader>f/",
+        function()
+          Snacks.picker.search_history()
+        end,
+        desc = "Search History",
+      },
+      {
+        "<leader>fa",
+        function()
+          Snacks.picker.autocmds()
+        end,
+        desc = "Autocmds",
+      },
+      {
+        "<leader>fc",
+        function()
+          Snacks.picker.command_history()
+        end,
+        desc = "Command History",
+      },
+      {
+        "<leader>fC",
+        function()
+          Snacks.picker.commands()
+        end,
+        desc = "Commands",
+      },
+      {
+        "<leader>fd",
+        function()
+          Snacks.picker.diagnostics()
+        end,
+        desc = "Diagnostics",
+      },
+      {
+        "<leader>fD",
+        function()
+          Snacks.picker.diagnostics_buffer()
+        end,
+        desc = "Buffer Diagnostics",
+      },
+      {
+        "<leader>fh",
+        function()
+          Snacks.picker.help()
+        end,
+        desc = "Help Pages",
+      },
+      {
+        "<leader>fH",
+        function()
+          Snacks.picker.highlights()
+        end,
+        desc = "Highlights",
+      },
+      {
+        "<leader>fi",
+        function()
+          Snacks.picker.icons()
+        end,
+        desc = "Icons",
+      },
+      {
+        "<leader>fk",
+        function()
+          Snacks.picker.keymaps()
+        end,
+        desc = "Keymaps",
+      },
+      {
+        "<leader>fl",
+        function()
+          Snacks.picker.loclist()
+        end,
+        desc = "Location List",
+      },
+      {
+        "<leader>fm",
+        function()
+          Snacks.picker.man()
+        end,
+        desc = "Man Pages",
+      },
+      {
+        "<leader>fM",
+        function()
+          Snacks.picker.marks()
+        end,
+        desc = "Marks",
+      },
+      {
+        "<leader>fr",
+        function()
+          Snacks.picker.resume()
+        end,
+        desc = "Resume",
+      },
+      {
+        "<leader>fo",
+        LazyVim.pick("oldfiles"),
+        desc = "Resume",
+      },
+      {
+        "<leader>fR",
+        function()
+          Snacks.picker.recent({ filter = { cwd = true } })
+        end,
+        desc = "Recent (cwd)",
+      },
+      {
+        "<leader>fq",
+        function()
+          Snacks.picker.qflist()
+        end,
+        desc = "Quickfix List",
+      },
+      {
+        "<leader>fu",
+        function()
+          Snacks.picker.undo()
+        end,
+        desc = "Undotree",
+      },
+      {
+        "<leader>fp",
+        function()
+          Snacks.picker.projects()
+        end,
+        desc = "Projects",
+      },
+      {
+        "<leader>fj",
+        function()
+          Snacks.picker.jumps()
+        end,
+        desc = "Jumps",
       },
     },
   },
-  keys = {
-    {
-      "<C-p>",
-      function()
-        local branch = vim.b.gitsigns_head or nil
-        if branch ~= nil and branch ~= "" then
-          Snacks.picker.git_files({ layout = { preset = "vscode" }, untracked = true })
-        else
-          Snacks.picker.files({ layout = { preset = "vscode" } })
-        end
-      end,
-      desc = "Find Files",
-    },
-    {
-      "<leader>ff",
-      function()
-        Snacks.picker.files({ layout = { preset = "vscode" } })
-      end,
-      desc = "Find Files",
-    },
-    {
-      "<leader>fg",
-      function()
-        Snacks.picker.git_files({ untracked = true, layout = { preset = "vscode" } })
-      end,
-      desc = "Find Files(git)",
-    },
-    {
-      "<leader>fn",
-      function()
-        Snacks.picker.files({ cwd = vim.fn.stdpath("config"), layout = { preset = "vscode" } })
-      end,
-      desc = "Find Config File",
-    },
-    {
-      "<leader>fN",
-      function()
-        Snacks.picker.files({ cwd = vim.fn.stdpath("data") .. "/lazy", layout = { preset = "vscode" } })
-      end,
-      desc = "Neovim Data dir",
-    },
-    {
-      "<leader>fd",
-      function()
-        Snacks.picker.files({ cwd = vim.fn.expand("~/Documents/dotfiles/.config"), layout = { preset = "vscode" } })
-      end,
-      desc = "Find Dotfiles",
-    },
-    {
-      "<leader>fz",
-      function()
-        Snacks.picker.zoxide()
-      end,
-      desc = "Zoxided",
-    },
-    {
-      "<leader>uN",
-      function()
-        Snacks.notifier.show_history()
-      end,
-      desc = "Notification History",
-    },
-    {
-      "<c-w>m",
-      function()
-        Snacks.zen.zoom()
-      end,
-      desc = "Toggle Zoom",
-    },
-    {
-      "<C-\\>",
-      function()
-        Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
-      end,
-      desc = "Toggle terminal",
-    },
-    {
-      "<C-\\>",
-      "<cmd>close<cr>",
-      mode = "t",
-      desc = "Hide terminal",
+  {
+    "folke/todo-comments.nvim",
+    optional = true,
+    keys = {
+      { "<leader>st", false },
+      { "<leader>sT", false },
+      {
+        "<leader>ft",
+        function()
+          Snacks.picker.todo_comments()
+        end,
+        desc = "Todo",
+      },
+      {
+        "<leader>fT",
+        function()
+          Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
+        end,
+        desc = "Todo/Fix/Fixme",
+      },
     },
   },
 }
