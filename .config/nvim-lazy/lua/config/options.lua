@@ -39,6 +39,19 @@ if vim.fn.executable("rg") == 1 then
   vim.opt.grepprg = "rg --vimgrep --smart-case" -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 end
 
+function Fd(file_pattern, _)
+  -- if first char is * then fuzzy search
+  if file_pattern:sub(1, 1) == "*" then
+    file_pattern = file_pattern:gsub(".", ".*%0") .. ".*"
+  end
+  local cmd = 'fd  --color=never --full-path --type file "' .. file_pattern .. '"'
+  local result = vim.fn.systemlist(cmd)
+  return result
+end
+if vim.fn.has("nvim-0.11") == 1 and vim.fn.executable("fd") then
+  vim.opt.findfunc = "v:lua.Fd"
+end
+
 vim.api.nvim_create_user_command("PrintConfig", function(opts)
   local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
   local args = opts.args

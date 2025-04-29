@@ -6,38 +6,57 @@ alias free="/bin/free -h"
 alias grep="/bin/grep -Ei --color=auto"
 
 # Changing "ls" to "exa"
-alias ls="eza -l --color=auto --icons --group-directories-first"
-alias ll="eza -al --color=auto --icons --group-directories-first --no-user"
-alias la="eza -a --color=auto --icons --group-directories-first"
-alias lt="eza -aT --color=auto --icons --group-directories-first"
-alias l="ll --no-filesize --no-permissions --no-time"
+if command -q eza
+    or command -q exa
+    alias ls="eza -l --color=auto --icons --group-directories-first"
+    alias ll="eza -al --color=auto --icons --group-directories-first --no-user"
+    alias la="eza -a --color=auto --icons --group-directories-first"
+    alias lt="eza -aT --color=auto --icons --group-directories-first"
+    alias l="ll --no-filesize --no-permissions --no-time"
+else
+    alias ls="command ls -lhv --classify --color=auto --group-directories-first"
+    alias la="command ls -hv --classify --color=auto --group-directories-first"
+    alias ll="ls -a"
+    alias lt="ls --recursive"
+end
 
 alias rr="/bin/rm -rf"
-alias rm="trash"
-alias rmd="trash-put -rf"
-alias tls="trash-list"
+if command -q trash
+    alias rm="trash"
+    alias rmd="trash-put -rf"
+    alias tls="trash-list"
+end
 alias cls="clear"
 alias xcp="xclip -i -r -sel clip"
 
-# alias d="sudo dnf5"
-# alias di="sudo dnf install"
-# alias dr="sudo dnf remove"
-# alias dU="sudo dnf upgrade"
-# alias dp="dnf provides"
-# alias ds="dnf search"
-# alias a="sudo nala"
-# alias ai="sudo nala install"
-# alias ar="sudo nala remove"
-# alias au="sudo nala upgrade"
-# alias as="nala search"
+if command -q dnf
+    # alias d="sudo dnf5"
+    alias di="sudo dnf install"
+    alias dr="sudo dnf remove"
+    alias dU="sudo dnf upgrade"
+    alias dp="dnf provides"
+    alias ds="dnf search"
+end
+if command -q nala
+    # alias a="sudo nala"
+    alias ai="sudo nala install"
+    alias ar="sudo nala remove"
+    alias au="sudo nala upgrade"
+    alias as="nala search"
+end
 # alias up="a update;and a upgrade;and a autopurge"
 # alias sea="nala search"
 [ -x /usr/bin/paru ] && alias yay="paru"
-alias ys="yay -S --noredownload --needed"
-alias yr="yay -Rncs"
-# # alias xin="sudo xbps-install -S"
-# alias xr="sudo xbps-remove -R"
-# alias xs="xbps-query -R --regex -s"
+if command -q paru
+    or command -q yay
+    alias ys="yay -S --noredownload --needed"
+    alias yr="yay -Rncs"
+end
+if command -q xbps-install
+    alias xin="sudo xbps-install -S"
+    alias xr="sudo xbps-remove -R"
+    alias xs="xbps-query -R --regex -s"
+end
 
 alias ..="cd .."
 alias ...="cd ../.."

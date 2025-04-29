@@ -12,7 +12,9 @@
     "temperature",
     "idle_inhibitor",
   ],
-  "modules-center": ["clock"],
+  "modules-center": [
+    "clock"
+  ],
   "modules-right": [
     "battery",
     "network",
@@ -24,7 +26,6 @@
     "tray",
     "custom/swaync",
   ],
-
   "hyprland/workspaces": {
     "active-only": false,
     "all-outputs": true,
@@ -43,7 +44,10 @@
     "on-click": "activate",
     "on-click-middle": "close",
     "on-click-right": "minimize-raise",
-    "ignore-list": ["wofi", "rofi"],
+    "ignore-list": [
+      "wofi",
+      "rofi"
+    ],
   },
   // "bluetooth": {
   //   "format": "",
@@ -64,7 +68,8 @@
     "tooltip": "true",
   },
   "tray": {
-    "icon-size": 22,
+    "show-passive-items": true,
+    "icon-size": 24,
     "spacing": 4,
   },
   "clock": {
@@ -97,7 +102,11 @@
     "critical-threshold": 74,
     "format-critical": "  {temperatureC}°C",
     "format": "{icon}  {temperatureC}°C",
-    "format-icons": ["", "", ""],
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
     "max-length": 7,
     "min-length": 7,
   },
@@ -124,13 +133,23 @@
     "tooltip-format-ethernet": "{ifname} 󰌘",
     "tooltip-format-disconnected": "󰌙 Disconnected",
     "max-length": 50,
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
   },
   "pulseaudio": {
     "format": " <span size='large'>{icon}</span> {volume}% ",
     "format-muted": "<span size='large'>󰖁</span>",
     "format-icons": {
-      "default": ["", "", ""],
+      "default": [
+        "",
+        "",
+        ""
+      ],
     },
     "scroll-step": 5.0,
     "on-click": "pavucontrol -t 3",
@@ -169,7 +188,19 @@
     "format-alt-click": "click",
     "format-full": "<span size='large'>{icon}</span> Full",
     "format-alt": "<span size='large'>{icon}</span> {time}",
-    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
     "format-time": "{H}h {M}min",
     "tooltip": true,
     "tooltip-format": "{timeTo} {power}w",

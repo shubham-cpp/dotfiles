@@ -1,4 +1,3 @@
-vim.g.lazyvim_python_lsp = "basedpyright"
 ---@type LazySpec
 return {
   {
@@ -10,6 +9,37 @@ return {
           settings = {
             vtsls = {
               experimental = { completion = { enableServerSideFuzzyMatch = false } },
+            },
+          },
+        },
+        eslint = {
+          keys = {
+            { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" },
+          },
+        },
+        pyright = false,
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                ---@type "standard"|"basic"
+                typeCheckingMode = "standard",
+                autoImportCompletions = true,
+                diagnosticSeverityOverrides = {
+                  reportUnusedImport = "information",
+                  reportUnusedFunction = "information",
+                  reportUnusedVariable = "information",
+                  reportGeneralTypeIssues = "none",
+                  reportOptionalMemberAccess = "warning",
+                  reportOptionalSubscript = "none",
+                  reportIgnoreCommentWithoutRule = "warning",
+                  reportUnreachable = "error",
+                  reportPrivateLocalImportUsage = "error",
+                  reportImplicitRelativeImport = "error",
+                  reportInvalidCast = "error",
+                  -- reportPrivateImportUsage = "none",
+                },
+              },
             },
           },
         },
@@ -110,7 +140,7 @@ return {
         ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
       }
       keys[#keys + 1] = {
-        "<leader>lD",
+        "<leader>lF",
         LazyVim.lsp.action["source.fixAll.ts"],
         desc = "Fix all diagnostics",
         ft = { "typescript", "javascript", "typescriptreact", "javascriptreact" },

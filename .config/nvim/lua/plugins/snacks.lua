@@ -1,5 +1,5 @@
 local branch = nil
-vim.g.last_buffer = nil
+vim.g["last_buffer"] = nil
 
 ---@param picker snacks.Picker
 local function explorer_add_in_parent(picker)
@@ -12,7 +12,7 @@ local function explorer_add_in_parent(picker)
   else
     default_dir = parent.file
   end
-  Snacks.input({
+  require("snacks").input({
     prompt = 'Add a new file or directory (directories end with a "/")',
     default = default_dir .. "/",
   }, function(value)
@@ -21,7 +21,7 @@ local function explorer_add_in_parent(picker)
     local is_file = value:sub(-1) ~= "/"
     local dir = is_file and vim.fs.dirname(path) or path
     if is_file and uv.fs_stat(path) then
-      Snacks.notify.warn("File already exists:\n- `" .. path .. "`")
+      require("snacks").notify.warn("File already exists:\n- `" .. path .. "`")
       return
     end
     vim.fn.mkdir(dir, "p")
@@ -46,7 +46,7 @@ end
 ---@param picker snacks.Picker
 local function copy_path_relative(picker)
   ---@type string[]
-  local paths = vim.tbl_map(Snacks.picker.util.path, picker:selected { fallback = true })
+  local paths = vim.tbl_map(require("snacks").picker.util.path, picker:selected { fallback = true })
   if #paths == 0 then
     vim.notify(
       "No files selected to move",
@@ -75,7 +75,7 @@ local function copy_path_relative(picker)
 
   local on_done = function(obj)
     if obj.stderr ~= "" or obj.stdout == "" then
-      Snacks.notify.warn("Some error while calculating relative paths " .. obj.stderr)
+      require("snacks").notify.warn("Some error while calculating relative paths " .. obj.stderr)
       return
     end
     vim.fn.setreg(vim.v.register, obj.stdout)
@@ -92,10 +92,8 @@ return {
     "folke/snacks.nvim",
     ---@type snacks.Config
     opts = {
-      input = {},
-      bigfile = {},
+      dashboard = { enabled = false },
       lazygit = {},
-      notifier = {},
       picker = {
         enabled = true,
         layout = { preset = "dropdown" },
@@ -141,12 +139,12 @@ return {
     keys = {
       {
         "<leader>gg",
-        function() Snacks.lazygit() end,
+        function() require("snacks").lazygit() end,
         desc = "Toggle Lazygit",
       },
       {
         "<C-w>m",
-        function() Snacks.zen.zoom() end,
+        function() require("snacks").zen.zoom() end,
         desc = "Toggle Zoom",
       },
       {
@@ -154,95 +152,73 @@ return {
         function()
           branch = vim.b.gitsigns_head or nil
           if branch ~= nil and branch ~= "" then
-            Snacks.picker.git_files { layout = { preset = "vscode" }, untracked = true }
+            require("snacks").picker.git_files { layout = { preset = "vscode" }, untracked = true }
           else
-            Snacks.picker.files { layout = { preset = "vscode" } }
+            require("snacks").picker.files { layout = { preset = "vscode" } }
           end
         end,
         desc = "Find Files",
       },
       {
-        "<leader>ff",
-        function() Snacks.picker.files { layout = { preset = "vscode" } } end,
-        desc = "Find Files",
-      },
-      {
-        "<leader>fF",
-        function() Snacks.picker.files { layout = { preset = "vscode" }, hidden = true, ignored = true } end,
-        desc = "Find all files",
-      },
-      {
         "<leader>fn",
-        function() Snacks.picker.files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } } end,
+        function() require("snacks").picker.files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } } end,
         desc = "Find Config File",
       },
       {
         "<leader>fN",
-        function() Snacks.picker.files { cwd = vim.fn.stdpath "data" .. "/lazy", layout = { preset = "vscode" } } end,
+        function()
+          require("snacks").picker.files { cwd = vim.fn.stdpath "data" .. "/lazy", layout = { preset = "vscode" } }
+        end,
         desc = "Neovim Data dir",
       },
       {
         "<leader>fd",
         function()
-          Snacks.picker.files { cwd = vim.fn.expand "~/Documents/dotfiles/.config", layout = { preset = "vscode" } }
+          require("snacks").picker.files {
+            cwd = vim.fn.expand "~/Documents/dotfiles/.config",
+            layout = { preset = "vscode" },
+          }
         end,
         desc = "Find Dotfiles",
       },
       {
         "<leader>fg",
-        function() Snacks.picker.git_files { untracked = true, layout = { preset = "vscode" } } end,
+        function() require("snacks").picker.git_files { untracked = true, layout = { preset = "vscode" } } end,
         desc = "Find Git Files",
       },
       {
         "<leader>fs",
-        function() Snacks.picker.grep() end,
+        function() require("snacks").picker.grep() end,
         desc = "Search/Grep",
       },
       {
         "<leader>fS",
-        function() Snacks.picker.grep_buffers() end,
+        function() require("snacks").picker.grep_buffers() end,
         desc = "Search/Grep in Open Buffers",
       },
       {
         "<leader>fo",
-        function() Snacks.picker.smart() end,
+        function() require("snacks").picker.smart() end,
         desc = "Find buffers/recent/files",
       },
       {
-        "<leader>fr",
-        function() Snacks.picker.resume() end,
-        desc = "Resume",
-      },
-      {
         "<leader>fO",
-        function() Snacks.picker.recent { layout = { preset = "vertical" } } end,
+        function() require("snacks").picker.recent { layout = { preset = "vertical" } } end,
         desc = "Old Files",
       },
       {
-        "<leader>f,",
-        function() Snacks.picker.recent { layout = { preset = "vertical" }, filter = { cwd = true } } end,
-        desc = "Old Files(cwd)",
+        "<leader>fr",
+        function() require("snacks").picker.resume() end,
+        desc = "Resume",
       },
       {
         "<leader>fz",
-        function() Snacks.picker.zoxide { layout = { preset = "vertical" } } end,
+        function() require("snacks").picker.zoxide { layout = { preset = "vertical" } } end,
         desc = "Zoxided",
       },
       {
-        "<leader>fw",
-        function() Snacks.picker.grep_word() end,
-        desc = "Visual selection or word",
-        mode = { "n", "x" },
-      },
-      {
-        "<leader>fW",
-        function() Snacks.picker.grep_word { hidden = true, ignored = true } end,
-        desc = "Visual selection or word",
-        mode = { "n", "x" },
-      },
-      {
         "<leader>fu",
-        function() Snacks.picker.undo() end,
+        function() require("snacks").picker.undo() end,
         desc = "Undotree",
       },
       {
@@ -254,9 +230,9 @@ return {
             and string.match(last_buffer_path, "nvim/runtime/doc/") == nil
             and string.match(last_buffer_path, "quickfix%-%d+") == nil
           then
-            vim.g.last_buffer = last_buffer_path
+            vim.g["last_buffer"] = last_buffer_path
           end
-          Snacks.explorer()
+          require("snacks").explorer()
         end,
         desc = "Explorer",
       },
@@ -277,35 +253,4 @@ return {
       },
     },
   },
-  -- {
-  --   "AstroNvim/astrolsp",
-  --   ---@param opts AstroLSPOpts
-  --   opts = function(_, opts)
-  --     if opts.mappings.n.gd then
-  --       opts.mappings.n.gd[1] = function() require("snacks").picker.lsp_definitions { layout = { preset = "vertical" } } end
-  --     end
-  --     if opts.mappings.n.gI then
-  --       opts.mappings.n.gI[1] = function()
-  --         require("snacks").picker.lsp_implementations { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     if opts.mappings.n.gy then
-  --       opts.mappings.n.gy[1] = function()
-  --         require("snacks").picker.lsp_type_definitions { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     if opts.mappings.n["<Leader>lG"] then
-  --       opts.mappings.n["<Leader>lG"][1] = require("snacks").picker.lsp_workspace_symbols
-  --     end
-  --     if opts.mappings.n["<Leader>lR"] then
-  --       opts.mappings.n["<Leader>lR"][1] = function()
-  --         require("snacks").picker.lsp_references { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     opts.mappings.n["grr"] = {
-  --       function() require("snacks").picker.lsp_references { layout = { preset = "vertical" } } end,
-  --       desc = "LSP References",
-  --     }
-  --   end,
-  -- },
 }

@@ -1,23 +1,16 @@
 ---@type LazySpec
 return {
-  -- {dir = "~/Downloads/GitClones/Contribute/astrocommunity"},
-  {
   "AstroNvim/astrocommunity",
-  -- "astrocommunity",
   { import = "astrocommunity.pack.lua" },
   { import = "astrocommunity.pack.astro" },
   { import = "astrocommunity.pack.bash" },
-  { import = "astrocommunity.pack.blade" },
   { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.docker" },
-  { import = "astrocommunity.pack.elixir-phoenix" },
   { import = "astrocommunity.pack.fish" },
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.gleam" },
-  { import = "astrocommunity.pack.haskell" },
   { import = "astrocommunity.pack.html-css" },
   { import = "astrocommunity.pack.json" },
-  { import = "astrocommunity.pack.laravel" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.prisma" },
   { import = "astrocommunity.pack.python-ruff" },
@@ -33,10 +26,6 @@ return {
   { import = "astrocommunity.pack.full-dadbod" },
 
   { import = "astrocommunity.quickfix.quicker-nvim" },
-  -- { import = "astrocommunity.file-explorer.mini-files" },
-
-  { import = "astrocommunity.completion.magazine-nvim" },
-  -- { import = "astrocommunity.completion.blink-cmp" },
 
   { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
@@ -46,10 +35,6 @@ return {
   { import = "astrocommunity.editing-support.nvim-treesitter-context" },
   { import = "astrocommunity.editing-support.refactoring-nvim" },
 
-  { import = "astrocommunity.fuzzy-finder.snacks-picker" },
-  { import = "astrocommunity.lsp.ts-error-translator-nvim" },
-  { import = "astrocommunity.lsp.nvim-lsp-file-operations" },
-
   { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
   { import = "astrocommunity.motion.flash-nvim" },
   { import = "astrocommunity.motion.nvim-surround" },
@@ -57,5 +42,4 @@ return {
 
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
-  { import = "astrocommunity.icon.mini-icons" },
-} }
+}

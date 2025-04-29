@@ -319,14 +319,14 @@ return {
         desc = "Commands",
       },
       {
-        "<leader>fd",
+        "<leader>ld",
         function()
           Snacks.picker.diagnostics()
         end,
         desc = "Diagnostics",
       },
       {
-        "<leader>fD",
+        "<leader>lD",
         function()
           Snacks.picker.diagnostics_buffer()
         end,

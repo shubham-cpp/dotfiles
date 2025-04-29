@@ -20,10 +20,10 @@ return {
             autoUseWorkspaceTsdk = true,
             experimental = {
               maxInlayHintLength = 30,
-              completion = {
-                enableServerSideFuzzyMatch = true,
-                entriesLimit = 30,
-              },
+              -- completion = {
+              --   enableServerSideFuzzyMatch = true,
+              --   entriesLimit = 30,
+              -- },
             },
           },
           typescript = {

@@ -5,36 +5,58 @@ alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
-alias ls="eza -l --color=auto --icons --group-directories-first"            # long format
-alias ll="eza -al --color=auto --icons --group-directories-first --no-user" # my preferred listing
-alias la="eza -a --color=auto --icons --group-directories-first"            # all files and dirs
-alias lt="eza -aT --color=auto --icons --group-directories-first"           # tree listing
-alias l="ll --no-filesize --no-permissions --no-time"
+if command -v xbps-install >/dev/null; then
+  alias ls="eza -l --color=auto --icons --group-directories-first"            # long format
+  alias ll="eza -al --color=auto --icons --group-directories-first --no-user" # my preferred listing
+  alias la="eza -a --color=auto --icons --group-directories-first"            # all files and dirs
+  alias lt="eza -aT --color=auto --icons --group-directories-first"           # tree listing
+  alias l="ll --no-filesize --no-permissions --no-time"
+else
+  alias ls="command ls -lhv --classify --color=auto --group-directories-first"
+  alias la="command ls -hv --classify --color=auto --group-directories-first"
+  alias ll="ls -a"
+  alias lt="ls --recursive"
+fi
 
 alias rr="/bin/rm -rf"
-alias rm="trash"
-alias rmd="trash -rf"
-alias tls="trash-list"
+if command -v trash >/dev/null; then
+  alias rm="trash"
+  alias rmd="trash -rf"
+  alias tls="trash-list"
+fi
 
 alias cls="clear"
 
-# # alias d="sudo dnf"
-# alias di="sudo dnf install"
-# alias dr="sudo dnf remove"
-# alias dU="sudo dnf upgrade"
-# alias dp="dnf provides"
-# alias ds="dnf search"
-# alias a="sudo nala"
-# alias ar="sudo nala remove"
-# alias ai="sudo nala install"
-# alias au="sudo nala upgrade"
-# alias as="nala search"
-[ -x /usr/bin/paru ] && alias yay="paru"
-alias ys="yay -S --noredownload --needed"
-alias yr="yay -Rcns"
-# alias xin="sudo xbps-install -S"
-# alias xr="sudo xbps-remove -R"
-# alias xs="xbps-query -R --regex -s"
+# alias d="sudo dnf"
+if command -v dnf >/dev/null; then
+  alias di="sudo dnf install"
+  alias dr="sudo dnf remove"
+  alias dU="sudo dnf upgrade"
+  alias dp="dnf provides"
+  alias ds="dnf search"
+fi
+
+if command -v nala >/dev/null; then
+  alias ar="sudo nala remove"
+  alias ai="sudo nala install"
+  alias au="sudo nala upgrade"
+  alias as="nala search"
+fi
+
+if command -v paru >/dev/null; then
+  alias yay="paru"
+  alias ys="yay -S --noredownload --needed"
+  alias yr="yay -Rcns"
+elif command -v yay >/dev/null; then
+  alias ys="yay -S --noredownload --needed"
+  alias yr="yay -Rcns"
+fi
+
+if command -v xbps-install >/dev/null; then
+  alias xin="sudo xbps-install -S"
+  alias xr="sudo xbps-remove -R"
+  alias xs="xbps-query -R --regex -s"
+fi
 
 alias ..="cd .."
 alias ...="cd ../.."

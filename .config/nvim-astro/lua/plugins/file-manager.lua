@@ -16,7 +16,7 @@ return {
         desc = "Open yazi at the current file",
       },
       {
-        "<c-/>",
+        "<leader>_",
         "<cmd>Yazi cwd<cr>",
         desc = "Resume the last yazi session",
       },
