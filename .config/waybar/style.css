@@ -25,35 +25,6 @@
  * -------------------------------------------------------------------------- */
 
 /* COLORS */
-
-/* Nord */
-/* @define-color bg #2E3440; */
-/*@define-color bg #353C4A;*/
-/* @define-color light #D8DEE9; */
-/*@define-color dark @nord_dark_font;*/
-/* @define-color warning #ebcb8b; */
-/* @define-color critical #BF616A; */
-/* @define-color mode #434C5E; */
-/*@define-color workspaces @bg;*/
-/*@define-color workspaces @nord_dark_font;*/
-/*@define-color workspacesfocused #434C5E;*/
-/* @define-color workspacesfocused #4C566A; */
-/* @define-color tray @workspacesfocused; */
-/* @define-color sound #EBCB8B; */
-/* @define-color network #5D7096; */
-/* @define-color memory #546484; */
-/* @define-color cpu #596A8D; */
-/* @define-color temp #4D5C78; */
-/* @define-color layout #5e81ac; */
-/* @define-color battery #3F5F5E; */
-/* @define-color date #434C5E; */
-/* @define-color time #434C5E; */
-/* @define-color backlight #434C5E; */
-/* @define-color nord_bg #434C5E; */
-/* @define-color nord_bg_blue #546484; */
-/* @define-color nord_light #D8DEE9; */
-/* @define-color nord_light_font #D8DEE9; */
-/* @define-color nord_dark_font #434C5E; */
 /* Gruvbox Hard */
 @define-color bg #1d2021;
 @define-color light #ebdbb2;
@@ -72,11 +43,11 @@
 @define-color date #3c3836;
 @define-color time #3c3836;
 @define-color backlight #3c3836;
-@define-color gruvbox_bg #282828; /* Gruvbox dark0_hard */
-@define-color gruvbox_bg_soft #32302f; /* Gruvbox dark0_soft */
-@define-color gruvbox_light #ebdbb2; /* Gruvbox light0 */
-@define-color gruvbox_light_font #ebdbb2; /* Same as light0 */
-@define-color gruvbox_dark_font #3c3836; /* Gruvbox dark1 */
+@define-color gruvbox_bg #282828; 
+@define-color gruvbox_bg_soft #32302f; 
+@define-color gruvbox_light #ebdbb2; 
+@define-color gruvbox_light_font #ebdbb2; 
+@define-color gruvbox_dark_font #3c3836; 
 
 /* Reset all styles */
 * {
@@ -146,8 +117,7 @@
 #mode,
 #memory.critical,
 #temperature.critical,
-#workspaces button.urgent,
-#battery.critical.discharging {
+#workspaces button.urgent {
   animation-name: blink-critical;
   animation-duration: 2s;
 }
@@ -156,17 +126,16 @@
 #network.disconnected,
 #memory.warning,
 #cpu.warning,
-#temperature.warning,
-#battery.warning {
+#temperature.warning {
   background: @warning;
   color: @gruvbox_dark_font;
 }
 
 /* Each warning that should blink */
-#battery.warning.discharging {
-  animation-name: blink-warning;
-  animation-duration: 3s;
-}
+/* #battery.warning.discharging { */
+/*   animation-name: blink-warning; */
+/*   animation-duration: 3s; */
+/* } */
 
 /* And now modules themselves in their respective order */
 
@@ -178,11 +147,6 @@
 
 /* Workspaces stuff */
 
-#workspaces {
-  /*   color: #D8DEE9;
-    margin-right: 10px;*/
-}
-
 #taskbar button.active {
   background-color: @mode;
   padding-left: 12px;
@@ -192,7 +156,8 @@
 }
 
 #workspaces button {
-  font-weight: bold; /* Somewhy the bar-wide setting is ignored*/
+  font-weight: bold;
+  /* Somewhy the bar-wide setting is ignored*/
   padding: 0;
   /*color: #999;*/
   opacity: 0.3;
@@ -218,40 +183,47 @@
   margin-left: 40px;
   font-weight: normal;
 }
+
 #bluetooth {
   background: @gruvbox_bg_soft;
   font-size: 1.2em;
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #custom-gpu {
   background: @gruvbox_bg;
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #custom-weather {
   background: @mode;
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #custom-pacman {
   background: @gruvbox_light;
   color: @gruvbox_dark_font;
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #custom-scratchpad-indicator {
   background: @gruvbox_light;
   color: @gruvbox_dark_font;
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #idle_inhibitor {
   background: @mode;
   /*font-size: 1.6em;*/
   font-weight: bold;
   padding: 0 0.6em;
 }
+
 #custom-alsa {
   background: @sound;
 }
@@ -268,33 +240,39 @@
   background: @gruvbox_bg;
   color: @gruvbox_light_font;
 }
+
 #cpu.critical {
   color: @gruvbox_dark_font;
 }
+
 #language {
   background: @gruvbox_bg_soft;
   color: @gruvbox_light_font;
   padding: 0 0.4em;
 }
+
 #custom-cpugovernor {
   background-color: @gruvbox_light;
   color: @gruvbox_dark_font;
 }
-#custom-cpugovernor.perf {
-}
+
+#custom-cpugovernor.perf {}
+
 #temperature {
   background-color: @gruvbox_bg;
   color: @gruvbox_light_font;
 }
+
 #temperature.critical {
   background: @critical;
 }
+
 #custom-layout {
   background: @layout;
 }
 
 #battery {
-  background: #77813c;
+  background: @backlight;
 }
 
 #backlight {
@@ -305,6 +283,7 @@
   background: @gruvbox_bg_soft;
   color: #d8dee9;
 }
+
 #clock.date {
   background: @date;
 }
@@ -326,11 +305,13 @@
   color: @gruvbox_light_font;
   /* No styles */
 }
+
 #pulseaudio.source-muted {
   background: @temp;
   color: @gruvbox_light_font;
   /* No styles */
 }
+
 #tray {
   background: @gruvbox_bg_soft;
 }

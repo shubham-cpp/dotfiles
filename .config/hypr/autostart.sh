@@ -25,6 +25,7 @@ if test -f /usr/lib/polkit-kde-authentication-agent-1; then
 fi
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
 hyprshade auto &
+sleep 5s
 env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
 
 # Theme settings

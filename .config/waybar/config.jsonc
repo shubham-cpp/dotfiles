@@ -1,4 +1,3 @@
-// vim:fileencoding=utf-8:ft=jsonc
 {
   "layer": "top", // Waybar at top layer
   "position": "top", // Waybar position (top|bottom|left|right)
@@ -22,9 +21,9 @@
     "pulseaudio",
     "pulseaudio#microphone",
     "backlight",
-    // "bluetooth",
+    "bluetooth",
     "tray",
-    "custom/swaync",
+    "custom/swaync"
   ],
   "hyprland/workspaces": {
     "active-only": false,
@@ -49,16 +48,16 @@
       "rofi"
     ],
   },
-  // "bluetooth": {
-  //   "format": "",
-  //   "format-disabled": "󰂳",
-  //   "format-connected": "󰂱 {num_connections}",
-  //   "tooltip-format": " {device_alias}",
-  //   "tooltip-format-connected": "{device_enumerate}",
-  //   "tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
-  //   "tooltip": true,
-  //   "on-click": "blueman-manager",
-  // },
+  "bluetooth": {
+    "format": "",
+    "format-disabled": "󰂳",
+    "format-connected": "󰂱 {num_connections}",
+    "tooltip-format": " {device_alias}",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": " {device_alias} 󰂄{device_battery_percentage}%",
+    "tooltip": true,
+    "on-click": "blueman-manager",
+  },
   "idle_inhibitor": {
     "format": "<span size='large'>{icon}</span> ",
     "format-icons": {
@@ -203,9 +202,7 @@
     ],
     "format-time": "{H}h {M}min",
     "tooltip": true,
-    "tooltip-format": "{timeTo} {power}w",
-    "on-click-middle": "~/.config/hypr/scripts/ChangeBlur.sh",
-    "on-click-right": "~/.config/hypr/scripts/Wlogout.sh",
+    "tooltip-format": "{timeTo} {power}w"
   },
   "backlight": {
     "interval": 2,

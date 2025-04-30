@@ -2,7 +2,7 @@
 return {
   {
     "LazyVim",
-    opts = { colorscheme = "catppuccin" },
+    opts = { colorscheme = "jellybeans-muted" },
   },
   {
     "catppuccin",
@@ -33,5 +33,16 @@ return {
       vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = c.delta, bg = c.visual, bold = true, undercurl = true })
       vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = c.hint, bg = c.visual, bold = true, undercurl = true })
     end,
+  },
+  {
+    "wtfox/jellybeans.nvim",
+    lazy = true,
+    opts = {
+      transparent = true,
+      on_highlights = function(hl, c)
+        hl.QuickScopePrimary = { fg = c.perano, bg = c.tundora, bold = true, undercurl = true }
+        hl.QuickScopeSecondary = { fg = c.koromiko, bg = c.tundora, bold = true, undercurl = true }
+      end,
+    },
   },
 }
