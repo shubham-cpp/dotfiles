@@ -25,12 +25,15 @@ if test -f /usr/lib/polkit-kde-authentication-agent-1; then
 fi
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
 hyprshade auto &
+gnome-keyring-daemon &
 sleep 5s
 env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
 
 # Theme settings
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface font-name 'Fira Sans 11'
 gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Font Mono 11'
-gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark-Solid'
-gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice'
-gsettings set org.gnome.desktop.interface gtk-theme 'Mint-Y-Dark-Blue'
+# gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark-Solid'
+# gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice'
+gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'

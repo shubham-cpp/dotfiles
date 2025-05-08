@@ -26,7 +26,7 @@ config.font = wezterm.font_with_fallback({
   "FontAwesome",
 })
 config.window_background_opacity = 0.95
-config.font_size = 13
+config.font_size = 12
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 config.switch_to_last_active_tab_when_closing_tab = true
 config.scrollback_lines = 10000
@@ -148,7 +148,7 @@ tabline.setup({
         max_length = 28,
         padding = { left = 0, right = 1 },
       },
-      { "zoomed",  padding = 0 },
+      { "zoomed", padding = 0 },
     },
     tab_inactive = {
       "index",

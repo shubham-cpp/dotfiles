@@ -5,7 +5,7 @@ alias grep="/bin/grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
-if command -v xbps-install >/dev/null; then
+if command -v eza >/dev/null; then
   alias ls="eza -l --color=auto --icons --group-directories-first"            # long format
   alias ll="eza -al --color=auto --icons --group-directories-first --no-user" # my preferred listing
   alias la="eza -a --color=auto --icons --group-directories-first"            # all files and dirs
@@ -61,12 +61,15 @@ fi
 alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
-alias v="nvim"
-alias va="env NVIM_APPNAME=nvim-astro nvim"
-alias vl="env NVIM_APPNAME=nvim-lazy nvim"
-alias vv="env NVIM_APPNAME=nvim-tt nvim"
-alias vc="env NVIM_APPNAME=nvim-chad nvim"
-alias se="sudoedit"
+
+if command -v nvim >/dev/null; then
+  alias v="nvim"
+  alias va="env NVIM_APPNAME=nvim-astro nvim"
+  alias vl="env NVIM_APPNAME=nvim-lazy nvim"
+  alias vv="env NVIM_APPNAME=nvim-tt nvim"
+  alias vc="env NVIM_APPNAME=nvim-chad nvim"
+  alias se="sudoedit"
+fi
 
 alias xcp="xclip -i -r -sel clip"
 alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
