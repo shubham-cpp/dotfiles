@@ -1,6 +1,8 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/.local/share/nvim-lazy/lazy/LazyVim
+    - /home/shubham/Documents/Programming/WebDev/travel-vue3-app/visit-trails
     - /home/shubham/Documents/Programming/WebDev/invoice-generator-nextjs
 startuppopupversion: 5
 lastversion: 0.48.0

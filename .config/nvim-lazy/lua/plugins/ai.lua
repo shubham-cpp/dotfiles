@@ -106,7 +106,7 @@ return {
             schema = {
               model = {
                 -- default = "gemini-2.0-flash",
-                default = "gemini-2.5-pro-exp-03-25",
+                default = "gemini-2.5-flash-preview-04-17",
               },
             },
           })
@@ -130,7 +130,7 @@ return {
         provider = "gemini",
         gemini = {
           -- model = "gemini-2.0-flash",
-          model = "gemini-2.5-pro-exp-03-25",
+          model = "gemini-2.5-flash-preview-04-17",
         },
       }
     end,

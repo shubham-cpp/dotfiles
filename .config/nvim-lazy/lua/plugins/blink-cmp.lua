@@ -9,6 +9,14 @@ return {
     opts = {
       keymap = {
         preset = "enter",
+        ["<C-space>"] = {
+          -- 'show'
+          function(cmp)
+            cmp.show({ providers = { "snippets" } })
+          end,
+          "show_documentation",
+          "hide_documentation",
+        },
         ["<C-h>"] = { "show_signature", "hide_signature", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
@@ -74,6 +82,7 @@ return {
             end
             return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
           end,
+          "exact",
           -- default sorts
           "score",
           "sort_text",
@@ -91,6 +100,10 @@ return {
       sources = {
         default = { "ripgrep" },
         providers = {
+          snippets = { min_keyword_length = 2, score_offset = 100 },
+          lsp = { min_keyword_length = 3, score_offset = 80 },
+          path = { min_keyword_length = 2, score_offset = 60 },
+          buffer = { min_keyword_length = 3, score_offset = 40 },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
@@ -98,30 +111,18 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = -3, -- should be lower priority
+              score_offset = 30,
               max_filesize = "300K",
               search_casing = "--smart-case",
             },
           },
         },
       },
-      -- fuzzy = {
-      --   sorts = {
-      --     function(a, b)
-      --       if a.client_name == nil or b.client_name == nil then
-      --         return nil
-      --       end
-      --       return b.client_name == "emmet_ls"
-      --     end,
-      --     "exact",
-      --     "score",
-      --     "sort_text",
-      --   },
-      -- },
     },
   },
   {
     "L3MON4D3/LuaSnip",
+    optional = true,
     opts = {
       history = true,
       delete_check_events = "TextChanged",

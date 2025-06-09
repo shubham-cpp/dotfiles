@@ -27,6 +27,18 @@ return {
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
         ["<CR>"] = { "select_and_accept", "fallback" },
       },
+      fuzzy = {
+        sorts = {
+          function(a, b)
+            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then return end
+            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+          end,
+          "exact",
+          -- default sorts
+          "score",
+          "sort_text",
+        },
+      },
       cmdline = {
         enabled = true,
         keymap = {

@@ -127,6 +127,7 @@ checked_paths=(
 	"${XDG_DATA_HOME:-$HOME/.local/share}/bob/nvim-bin"
 	"${XDG_CACHE_HOME:-$HOME/.cache}/fnm-install"
 	"${XDG_DATA_HOME:-$HOME/.local/share}/npm/bin/"
+	"${XDG_DATA_HOME:-$HOME/.local/share}/npm/lib/"
 	"${XDG_CONFIG_HOME:-$HOME/.config}/suckless/dwm/status/scripts/"
 	"$HOME/.turso"
 	"$HOME/Downloads/GitClones/void-packages"

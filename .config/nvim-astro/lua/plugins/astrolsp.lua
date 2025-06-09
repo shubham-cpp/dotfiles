@@ -4,7 +4,7 @@ return {
   ---@type AstroLSPOpts
   opts = {
     features = {
-      inlay_hints = true,
+      inlay_hints = false,
     },
     -- enable servers that you already have installed without mason
     -- servers = { },

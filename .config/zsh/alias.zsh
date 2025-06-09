@@ -100,7 +100,7 @@ alias gupav='git pull --rebase --autostash -v'
 alias gcl='git clone'
 alias gch='git checkout'
 
-alias p="pnpm"
+alias p="corepack pnpm"
 alias y='yazi'
 
 alias sc="./vendor/bin/sail composer"

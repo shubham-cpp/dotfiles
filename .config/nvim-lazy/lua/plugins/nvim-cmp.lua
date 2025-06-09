@@ -50,27 +50,32 @@ return {
       "https://codeberg.org/FelipeLema/cmp-async-path",
       "lukas-reineke/cmp-rg",
     },
+    event = { "InsertEnter", "CmdlineEnter" },
     opts = function(_, opts)
       local cmp = require("cmp")
       local types = require("cmp.types")
       local defaults = require("cmp.config.default")()
-      vim.opt.completeopt:append("noselect")
-      opts.completion = {
-        completeopt = "menu,menuone,noselect",
+
+      -- vim.opt.completeopt:append("noselect")
+      -- opts.completion = {
+      --   completeopt = "menu,menuone,noselect",
+      -- }
+      -- opts.preselect = cmp.PreselectMode.None
+      opts.confirm_opts = {
+        behavior = cmp.ConfirmBehavior.Replace,
+        select = false,
       }
-      opts.preselect = cmp.PreselectMode.None
+
       opts.mapping["<C-x><C-x>"] = cmp.mapping.complete({
         config = { sources = { { name = "luasnip" } } },
       })
-      opts.mapping["<C-j>"] =
-        cmp.mapping(cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }), { "i", "c" })
-      opts.mapping["<C-k>"] =
-        cmp.mapping(cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select }), { "i", "c" })
+      opts.mapping["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" })
+      opts.mapping["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" })
       opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
         local ok, luasnip = pcall(require, "luasnip")
         if is_visible(cmp) then
           cmp.select_next_item()
-        elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.expand_or_locally_jumpable() then
+        elseif ok and vim.api.nvim_get_mode().mode ~= "c" and luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
         elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = 1 }) then
           vim.schedule(function()
@@ -86,7 +91,7 @@ return {
         local ok, luasnip = pcall(require, "luasnip")
         if is_visible(cmp) then
           cmp.select_prev_item()
-        elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.jumpable(-1) then
+        elseif ok and vim.api.nvim_get_mode().mode ~= "c" and luasnip.jumpable(-1) then
           luasnip.jump(-1)
         elseif vim.api.nvim_get_mode().mode ~= "c" and vim.snippet and vim.snippet.active({ direction = -1 }) then
           vim.schedule(function()
@@ -130,6 +135,13 @@ return {
       })
       cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
+        completion = {
+          completeopt = "menu,menuone,preview",
+        },
+        confirm_opts = {
+          behavior = cmp.ConfirmBehavior.Insert,
+          select = false,
+        },
         sources = cmp.config.sources({
           { name = "path" },
         }, {
@@ -143,49 +155,49 @@ return {
       })
     end,
   },
-  {
-    "L3MON4D3/LuaSnip",
-    lazy = true,
-    specs = {
-      {
-        "nvim-cmp",
-        optional = true,
-        dependencies = { { "saadparwaiz1/cmp_luasnip", lazy = true } },
-        opts = function(_, opts)
-          local luasnip, cmp = require("luasnip"), require("cmp")
-
-          if not opts.snippet then
-            opts.snippet = {}
-          end
-          opts.snippet.expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end
-
-          if not opts.mappings then
-            opts.mappings = {}
-          end
-          opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
-            if is_visible(cmp) then
-              cmp.select_next_item()
-            elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            elseif has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end, { "i", "s" })
-          opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
-            if is_visible(cmp) then
-              cmp.select_prev_item()
-            elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { "i", "s" })
-        end,
-      },
-    },
-  },
+  -- {
+  --   "L3MON4D3/LuaSnip",
+  --   lazy = true,
+  --   specs = {
+  --     {
+  --       "nvim-cmp",
+  --       optional = true,
+  --       dependencies = { { "saadparwaiz1/cmp_luasnip", lazy = true } },
+  --       opts = function(_, opts)
+  --         local luasnip, cmp = require("luasnip"), require("cmp")
+  --
+  --         if not opts.snippet then
+  --           opts.snippet = {}
+  --         end
+  --         opts.snippet.expand = function(args)
+  --           luasnip.lsp_expand(args.body)
+  --         end
+  --
+  --         if not opts.mappings then
+  --           opts.mappings = {}
+  --         end
+  --         opts.mapping["<Tab>"] = cmp.mapping(function(fallback)
+  --           if is_visible(cmp) then
+  --             cmp.select_next_item()
+  --           elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.expand_or_locally_jumpable() then
+  --             luasnip.expand_or_jump()
+  --           elseif has_words_before() then
+  --             cmp.complete()
+  --           else
+  --             fallback()
+  --           end
+  --         end, { "i", "s" })
+  --         opts.mapping["<S-Tab>"] = cmp.mapping(function(fallback)
+  --           if is_visible(cmp) then
+  --             cmp.select_prev_item()
+  --           elseif vim.api.nvim_get_mode().mode ~= "c" and luasnip.jumpable(-1) then
+  --             luasnip.jump(-1)
+  --           else
+  --             fallback()
+  --           end
+  --         end, { "i", "s" })
+  --       end,
+  --     },
+  --   },
+  -- },
 }

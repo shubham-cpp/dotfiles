@@ -32,6 +32,7 @@ config.switch_to_last_active_tab_when_closing_tab = true
 config.scrollback_lines = 10000
 config.check_for_updates = false
 config.default_cursor_style = "SteadyBar"
+config.enable_wayland = require("os").getenv "XDG_CURRENT_DESKTOP" ~= "Hyprland"
 
 local alt_keys = {}
 

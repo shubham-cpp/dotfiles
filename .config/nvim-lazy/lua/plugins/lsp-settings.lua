@@ -192,7 +192,8 @@ return {
     end,
   },
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
+    version = "^1.0.0",
     optional = true,
     opts = {
       ---@type '"prepend"' | '"append"' | '"skip"'
@@ -210,6 +211,11 @@ return {
         "css-variables-language-server",
       },
     },
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    version = "^1.0.0",
+    optional = true,
   },
   {
     "folke/trouble.nvim",
