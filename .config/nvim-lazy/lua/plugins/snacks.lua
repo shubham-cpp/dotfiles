@@ -121,6 +121,11 @@ return {
                   ["<leader>f"] = { "picker_files", desc = "Open File Picker" },
                 },
               },
+              input = {
+                keys = {
+                  ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
+                },
+              },
             },
           },
         },

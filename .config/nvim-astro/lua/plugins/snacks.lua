@@ -122,6 +122,11 @@ return {
                   ["<leader>f"] = { "picker_files", desc = "Open File Picker" },
                 },
               },
+              input = {
+                keys = {
+                  ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
+                },
+              },
             },
           },
         },
@@ -277,35 +282,4 @@ return {
       },
     },
   },
-  -- {
-  --   "AstroNvim/astrolsp",
-  --   ---@param opts AstroLSPOpts
-  --   opts = function(_, opts)
-  --     if opts.mappings.n.gd then
-  --       opts.mappings.n.gd[1] = function() require("snacks").picker.lsp_definitions { layout = { preset = "vertical" } } end
-  --     end
-  --     if opts.mappings.n.gI then
-  --       opts.mappings.n.gI[1] = function()
-  --         require("snacks").picker.lsp_implementations { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     if opts.mappings.n.gy then
-  --       opts.mappings.n.gy[1] = function()
-  --         require("snacks").picker.lsp_type_definitions { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     if opts.mappings.n["<Leader>lG"] then
-  --       opts.mappings.n["<Leader>lG"][1] = require("snacks").picker.lsp_workspace_symbols
-  --     end
-  --     if opts.mappings.n["<Leader>lR"] then
-  --       opts.mappings.n["<Leader>lR"][1] = function()
-  --         require("snacks").picker.lsp_references { layout = { preset = "vertical" } }
-  --       end
-  --     end
-  --     opts.mappings.n["grr"] = {
-  --       function() require("snacks").picker.lsp_references { layout = { preset = "vertical" } } end,
-  --       desc = "LSP References",
-  --     }
-  --   end,
-  -- },
 }

@@ -39,10 +39,6 @@ return {
     optional = true,
     keys = { ":", "/", "?" }, -- lazy load cmp on more keys along with insert mode
     dependencies = {
-      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
-      { "iguanacucumber/mag-nvim-lsp", name = "cmp-nvim-lsp", opts = {} },
-      { "iguanacucumber/mag-buffer", name = "cmp-buffer" },
-      { "iguanacucumber/mag-cmdline", name = "cmp-cmdline" },
       "https://codeberg.org/FelipeLema/cmp-async-path",
       "lukas-reineke/cmp-rg",
     },
@@ -106,30 +102,30 @@ return {
         }, defaults.sorting.comparators),
       }
     end,
-    config = function(_, opts)
-      local cmp = require "cmp"
-      cmp.setup(opts)
-
-      cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
-      })
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          {
-            name = "cmdline",
-            option = {
-              ignore_cmds = { "Man", "!", "find", "fin" },
-            },
-          },
-        }),
-      })
-    end,
+    -- config = function(_, opts)
+    --   local cmp = require "cmp"
+    --   cmp.setup(opts)
+    --
+    --   cmp.setup.cmdline("/", {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = {
+    --       { name = "buffer" },
+    --     },
+    --   })
+    --   cmp.setup.cmdline(":", {
+    --     mapping = cmp.mapping.preset.cmdline(),
+    --     sources = cmp.config.sources({
+    --       { name = "path" },
+    --     }, {
+    --       {
+    --         name = "cmdline",
+    --         option = {
+    --           ignore_cmds = { "Man", "!", "find", "fin" },
+    --         },
+    --       },
+    --     }),
+    --   })
+    -- end,
   },
   {
     "LuaSnip",
