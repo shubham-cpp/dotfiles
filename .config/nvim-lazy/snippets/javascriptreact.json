@@ -1,7 +1,9 @@
 {
   "useClient": {
     "prefix": "uc",
-    "body": ["\"use client\";$0"],
+    "body": [
+      "\"use client\";$0"
+    ],
     "description": "use client for next.js"
   },
   "reactClientComponent": {
@@ -84,5 +86,10 @@
     "prefix": "jcn",
     "body": "{${1:true} ? <View>$0</View> : ${2:null}}",
     "description": "ternary jsx elements"
+  },
+  "react component": {
+    "prefix": "comp",
+    "body": "const ${1:Component} = () => {\n\treturn(\n\t\t$0\n\t)\n}",
+    "description": "Create a react component"
   }
 }

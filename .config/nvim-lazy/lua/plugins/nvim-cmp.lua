@@ -162,9 +162,8 @@ return {
       local defaults = require("cmp.config.default")()
 
       -- vim.opt.completeopt:append("noselect")
-      -- opts.completion = {
-      --   completeopt = "menu,menuone,noselect",
-      -- }
+      -- opts.completion = { completeopt = "menu,menuone,noselect", }
+      -- opts.completion = { completeopt = "menu,menuone,noinsert" }
       -- opts.preselect = cmp.PreselectMode.None
       -- opts.confirm_opts = {
       --   behavior = cmp.ConfirmBehavior.Replace,
@@ -174,6 +173,9 @@ return {
       opts.mapping["<C-x><C-x>"] = cmp.mapping.complete({
         config = { sources = { { name = "luasnip" } } },
       })
+
+      -- opts.mapping["<CR>"] =
+      --   cmp.mapping(cmp.mapping.confirm({ select = true }), { "i", "c" })
 
       opts.mapping["<C-j>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "c" })
       opts.mapping["<C-k>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "c" })
@@ -233,26 +235,6 @@ return {
           lower_emmet(),
         }, defaults.sorting.comparators),
       }
-
-      cmp.setup.cmdline("/", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer" },
-        },
-      })
-      cmp.setup.cmdline(":", {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({
-          { name = "path" },
-        }, {
-          {
-            name = "cmdline",
-            option = {
-              ignore_cmds = { "Man", "!", "find", "fin" },
-            },
-          },
-        }),
-      })
     end,
   },
   {
@@ -264,29 +246,16 @@ return {
       return {
         {
           type = "/",
-          mapping = cmp.mapping.preset.cmdline({
-            ["<C-j>"] = {
-              c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select }),
-            },
-          }),
+          completion = { completeopt = "menu,menuone,noselect" },
+          mapping = cmp.mapping.preset.cmdline(),
           sources = {
             { name = "buffer" },
           },
         },
         {
           type = ":",
-          confirm_opts = {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = false,
-          },
-          mapping = cmp.mapping.preset.cmdline({
-            ["<C-j>"] = {
-              c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-            },
-            ["<C-k>"] = {
-              c = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
-            },
-          }),
+          completion = { completeopt = "menu,menuone,noselect" },
+          mapping = cmp.mapping.preset.cmdline(),
           sources = cmp.config.sources({
             { name = "path" },
           }, {

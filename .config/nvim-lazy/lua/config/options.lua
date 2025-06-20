@@ -6,6 +6,7 @@ vim.opt.showbreak = "󰄾 "
 vim.opt.iskeyword:append("-")
 vim.opt.scrolloff = 8
 vim.opt.sessionoptions = "buffers,curdir,tabpages,winsize,help,globals,skiprtp"
+vim.opt.exrc = true
 
 vim.opt.wildignore:append({
   "*.o",
