@@ -9,14 +9,14 @@ return {
     opts = {
       keymap = {
         preset = "enter",
-        ["<C-space>"] = {
-          -- 'show'
-          function(cmp)
-            cmp.show({ providers = { "snippets" } })
-          end,
-          "show_documentation",
-          "hide_documentation",
-        },
+        -- ["<C-space>"] = {
+        --   -- 'show'
+        --   function(cmp)
+        --     cmp.show({ providers = { "snippets" } })
+        --   end,
+        --   "show_documentation",
+        --   "hide_documentation",
+        -- },
         ["<C-h>"] = { "show_signature", "hide_signature", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
@@ -74,20 +74,20 @@ return {
           },
         },
       },
-      fuzzy = {
-        sorts = {
-          function(a, b)
-            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-              return
-            end
-            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-          end,
-          "exact",
-          -- default sorts
-          "score",
-          "sort_text",
-        },
-      },
+      -- fuzzy = {
+      --   sorts = {
+      --     function(a, b)
+      --       if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+      --         return
+      --       end
+      --       return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+      --     end,
+      --     "exact",
+      --     -- default sorts
+      --     "score",
+      --     "sort_text",
+      --   },
+      -- },
     },
   },
   {
@@ -100,10 +100,10 @@ return {
       sources = {
         default = { "ripgrep" },
         providers = {
-          snippets = { min_keyword_length = 2, score_offset = 100 },
-          lsp = { min_keyword_length = 3, score_offset = 80 },
-          path = { min_keyword_length = 2, score_offset = 60 },
-          buffer = { min_keyword_length = 3, score_offset = 40 },
+          -- snippets = { min_keyword_length = 2, score_offset = 100 },
+          -- lsp = { min_keyword_length = 3, score_offset = 80 },
+          -- path = { min_keyword_length = 2, score_offset = 60 },
+          -- buffer = { min_keyword_length = 3, score_offset = 40 },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",

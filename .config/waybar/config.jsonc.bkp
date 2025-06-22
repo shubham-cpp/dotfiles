@@ -1,12 +1,19 @@
 {
-  "layer": "top",
-  "position": "top",
+  "layer": "top", // Waybar at top layer
+  "position": "top", // Waybar position (top|bottom|left|right)
   "ipc": true,
   "exclusive": true,
   "passthrough": false,
-  "modules-left": ["hyprland/workspaces", "memory", "cpu"],
-
-  "modules-center": ["clock", "custom/weather"],
+  "modules-left": [
+    "hyprland/workspaces",
+    "cpu",
+    "memory",
+    "temperature",
+    "idle_inhibitor",
+  ],
+  "modules-center": [
+    "clock"
+  ],
   "modules-right": [
     "battery",
     "network",
@@ -16,7 +23,7 @@
     "backlight",
     "bluetooth",
     "tray",
-    "custom/swaync",
+    "custom/swaync"
   ],
   "hyprland/workspaces": {
     "active-only": false,
@@ -27,9 +34,23 @@
     "on-scroll-up": "hyprctl dispatch workspace e+1",
     "on-scroll-down": "hyprctl dispatch workspace e-1",
   },
+  "wlr/taskbar": {
+    "format": "{icon} {name} ",
+    "icon-size": 15,
+    "all-outputs": false,
+    "active-first": true,
+    "tooltip-format": "{title}",
+    "on-click": "activate",
+    "on-click-middle": "close",
+    "on-click-right": "minimize-raise",
+    "ignore-list": [
+      "wofi",
+      "rofi"
+    ],
+  },
   "bluetooth": {
-    "format": "<span size='large'></span>",
-    "format-disabled": "<span size='large'>󰂳</span>",
+    "format": "",
+    "format-disabled": "󰂳",
     "format-connected": "󰂱 {num_connections}",
     "tooltip-format": " {device_alias}",
     "tooltip-format-connected": "{device_enumerate}",
@@ -37,9 +58,17 @@
     "tooltip": true,
     "on-click": "blueman-manager",
   },
+  "idle_inhibitor": {
+    "format": "<span size='large'>{icon}</span> ",
+    "format-icons": {
+      "activated": "",
+      "deactivated": "",
+    },
+    "tooltip": "true",
+  },
   "tray": {
     "show-passive-items": true,
-    "icon-size": 20,
+    "icon-size": 24,
     "spacing": 4,
   },
   "clock": {
@@ -50,9 +79,11 @@
   },
   "cpu": {
     "interval": 2,
-    "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
-    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
-    "on-click": "alacritty --title btop -e btop",
+    "format": "  {usage}% <span color=\"darkgray\" size=\"small\">| {max_frequency}GHz</span>",
+    "max-length": 13,
+    "min-length": 13,
+    "on-click": "kitty -e htop --sort-key PERCENT_CPU",
+    "tooltip": false,
   },
   "memory": {
     "interval": 10,
@@ -61,7 +92,7 @@
     "format-alt-click": "click",
     "tooltip": true,
     "tooltip-format": "{used:0.1f}GB/{total:0.1f}G",
-    "on-click-right": "alacritty --title btop -e btop",
+    "on-click-right": "kitty --title btop sh -c 'btop'",
   },
   "temperature": {
     //"thermal-zone": 1,
@@ -70,7 +101,11 @@
     "critical-threshold": 74,
     "format-critical": "  {temperatureC}°C",
     "format": "{icon}  {temperatureC}°C",
-    "format-icons": ["", "", ""],
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
     "max-length": 7,
     "min-length": 7,
   },
@@ -97,13 +132,23 @@
     "tooltip-format-ethernet": "{ifname} 󰌘",
     "tooltip-format-disconnected": "󰌙 Disconnected",
     "max-length": 50,
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
   },
   "pulseaudio": {
     "format": " <span size='large'>{icon}</span> {volume}% ",
     "format-muted": "<span size='large'>󰖁</span>",
     "format-icons": {
-      "default": ["", "", " "],
+      "default": [
+        "",
+        "",
+        ""
+      ],
     },
     "scroll-step": 5.0,
     "on-click": "pavucontrol -t 3",
@@ -142,10 +187,22 @@
     "format-alt-click": "click",
     "format-full": "<span size='large'>{icon}</span> Full",
     "format-alt": "<span size='large'>{icon}</span> {time}",
-    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
     "format-time": "{H}h {M}min",
     "tooltip": true,
-    "tooltip-format": "{timeTo} {power}w",
+    "tooltip-format": "{timeTo} {power}w"
   },
   "backlight": {
     "interval": 2,
@@ -201,7 +258,7 @@
     "escape": true,
   },
   "custom/weather": {
-    "exec": "$(pwd)/wttr.sh 'Pune?format=3'",
+    "exec": "curl 'https://wttr.in/?format=1'",
     "interval": 3600,
   },
 }

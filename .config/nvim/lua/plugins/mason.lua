@@ -1,11 +1,11 @@
 ---@type LazySpec
 return {
-  -- use mason-lspconfig to configure LSP installations
   {
-    "mason.nvim",
-    optional = true,
+    "mason-org/mason.nvim",
+    version = "^1.0.0",
+    cmd = "Mason",
+    build = ":MasonUpdate",
     opts = {
-      ---@type '"prepend"' | '"append"' | '"skip"'
       PATH = "append",
       ui = {
         icons = {
@@ -14,6 +14,20 @@ return {
           package_uninstalled = " ",
         },
       },
+      ensure_installed = {
+        "stylua",
+        "shfmt",
+      },
+    },
+    opts_extend = { "ensure_installed" },
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    version = "^1.0.0",
+    dependencies = "mason-org/mason.nvim",
+    opts_extend = { "ensure_installed" },
+    opts = {
+      ensure_installed = { "lua_ls" },
     },
   },
 }

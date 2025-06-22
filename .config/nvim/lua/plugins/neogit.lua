@@ -2,12 +2,16 @@
 return {
   "NeogitOrg/neogit",
   cmd = "Neogit",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    { "sindrets/diffview.nvim", cmd = "DiffviewOpen", opts = {} }, -- optional - Diff integration
-  },
   keys = {
     { "<leader>gn", "<cmd>Neogit kind=floating<cr>", desc = "Neogit" },
   },
-  opts = {},
+  dependencies = {
+    "nvim-lua/plenary.nvim", -- required
+    { "sindrets/diffview.nvim", cmd = "DiffviewOpen", opts = {} }, -- optional - Diff integration
+  },
+  opts = {
+    -- telescope_sorter = function()
+    --   return require("telescope").extensions.fzf.native_fzf_sorter()
+    -- end,
+  },
 }

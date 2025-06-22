@@ -1,317 +1,114 @@
-@keyframes blink-warning {
-  70% {
-    color: @light;
-  }
-
-  to {
-    color: @light;
-    background-color: @warning;
-  }
-}
-
-@keyframes blink-critical {
-  70% {
-    color: @light;
-  }
-
-  to {
-    color: @light;
-    background-color: @critical;
-  }
-}
-
-/* -----------------------------------------------------------------------------
- * Styles
- * -------------------------------------------------------------------------- */
-
-/* COLORS */
-/* Gruvbox Hard */
-@define-color bg #1d2021;
-@define-color light #ebdbb2;
-@define-color warning #fabd2f;
-@define-color critical #fb4934;
-@define-color mode #3c3836;
-@define-color workspacesfocused #504945;
-@define-color tray @workspacesfocused;
-@define-color sound #b8bb26;
-@define-color network #83a598;
-@define-color memory #8ec07c;
-@define-color cpu #d3869b;
-@define-color temp #fe8019;
-@define-color layout #689d6a;
-@define-color battery #98971a;
-@define-color date #3c3836;
-@define-color time #3c3836;
-@define-color backlight #3c3836;
-@define-color gruvbox_bg #282828; 
-@define-color gruvbox_bg_soft #32302f; 
-@define-color gruvbox_light #ebdbb2; 
-@define-color gruvbox_light_font #ebdbb2; 
-@define-color gruvbox_dark_font #3c3836; 
-
-/* Reset all styles */
-* {
-  border: none;
-  border-radius: 3px;
-  min-height: 0;
-  margin: 0.2em 0.3em 0.2em 0.3em;
-  /* font-family: */
-  /*   JetBrains Mono, */
-  /*   Cantarell, */
-  /*   "Font Awesome 5 Pro"; */
-  font-size: 12px;
-}
-
-/* The whole bar */
-#waybar {
-  background: @bg;
-  color: @light;
-  font-family: "JetBrains Mono", "Cantarell", "Symbols Nerd Font", "FontAwesome";
-  font-size: 12px;
-  font-weight: bold;
-}
-
-/* Each module */
-#battery,
-#clock,
-#cpu,
-#custom-layout,
-#memory,
-#mode,
-#network,
-#pulseaudio,
-#wireplumber,
-#temperature,
-#custom-alsa,
-#custom-pacman,
-#custom-weather,
-#custom-gpu,
-#tray,
-#backlight,
-#language,
-#workspaces button,
-#custom-cpugovernor {
-  padding-left: 0.6em;
-  padding-right: 0.6em;
-}
-
-/* Each module that should blink */
-#mode,
-#memory,
-#temperature,
-#battery {
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-/* Each critical module */
-#memory.critical,
-#cpu.critical,
-#temperature.critical,
-#battery.critical {
-  color: @critical;
-}
-
-/* Each critical that should blink */
-#mode,
-#memory.critical,
-#temperature.critical,
-#workspaces button.urgent {
-  animation-name: blink-critical;
-  animation-duration: 2s;
-}
-
-/* Each warning */
-#network.disconnected,
-#memory.warning,
-#cpu.warning,
-#temperature.warning {
-  background: @warning;
-  color: @gruvbox_dark_font;
-}
-
-/* Each warning that should blink */
-/* #battery.warning.discharging { */
-/*   animation-name: blink-warning; */
-/*   animation-duration: 3s; */
+/* @keyframes blink-warning { */
+/*   70% { */
+/*     color: @light; */
+/*   } */
+/**/
+/*   to { */
+/*     color: @light; */
+/*     background-color: @warning; */
+/*   } */
+/* } */
+/**/
+/* @keyframes blink-critical { */
+/*   70% { */
+/*     color: @light; */
+/*   } */
+/**/
+/*   to { */
+/*     color: @light; */
+/*     background-color: @critical; */
+/*   } */
 /* } */
 
-/* And now modules themselves in their respective order */
-
-#mode {
-  /* Shown current Sway mode (resize etc.) */
-  color: @light;
-  background: @mode;
+* {
+  font-family: JetbrainsMono Nerd Font;
+  font-size: 12px;
+  min-height: 0;
+  padding-right: 2px;
+  padding-left: 2px;
+  padding-bottom: 0px;
 }
 
-/* Workspaces stuff */
+#waybar {
+  background: transparent;
+  color: #c6d0f5;
+  margin: 2px 2px;
+}
 
-#taskbar button.active {
-  background-color: @mode;
-  padding-left: 12px;
-  padding-right: 12px;
-  animation: gradient_f 20s ease-in infinite;
-  transition: all 0.3s cubic-bezier(0.55, -0.68, 0.48, 1.682);
+#workspaces {
+  border-radius: 5px;
+  margin: 5px;
+  background: #101010;
+  margin-left: 2px;
 }
 
 #workspaces button {
-  font-weight: bold;
-  /* Somewhy the bar-wide setting is ignored*/
-  padding: 0;
-  /*color: #999;*/
-  opacity: 0.3;
-  background: none;
-  font-size: 1em;
+  color: #babbf1;
+  border-radius: 5px;
+  padding: 0.4rem;
 }
 
 #workspaces button.active {
-  background: @workspacesfocused;
-  color: #d8dee9;
-  opacity: 1;
-  padding: 0 0.4em;
+  color: #99d1db;
+  border-radius: 5px;
 }
 
-#workspaces button.urgent {
-  border-color: #c9545d;
-  color: #c9545d;
-  opacity: 1;
+button {
+  background: transparent;
 }
 
-#window {
-  margin-right: 40px;
-  margin-left: 40px;
-  font-weight: normal;
+#workspaces button:hover {
+  background: #1e1e1e;
 }
 
-#bluetooth {
-  background: @gruvbox_bg_soft;
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#custom-gpu {
-  background: @gruvbox_bg;
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#custom-weather {
-  background: @mode;
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#custom-pacman {
-  background: @gruvbox_light;
-  color: @gruvbox_dark_font;
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#custom-scratchpad-indicator {
-  background: @gruvbox_light;
-  color: @gruvbox_dark_font;
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#idle_inhibitor {
-  background: @mode;
-  /*font-size: 1.6em;*/
-  font-weight: bold;
-  padding: 0 0.6em;
-}
-
-#custom-alsa {
-  background: @sound;
-}
-
-#network {
-  background: @gruvbox_bg_soft;
-}
-
-#memory {
-  background: @gruvbox_bg_soft;
-}
-
-#cpu {
-  background: @gruvbox_bg;
-  color: @gruvbox_light_font;
-}
-
-#cpu.critical {
-  color: @gruvbox_dark_font;
-}
-
-#language {
-  background: @gruvbox_bg_soft;
-  color: @gruvbox_light_font;
-  padding: 0 0.4em;
-}
-
-#custom-cpugovernor {
-  background-color: @gruvbox_light;
-  color: @gruvbox_dark_font;
-}
-
-#custom-cpugovernor.perf {}
-
-#temperature {
-  background-color: @gruvbox_bg;
-  color: @gruvbox_light_font;
-}
-
-#temperature.critical {
-  background: @critical;
-}
-
-#custom-layout {
-  background: @layout;
-}
-
-#battery {
-  background: @backlight;
-}
-
-#backlight {
-  background: @backlight;
+#custom-music,
+#tray,
+#backlight,
+#clock,
+#battery,
+#pulseaudio,
+#network,
+#cpu,
+#memory,
+#custom-lock,
+#custom-power,
+#custom-weather,
+#custom-uptime,
+#custom-docker {
+  background-color: #101010;
+  padding: 0.5rem 1rem;
+  margin: 5px 0;
 }
 
 #clock {
-  background: @gruvbox_bg_soft;
-  color: #d8dee9;
+  border-radius: 5px;
 }
 
-#clock.date {
-  background: @date;
+#custom-weather {
+  margin-left: 0.5rem;
+  border-radius: 5px;
 }
 
-#clock.time {
-  background: @mode;
+#battery.charging {
+  color: #a6d189;
 }
 
-#pulseaudio,
-#wireplumber {
-  /* Unsused but kept for those who needs it */
-  background: @gruvbox_bg_soft;
-  color: @gruvbox_light_font;
+
+/* Each critical module */
+#cpu.critical,
+#memory.critical,
+#temperature.critical,
+#battery.warning:not(.charging),
+#battery.critical {
+  color: #e78284;
+  /* color: #fa5c4a; */
 }
 
-#pulseaudio.muted,
-#wireplumber.muted {
-  background: @critical;
-  color: @gruvbox_light_font;
-  /* No styles */
+#backlight,
+#battery {
+  border-radius: 0;
 }
 
-#pulseaudio.source-muted {
-  background: @temp;
-  color: @gruvbox_light_font;
-  /* No styles */
-}
-
-#tray {
-  background: @gruvbox_bg_soft;
+#pulseaudio {
+  border-radius: 5px 0px 0px 5px;
 }

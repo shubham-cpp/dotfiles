@@ -239,6 +239,7 @@ return {
   },
   {
     "hrsh7th/cmp-cmdline",
+    optional = true,
     keys = { ":", "/", "?" }, -- lazy load cmp on more keys along with insert mode
     dependencies = { "hrsh7th/nvim-cmp" },
     opts = function()
