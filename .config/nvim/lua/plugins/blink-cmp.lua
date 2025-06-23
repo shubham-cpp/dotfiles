@@ -24,7 +24,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = -20,
+              -- score_offset = -20,
               max_filesize = "300K",
               search_casing = "--smart-case",
             },
@@ -33,6 +33,11 @@ return {
       },
       keymap = {
         preset = "enter",
+        ["<C-s>"] = {
+          function(cmp)
+            cmp.show { providers = { "snippets" } }
+          end,
+        },
         ["<C-h>"] = { "show_signature", "hide_signature", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
@@ -110,6 +115,20 @@ return {
           },
         },
       },
+      -- fuzzy = {
+      --   sorts = {
+      --     -- function(a, b)
+      --     --   if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+      --     --     return
+      --     --   end
+      --     --   return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+      --     -- end,
+      --     "exact",
+      --     -- default sorts
+      --     "score",
+      --     "sort_text",
+      --   },
+      -- },
       snippets = { preset = "luasnip" },
       signature = { enabled = true },
     },

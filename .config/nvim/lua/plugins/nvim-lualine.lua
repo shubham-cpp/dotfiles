@@ -34,10 +34,10 @@ return {
         lualine_z = {},
       },
       tabline = {
-        lualine_b = {
+        lualine_a = {
           "buffers",
         },
-        lualine_x = {
+        lualine_y = {
           "tabs",
         },
       },

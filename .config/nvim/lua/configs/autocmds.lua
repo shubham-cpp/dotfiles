@@ -127,6 +127,8 @@ vim.filetype.add {
     ocaml = "ocaml",
     rasi = "rasi",
     roc = "roc",
+    pcss = "postcss",
+    postcss = "postcss",
   },
   filename = {
     vimfrc = "vim",
@@ -134,10 +136,10 @@ vim.filetype.add {
     [".env"] = "conf",
     [".env.*"] = "conf",
     ["package.json"] = "jsonc",
+    ["docker-compose.yaml"] = "yaml.docker-compose",
   },
   pattern = {
-    ["*profile"] = "sh",
-    ["*.postcss"] = "css",
+    [".*profile"] = "sh",
     ["*.kbd"] = "lisp",
     [".eslintrc"] = "jsonc",
     ["tsconfig.*.json"] = "jsonc",

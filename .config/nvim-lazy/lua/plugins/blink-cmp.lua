@@ -17,6 +17,11 @@ return {
         --   "show_documentation",
         --   "hide_documentation",
         -- },
+        ["<C-s>"] = {
+          function(cmp)
+            cmp.show({ providers = { "snippets" } })
+          end,
+        },
         ["<C-h>"] = { "show_signature", "hide_signature", "fallback" },
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
@@ -49,6 +54,8 @@ return {
           preset = "cmdline",
           -- ["<Up>"] = {},
           -- ["<Down>"] = {},
+          ["<Left>"] = {},
+          ["<Right>"] = {},
           ["<C-k>"] = { "select_prev", "fallback" },
           ["<C-j>"] = { "select_next", "fallback" },
           ["<Tab>"] = { "select_next", "fallback" },
@@ -74,20 +81,20 @@ return {
           },
         },
       },
-      -- fuzzy = {
-      --   sorts = {
-      --     function(a, b)
-      --       if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-      --         return
-      --       end
-      --       return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-      --     end,
-      --     "exact",
-      --     -- default sorts
-      --     "score",
-      --     "sort_text",
-      --   },
-      -- },
+      fuzzy = {
+        sorts = {
+          -- function(a, b)
+          --   if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+          --     return
+          --   end
+          --   return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+          -- end,
+          "exact",
+          -- default sorts
+          "score",
+          "sort_text",
+        },
+      },
     },
   },
   {
@@ -100,10 +107,10 @@ return {
       sources = {
         default = { "ripgrep" },
         providers = {
-          -- snippets = { min_keyword_length = 2, score_offset = 100 },
-          -- lsp = { min_keyword_length = 3, score_offset = 80 },
-          -- path = { min_keyword_length = 2, score_offset = 60 },
-          -- buffer = { min_keyword_length = 3, score_offset = 40 },
+          snippets = { score_offset = 100 },
+          lsp = { score_offset = 100 },
+          path = { score_offset = 120 },
+          buffer = { score_offset = 40 },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
@@ -111,7 +118,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = 30,
+              score_offset = 20,
               max_filesize = "300K",
               search_casing = "--smart-case",
             },

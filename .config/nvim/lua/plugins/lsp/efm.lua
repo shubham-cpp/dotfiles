@@ -6,6 +6,10 @@ return {
     opts = { ensure_installed = { "efm" } },
   },
   {
+    "mason-org/mason.nvim",
+    opts = { ensure_installed = { "eslint_d","prettier" } },
+  },
+  {
     "creativenull/efmls-configs-nvim",
     -- dir="~/Documents/Programming/Contributions/efmls-configs-nvim",
     version = "v1.x.x", -- version is optional, but recommended
@@ -16,8 +20,8 @@ return {
     opts = function(_, opts)
       vim.env.ESLINT_D_PPID = vim.fn.getpid()
 
-      local eslint = require "efmls-configs.linters.eslint_d"
-      local eslint_d = require "efmls-configs.formatters.eslint_d"
+      local eslint_lint = require "efmls-configs.linters.eslint_d"
+      local eslint_format = require "efmls-configs.formatters.eslint_d"
       local prettier = require "efmls-configs.formatters.prettier_d"
       local stylua = require "efmls-configs.formatters.stylua"
       local shellcheck = require "efmls-configs.linters.shellcheck"
@@ -33,12 +37,12 @@ return {
       local ruff_sort = require "efmls-configs.formatters.ruff_sort"
 
       -- Add newer eslint config files
-      table.insert(eslint.rootMarkers, "eslint.config.mjs")
-      table.insert(eslint.rootMarkers, "eslint.config.js")
-      table.insert(eslint.rootMarkers, "eslint.config.js")
-      if eslint_d.rootMarkers == nil then
-        eslint_d.rootMarkers = eslint.rootMarkers
-        eslint_d.requireMarker = true
+      table.insert(eslint_lint.rootMarkers, "eslint.config.mjs")
+      table.insert(eslint_lint.rootMarkers, "eslint.config.js")
+      table.insert(eslint_lint.rootMarkers, "eslint.config.js")
+      if eslint_format.rootMarkers == nil then
+        eslint_format.rootMarkers = eslint_lint.rootMarkers
+        eslint_format.requireMarker = true
       end
 
       local languages = {
@@ -50,14 +54,15 @@ return {
         json = { prettier },
         jsonc = { prettier },
         yaml = { prettier },
+        ["yaml.docker-compose"] = { prettier },
         markdown = { prettier },
-        vue = { eslint_d, eslint },
-        astro = { prettier, eslint, eslint_d },
-        svelte = { prettier, eslint, eslint_d },
-        javascript = { prettier, eslint, eslint_d },
-        typescript = { prettier, eslint, eslint_d },
-        javascriptreact = { prettier, eslint, eslint_d },
-        typescriptreact = { prettier, eslint, eslint_d },
+        vue = { prettier, eslint_format, eslint_lint },
+        astro = { prettier, eslint_lint, eslint_format },
+        svelte = { prettier, eslint_lint, eslint_format },
+        javascript = { prettier, eslint_lint, eslint_format },
+        typescript = { prettier, eslint_lint, eslint_format },
+        javascriptreact = { prettier, eslint_lint, eslint_format },
+        typescriptreact = { prettier, eslint_lint, eslint_format },
         lua = { stylua },
         bash = { shellcheck, shfmt },
         sh = { shellcheck, shfmt },

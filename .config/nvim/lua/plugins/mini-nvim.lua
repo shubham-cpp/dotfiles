@@ -3,7 +3,45 @@ return {
   {
     "echasnovski/mini.icons",
     version = "*",
-    opts = {},
+    opts = function(_, opts)
+      opts = opts or {}
+      opts.file = opts.file or {}
+      --- Taken from astronvim
+      opts.filetype = vim.tbl_extend("force", opts.filetype or {}, {
+        postcss = { glyph = "󰌜", hl = "MiniIconsOrange" },
+        gotmpl = { glyph = "󰟓", hl = "MiniIconsGrey" },
+      })
+
+      local eslint_files = {
+        -- ESLint <=8 (Deprecated)
+        ".eslintignore",
+        ".eslintrc",
+        ".eslintrc.cjs",
+        ".eslintrc.js",
+        ".eslintrc.json",
+        ".eslintrc.yaml",
+        ".eslintrc.yml",
+        -- ESLint >=9
+        "eslint.config.cjs",
+        "eslint.config.cts",
+        "eslint.config.js",
+        "eslint.config.mjs",
+        "eslint.config.mts",
+        "eslint.config.ts",
+      }
+      for _, filename in ipairs(eslint_files) do
+        opts.file[filename] = { glyph = "󰱺", hl = "MiniIconsYellow" }
+      end
+
+      opts.file[".go-version"] = { glyph = "", hl = "MiniIconsBlue" }
+      opts.file[".node-version"] = { glyph = "", hl = "MiniIconsGreen" }
+      opts.file[".prettierrc"] = { glyph = "", hl = "MiniIconsPurple" }
+      opts.file[".yarnrc.yml"] = { glyph = "", hl = "MiniIconsBlue" }
+      opts.file["package.json"] = { glyph = "", hl = "MiniIconsGreen" }
+      opts.file["tsconfig.json"] = { glyph = "", hl = "MiniIconsAzure" }
+      opts.file["tsconfig.build.json"] = { glyph = "", hl = "MiniIconsAzure" }
+      opts.file["yarn.lock"] = { glyph = "", hl = "MiniIconsBlue" }
+    end,
     config = function(_, opts)
       local icons = require "mini.icons"
       icons.setup(opts)

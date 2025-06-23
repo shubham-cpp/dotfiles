@@ -19,10 +19,7 @@ return {
         "vim",
         "lua",
         "luadoc",
-        "scss",
         "vimdoc",
-        "html",
-        "css",
       },
       incremental_selection = {
         enable = true,

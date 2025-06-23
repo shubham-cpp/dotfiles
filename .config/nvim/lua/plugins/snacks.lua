@@ -39,16 +39,23 @@ return {
     {
       "<leader>bd",
       function()
-        require("snacks").bufdelete()
+        require("snacks").bufdelete.delete()
       end,
-      desc = "Delete Buffer",
+      desc = "Delete",
+    },
+    {
+      "<leader>bD",
+      function()
+        require("snacks").bufdelete.all()
+      end,
+      desc = "Delete All",
     },
     {
       "<leader>bo",
       function()
-        require("snacks").bufdelete()
+        require("snacks").bufdelete.other()
       end,
-      desc = "Delete Buffer",
+      desc = "Delete Others",
     },
   },
   init = function()

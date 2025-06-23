@@ -1,0 +1,204 @@
+version: 2
+log-file: /tmp/efm.log
+log-level: 4
+
+tools:
+  dockerfile-hadolint: &dockerfile-hadolint
+    lint-command: "hadolint"
+    lint-formats:
+      - "%f:%l %m"
+
+  # Bash/Zsh
+  shellcheck: &shellcheck
+    lint-command: "shellcheck -f gcc -x"
+    lint-formats:
+      - "%f:%l:%c: %trror: %m"
+      - "%f:%l:%c: %tarning: %m"
+      - "%f:%l:%c: %tote: %m"
+  shfmt: &shfmt
+    format-command: "shfmt -ci -s -bn"
+    format-stdin: true
+
+  fish: &fish
+    lint-command: 'fish --no-execute "${INPUT}"'
+    lint-formats:
+      - "%.%#(line %l): %m"
+    lint-ignore-exit-code: true
+    lint-source: "efm/fish"
+    prefix: "fish"
+
+  fish_indent: &fish_indent
+    format-command: "fish_indent"
+    format-stdin: true
+
+
+  # WebDev
+  eslint_d: &eslint_d
+    lint-command: "eslint_d -f stylish --stdin --stdin-filename ${INPUT}"
+    lint-ignore-exit-code: true
+    lint-stdin: true
+    lint-source: efm/eslint
+    lint-formats:
+      - "%-P%f"
+      - "%\\s%#%l:%c %# %trror  %m"
+      - "%\\s%#%l:%c %# %tarning  %m"
+      - "%-Q,%-G%.%#"
+    require-marker: true
+    root-markers:
+      - eslint.config.cjs
+      - eslint.config.mjs
+      - eslint.config.js
+      - eslint.config.ts
+      - .eslintrc.cjs
+      - .eslintrc.js
+      - .eslintrc.yaml
+      - .eslintrc.yml
+      - .eslintrc.json
+
+  eslint_d_format: &eslint_d_format
+    format-command: "eslint_d --fix-to-stdout --stdin-filename '${INPUT}' --stdin"
+    format-stdin: true
+    require-marker: true
+    root-markers:
+      - eslint.config.cjs
+      - eslint.config.mjs
+      - eslint.config.js
+      - eslint.config.ts
+      - .eslintrc.cjs
+      - .eslintrc.js
+      - .eslintrc.yaml
+      - .eslintrc.yml
+      - .eslintrc.json
+
+  prettier: &prettier
+    format-command: "prettierd '${INPUT}' ${--range-start=charStart} ${--range-end=charEnd} ${--tab-width=tabWidth} ${--use-tabs=!insertSpaces}"
+    format-stdin: true
+    format-can-range: true
+    require-marker: true
+    root-markers:
+      - package.json
+
+  stylua: &stylua
+    format-command: "stylua --color Never ${--range-start:charStart} ${--range-end:charEnd} --stdin-filepath '${INPUT}' -"
+    format-can-range: true
+    format-stdin: true
+    root-markers:
+      - stylua.toml
+      - .stylua.toml
+
+  gofumpt: &gofumpt
+    format-command: "gofumpt"
+    format-stdin: true
+
+  goimports: &goimports
+    format-command: "goimports"
+    format-stdin: true
+
+  golangci-lint: &golangci-lint
+    lint-command: 'golangci-lint run --color never --output.tab.path stdout "${INPUT}"'
+    lint-formats:
+      - "%.%#:%l:%c %m"
+    lint-source: "efm/golangci-lint"
+    lint-stdin: false
+    prefix: "golangci-lint"
+    root-markers:
+      - go.mod
+
+  ruff_lint: &ruff_lint
+    lint-command: 'ruff check --stdin-filename "${INPUT}"'
+    lint-formats: 
+      - "%.%#:%l:%c: %t%n %m" 
+    lint-severity: 4
+    lint-source: efm/ruff
+    lint-stdin: true
+    prefix: ruff
+    root-markers:
+      - ruff.toml
+      - pyproject.toml
+      - setup.cfg
+  ruff_format: &ruff_format
+    format-command: "ruff format --no-cache --stdin-filename '${INPUT}'"
+    format-stdin: true
+    root-markers:
+      - pyproject.toml
+      - setup.py
+      - requirements.txt
+      - ruff.toml
+  ruff_sort: &ruff_sort
+    format-command: "ruff check --select I --fix --stdin-filename '${INPUT}'"
+    format-stdin: true
+    root-markers:
+      - pyproject.toml
+      - setup.py
+      - requirements.txt
+      - ruff.toml
+
+languages:
+  lua:
+    - <<: *stylua
+  go:
+    - <<: *gofumpt
+    - <<: *goimports
+    - <<: *golangci-lint
+  python:
+    - <<: *ruff_lint
+    - <<: *ruff_format
+    - <<: *ruff_sort
+  fish:
+    - <<: *fish_indent
+    - <<: *fish
+  bash:
+    - <<: *shellcheck
+    - <<: *shfmt
+  zsh:
+    - <<: *shellcheck
+    - <<: *shfmt
+  sh:
+    - <<: *shellcheck
+    - <<: *shfmt
+  html:
+    - <<: *prettier
+  css:
+    - <<: *prettier
+  json:
+    - <<: *prettier
+  jsonc:
+    - <<: *prettier
+  json5:
+    - <<: *prettier
+  yaml:
+    - <<: *prettier
+  yaml.docker-compose:
+    - <<: *prettier
+  markdown:
+    - <<: *prettier
+  dockerfile:
+  - <<: *dockerfile-hadolint
+  astro:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  vue:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  svelte:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  javascript:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  javascriptreact:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  typescript:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
+  typescriptreact:
+    - <<: *prettier
+    - <<: *eslint_d_format
+    - <<: *eslint_d
