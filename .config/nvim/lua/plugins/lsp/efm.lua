@@ -7,7 +7,7 @@ return {
   },
   {
     "mason-org/mason.nvim",
-    opts = { ensure_installed = { "eslint_d","prettier" } },
+    opts = { ensure_installed = { "eslint_d", "prettier" } },
   },
   {
     "creativenull/efmls-configs-nvim",
@@ -96,12 +96,10 @@ return {
         },
         on_attach = function(_, buffer, map)
           vim.api.nvim_create_autocmd("BufWritePre", {
-            group = group,
+            -- group = group,
             desc = "Format on Save",
             buffer = buffer,
-            callback = function()
-              vim.lsp.buf.format { name = "efm", timeout = 2000, async = false }
-            end,
+            command = 'lua vim.lsp.buf.format({ name = "efm", timeout = 2000, async = false })',
           })
           map("<leader>=", function()
             vim.lsp.buf.format { name = "efm", async = true }

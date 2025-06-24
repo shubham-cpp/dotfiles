@@ -1,7 +1,26 @@
 ---@type LazySpec
 return {
   {
+    "L3MON4D3/LuaSnip",
+    version = "v2.*",
+    build = "make install_jsregexp",
+    dependencies = {
+      {
+        "rafamadriz/friendly-snippets",
+        config = function()
+          require("luasnip.loaders.from_vscode").lazy_load()
+          require("luasnip.loaders.from_vscode").lazy_load { paths = { vim.fn.stdpath "config" .. "/snippets" } }
+        end,
+      },
+    },
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
+  },
+  {
     "saghen/blink.cmp",
+    enabled = true,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = { "L3MON4D3/LuaSnip", "mikavilpas/blink-ripgrep.nvim", "windwp/nvim-autopairs" },
     version = "1.*",
@@ -15,8 +34,11 @@ return {
           lazydev = {
             name = "LazyDev",
             module = "lazydev.integrations.blink",
-            score_offset = 100,
+            score_offset = 12,
           },
+          lsp = { score_offset = 10, module = "blink.cmp.sources.lsp", name = "LSP" },
+          path = { score_offset = 15, module = "blink.cmp.sources.path" },
+          snippets = { score_offset = 9, module = "blink.cmp.sources.snippets" },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
@@ -24,7 +46,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              -- score_offset = -20,
+              score_offset = -10,
               max_filesize = "300K",
               search_casing = "--smart-case",
             },
@@ -133,23 +155,5 @@ return {
       signature = { enabled = true },
     },
     opts_extend = { "sources.default" },
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    version = "v2.*",
-    build = "make install_jsregexp",
-    dependencies = {
-      {
-        "rafamadriz/friendly-snippets",
-        config = function()
-          require("luasnip.loaders.from_vscode").lazy_load()
-          require("luasnip.loaders.from_vscode").lazy_load { paths = { vim.fn.stdpath "config" .. "/snippets" } }
-        end,
-      },
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
   },
 }

@@ -2,12 +2,17 @@
 return {
   {
     "mason-org/mason-lspconfig.nvim",
-    opts = { ensure_installed = { "tailwindcss" }, },
+    opts = { ensure_installed = { "tailwindcss" } },
   },
   {
-    'neovim/nvim-lspconfig',
-    opts = function(_,opts)
-      opts.servers['tailwindcss'] = {}
-    end
-  }
+    "neovim/nvim-lspconfig",
+    opts = function(_, opts)
+      opts.servers["tailwindcss"] = {
+        on_attach = function(client)
+          client.server_capabilities.completionProvider.triggerCharacters =
+            { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
+        end,
+      }
+    end,
+  },
 }

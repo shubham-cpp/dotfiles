@@ -30,12 +30,9 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      "KingMichaelPark/age.nvim",
       {
         "MeanderingProgrammer/render-markdown.nvim",
-        opts = {
-          file_types = { "markdown", "Avante", "codecompanion" },
-        },
+        opts = { file_types = { "markdown", "Avante", "codecompanion" } },
         ft = { "markdown", "Avante", "codecompanion" },
       },
     },
@@ -64,16 +61,9 @@ return {
         gemini = function()
           return require("codecompanion.adapters").extend("gemini", {
             env = {
-              api_key = function()
-                return get_age_credentials("gemini_api.age")
-              end,
+              api_key = "cmd:age -i ~/.config/age/identity.txt -d ~/.config/age/gemini_api.age",
             },
-            schema = {
-              model = {
-                -- default = "gemini-2.0-flash",
-                default = "gemini-2.5-flash-preview-04-17",
-              },
-            },
+            schema = { model = { default = "gemini-2.5-flash" } },
           })
         end,
       },
@@ -104,8 +94,7 @@ return {
             },
           },
           gemini = {
-            -- model = "gemini-2.0-flash",
-            model = "gemini-2.5-flash-preview-04-17",
+            model = "gemini-2.5-flash",
           },
         },
       }

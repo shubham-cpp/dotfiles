@@ -1,6 +1,12 @@
 export ZGEN_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zgenom"
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-cache"
 
+setopt APPEND_HISTORY
+unsetopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+
 # WORDCHARS=${WORDCHARS//\/[&.;]}
 HISTFILE=~/.cache/zhistory
 ZSH_TMUX_FIXTERM=true
