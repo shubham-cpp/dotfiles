@@ -7,9 +7,16 @@ return {
     build = ":TSUpdate",
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
       {
         "nvim-treesitter/nvim-treesitter-context",
         opts = { mode = "cursor", max_lines = 3 },
+      },
+      {
+        "andymass/vim-matchup",
+        init = function()
+          vim.g.matchup_matchparen_offscreen = { method = "popup" }
+        end,
       },
     },
     opts = {
@@ -28,6 +35,67 @@ return {
           node_incremental = "<C-space>",
           scope_incremental = false,
           node_decremental = "<bs>",
+        },
+      },
+      matchup = { enable = true },
+      textobjects = {
+        select = {
+          enable = true,
+          lookahead = true,
+          keymaps = {
+            ["ak"] = { query = "@block.outer", desc = "around block" },
+            ["ik"] = { query = "@block.inner", desc = "inside block" },
+            ["ac"] = { query = "@class.outer", desc = "around class" },
+            ["ic"] = { query = "@class.inner", desc = "inside class" },
+            ["a?"] = { query = "@conditional.outer", desc = "around conditional" },
+            ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
+            ["af"] = { query = "@function.outer", desc = "around function " },
+            ["if"] = { query = "@function.inner", desc = "inside function " },
+            ["ao"] = { query = "@loop.outer", desc = "around loop" },
+            ["io"] = { query = "@loop.inner", desc = "inside loop" },
+            ["aa"] = { query = "@parameter.outer", desc = "around argument" },
+            ["ia"] = { query = "@parameter.inner", desc = "inside argument" },
+          },
+        },
+        move = {
+          enable = true,
+          goto_next_start = {
+            ["]k"] = { query = "@block.outer", desc = "Next start: block" },
+            ["]f"] = { query = "@function.outer", desc = "Next start: function" },
+            ["]x"] = { query = "@class.outer", desc = "Next start: class" },
+            ["]a"] = { query = "@parameter.inner", desc = "Next start: parameter" },
+          },
+          goto_next_end = {
+            ["]K"] = { query = "@block.outer", desc = "Next end: block" },
+            ["]F"] = { query = "@function.outer", desc = "Next end: function" },
+            ["]X"] = { query = "@class.outer", desc = "Next end: class" },
+            ["]A"] = { query = "@parameter.inner", desc = "Next end: parameter" },
+          },
+          goto_previous_start = {
+            ["[k"] = { query = "@block.outer", desc = "Previous start: block" },
+            ["[f"] = { query = "@function.outer", desc = "Previous start: function" },
+            ["[x"] = { query = "@class.outer", desc = "Previous start: class" },
+            ["[a"] = { query = "@parameter.inner", desc = "Previous start: parameter" },
+          },
+          goto_previous_end = {
+            ["[K"] = { query = "@block.outer", desc = "Previous end: block" },
+            ["[F"] = { query = "@function.outer", desc = "Previous end: function" },
+            ["[X"] = { query = "@class.outer", desc = "Previous end: class" },
+            ["[A"] = { query = "@parameter.inner", desc = "Previous end: parameter" },
+          },
+        },
+        swap = {
+          enable = true,
+          swap_next = {
+            ["<localleader>k"] = { query = "@block.outer", desc = "Swap next block" },
+            ["<localleader>f"] = { query = "@function.outer", desc = "Swap next function" },
+            ["<localleader>a"] = { query = "@parameter.inner", desc = "Swap next argument" },
+          },
+          swap_previous = {
+            ["<localleader>K"] = { query = "@block.outer", desc = "Swap previous block" },
+            ["<localleader>F"] = { query = "@function.outer", desc = "Swap previous function" },
+            ["<localleader>A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+          },
         },
       },
     },
