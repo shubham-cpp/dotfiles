@@ -16,7 +16,7 @@ return {
     "neovim/nvim-lspconfig",
     -- event = "VeryLazy",
     event = { "BufReadPost", "BufNewFile", "BufWritePre" },
-    dependencies = { "saghen/blink.cmp", "mason-org/mason.nvim", "mason-org/mason-lspconfig.nvim" },
+    dependencies = { "saghen/blink.cmp", "hrsh7th/nvim-cmp", "mason-org/mason.nvim", "mason-org/mason-lspconfig.nvim" },
     opts = {
       servers = {
         lua_ls = {
@@ -72,14 +72,15 @@ return {
       }
 
       for server, config in pairs(opts.servers) do
-        config.capabilities = require("blink.cmp").get_lsp_capabilities(vim.tbl_deep_extend("force", {
+        -- config.capabilities = require("blink.cmp").get_lsp_capabilities(vim.tbl_deep_extend("force", {
+        config.capabilities = require("cmp_nvim_lsp").default_capabilities(vim.tbl_deep_extend("force", {
           textDocument = {
             foldingRange = { dynamicRegistration = false, lineFoldingOnly = true },
           },
         }, config.capabilities or {}))
         lspconfig[server].setup(vim.tbl_extend("force", config, {
           on_attach = function(client, buffer)
-            local ok, fzf = pcall(require, "fzf-lua")
+            local ok, picker = pcall(require, "snacks.picker")
             ---LSP mappings function
             ---@param lhs string
             ---@param rhs string | function
@@ -113,36 +114,24 @@ return {
             map("grO", vim.lsp.buf.workspace_symbol, "Symbols(Workspace)", "workspace/symbol")
 
             if ok then
-              map("gd", fzf.lsp_definitions, "Goto Definition", "definition")
-              map("grt", fzf.lsp_typedefs, "Goto type_definition", "typeDefinition")
-              map("gD", fzf.lsp_declarations, "Goto Declaration", "declaration")
-              map("<leader>ld", fzf.lsp_definitions, "Goto Definition", "definition")
-              map("<leader>lD", fzf.lsp_declarations, "Goto Declaration", "declaration")
-              map("<leader>li", fzf.lsp_implementations, "Implementation", "implementation")
-              map("gri", fzf.lsp_implementations, "Implementation", "implementation")
+              map("gd", picker.lsp_definitions, "Goto Definition", "definition")
+              map("grt", picker.lsp_type_definitions, "Goto type_definition", "typeDefinition")
+              map("gD", picker.lsp_declarations, "Goto Declaration", "declaration")
+              map("<leader>ld", picker.lsp_definitions, "Goto Definition", "definition")
+              map("<leader>lD", picker.lsp_declarations, "Goto Declaration", "declaration")
+              map("<leader>li", picker.lsp_implementations, "Implementation", "implementation")
+              map("gri", picker.lsp_implementations, "Implementation", "implementation")
               map("grr", function()
-                fzf.lsp_references { ignore_current_line = true, includeDeclaration = false }
+                picker.lsp_references { ignore_current_line = true, includeDeclaration = false }
               end, "References", "definition")
-              map("gro", function()
-                fzf.lsp_document_symbols { fzf_cli_args = "--with-nth 1" }
-              end, "Symbols", "documentSymbol")
 
-              map("<leader>la", function()
-                fzf.lsp_code_actions { async = false }
-              end, "Code Action", "codeAction", { "n", "v" })
-              map("gra", function()
-                fzf.lsp_code_actions { async = false }
-              end, "Code Action", "codeAction", { "n", "v" })
+              -- map("<leader>la", picker.lsp_code_actions, "Code Action", "codeAction", { "n", "v" })
+              -- map("gra", picker.lsp_code_actions, "Code Action", "codeAction", { "n", "v" })
 
-              map("grO", function()
-                fzf.lsp_workspace_symbols { fzf_cli_args = "--nth 1" }
-              end, "Symbols(Workspace)", "workspace/symbol")
-              map("<leader>lw", function()
-                fzf.lsp_document_symbols { fzf_cli_args = "--with-nth 1" }
-              end, "Symbols", "documentSymbol")
-              map("<leader>lW", function()
-                fzf.lsp_workspace_symbols { fzf_cli_args = "--nth 1" }
-              end, "Symbols(Workspace)", "workspace/symbol")
+              map("gro", picker.lsp_symbols, "Symbols", "documentSymbol")
+              map("grO", picker.lsp_workspace_symbols, "Symbols(Workspace)", "workspace/symbol")
+              map("<leader>lw", picker.lsp_symbols, "Symbols", "documentSymbol")
+              map("<leader>lW", picker.lsp_workspace_symbols, "Symbols(Workspace)", "workspace/symbol")
             end
 
             if config["on_attach"] ~= nil then

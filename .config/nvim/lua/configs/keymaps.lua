@@ -79,6 +79,12 @@ map("v", "D", '"_D')
 map({ "n", "v" }, "c", '"_c')
 map("n", "C", '"_C')
 
+--- Basic readline-like mappings
+map("c", "<c-a>", '<home>')
+map("c", "<c-e>", '<end>')
+map("c", "<m-f>", '<c-right>')
+map("c", "<m-b>", '<c-left>')
+
 for i = 1, 9 do
   map("n", "<leader>" .. i, i .. "gt", { desc = "Goto Tab " .. i })
 end

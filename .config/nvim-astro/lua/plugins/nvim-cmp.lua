@@ -132,7 +132,7 @@ return {
     optional = true,
     config = function(...)
       require "astronvim.plugins.configs.luasnip"(...)
-      require("luasnip.loaders.from_vscode").lazy_load { paths = { vim.fn.stdpath "config" .. "/snippets" } }
+      require("luasnip.loaders.from_vscode").lazy_load { paths = { vim.fn.expand "~/.config/nvim/snippets" } }
     end,
   },
 }

@@ -20,7 +20,7 @@ return {
   },
   {
     "saghen/blink.cmp",
-    enabled = true,
+    enabled = false,
     event = { "InsertEnter", "CmdlineEnter" },
     dependencies = { "L3MON4D3/LuaSnip", "mikavilpas/blink-ripgrep.nvim", "windwp/nvim-autopairs" },
     version = "1.*",

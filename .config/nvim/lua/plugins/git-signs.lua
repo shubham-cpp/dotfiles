@@ -16,27 +16,27 @@ return {
       map("L", function()
         require("gitsigns").blame_line { full = true }
       end, "View full Git blame")
-      map("p", function()
+      map("hp", function()
         require("gitsigns").preview_hunk_inline()
       end, "Preview Git hunk")
 
-      map("r", function()
+      map("hr", function()
         require("gitsigns").reset_hunk()
       end, "Reset Git hunk")
-      map("r", function()
+      map("hr", function()
         require("gitsigns").reset_hunk { vim.fn.line ".", vim.fn.line "v" }
       end, "Reset Git hunk", "v")
-      map("R", function()
+      map("hR", function()
         require("gitsigns").reset_buffer()
       end, "Reset Git buffer")
 
-      map("s", function()
+      map("hs", function()
         require("gitsigns").stage_hunk()
       end, "Stage Git hunk")
-      map("s", function()
+      map("hs", function()
         require("gitsigns").stage_hunk { vim.fn.line ".", vim.fn.line "v" }
       end, "Stage Git hunk", "v")
-      map("S", function()
+      map("hS", function()
         require("gitsigns").stage_buffer()
       end, "Stage Git buffer")
 

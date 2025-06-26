@@ -1,7 +1,7 @@
 ---@type LazySpec
 return {
   "hrsh7th/nvim-cmp",
-  enabled = false,
+  enabled = true,
   event = { "InsertEnter", "CmdlineEnter" },
   dependencies = {
     "hrsh7th/cmp-nvim-lsp",
@@ -90,7 +90,7 @@ return {
       ["<C-U>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
       ["<C-D>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
       ["<C-E>"] = cmp.mapping(cmp.mapping.abort(), { "i", "c" }),
-      ["<CR>"] = cmp.mapping(cmp.mapping.confirm { select = false }, { "i", "c" }),
+      ["<CR>"] = { i = cmp.mapping.confirm { select = true }, c = cmp.mapping.confirm { select = false } },
       ["<C-Space>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
       ["<Tab>"] = cmp.mapping(function(fallback)
         if is_visible(cmp) then

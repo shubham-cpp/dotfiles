@@ -9,14 +9,6 @@ return {
     opts = {
       keymap = {
         preset = "enter",
-        -- ["<C-space>"] = {
-        --   -- 'show'
-        --   function(cmp)
-        --     cmp.show({ providers = { "snippets" } })
-        --   end,
-        --   "show_documentation",
-        --   "hide_documentation",
-        -- },
         ["<C-s>"] = {
           function(cmp)
             cmp.show({ providers = { "snippets" } })
@@ -52,8 +44,6 @@ return {
         end,
         keymap = {
           preset = "cmdline",
-          -- ["<Up>"] = {},
-          -- ["<Down>"] = {},
           ["<Left>"] = {},
           ["<Right>"] = {},
           ["<C-k>"] = { "select_prev", "fallback" },
@@ -135,5 +125,13 @@ return {
       delete_check_events = "TextChanged",
       region_check_events = "CursorMoved",
     },
+  },
+  {
+    "rafamadriz/friendly-snippets",
+    optional = true,
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load()
+      require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.expand("~/.config/nvim/snippets") } })
+    end,
   },
 }

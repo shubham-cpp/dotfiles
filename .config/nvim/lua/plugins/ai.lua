@@ -36,7 +36,7 @@ return {
             description = "Select a file using Telescope",
             opts = {
               ---@type 'default'| 'mini_pick'| 'fzf_lua'| 'snacks'|'telescope'
-              provider = "fzf_lua", -- Other options include
+              provider = "snacks", -- Other options include
               contains_code = true,
             },
           },
