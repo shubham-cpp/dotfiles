@@ -22,11 +22,19 @@ return {
         -- input window
         input = {
           keys = {
+            ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+            ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+            ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
+            ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
             ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
           },
         },
         list = {
           keys = {
+            ["<c-u>"] = "preview_scroll_up",
+            ["<c-d>"] = "preview_scroll_down",
+            ["<c-f>"] = "list_scroll_down",
+            ["<c-b>"] = "list_scroll_up",
             ["<c-x>"] = "edit_split",
           },
         },
@@ -58,9 +66,11 @@ return {
     { "<leader>fb",      function() Snacks.picker.buffers() end,                                    desc = "Buffers"          },
     { "<leader>fB",      function() Snacks.picker.grep_buffers() end,                               desc = "Grep Buffers"     },
     { "<leader>ff",      function() Snacks.picker.files { layout = { preset = "vscode" } } end,     desc = "Find Files"       },
+    { "<C-p>",           function() Snacks.picker.files { layout = { preset = "vscode" } } end,     desc = "Find Files"       },
     { "<leader>fg",      function() Snacks.picker.git_files { layout = { preset = "vscode" } } end, desc = "Find Git Files"   },
     { "<leader>fo",      function() Snacks.picker.recent() end,                                     desc = "Recent"           },
     { "<leader>fh",      function() Snacks.picker.help() end,                                       desc = "Help Pages"       },
+    { "<leader>fH",      function() Snacks.picker.highlights() end,                                 desc = "Highlights"       },
     { "<leader>fi",      function() Snacks.picker.icons() end,                                      desc = "Icons"            },
     { "<leader>fk",      function() Snacks.picker.keymaps() end,                                    desc = "Keymaps"          },
     { "<leader>fm",      function() Snacks.picker.marks() end,                                      desc = "Marks"            },
@@ -71,7 +81,9 @@ return {
     { "<leader>fu",      function() Snacks.picker.undo() end,                                       desc = "Undo History"     },
     { "<leader>fz",      function() Snacks.picker.zoxide() end,                                     desc = "Zoxide"           },
     { "<leader>fs",      function() Snacks.picker.grep() end,                                       desc = "Grep"             },
+    { "<leader>fS",      function() Snacks.picker.grep({cwd = vim.fn.expand('%:p:h')}) end,         desc = "Grep(cwd)"        },
     { "<leader>fw",      function() Snacks.picker.grep_word() end,                                  desc = "Grep word", mode = { "n", "x" } },
+    { "<leader>fW",      function() Snacks.picker.grep_word({cwd = vim.fn.expand('%:p:h')}) end,    desc = "Grep(cwd)", mode = { "n", "x" } },
 
     { "<leader>fn",      function()
       Snacks.picker.files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } }

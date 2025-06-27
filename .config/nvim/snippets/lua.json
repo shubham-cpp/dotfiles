@@ -69,5 +69,10 @@
     "prefix": "exe",
     "body": ["vim.fn.executable('${1:cmd}') == 1"],
     "description": "Check if a command is executable"
+  },
+  "anon function": {
+    "prefix": "fun",
+    "body": "function($1)\t$0\tend",
+    "description": "Anonymous lua function"
   }
 }

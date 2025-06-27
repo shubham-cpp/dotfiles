@@ -60,10 +60,10 @@ table.insert(alt_keys, { key = "0", mods = "ALT", action = act.PaneSelect({ mode
 table.insert(alt_keys, { key = "v", mods = "ALT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) })
 table.insert(alt_keys, { key = "s", mods = "ALT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) })
 
-table.insert(alt_keys, { key = "p", mods = "SHIFT|ALT", action = act.MoveTabRelative(-1) })
-table.insert(alt_keys, { key = "n", mods = "SHIFT|ALT", action = act.MoveTabRelative(1) })
-table.insert(alt_keys, { key = "p", mods = "ALT", action = act.ActivateTabRelative(-1) })
-table.insert(alt_keys, { key = "n", mods = "ALT", action = act.ActivateTabRelative(1) })
+table.insert(alt_keys, { key = "{", mods = "SHIFT|ALT", action = act.MoveTabRelative(-1) })
+table.insert(alt_keys, { key = "}", mods = "SHIFT|ALT", action = act.MoveTabRelative(1) })
+table.insert(alt_keys, { key = "[", mods = "ALT", action = act.ActivateTabRelative(-1) })
+table.insert(alt_keys, { key = "]", mods = "ALT", action = act.ActivateTabRelative(1) })
 table.insert(alt_keys, { key = ".", mods = "ALT", action = act.ActivateCommandPalette })
 
 table.insert(alt_keys, { key = "q", mods = "SHIFT|ALT", action = act.QuickSelect })

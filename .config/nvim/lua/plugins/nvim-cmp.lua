@@ -11,6 +11,17 @@ return {
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
     "lukas-reineke/cmp-rg",
+    {
+      "onsails/lspkind.nvim",
+      opts = {
+        ---@type 'text' | 'text_symbol' | 'symbol_text' | 'symbol'
+        mode = "text_symbol",
+        preset = "codicons",
+      },
+      config = function(_, opts)
+        require("lspkind").init(opts)
+      end,
+    },
   },
   opts = function(_, opts)
     opts = opts or {}
@@ -20,10 +31,10 @@ return {
 
     local defaults = require "cmp.config.default"()
 
-    local function has_words_before()
-      local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
-      return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
-    end
+    -- local function has_words_before()
+    --   local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
+    --   return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match "%s" == nil
+    -- end
     local function is_visible(cmp)
       return cmp.core.view:visible() or vim.fn.pumvisible() == 1
     end
@@ -64,7 +75,21 @@ return {
         luasnip.lsp_expand(args.body)
       end,
     }
-    opts.formatting = { fields = { "kind", "abbr", "menu" }, format = format }
+    opts.formatting = {
+      fields = { "kind", "abbr", "menu" },
+      format = require("lspkind").cmp_format {
+        mode = "symbol",
+        maxwidth = {
+          -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+          -- can also be a function to dynamically calculate max width such as
+          -- menu = function() return math.floor(0.45 * vim.o.columns) end,
+          menu = function()
+            return math.floor(0.45 * vim.o.columns)
+          end,
+          abbr = 60, -- actual suggestion item
+        },
+      },
+    }
     opts.mapping = cmp.mapping.preset.insert {
       ["<Up>"] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Select },
       ["<Down>"] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Select },
@@ -101,8 +126,8 @@ return {
           vim.schedule(function()
             vim.snippet.jump(1)
           end)
-        elseif has_words_before() then
-          cmp.complete()
+        -- elseif has_words_before() then
+        --   cmp.complete()
         else
           fallback()
         end
