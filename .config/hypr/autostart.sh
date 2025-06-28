@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# Theme settings
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface font-name 'Fira Sans 11'
+gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Font Mono 11'
+# gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark-Solid'
+# gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice'
+# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
+# gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
+# gsettings set org.gnome.desktop.interface gtk-theme Juno
+# gsettings set org.gnome.desktop.wm.preferences theme Juno
+
 sleep 1
 systemctl --user stop xdg-desktop-portal-gtk xdg-desktop-portal xdg-desktop-portal-hyprland
 killall waybar
@@ -28,14 +39,3 @@ hyprshade auto &
 gnome-keyring-daemon &
 sleep 5s
 env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
-
-# Theme settings
-gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
-gsettings set org.gnome.desktop.interface font-name 'Fira Sans 11'
-gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Font Mono 11'
-# gsettings set org.gnome.desktop.interface gtk-theme 'Layan-Dark-Solid'
-# gsettings set org.gnome.desktop.interface cursor-theme 'Bibata-Modern-Ice'
-# gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'
-# gsettings set org.gnome.desktop.interface icon-theme 'Adwaita'
-# gsettings set org.gnome.desktop.interface gtk-theme Juno
-# gsettings set org.gnome.desktop.wm.preferences theme Juno

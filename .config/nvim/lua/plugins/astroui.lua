@@ -1,39 +1,61 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
--- AstroUI provides the basis for configuring the AstroNvim User Interface
--- Configuration documentation can be found with `:h astroui`
--- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
---       as this provides autocomplete and documentation while editing
-
 ---@type LazySpec
 return {
-  "AstroNvim/astroui",
-  ---@type AstroUIOpts
-  opts = {
-    -- change colorscheme
-    colorscheme = "astrodark",
-    -- AstroUI allows you to easily modify highlight groups easily for any and all colorschemes
-    highlights = {
-      init = { -- this table overrides highlights in all themes
-        -- Normal = { bg = "#000000" },
-      },
-      astrodark = { -- a table of overrides/changes when applying the astrotheme theme
-        -- Normal = { bg = "#000000" },
-      },
+  {
+    "oxfist/night-owl.nvim",
+    enabled = true,
+    lazy = true,
+    opts = {
+      transparent_background = true,
     },
-    -- Icons can be configured throughout the interface
-    icons = {
-      -- configure the loading of the lsp in the status line
-      LSPLoading1 = "⠋",
-      LSPLoading2 = "⠙",
-      LSPLoading3 = "⠹",
-      LSPLoading4 = "⠸",
-      LSPLoading5 = "⠼",
-      LSPLoading6 = "⠴",
-      LSPLoading7 = "⠦",
-      LSPLoading8 = "⠧",
-      LSPLoading9 = "⠇",
-      LSPLoading10 = "⠏",
+  },
+  {
+    "vague2k/vague.nvim",
+    enabled = true,
+    lazy = true,
+    opts = { transparent = false },
+  },
+  {
+    "AstroNvim/astroui",
+    ---@type AstroUIOpts
+    opts = {
+      ---@type "night-owl"|"vague"|"astrodark"
+      colorscheme = "night-owl",
+      status = {
+        colors = function(hl)
+          -- astrodark
+          hl.buffer_active_bg = "#032240"
+          -- hl.buffer_active_bg = "#393960"
+          return hl
+        end,
+      },
+      highlights = {
+        astrodark = {
+          QuickScopePrimary = { fg = "#dfbb78", bg = "#505050", bold = true, undercurl = true },
+          QuickScopeSecondary = { fg = "#61afef", bg = "#505050", bold = true, undercurl = true },
+        },
+        vague = {
+          ["@tag.attribute"] = { fg = "#c3c3d5" },
+          StatusLine = { bg = "#181818" },
+          WinBar = { bg = "#141415" },
+          SnacksPickerMatch = { fg = "#f3be7c" },
+          QuickScopePrimary = { fg = "#f3be7c", bg = "#333738", bold = true, undercurl = true },
+          QuickScopeSecondary = { fg = "#7e98e8", bg = "#333738", bold = true, undercurl = true },
+        },
+      },
+      -- Icons can be configured throughout the interface
+      -- icons = {
+      --   -- configure the loading of the lsp in the status line
+      --   LSPLoading1 = "⠋",
+      --   LSPLoading2 = "⠙",
+      --   LSPLoading3 = "⠹",
+      --   LSPLoading4 = "⠸",
+      --   LSPLoading5 = "⠼",
+      --   LSPLoading6 = "⠴",
+      --   LSPLoading7 = "⠦",
+      --   LSPLoading8 = "⠧",
+      --   LSPLoading9 = "⠇",
+      --   LSPLoading10 = "⠏",
+      -- },
     },
   },
 }

@@ -74,6 +74,7 @@ return {
           desc = "Find git files",
         }
 
+        maps.n["<Leader>fH"] = { function() require("snacks").picker.highlights() end, desc = "highlights" }
         maps.n["<Leader>fr"] = { function() require("snacks").picker.resume() end, desc = "Resume" }
         maps.n["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Zoxide" }
 

@@ -89,7 +89,7 @@ return {
         {
           event = "BufWritePre",
           desc = "Run Eslint fix on save",
-          command = "LspEslintFixAll",
+          command = "EslintFixAll",
         },
       },
     },

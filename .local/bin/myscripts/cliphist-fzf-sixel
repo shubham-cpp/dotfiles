@@ -12,7 +12,7 @@ preview)
     ;;
 
 *)
-    id="$(cliphist list | fzf --preview-window="bottom" --preview "$(realpath "$0") preview {}")"
+    id="$(cliphist list | fzf --preview-window="top" --layout=reverse --preview "$(realpath "$0") preview {}")"
     test -z "$id" && exit
 
     cliphist decode <<<"$id" | wl-copy
