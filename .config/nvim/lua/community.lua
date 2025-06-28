@@ -1,0 +1,53 @@
+---@type LazySpec
+return {
+  "AstroNvim/astrocommunity",
+  { import = "astrocommunity.pack.lua" },
+  { import = "astrocommunity.pack.bash" },
+  { import = "astrocommunity.pack.fish" },
+  { import = "astrocommunity.pack.eslint" },
+  { import = "astrocommunity.pack.typescript" },
+  { import = "astrocommunity.pack.html-css" },
+  { import = "astrocommunity.pack.tailwindcss" },
+  { import = "astrocommunity.pack.go" },
+  { import = "astrocommunity.pack.gleam" },
+  { import = "astrocommunity.pack.docker" },
+  { import = "astrocommunity.pack.json" },
+  { import = "astrocommunity.pack.yaml" },
+  { import = "astrocommunity.pack.markdown" },
+  { import = "astrocommunity.pack.prisma" },
+  { import = "astrocommunity.pack.python-ruff" },
+  { import = "astrocommunity.pack.rust" },
+  { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.vue" },
+  { import = "astrocommunity.pack.templ" },
+  { import = "astrocommunity.pack.toml" },
+  { import = "astrocommunity.pack.sql" },
+  { import = "astrocommunity.pack.cpp" },
+  { import = "astrocommunity.pack.full-dadbod" },
+  { import = "astrocommunity.pack.hyprlang" },
+
+  { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
+  { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
+  { import = "astrocommunity.debugging.persistent-breakpoints-nvim" },
+
+  { import = "astrocommunity.editing-support.dial-nvim" },
+  { import = "astrocommunity.editing-support.nvim-treesitter-context" },
+  { import = "astrocommunity.editing-support.refactoring-nvim" },
+  { import = "astrocommunity.editing-support.quick-scope" },
+
+  { import = "astrocommunity.lsp.ts-error-translator-nvim" },
+  { import = "astrocommunity.markdown-and-latex.render-markdown-nvim" },
+
+  { import = "astrocommunity.motion.flash-nvim" },
+  { import = "astrocommunity.motion.nvim-surround" },
+  { import = "astrocommunity.motion.vim-matchup" },
+
+  { import = "astrocommunity.recipes.heirline-vscode-winbar" },
+  { import = "astrocommunity.recipes.picker-lsp-mappings" },
+  { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
+
+  { import = "astrocommunity.test.neotest" },
+
+  -- { import = "astrocommunity.completion.nvim-cmp" },
+  -- { import = "astrocommunity.completion.cmp-cmdline" },
+}

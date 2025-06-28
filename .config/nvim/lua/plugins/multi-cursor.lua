@@ -99,6 +99,7 @@ return {
   {
     "jake-stewart/multicursor.nvim",
     branch = "1.0",
+    lazy = true,
     opts = {},
     keys = function()
       local mc = require "multicursor-nvim"
