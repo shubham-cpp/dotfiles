@@ -59,9 +59,12 @@ return {
 
         maps.n["<Leader><Leader>"] = {
           function()
-            local is_git = vim.tbl_get((vim.uv or vim.loop).fs_stat ".git" or {}, "type") == "directory"
-            if is_git then require("snacks").picker.git_files { layout = { preset = "vscode" } } end
-            require("snacks").picker.files { layout = { preset = "vscode" } }
+            local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
+            if is_git then
+              require("snacks").picker.git_files { layout = { preset = "vscode" } }
+            else
+              require("snacks").picker.files { layout = { preset = "vscode" } }
+            end
           end,
           desc = "Find files",
         }

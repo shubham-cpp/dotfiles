@@ -1,14 +1,6 @@
 ---@type LazySpec
 return {
   {
-    "oxfist/night-owl.nvim",
-    enabled = true,
-    lazy = true,
-    opts = {
-      transparent_background = true,
-    },
-  },
-  {
     "vague2k/vague.nvim",
     enabled = true,
     lazy = true,
@@ -18,13 +10,13 @@ return {
     "AstroNvim/astroui",
     ---@type AstroUIOpts
     opts = {
-      ---@type "night-owl"|"vague"|"astrodark"
-      colorscheme = "night-owl",
+      ---@type "vague"|"astrodark"
+      colorscheme = "vague",
       status = {
         colors = function(hl)
           -- astrodark
-          hl.buffer_active_bg = "#032240"
-          -- hl.buffer_active_bg = "#393960"
+          -- hl.buffer_active_bg = "#032240"
+          hl.buffer_active_bg = "#393960"
           return hl
         end,
       },
