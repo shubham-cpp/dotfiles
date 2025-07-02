@@ -14,8 +14,8 @@ local function first(bufnr, ...)
 end
 
 local function prettier_eslint(bufnr)
-  -- return { first(bufnr, "prettierd", "prettier"), "eslint_d" }
-  return { first(bufnr, "prettierd", "prettier") }
+  return { first(bufnr, "prettierd", "prettier"), "eslint_d" }
+  -- return { first(bufnr, "prettierd", "prettier") }
 end
 ---@type LazySpec
 return {

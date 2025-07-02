@@ -12,7 +12,7 @@ local function explorer_add_in_parent(picker)
   else
     default_dir = parent.file
   end
-  Snacks.input({
+  require("snacks").input({
     prompt = 'Add a new file or directory (directories end with a "/")',
     default = default_dir .. "/",
   }, function(value)
@@ -21,7 +21,7 @@ local function explorer_add_in_parent(picker)
     local is_file = value:sub(-1) ~= "/"
     local dir = is_file and vim.fs.dirname(path) or path
     if is_file and uv.fs_stat(path) then
-      Snacks.notify.warn("File already exists:\n- `" .. path .. "`")
+      require("snacks").notify.warn("File already exists:\n- `" .. path .. "`")
       return
     end
     vim.fn.mkdir(dir, "p")
@@ -46,7 +46,7 @@ end
 ---@param picker snacks.Picker
 local function copy_path_relative(picker)
   ---@type string[]
-  local paths = vim.tbl_map(Snacks.picker.util.path, picker:selected { fallback = true })
+  local paths = vim.tbl_map(require("snacks").picker.util.path, picker:selected { fallback = true })
   if #paths == 0 then
     vim.notify(
       "No files selected to move",
@@ -75,7 +75,7 @@ local function copy_path_relative(picker)
 
   local on_done = function(obj)
     if obj.stderr ~= "" or obj.stdout == "" then
-      Snacks.notify.warn("Some error while calculating relative paths " .. obj.stderr)
+      require("snacks").notify.warn("Some error while calculating relative paths " .. obj.stderr)
       return
     end
     vim.fn.setreg(vim.v.register, obj.stdout)
@@ -96,6 +96,7 @@ return {
       bigfile = {},
       lazygit = {},
       notifier = {},
+      explorer = { enabled = false },
       picker = {
         enabled = true,
         layout = { preset = "dropdown" },
@@ -104,6 +105,7 @@ return {
         formatters = { file = { filename_first = true } },
         sources = {
           explorer = {
+            enabled = false,
             layout = { cycle = false, layout = { position = "right" } },
             actions = {
               explorer_add_in_parent = explorer_add_in_parent,
@@ -134,137 +136,165 @@ return {
           -- input window
           input = {
             keys = {
+              ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+              ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+              ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
+              ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
               ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
               ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
               ["<c-c>"] = { "copy", mode = { "i", "n" } },
             },
           },
-          list = { keys = { ["<c-x>"] = "edit_split" } },
+          list = {
+            keys = {
+              ["<c-u>"] = "preview_scroll_up",
+              ["<c-d>"] = "preview_scroll_down",
+              ["<c-f>"] = "list_scroll_down",
+              ["<c-b>"] = "list_scroll_up",
+              ["<c-x>"] = "edit_split",
+            },
+          },
         },
       },
     },
     keys = {
       {
         "<leader>gg",
-        function() Snacks.lazygit() end,
+        function() require("snacks").lazygit() end,
         desc = "Toggle Lazygit",
       },
       {
         "<C-w>m",
-        function() Snacks.zen.zoom() end,
+        function() require("snacks").zen.zoom() end,
         desc = "Toggle Zoom",
       },
       {
-        "<C-p>",
+        "<Leader><Leader>",
         function()
-          branch = vim.b.gitsigns_head or nil
-          if branch ~= nil and branch ~= "" then
-            Snacks.picker.git_files { layout = { preset = "vscode" }, untracked = true }
+          local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
+          if is_git then
+            require("snacks").picker.git_files { layout = { preset = "vscode" } }
           else
-            Snacks.picker.files { layout = { preset = "vscode" } }
+            require("snacks").picker.files { layout = { preset = "vscode" } }
           end
         end,
+        desc = "Find files",
+      },
+      {
+        "<C-p>",
+        function() require("snacks").picker.files { layout = { preset = "vscode" } } end,
         desc = "Find Files",
       },
       {
         "<leader>ff",
-        function() Snacks.picker.files { layout = { preset = "vscode" } } end,
+        function() require("snacks").picker.files { layout = { preset = "vscode" } } end,
         desc = "Find Files",
       },
       {
         "<leader>fF",
-        function() Snacks.picker.files { layout = { preset = "vscode" }, hidden = true, ignored = true } end,
+        function() require("snacks").picker.files { layout = { preset = "vscode" }, hidden = true, ignored = true } end,
         desc = "Find all files",
       },
       {
         "<leader>fn",
-        function() Snacks.picker.files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } } end,
+        function() require("snacks").picker.files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } } end,
         desc = "Find Config File",
       },
       {
         "<leader>fN",
-        function() Snacks.picker.files { cwd = vim.fn.stdpath "data" .. "/lazy", layout = { preset = "vscode" } } end,
-        desc = "Neovim Data dir",
+        function() require("snacks").picker.notifications() end,
+        desc = "Notifications",
       },
       {
         "<leader>fd",
         function()
-          Snacks.picker.files { cwd = vim.fn.expand "~/Documents/dotfiles/.config", layout = { preset = "vscode" } }
+          require("snacks").picker.files {
+            cwd = vim.fn.expand "~/Documents/dotfiles/.config",
+            layout = { preset = "vscode" },
+          }
         end,
         desc = "Find Dotfiles",
       },
       {
         "<leader>fg",
-        function() Snacks.picker.git_files { untracked = true, layout = { preset = "vscode" } } end,
+        function() require("snacks").picker.git_files { untracked = true, layout = { preset = "vscode" } } end,
         desc = "Find Git Files",
       },
       {
-        "<leader>fs",
-        function() Snacks.picker.grep() end,
-        desc = "Search/Grep",
-      },
-      {
-        "<leader>fS",
-        function() Snacks.picker.grep_buffers() end,
-        desc = "Search/Grep in Open Buffers",
-      },
-      {
         "<leader>fo",
-        function() Snacks.picker.smart() end,
+        function() require("snacks").picker.smart() end,
         desc = "Find buffers/recent/files",
       },
       {
         "<leader>fr",
-        function() Snacks.picker.resume() end,
+        function() require("snacks").picker.resume() end,
         desc = "Resume",
       },
       {
         "<leader>fO",
-        function() Snacks.picker.recent { layout = { preset = "vertical" } } end,
+        function() require("snacks").picker.recent { layout = { preset = "vertical" } } end,
         desc = "Old Files",
       },
       {
         "<leader>f,",
-        function() Snacks.picker.recent { layout = { preset = "vertical" }, filter = { cwd = true } } end,
+        function() require("snacks").picker.recent { layout = { preset = "vertical" }, filter = { cwd = true } } end,
         desc = "Old Files(cwd)",
       },
       {
         "<leader>fz",
-        function() Snacks.picker.zoxide { layout = { preset = "vertical" } } end,
+        function() require("snacks").picker.zoxide { layout = { preset = "vertical" } } end,
         desc = "Zoxided",
       },
       {
+        "<leader>fs",
+        function() require("snacks").picker.grep() end,
+        desc = "Search/Grep",
+      },
+      {
+        "<leader>fs",
+        function() require("snacks").picker.grep { cwd = vim.fn.expand "%:p:h" } end,
+        desc = "Search/Grep",
+      },
+      {
+        "<leader>fB",
+        function() require("snacks").picker.grep_buffers() end,
+        desc = "Search/Grep in Open Buffers",
+      },
+      {
         "<leader>fw",
-        function() Snacks.picker.grep_word() end,
+        function() require("snacks").picker.grep_word() end,
         desc = "Visual selection or word",
         mode = { "n", "x" },
       },
       {
         "<leader>fW",
-        function() Snacks.picker.grep_word { hidden = true, ignored = true } end,
+        function() require("snacks").picker.grep_word { cwd = vim.fn.expand "%:p:h" } end,
         desc = "Visual selection or word",
         mode = { "n", "x" },
       },
+      { "<leader>fu", function() require("snacks").picker.undo() end, desc = "Undotree" },
+      { "<Leader>fH", function() require("snacks").picker.highlights() end, desc = "highlights" },
+      { "<Leader>ft", function() require("snacks").picker.todo_comments() end, desc = "Todo comments" },
       {
-        "<leader>fu",
-        function() Snacks.picker.undo() end,
-        desc = "Undotree",
+        "<Leader>fT",
+        function() require("snacks").picker.todo_comments { keywords = { "TODO", "FIX", "FIXME" } } end,
+        desc = "Todo/Fix/Fixme",
       },
-      {
-        "<leader>e",
-        function()
-          local last_buffer_path = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
-          if
-            last_buffer_path ~= ""
-            and string.match(last_buffer_path, "nvim/runtime/doc/") == nil
-            and string.match(last_buffer_path, "quickfix%-%d+") == nil
-          then
-            vim.g.last_buffer = last_buffer_path
-          end
-          Snacks.explorer()
-        end,
-        desc = "Explorer",
-      },
+      -- {
+      --   "<leader>e",
+      --   function()
+      --     local last_buffer_path = vim.api.nvim_buf_get_name(vim.api.nvim_get_current_buf())
+      --     if
+      --       last_buffer_path ~= ""
+      --       and string.match(last_buffer_path, "nvim/runtime/doc/") == nil
+      --       and string.match(last_buffer_path, "quickfix%-%d+") == nil
+      --     then
+      --       vim.g.last_buffer = last_buffer_path
+      --     end
+      --     require('snacks').explorer()
+      --   end,
+      --   desc = "Explorer",
+      -- },
     },
     dependencies = {
       {

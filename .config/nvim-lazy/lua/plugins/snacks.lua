@@ -102,6 +102,19 @@ return {
         matcher = { frecency = true, history_bonus = true },
         formatters = { file = { filename_first = true } },
         sources = {
+          buffers = {
+            win = {
+              input = {
+                keys = {
+                  ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
+                  ["<a-x>"] = { "bufdelete", mode = { "n", "i" } },
+                },
+              },
+              list = { keys = { ["dd"] = "bufdelete" } },
+            },
+          },
+          git_files = { untracked = true },
+          git_grep = { untracked = true },
           explorer = {
             layout = { cycle = false, layout = { position = "right" } },
             actions = {
@@ -133,12 +146,24 @@ return {
           -- input window
           input = {
             keys = {
+              ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+              ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+              ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
+              ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
               ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
               ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
               ["<c-c>"] = { "copy", mode = { "i", "n" } },
             },
           },
-          list = { keys = { ["<c-x>"] = "edit_split" } },
+          list = {
+            keys = {
+              ["<c-u>"] = "preview_scroll_up",
+              ["<c-d>"] = "preview_scroll_down",
+              ["<c-f>"] = "list_scroll_down",
+              ["<c-b>"] = "list_scroll_up",
+              ["<c-x>"] = "edit_split",
+            },
+          },
         },
       },
     },
@@ -172,16 +197,26 @@ return {
       { "<leader>sq", false },
       { "<leader>su", false },
       { "<leader>sj", false },
+      -- explorer
+      { "<leader>e", false },
+      { "<leader>E", false },
       ---}}}
+      {
+        "<Leader><Leader>",
+        function()
+          local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
+          if is_git then
+            require("snacks").picker.git_files({ layout = { preset = "vscode" } })
+          else
+            require("snacks").picker.files({ layout = { preset = "vscode" } })
+          end
+        end,
+        desc = "Find files",
+      },
       {
         "<C-p>",
         function()
-          local branch = vim.b.gitsigns_head or nil
-          if branch ~= nil and branch ~= "" then
-            Snacks.picker.git_files({ layout = { preset = "vscode" }, untracked = true })
-          else
-            Snacks.picker.files({ layout = { preset = "vscode" } })
-          end
+          Snacks.picker.files({ layout = { preset = "vscode" } })
         end,
         desc = "Find Files",
       },
@@ -198,7 +233,7 @@ return {
       {
         "<leader>fg",
         function()
-          Snacks.picker.git_files({ untracked = true, layout = { preset = "vscode" } })
+          Snacks.picker.git_files({ layout = { preset = "vscode" } })
         end,
         desc = "Find Files(git)",
       },
@@ -212,9 +247,9 @@ return {
       {
         "<leader>fN",
         function()
-          Snacks.picker.files({ cwd = vim.fn.stdpath("data") .. "/lazy", layout = { preset = "vscode" } })
+          Snacks.picker.notifications()
         end,
-        desc = "Neovim Data dir",
+        desc = "notifications",
       },
       {
         "<leader>fd",
@@ -244,19 +279,19 @@ return {
         end,
         desc = "Toggle Zoom",
       },
-      {
-        "<C-\\>",
-        function()
-          Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
-        end,
-        desc = "Toggle terminal",
-      },
-      {
-        "<C-\\>",
-        "<cmd>close<cr>",
-        mode = "t",
-        desc = "Hide terminal",
-      },
+      -- {
+      --   "<C-\\>",
+      --   function()
+      --     Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
+      --   end,
+      --   desc = "Toggle terminal",
+      -- },
+      -- {
+      --   "<C-\\>",
+      --   "<cmd>close<cr>",
+      --   mode = "t",
+      --   desc = "Hide terminal",
+      -- },
       {
         "<leader>fl",
         function()

@@ -3,20 +3,22 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      setup = {
+        tailwindcss = function()
+          LazyVim.lsp.on_attach(function(client)
+            client.server_capabilities.completionProvider.triggerCharacters =
+              { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
+          end,'sp_tailwind')
+        end,
+      },
       -- make sure mason installs the server
       servers = {
         vtsls = {
           settings = {
-            vtsls = {
-              experimental = { completion = { enableServerSideFuzzyMatch = false } },
-            },
+            vtsls = { experimental = { completion = { enableServerSideFuzzyMatch = false } } },
           },
         },
-        eslint = {
-          keys = {
-            { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" },
-          },
-        },
+        eslint = { keys = { { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" } } },
         pyright = false,
         basedpyright = {
           settings = {
@@ -207,6 +209,7 @@ return {
         "golangci-lint",
         "html-lsp",
         "css-lsp",
+        "eslint_d",
         "cssmodules-language-server",
         "css-variables-language-server",
       },
@@ -229,18 +232,15 @@ return {
   },
   {
     "mfussenegger/nvim-lint",
-    opts = {
-      linters_by_ft = {
-        go = { "golangcilint" },
-      },
-    },
+    opts = { linters_by_ft = { go = { "golangcilint" } } },
   },
   {
     "linux-cultist/venv-selector.nvim",
     optional = true,
+    cmd = "VenvSelect",
     keys = {
       { "<leader>cv", false },
-      { "<leader>lv", "<cmd>:VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" },
+      { "<leader>lv", "<cmd>VenvSelect<cr>", desc = "Select VirtualEnv", ft = "python" },
     },
   },
   {

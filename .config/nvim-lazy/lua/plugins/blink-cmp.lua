@@ -73,16 +73,15 @@ return {
       },
       fuzzy = {
         sorts = {
-          -- function(a, b)
-          --   if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-          --     return
-          --   end
-          --   return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-          -- end,
-          "exact",
-          -- default sorts
+          function(a, b)
+            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+              return
+            end
+            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+          end,
           "score",
           "sort_text",
+          "exact",
         },
       },
     },
@@ -97,10 +96,19 @@ return {
       sources = {
         default = { "ripgrep" },
         providers = {
-          snippets = { score_offset = 100 },
-          lsp = { score_offset = 100 },
-          path = { score_offset = 120 },
-          buffer = { score_offset = 40 },
+          -- snippets = { score_offset = 100 },
+          -- lsp = { score_offset = 100 },
+          -- path = { score_offset = 120 },
+          buffer = {
+            -- score_offset = 40,
+            opts = {
+              get_bufnrs = function()
+                return vim.tbl_filter(function(bufnr)
+                  return vim.bo[bufnr].buftype == ""
+                end, vim.api.nvim_list_bufs())
+              end,
+            },
+          },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
@@ -108,8 +116,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = 20,
-              max_filesize = "300K",
+              -- score_offset = 20,
               search_casing = "--smart-case",
             },
           },

@@ -53,6 +53,43 @@ if vim.fn.has("nvim-0.11") == 1 and vim.fn.executable("fd") then
   vim.opt.findfunc = "v:lua.Fd"
 end
 
+vim.api.nvim_create_user_command("Redir", function(opts)
+  local cmd = opts.args
+  local output
+
+  if cmd:match("^!") then
+    -- Run shell command (strip !)
+    local shell_cmd = cmd:sub(2)
+    output = vim.split(vim.fn.system(shell_cmd), "\n", { trimempty = true })
+  else
+    -- Redirect built-in/ex command output
+    local ok, result = pcall(vim.api.nvim_exec2, cmd, { output = true })
+    if not result.output then
+      return
+    end
+    output = ok and vim.split(result.output, "\n", { trimempty = false }) or { result }
+  end
+
+  -- Open new tab with scratch buffer
+  vim.cmd("$tabnew")
+  local buf = vim.api.nvim_get_current_buf()
+  vim.api.nvim_set_option_value("buftype", "nofile", { buf = buf })
+  vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+  vim.api.nvim_set_option_value("swapfile", false, { buf = buf })
+  vim.api.nvim_set_option_value("buflisted", false, { buf = buf })
+
+  -- Show the command and separator
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, { string.format("Command [[ %s ]] ----- Output ---->", cmd) })
+  -- Populate lines
+  vim.api.nvim_buf_set_lines(buf, 1, -1, false, output)
+end, {
+  nargs = 1,
+  desc = "Redirect output of a command to scratch tab",
+  complete = function(query)
+    return vim.fn.getcompletion(query, "command")
+  end,
+})
+
 vim.api.nvim_create_user_command("PrintConfig", function(opts)
   local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
   local args = opts.args

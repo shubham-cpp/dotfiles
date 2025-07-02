@@ -58,5 +58,7 @@ return {
 
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
+  { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
+  { import = "astrocommunity.file-explorer.mini-files" },
   { import = "astrocommunity.icon.mini-icons" },
 } }

@@ -55,8 +55,8 @@ return {
           end,
           -- default sorts
           "score",
-          "exact",
           "sort_text",
+          "exact",
         },
       },
     },

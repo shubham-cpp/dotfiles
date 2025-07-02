@@ -19,7 +19,7 @@ return {
     }
 
     return {
-      "hide",
+      { "border-fused", "hide" },
       defaults = { formatter = { "path.filename_first", 2 } },
       winopts = { preview = { default = "bat" } },
       files = {

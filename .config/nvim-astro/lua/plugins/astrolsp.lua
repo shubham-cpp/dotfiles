@@ -54,7 +54,27 @@ return {
       },
     },
     -- customize how language servers are attached
-    -- handlers = { },
+    handlers = {
+      tailwindcss = function(server, opts)
+        local default_attach = opts.on_attach
+        opts.on_attach = function(client, bufnr)
+          default_attach(client, bufnr)
+          client.server_capabilities.completionProvider.triggerCharacters =
+            { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
+        end
+        require("lspconfig")[server].setup(opts)
+      end,
+    },
+    autocmds = {
+      eslint_auto_fix = {
+        cond = function(client) return client.name == "eslint" end,
+        {
+          event = "BufWritePre",
+          desc = "Run Eslint fix on save",
+          command = "EslintFixAll",
+        },
+      },
+    },
     -- mappings to be set up on attaching of a language server
     mappings = {
       n = {

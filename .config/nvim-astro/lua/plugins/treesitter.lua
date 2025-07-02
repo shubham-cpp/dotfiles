@@ -31,6 +31,9 @@ return {
             desc = "Jumping to context (upwards)",
             silent = true,
           },
+          --- Swap the default bindings for ut & uT
+          ["<Leader>uT"] = { function() require("astrocore.toggles").tabline() end, desc = "Toggle tabline" },
+          ["<Leader>ut"] = { "<cmd>TSContext toggle<CR>", desc = "Toggle treesitter context" },
         },
       },
     },

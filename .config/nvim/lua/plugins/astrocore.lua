@@ -102,14 +102,6 @@ return {
         },
       },
       autocmds = {
-        other_options = {
-          {
-            event = "BufRead",
-            desc = "Setting other options",
-            callback = function() vim.opt.iskeyword:append "-" end,
-            once = true,
-          },
-        },
         fix_comment_continuation = {
           {
             event = "FileType",

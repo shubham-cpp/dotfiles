@@ -95,6 +95,8 @@ return {
     lazy = true,
     opts = {
       options = { permanent_delete = false },
+      go_in = "L",
+      go_in_plus = "l",
     },
     dependencies = {
       {
