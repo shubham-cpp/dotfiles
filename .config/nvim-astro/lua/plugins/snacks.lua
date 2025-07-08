@@ -208,8 +208,8 @@ return {
       {
         "<leader>fd",
         function()
-          require("snacks").picker.files {
-            cwd = vim.fn.expand "~/Documents/dotfiles/.config",
+          require("snacks").picker.git_files {
+            cwd = vim.fn.expand "~/Documents/dotfiles",
             layout = { preset = "vscode" },
           }
         end,
@@ -251,7 +251,7 @@ return {
         desc = "Search/Grep",
       },
       {
-        "<leader>fs",
+        "<leader>fS",
         function() require("snacks").picker.grep { cwd = vim.fn.expand "%:p:h" } end,
         desc = "Search/Grep",
       },

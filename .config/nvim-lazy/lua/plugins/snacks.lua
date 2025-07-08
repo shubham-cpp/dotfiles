@@ -254,7 +254,10 @@ return {
       {
         "<leader>fd",
         function()
-          Snacks.picker.files({ cwd = vim.fn.expand("~/Documents/dotfiles/.config"), layout = { preset = "vscode" } })
+          Snacks.picker.git_files({
+            cwd = vim.fn.expand("~/Documents/dotfiles"),
+            layout = { preset = "vscode" },
+          })
         end,
         desc = "Find Dotfiles",
       },

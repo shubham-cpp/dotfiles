@@ -12,8 +12,14 @@ return {
     "williamboman/mason-lspconfig.nvim",
     optional = true,
     opts = function(_, opts)
-      opts.ensure_installed =
-        require("astrocore").list_insert_unique(opts.ensure_installed, { "css_variables", "cssmodules_ls" })
+      opts.ensure_installed = require("astrocore").list_insert_unique(
+        opts.ensure_installed,
+        { "css_variables", "cssmodules_ls", "emmet_language_server" }
+      )
+      opts.ensure_installed = vim.tbl_filter(
+        function(server) return server ~= "emmet_ls" end,
+        opts.ensure_installed or {}
+      )
     end,
   },
   {
@@ -22,7 +28,11 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = require("astrocore").list_insert_unique(
         opts.ensure_installed,
-        { "cssmodules-language-server", "css-variables-language-server" }
+        { "emmet-language-server", "cssmodules-language-server", "css-variables-language-server" }
+      )
+      opts.ensure_installed = vim.tbl_filter(
+        function(server) return server ~= "emmet-ls" end,
+        opts.ensure_installed or {}
       )
     end,
   },

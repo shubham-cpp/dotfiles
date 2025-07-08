@@ -3,8 +3,8 @@
 super + {KP_Enter,KP_End}
     {alacritty,xterm}
 
-super + shift + Return
-    wezterm || kitty
+# super + shift + Return
+#     alacritty || wezterm || kitty
 
 super + Escape
 	pkill -USR1 -x sxhkd && notify-send -t 1000 "DWM" "SXHKD Restarted"

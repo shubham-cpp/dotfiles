@@ -4,9 +4,16 @@
   "ipc": true,
   "exclusive": true,
   "passthrough": false,
-  "modules-left": ["hyprland/workspaces", "memory", "cpu"],
-
-  "modules-center": ["clock", "custom/weather"],
+  "modules-left": [
+    "hyprland/workspaces",
+    "memory",
+    "cpu",
+    "keyboard-state"
+  ],
+  "modules-center": [
+    "clock",
+    "custom/weather"
+  ],
   "modules-right": [
     "battery",
     "network",
@@ -51,7 +58,16 @@
   "cpu": {
     "interval": 2,
     "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
-    "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
+    "format-icons": [
+      "▁",
+      "▂",
+      "▃",
+      "▄",
+      "▅",
+      "▆",
+      "▇",
+      "█"
+    ],
     "on-click": "alacritty --title btop -e btop",
   },
   "memory": {
@@ -70,7 +86,11 @@
     "critical-threshold": 74,
     "format-critical": "  {temperatureC}°C",
     "format": "{icon}  {temperatureC}°C",
-    "format-icons": ["", "", ""],
+    "format-icons": [
+      "",
+      "",
+      ""
+    ],
     "max-length": 7,
     "min-length": 7,
   },
@@ -97,13 +117,23 @@
     "tooltip-format-ethernet": "{ifname} 󰌘",
     "tooltip-format-disconnected": "󰌙 Disconnected",
     "max-length": 50,
-    "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
+    "format-icons": [
+      "󰤯",
+      "󰤟",
+      "󰤢",
+      "󰤥",
+      "󰤨"
+    ],
   },
   "pulseaudio": {
     "format": " <span size='large'>{icon}</span> {volume}% ",
     "format-muted": "<span size='large'>󰖁</span>",
     "format-icons": {
-      "default": ["", "", " "],
+      "default": [
+        "",
+        "",
+        " "
+      ],
     },
     "scroll-step": 5.0,
     "on-click": "pavucontrol -t 3",
@@ -142,7 +172,19 @@
     "format-alt-click": "click",
     "format-full": "<span size='large'>{icon}</span> Full",
     "format-alt": "<span size='large'>{icon}</span> {time}",
-    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+    "format-icons": [
+      "󰂎",
+      "󰁺",
+      "󰁻",
+      "󰁼",
+      "󰁽",
+      "󰁾",
+      "󰁿",
+      "󰂀",
+      "󰂁",
+      "󰂂",
+      "󰁹"
+    ],
     "format-time": "{H}h {M}min",
     "tooltip": true,
     "tooltip-format": "{timeTo} {power}w",
@@ -203,5 +245,17 @@
   "custom/weather": {
     "exec": "$(pwd)/wttr.sh 'Pune?format=3'",
     "interval": 3600,
+  },
+  "keyboard-state": {
+    "numlock": true,
+    "capslock": false,
+    "format": {
+      "numlock": " {icon}",
+      "capslock": "󰪛 {icon}",
+    },
+    "format-icons": {
+      "locked": "",
+      "unlocked": "",
+    },
   },
 }

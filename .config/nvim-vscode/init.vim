@@ -141,7 +141,7 @@ if exists('g:vscode')
   map zO <Cmd>call VSCodeNotify('editor.unfoldAll')<CR>
   map zp <Cmd>call VSCodeNotify('editor.gotoParentFold')<CR>
 
-  nnoremap <C-b> <cmd>call VSCodeNotify('workbench.explorer.fileView.toggleVisibility')<cr>
+  nnoremap <C-b> <cmd>call VSCodeNotify('workbench.action.toggleSidebarVisibility')<cr>
   nnoremap <C-j> <Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>
 
   nnoremap <leader>gg <Cmd>call VSCodeNotify('workbench.view.scm')<cr>

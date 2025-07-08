@@ -51,6 +51,7 @@ return {
           },
         },
       },
+      emmet_ls = false,
     },
     handlers = {
       tailwindcss = function(server, opts)

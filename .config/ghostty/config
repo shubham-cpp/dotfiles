@@ -2,7 +2,7 @@
 command = fish --login
 window-padding-color = background
 font-family = "RecMonoCasual Nerd Font"
-font-size=13
+font-size=12
 # font-family = "FiraCode Nerd Font"
 font-feature = -calt
 font-feature = -liga

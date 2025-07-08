@@ -13,6 +13,7 @@ set -U SXHKD_SHELL /usr/bin/sh
 
 starship init fish | source
 zoxide init fish | source
+mise activate fish | source
 #fnm env --use-on-cd | source
 # Keybindings
 # Refer: https://fishshell.com/docs/3.2/cmds/bind.html

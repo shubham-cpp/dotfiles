@@ -60,6 +60,7 @@ button {
 }
 
 #custom-music,
+#keyboard-state,
 #tray,
 #backlight,
 #bluetooth,
@@ -83,6 +84,7 @@ button {
   margin-left: 0.5rem;
 }
 
+#keyboard-state label.locked,
 #battery.charging {
   color: #a6d189;
 }

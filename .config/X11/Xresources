@@ -141,10 +141,9 @@ XTerm*fullscreen: never
 *.color7:       #cbe3e7
 *.color15:      #a6b3cc
 
-st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
-! st*font: MesloLGS Nerd Font:size=11.5:antialias=true:autohint=true
-! st*font: RecMonoLinear Nerd Font:size=12:antialias=true:autohint=true
-! st*font: Iosevka Nerd Font Propo:size=13.0:antialias=true:autohint=true
+! st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
+! st*font: RecMonoLinear Nerd Font:size=11.5:antialias=true:autohint=true
+st*font: CaskaydiaCove Nerd Font:size=12:antialias=true:autohint=true
 
 URxvt*font: xft:JetBrains Mono:size=12,xft:FiraCode Nerd Font Mono:antialias=true:size=12
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex

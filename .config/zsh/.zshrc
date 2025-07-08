@@ -73,7 +73,8 @@ if ! zgenom saved; then
   else
     zgenom compile "$HOME/.zshrc"
   fi
-  if hash rustup &>/dev/null; then
+  [ -s "~/.local/share/cargo/env" ] && source "~/.local/share/cargo/env"
+  if command -v rustup >/dev/null; then
     zgenom eval --name rustup <<($HOME/.cargo/bin/rustup completions zsh)
   fi
 
@@ -83,24 +84,20 @@ if ! zgenom saved; then
   # if hash fzf &>/dev/null; then
   #   zgenom eval --name mise <<(fzf --zsh)
   # fi
-  if hash mise &>/dev/null; then
+  if command -v mise >/dev/null; then
     zgenom eval --name mise <<(mise activate zsh)
   fi
-  # if hash register-python-argcomplete; &>/dev/null then
-  #   zgenom eval --name pipx <<(register-python-argcomplete pipx)
-  # fi
+  if command -v register-python-argcomplete >/dev/null; then
+    zgenom eval --name pipx <<(register-python-argcomplete pipx)
+  fi
 
   zgenom save
 fi
-setopt appendhistory
-setopt sharehistory
 
 source "$HOME/Documents/dotfiles/.config/zsh/alias.zsh"
 source "$HOME/Documents/dotfiles/.config/zsh/bindings.zsh"
 source "$HOME/Documents/dotfiles/.config/zsh/mfunctions.zsh"
 
 # bun completions
-[ -s "~/.bun/_bun" ] && source "~/.bun/_bun"
+[ -s "~/.local/share/bun/_bun" ] && source "~/.local/share/bun/_bun"
 # zprof
-
-[ -f "/Users/shubham.pawar01/.ghcup/env" ] && . "/Users/shubham.pawar01/.ghcup/env" # ghcup-env

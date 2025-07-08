@@ -1,6 +1,70 @@
 #!/bin/sh
-# rg --files "$HOME" -g '!GitClones' | rofi -dmenu -i -p 'Open' -width 99 | xargs -0 -r -I % xdg-open %
-# rg --files "$HOME" -g '!GitClones' | dmenu -i -p 'Open' -l 20 | xargs -0 -r -I % xdg-open %
-rg --files ~/ --iglob '!.*' --iglob '!Git*' --iglob '!Project-Imgs' \
-    | rofi -dmenu -i -p "Open" -width 99 -async-pre-read 10 \
-    | xargs -r -I{} sh -c "setsid -f xdg-open '{}'"
+
+HOME_DIR="$HOME"
+# Create a temporary file to store the mapping from formatted display name to original path
+temp_map_file=$(mktemp)
+# Ensure the temporary file is deleted on script exit
+trap 'command rm -f "$temp_map_file"' EXIT
+
+rg --files ~/ --iglob '!.*' --iglob '!Git*' --iglob '!Project-Imgs' | while IFS= read -r original_path; do
+    filename=$(basename "$original_path")
+    dir=$(dirname "$original_path")
+
+    formatted_dir=""
+    display_name=""
+
+    if [ "$original_path" = "$HOME_DIR" ]; then
+        # Handle the home directory itself as a special case for display
+        display_name="~"
+        formatted_dir="~" # For consistency in map file, though not strictly used for display
+    elif [ "$dir" = "$HOME_DIR" ]; then
+        # Files directly in the home directory
+        formatted_dir="~"
+        display_name="$filename (~)"
+    elif printf "%s" "$dir" | grep -q "^${HOME_DIR}/"; then
+        # Files in subdirectories of home
+        # Replace $HOME_DIR with ~
+        formatted_dir=$(printf "%s" "$dir" | sed "s|^${HOME_DIR}|~|")
+        display_name="$filename ($formatted_dir)"
+    elif [ "$dir" = "/" ]; then
+        # Files directly in the root directory
+        formatted_dir="/"
+        display_name="$filename (/)"
+    elif [ -z "$dir" ] || [ "$original_path" = "$filename" ]; then
+        # Fallback for paths without directory (e.g., if rg returned non-absolute paths, though it usually returns absolute)
+        formatted_dir="." # Represent current directory if no path info
+        display_name="$filename (./)"
+    else
+        # Absolute paths outside the home directory
+        formatted_dir="$dir"
+        display_name="$filename ($formatted_dir)"
+    fi
+
+    # Print the formatted display name to stdout, which fuzzel will read
+    printf "%s\n" "$display_name"
+
+    # Store the mapping: "formatted_display_name<TAB>original_path" in the temporary file
+    # Escape tabs in display_name just in case it contains any literal tabs, though unlikely.
+    printf "%s\t%s\n" "$(printf "%s" "$display_name" | sed 's/\t/\\t/g')" "$original_path" >>"$temp_map_file"
+
+    # Pipe the list of formatted names to fuzzel
+done | fuzzel --dmenu --placeholder 'Open File' | {
+    # Read the selected formatted name from fuzzel's output
+    read -r selected_display_name
+
+    if [ -n "$selected_display_name" ]; then
+        # Look up the original path using the selected formatted name from the map file.
+        # Use grep -F for fixed string matching and -m 1 for first match.
+        # Escape special characters in selected_display_name for grep's regex interpretation.
+        # Then use awk to extract the second field (original path) from the matched line.
+        original_path_line=$(grep -F -m 1 -- "$(printf "%s" "$selected_display_name" | sed 's/[\*\.\[\]\/\\^$]/\\&/g')" "$temp_map_file")
+
+        # Extract the original path (which is the last tab-separated field)
+        selected_original_path=$(printf "%s" "$original_path_line" | awk -F'\t' '{print $NF}')
+
+        # If an original path was found, open it with xdg-open
+        if [ -n "$selected_original_path" ]; then
+            setsid -f xdg-open "$selected_original_path"
+        fi
+    fi
+}

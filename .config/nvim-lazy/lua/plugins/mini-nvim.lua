@@ -3,7 +3,7 @@ return {
   {
     "echasnovski/mini.align",
     version = "*",
-    keys = { "ga", "gA" },
+    keys = { { "ga", mode = { "n", "x" } }, { "gA", mode = { "n", "x" } } },
     opts = {},
   },
   {

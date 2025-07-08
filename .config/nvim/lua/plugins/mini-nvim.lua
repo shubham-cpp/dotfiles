@@ -89,14 +89,17 @@ return {
       },
     },
   },
+  { "JoosepAlviste/nvim-ts-context-commentstring", enabled = true },
   {
     "echasnovski/mini.files",
     optional = true,
     lazy = true,
     opts = {
       options = { permanent_delete = false },
-      go_in = "L",
-      go_in_plus = "l",
+      mappings = {
+        go_in = "L",
+        go_in_plus = "l",
+      },
     },
     dependencies = {
       {
@@ -160,17 +163,19 @@ return {
                 pattern = "MiniFilesBufferCreate",
                 desc = "Create mappings to select target window",
                 callback = function(args)
+                  local mini_files_opts = require("astrocore").plugin_opts "mini.files"
+                  local mappings = mini_files_opts.mappings or {}
                   local buf_id = args.data.buf_id
                   local files = require "mini.files"
 
-                  vim.keymap.set("n", "W", function()
+                  vim.keymap.set("n", mappings.pick_window_close or "W", function()
                     local win_id = require("window-picker").pick_window()
                     if win_id then
                       files.set_target_window(win_id)
                       files.go_in { close_on_file = true }
                     end
                   end, { desc = "Select window", buffer = buf_id })
-                  vim.keymap.set("n", "gw", function()
+                  vim.keymap.set("n", mappings.pick_window or "gw", function()
                     local win_id = require("window-picker").pick_window()
                     if win_id then
                       files.set_target_window(win_id)
@@ -186,11 +191,13 @@ return {
                 callback = function(args)
                   local buf_id = args.data.buf_id
                   local files = require "mini.files"
+                  local mini_files_opts = require("astrocore").plugin_opts "mini.files"
+                  local mappings = mini_files_opts.mappings or {}
                   local ok, picker = pcall(require, "snacks.picker")
 
                   if not ok then return end
 
-                  vim.keymap.set("n", "gf", function()
+                  vim.keymap.set("n", mappings.find_files_in_dir or "<leader>f", function()
                     local entry = files.get_fs_entry() or {}
                     files.close()
 
@@ -201,7 +208,7 @@ return {
                     picker.files { cwd = cwd, layout = { preset = "vscode" } }
                   end, { desc = "Files Dir", buffer = buf_id })
 
-                  vim.keymap.set("n", "gs", function()
+                  vim.keymap.set("n", mappings.grep_in_dir or "<leader>s", function()
                     local entry = files.get_fs_entry() or {}
                     files.close()
 
