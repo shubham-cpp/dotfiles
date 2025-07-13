@@ -1,8 +1,8 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
-    - /home/shubham/.config/st-terminal
     - /home/shubham/Documents/Programming/WebDev/ai-presentation
+    - /home/shubham/.config/st-terminal
     - /home/shubham/Documents/Programming/WebDev/travel-vue3-app/visit-trails
     - /home/shubham/.local/share/nvim-astro/lazy/blade-nav.nvim
     - /home/shubham/.local/share/nvim-lazy/lazy/LazyVim
