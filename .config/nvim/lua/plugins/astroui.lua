@@ -1,12 +1,6 @@
 ---@type LazySpec
 return {
   {
-    "vague2k/vague.nvim",
-    enabled = true,
-    lazy = true,
-    opts = { transparent = false },
-  },
-  {
     "AstroNvim/astroui",
     ---@type AstroUIOpts
     opts = {
@@ -49,5 +43,10 @@ return {
       --   LSPLoading10 = "⠏",
       -- },
     },
+  },
+  {
+    "vague2k/vague.nvim",
+    lazy = true,
+    opts = { transparent = false },
   },
 }

@@ -149,8 +149,7 @@ done
 # PATH="$(echo $PATH | tr ':' '\n' | awk '{print length, $0}' | sort -n | cut -d' ' -f2 | uniq | tr '\n' ':' | rev | cut -c2- | rev)"
 export PATH
 
-export EDITOR=$(which nvim)
-export VISUAL=$(which nvim)
+export EDITOR=nvim
+export VISUAL=nvim
 
-export TERMINAL=$(which kitty)
-# export FILE_BROWSER=$(which thunar)
+export TERMINAL="alacritty"

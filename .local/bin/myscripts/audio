@@ -33,7 +33,7 @@ toggle-mic)
   pidof dwmblocks | xargs -r kill -38
   ;;
 *)
-  echo "Program requires argument inc,dec,toggle, toggle-mic"
+  echo "Program requires argument inc, dec, toggle, toggle-mic"
   notify-send "Program requires argument inc,dec,toggle, toggle-mic" -t 2000 -i audio-volume-high-symbolic -r 10001
   exit 1
   ;;

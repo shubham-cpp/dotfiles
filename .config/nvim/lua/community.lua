@@ -47,7 +47,6 @@ return {
   { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
 
   { import = "astrocommunity.test.neotest" },
-  -- Mini.nvim
   { import = "astrocommunity.file-explorer.mini-files" },
   { import = "astrocommunity.comment.mini-comment" },
   { import = "astrocommunity.completion.nvim-cmp" },

@@ -8,6 +8,7 @@ return {
   },
   {
     "tpope/vim-dispatch",
+    enabled = true,
     cmd = { "Dispatch", "Make", "Focus", "Start", "FocusDispatch", "Spawn", "Copen", "AbortDispatch" },
   },
 }

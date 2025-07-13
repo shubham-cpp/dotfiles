@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+
+amount=${2:-10}
+
+get_brightness() {
+  out=$(brightnessctl g)
+  echo "$out"
+}
+
+case "$1" in
+inc)
+    brightnessctl s "$amount"+
+  ;;
+dec)
+  brightnessctl s "$amount"-
+  ;;
+*)
+  echo "Program requires argument inc,dec"
+  notify-send "Program requires argument inc,dec" -t 2000 -i display-brightness-symbolic -r 10001
+  exit 1
+  ;;
+
+esac
+notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight  -r 10001
+pidof dwmblocks | xargs -r kill -36

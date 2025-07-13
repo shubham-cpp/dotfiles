@@ -1,8 +1,6 @@
 set fish_greeting # Suppresses fish's intro message
 fish_add_path -aP $HOME/.local/bin $HOME/.local/bin/myscripts
 fish_add_path -aP $HOME/.local/share/npm/bin $HOME/.local/share/golib/bin $HOME/.local/share/luarocks/bin
-fish_add_path -aP $HOME/.config/emacs/bin $HOME/Programming/Flutter/flutter/bin
-fish_add_path -aP $HOME/.local/share/zinit/plugins/ajeetdsouza---zoxide/
 
 set -x EDITOR nvim
 set -g fish_cursor_default block
@@ -37,3 +35,7 @@ complete -c dnf5 -w dnf
 # bun
 set --export BUN_INSTALL "$HOME/.local/share/bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+if status --is-login; and not set -q CARGO_HOME; and test -z "$QT_QPA_PLATFORM"
+  bass source ~/.profile
+end
