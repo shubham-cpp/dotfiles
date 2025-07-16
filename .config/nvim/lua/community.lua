@@ -47,8 +47,11 @@ return {
   { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
 
   { import = "astrocommunity.test.neotest" },
+  { import = "astrocommunity.git.diffview-nvim" },
   -- { import = "astrocommunity.file-explorer.mini-files" },
   { import = "astrocommunity.comment.mini-comment" },
+  -- Nvim-Cmp
   { import = "astrocommunity.completion.nvim-cmp" },
+  { import = "astrocommunity.completion.cmp-under-comparator" },
   { import = "astrocommunity.completion.cmp-cmdline" },
 }
