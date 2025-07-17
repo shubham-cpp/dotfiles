@@ -42,3 +42,9 @@ vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>")
 vim.keymap.set({ "n", "v" }, "<leader>lf", function()
   LazyVim.format({ force = true })
 end, { desc = "Format" })
+
+for _, dir in ipairs({ "h", "j", "k", "l" }) do
+  vim.keymap.set("n", "<C-" .. dir .. ">", function()
+    smart_wincmd(dir)
+  end, { desc = "Smart split " .. dir })
+end
