@@ -65,6 +65,8 @@ return {
           end,
         },
         window = {
+          position = "right", -- left, right, top, bottom, float, current
+          width = 45,
           mappings = {
             ["l"] = "collapse_or_open",
             ["L"] = "child_or_open",

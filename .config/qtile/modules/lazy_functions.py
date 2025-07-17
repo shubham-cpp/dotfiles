@@ -1,7 +1,7 @@
+from libqtile.core.manager import Qtile
 from libqtile.lazy import lazy as lz
 from libqtile.log_utils import logger
-from libqtile.core.manager import Qtile
-# Custom Lazy Functions {{{
+
 # @hook.subscribe.client_urgent_hint_changed
 # def go_to(window):
 #     logger.debug("Run urgent")
@@ -151,9 +151,10 @@ def focus_next_class(qtile: Qtile):
     for w in windows:
         if w == current_window:
             continue
-        if w.window.get_wm_class() == current_window.window.get_wm_class() and w.is_visible:
+        if (
+            w.window.get_wm_class() == current_window.window.get_wm_class()
+            and w.is_visible
+        ):
             w.group.focus(w, True)
             w.keep_above(True)
             break
-
-# }}}

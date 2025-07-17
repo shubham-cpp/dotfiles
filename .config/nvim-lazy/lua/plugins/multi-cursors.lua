@@ -80,7 +80,7 @@ return {
             { desc = "prev(goto)" },
           },
           {
-            "k",
+            "l",
             function()
               require("multicursor-nvim").nextCursor()
             end,

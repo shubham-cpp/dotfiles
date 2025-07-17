@@ -2,10 +2,12 @@ from os import getenv
 from os.path import isfile
 from typing import LiteralString
 
+from libqtile import qtile
 from libqtile.config import EzKey as Key
 from libqtile.lazy import lazy
 
 from .lazy_functions import (
+    focus_next_class,
     move_win_to_immediate_group,
     smart_window_kill,
     toggle_layout,
@@ -14,15 +16,13 @@ from .lazy_functions import (
     update_brightness,
     update_mic_icon,
     update_volume,
-    focus_next_class,
 )
 
 mod: LiteralString = "mod4"
 # terminal = guess_terminal()
 terminal = getenv("TERMINAL", "xterm")
-# if qtile.core.name == "wayland":
-#     terminal = "foot"
-browser = getenv("BROWSER", "firefox")
+if qtile.core.name == "wayland":
+    terminal = "foot"
 
 keys = [
     # Toggles {{{
@@ -107,22 +107,6 @@ keys = [
         lazy.layout.previous(),
         desc="Move focus up",
     ),
-    Key("M-<Left>", lazy.layout.left(), desc="Move focus to left"),
-    Key("M-<Right>", lazy.layout.right(), desc="Move focus to right"),
-    # Key("M-<Down>", lazy.layout.down(), desc="Move focus down"),
-    # Key("M-<Up>", lazy.layout.up(), desc="Move focus up"),
-    Key(
-        "M-<Down>",
-        # lazy.group.next_window(),
-        lazy.layout.next(),
-        desc="Move focus down",
-    ),
-    Key(
-        "M-<Up>",
-        # lazy.group.prev_window(),
-        lazy.layout.previous(),
-        desc="Move focus up",
-    ),
     Key(
         "A-<Tab>",
         # lazy.group.next_window(),
@@ -131,22 +115,30 @@ keys = [
     ),
     # }}}
     # Move window {{{
-    Key("M-S-h", lazy.layout.swap_left(), desc="Move window to the left"),
-    Key("M-S-l", lazy.layout.swap_right(), desc="Move window to the right"),
-    Key("M-S-j", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key("M-S-k", lazy.layout.shuffle_up(), desc="Move window up"),
     Key(
-        "M-S-<Left>",
-        lazy.layout.shuffle_left(),
+        "M-S-h",
+        lazy.layout.move_left().when(layout="plasma"),
+        lazy.layout.swap_left(),
         desc="Move window to the left",
     ),
     Key(
-        "M-S-<Right>",
-        lazy.layout.shuffle_right(),
+        "M-S-l",
+        lazy.layout.move_right().when(layout="plasma"),
+        lazy.layout.swap_right(),
         desc="Move window to the right",
     ),
-    Key("M-S-<Down>", lazy.layout.shuffle_down(), desc="Move window down"),
-    Key("M-S-<Up>", lazy.layout.shuffle_up(), desc="Move window up"),
+    Key(
+        "M-S-j",
+        lazy.layout.move_down().when(layout="plasma"),
+        lazy.layout.swap_down(),
+        desc="Move window down",
+    ),
+    Key(
+        "M-S-k",
+        lazy.layout.move_up().when(layout="plasma"),
+        lazy.layout.swap_up(),
+        desc="Move window up",
+    ),
     # }}}
     # Resize Windows {{{
     Key(
@@ -247,49 +239,29 @@ keys = [
     Key("M-<KP_End>", lazy.spawn("xterm"), desc="Launch xterm"),
     Key(
         "M-w",
-        lazy.spawn(browser),
-        desc=f"Launch {browser}",
+        lazy.spawn("flatpak run com.brave.Browser",shell=True),
+        desc="Launch Brave",
     ),
     Key(
         "M-S-w",
-        # lazy.spawn("thorium-browser"),
-        lazy.spawn("bash -c 'brave || brave-browser'", shell=True),
-        # lazy.spawn("flatpak run com.github.Eloston.UngoogledChromium"),
-        # lazy.spawn(
-        #     "firefox"
-        #     if browser != "firefox" and isfile("/usr/bin/firefox")
-        #     else "brave"
-        #     if isfile("/usr/bin/brave") and browser != "brave"
-        #     else "brave-browser"
-        #     if isfile("/usr/bin/brave-browser") and browser != "brave-browser"
-        #     else "chromium"
-        #     if isfile("/usr/bin/chromium")
-        #     else "chromium-browser"
-        #     if isfile("/usr/bin/chromium-browser")
-        #     else "flatpak run com.github.Eloston.UngoogledChromium"
-        # ),
-        desc=f"Launch {browser}",
+        lazy.spawn("flatpak run io.gitlab.librewolf-community", shell=True),
+        desc="Launch Librewolf",
     ),
     Key(
         "M-e",
         lazy.spawn("bash -c 'thunar || pcmanfm'", shell=True),
         desc="Launch File Manager",
     ),
-    Key("M-S-e", lazy.spawn("kitty -e lfv", shell=True), desc="Launch lf"),
+    Key("M-S-e", lazy.spawn("kitty -e yazi", shell=True), desc="Launch yazi"),
     Key("M-S-q", smart_window_kill(), desc="Kill focused window"),
     Key("M-C-r", lazy.reload_config(), desc="Reload the config"),
     Key("M-C-S-r", lazy.restart(), desc="Reload the config"),
     Key("M-C-x", lazy.shutdown(), desc="Shutdown Qtile"),
-    Key(
-        "M-S-d",
-        lazy.spawn("bash -c 'dmenu_run_history -i || dmenu_run -i'", shell=True),
-        desc="Spawn Run Prompt",
-    ),
-    Key(
-        "M-d",
-        lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
-        desc="Spawn Run Prompt(Rofi)",
-    ),
+    # Key(
+    #     "M-d",
+    #     lazy.spawn("rofi -show run -async-read 10 -config ~/.config/rofi/dmenu.rasi"),
+    #     desc="Spawn Run Prompt(Rofi)",
+    # ),
     Key(
         "M-r",
         lazy.spawn("rofi -show drun -async-read 10"),

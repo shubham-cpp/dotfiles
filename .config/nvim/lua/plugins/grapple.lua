@@ -13,8 +13,8 @@ return {
       { "<leader>`", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
       { "<c-e>", "<cmd>Grapple toggle_tags<cr>", desc = "Toggle tags menu" },
 
-      { "<c-n>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
-      { "<c-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
+      { "<c-s-n>", "<cmd>Grapple cycle_tags next<cr>", desc = "Go to next tag" },
+      { "<c-s-p>", "<cmd>Grapple cycle_tags prev<cr>", desc = "Go to previous tag" },
     }
     for i = 1, 9, 1 do
       local cmd = "<cmd>Grapple select index=" .. i .. "<cr>"

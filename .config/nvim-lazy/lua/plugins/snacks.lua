@@ -197,9 +197,11 @@ return {
       { "<leader>sq", false },
       { "<leader>su", false },
       { "<leader>sj", false },
+
+      { "<leader>n", false },
       -- explorer
-      { "<leader>e", false },
-      { "<leader>E", false },
+      -- { "<leader>e", false },
+      -- { "<leader>E", false },
       ---}}}
       {
         "<Leader><Leader>",

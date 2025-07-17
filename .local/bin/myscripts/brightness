@@ -3,16 +3,16 @@
 amount=${2:-10}
 
 get_brightness() {
-  out=$(brightnessctl g)
+  out=$(brightnessctl i | awk -F'[()]' '/Current brightness/ {print $2}')
   echo "$out"
 }
 
 case "$1" in
 inc)
-    brightnessctl s "$amount"+
+  brightnessctl s "$amount"%+
   ;;
 dec)
-  brightnessctl s "$amount"-
+  brightnessctl s "$amount"%-
   ;;
 *)
   echo "Program requires argument inc,dec"
@@ -21,5 +21,5 @@ dec)
   ;;
 
 esac
-notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight  -r 10001
+notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight -r 10001
 pidof dwmblocks | xargs -r kill -36

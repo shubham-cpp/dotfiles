@@ -1,12 +1,16 @@
+import os
+import subprocess
 from typing import TYPE_CHECKING, List, Union
 
+from extras.floating_window_snapping import move_snap_window
 from libqtile import hook, layout, qtile
 from libqtile.backend.base.window import WindowType
-from libqtile.config import Click, Drag, Match, Rule
+from libqtile.backend.wayland import InputConfig
+from libqtile.config import Click, Drag, DropDown, EzClick, EzDrag, EzKey, Match, Rule, ScratchPad
 from libqtile.layout.base import Layout
 from libqtile.layout.floating import Floating
 from libqtile.layout.max import Max
-from libqtile.layout.spiral import Spiral
+from libqtile.layout import Plasma, Bsp
 from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.layout.zoomy import Zoomy
 from libqtile.lazy import lazy
@@ -17,8 +21,6 @@ from modules.colors import backgroundColor, colors, foregroundColor
 from modules.groups import groups
 from modules.keys import keys, mod, terminal
 from modules.lazy_functions import sticky_windows
-
-from extras.floating_window_snapping import move_snap_window
 
 layouts: List[Layout] = [
     MonadTall(
@@ -32,25 +34,66 @@ layouts: List[Layout] = [
     Max(),
     Floating(),
     Zoomy(),
-    Spiral(**layout_theme),
 ]
+
+next_maximum = {
+    "x": 0.02,
+    "y": 0.02,
+    "width": 0.95,
+    "height": 0.95,
+    "opacity": 1.00,
+    "on_focus_lost_hide": False,
+}
+
+groups.append(
+    ScratchPad(
+        "SPD",
+        [
+            DropDown(
+                "VolumnControl",
+                "pavucontrol",
+                **next_maximum,
+            ),
+            DropDown(
+                "Calculator",
+                "qalculate-gtk",
+                **next_maximum,
+            ),
+        ],
+    )
+)
+keys.extend(
+    [
+        EzKey("M-p", lazy.group["SPD"].dropdown_toggle("VolumnControl")),
+        EzKey("<XF86Calculator>", lazy.group["SPD"].dropdown_toggle("Calculator")),
+    ]
+)
+# Add key bindings to switch VTs in Wayland.
+# We can't check qtile.core.name in default config as it is loaded before qtile is started
+# We therefore defer the check until the key binding is run by using .when(func=...)
+for vt in range(1, 8):
+    keys.append(
+        EzKey(
+            f"C-A-<f{vt}>",
+            lazy.core.change_vt(vt).when(func=lambda: qtile.core.name == "wayland"),
+            desc=f"Switch to VT{vt}",
+        )
+    )
 
 # Drag floating layouts.
 mouse: List[Union[Drag, Click]] = [
-    Drag(
-        [mod],
-        "Button1",
+    EzDrag(
+        "M-<Button1>",
         move_snap_window(snap_dist=20),
         # lazy.window.set_position_floating(),
         start=lazy.window.get_position(),
     ),
-    Drag(
-        [mod],
-        "Button3",
+    EzDrag(
+        "M-<Button3>",
         lazy.window.set_size_floating(),
         start=lazy.window.get_size(),
     ),
-    Click([mod], "Button1", lazy.window.bring_to_front()),
+    EzClick( "M-<Button1>", lazy.window.bring_to_front()),
 ]
 
 dgroups_key_binder = None
@@ -102,14 +145,26 @@ floating_layout = Floating(
         Match(wm_class="Gnome-disks"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="Virt-manager"),
+        Match(title="Bitwarden"),
     ],
 )
 auto_fullscreen = True
-focus_on_window_activation = "focus"
+floats_kept_above = True
+# focus_on_window_activation = "focus"
+focus_on_window_activation = "smart"
 reconfigure_screens = True
 auto_minimize = True
 # When using the Wayland backend, this can be used to configure input devices.
-wl_input_rules = None
+wl_input_rules = {
+    "type:touchpad": InputConfig(
+        scroll_method="two_finger",
+        natural_scroll=True,
+        pointer_accel=0.45,
+        tap=True,
+        tap_button_map="lrm",
+    ),
+    "type:keyboard": InputConfig(kb_repeat_delay=300, kb_repeat_rate=30),
+}
 wmname = "LG3D"
 
 
@@ -196,3 +251,10 @@ def auto_sticky_windows(window):
         and info["name"] == "Picture-in-Picture"
     ):
         sticky_windows.append(window)
+
+@hook.subscribe.startup_once
+def autostart():
+    home = os.path.expanduser(
+        "~/.config/qtile/extras/autostart.sh"
+    )  # path to my script, under my user directory
+    subprocess.call([home])
