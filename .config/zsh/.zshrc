@@ -1,6 +1,10 @@
 export ZGEN_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zgenom"
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/zsh-cache"
 
+if [[ ! -d "$ZGEN_DIR" ]]; then
+  git clone https://github.com/jandamm/zgenom.git "$ZGEN_DIR"
+fi
+
 setopt APPEND_HISTORY
 unsetopt INC_APPEND_HISTORY
 setopt SHARE_HISTORY
@@ -84,7 +88,7 @@ if ! zgenom saved; then
   # if hash fzf &>/dev/null; then
   #   zgenom eval --name mise <<(fzf --zsh)
   # fi
-  if command -v mise >/dev/null; then
+  if hash mise &>/dev/null; then
     zgenom eval --name mise <<(mise activate zsh)
   fi
   if command -v register-python-argcomplete >/dev/null; then

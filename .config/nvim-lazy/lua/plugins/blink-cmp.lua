@@ -93,14 +93,15 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      snippets = { score_offset = 9 },
       sources = {
         default = { "ripgrep" },
         providers = {
-          -- snippets = { score_offset = 100 },
-          -- lsp = { score_offset = 100 },
-          -- path = { score_offset = 120 },
+          snippets = { score_offset = 9 },
+          lsp = { score_offset = 10 },
+          path = { score_offset = 30 },
           buffer = {
-            -- score_offset = 40,
+            score_offset = -3,
             opts = {
               get_bufnrs = function()
                 return vim.tbl_filter(function(bufnr)
@@ -116,7 +117,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              -- score_offset = 20,
+              score_offset = -2,
               search_casing = "--smart-case",
             },
           },

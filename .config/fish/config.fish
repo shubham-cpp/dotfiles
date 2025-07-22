@@ -36,6 +36,6 @@ complete -c dnf5 -w dnf
 set --export BUN_INSTALL "$HOME/.local/share/bun"
 set --export PATH $BUN_INSTALL/bin $PATH
 
-if status --is-login; and not set -q CARGO_HOME; and test -z "$QT_QPA_PLATFORM"
+if status --is-login; and not set -q CARGO_HOME
   bass source ~/.profile
 end
