@@ -1,5 +1,5 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
+# source ~/.profile
 # Theme settings
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface font-name 'Fira Sans 11'
@@ -26,13 +26,13 @@ waybar &
 swaync &
 nm-applet &
 if test -f ~/.config/wall.png; then
-	swaybg --image ~/.config/wall.png --mode stretch &
+  swaybg --image ~/.config/wall.png --mode stretch &
 fi
 if test -f /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; then
-	/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+  /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 fi
 if test -f /usr/lib/polkit-kde-authentication-agent-1; then
-	/usr/lib/polkit-kde-authentication-agent-1 &
+  /usr/lib/polkit-kde-authentication-agent-1 &
 fi
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
 # hyprshade auto &

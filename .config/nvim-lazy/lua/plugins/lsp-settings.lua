@@ -8,7 +8,7 @@ return {
           LazyVim.lsp.on_attach(function(client)
             client.server_capabilities.completionProvider.triggerCharacters =
               { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
-          end,'sp_tailwind')
+          end, "sp_tailwind")
         end,
       },
       -- make sure mason installs the server
@@ -212,6 +212,7 @@ return {
         "eslint_d",
         "cssmodules-language-server",
         "css-variables-language-server",
+        "emmet-language-server",
       },
     },
   },

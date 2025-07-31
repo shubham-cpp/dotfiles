@@ -35,6 +35,7 @@ return {
           [".env.*"] = "conf",
         },
         pattern = {
+          ["tsconfig*.json"] = "jsonc",
           [".*/kitty/.+%.conf"] = "kitty",
         },
       },

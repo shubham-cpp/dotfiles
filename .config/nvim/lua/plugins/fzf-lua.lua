@@ -3,14 +3,12 @@ return {
   "ibhagwan/fzf-lua",
   dependencies = "echasnovski/mini.icons",
   cmd = "FzfLua",
-  lazy = true,
   opts = function()
     local actions = require "fzf-lua.actions"
 
     local vscode = {
       height = 0.55,
       width = 0.6,
-      col = 0.4,
       row = 0,
     }
 
@@ -41,7 +39,6 @@ return {
         },
       },
       grep = {
-        fzf_opts = { ["--scheme"] = "path" },
         actions = action_keys,
         rg_glob = true,
         glob_flag = "--iglob",
@@ -49,32 +46,6 @@ return {
       },
     }
   end,
-  -- keys = {
-  --   { "<c-p>", function() require("fzf-lua").files {} end, desc = "Find files" },
-  --   {
-  --     "<Leader>fg",
-  --     function() require("fzf-lua").git_files {} end,
-  --     desc = "Find git files",
-  --   },
-  --   {
-  --     "<Leader>fn",
-  --     function()
-  --       require("fzf-lua").files {
-  --         cwd = vim.fn.stdpath "config",
-  --       }
-  --     end,
-  --     desc = "Find AstroNvim config files",
-  --   },
-  --   {
-  --     "<Leader>fd",
-  --     function()
-  --       require("fzf-lua").git_files {
-  --         cwd = vim.fn.expand "~/Documents/dotfiles/",
-  --       }
-  --     end,
-  --     desc = "Dotfiles",
-  --   },
-  -- },
   specs = {
     {
       "AstroNvim/astrocore",

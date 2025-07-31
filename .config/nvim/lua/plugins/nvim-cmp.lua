@@ -4,7 +4,20 @@ return {
   dependencies = { "lukas-reineke/cmp-rg" },
   optional = true,
   opts = function(_, opts)
+    ---@return cmp.ComparatorFunction
+    local function lower_emmet()
+      return function(e1, e2)
+        local is_e1_emmet = e1.source:get_debug_name() == "nvim_lsp:emmet_ls"
+          or e1.source:get_debug_name() == "nvim_lsp:emmet_language_server"
+        local is_e2_emmet = e2.source:get_debug_name() == "nvim_lsp:emmet_ls"
+          or e2.source:get_debug_name() == "nvim_lsp:emmet_language_server"
+        if is_e1_emmet then return false end
+        if is_e2_emmet then return true end
+        return nil
+      end
+    end
     local luasnip, cmp = require "luasnip", require "cmp"
+    local defaults = require "cmp.config.default"()
 
     local function is_visible(_cmp) return _cmp.core.view:visible() or vim.fn.pumvisible() == 1 end
 
@@ -59,6 +72,13 @@ return {
         priority = 200,
         option = { additional_arguments = "--smart-case" },
       },
+    }
+    opts.sorting = {
+      priority_weight = defaults.sorting.priority_weight,
+      comparators = vim.tbl_extend("keep", {
+        -- deprio(types.lsp.CompletionItemKind.Text),
+        lower_emmet(),
+      }, defaults.sorting.comparators),
     }
   end,
 }

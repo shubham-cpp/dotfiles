@@ -54,6 +54,7 @@ return {
   { "echasnovski/mini.extra", opts = {}, lazy = true },
   {
     "echasnovski/mini.ai",
+    dependencies = { "echasnovski/mini.extra" },
     event = "User AstroFile",
     opts = function()
       local ai = require "mini.ai"
@@ -74,6 +75,7 @@ return {
             "^().*()$",
           },
           g = gen_ai_spec.buffer(), -- buffer
+          B = gen_ai_spec.buffer(),
           D = gen_ai_spec.diagnostic(),
           u = ai.gen_spec.function_call(), -- u for "Usage"
           U = ai.gen_spec.function_call { name_pattern = "[%w_]" }, -- without dot in function name

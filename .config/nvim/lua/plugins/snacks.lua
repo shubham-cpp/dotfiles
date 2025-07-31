@@ -87,39 +87,39 @@ return {
           end,
           desc = "Find files",
         }
-        maps.n["<c-p>"] = {
-          function() require("snacks").picker.files { layout = { preset = "vscode" } } end,
-          desc = "Find files",
-        }
-        maps.n["<Leader>fg"] = {
-          function() require("snacks").picker.git_files { layout = { preset = "vscode" } } end,
-          desc = "Find git files",
-        }
+        -- maps.n["<c-p>"] = {
+        --   function() require("snacks").picker.files { layout = { preset = "vscode" } } end,
+        --   desc = "Find files",
+        -- }
+        -- maps.n["<Leader>fg"] = {
+        --   function() require("snacks").picker.git_files { layout = { preset = "vscode" } } end,
+        --   desc = "Find git files",
+        -- }
 
         maps.n["<Leader>fH"] = { function() require("snacks").picker.highlights() end, desc = "highlights" }
         maps.n["<Leader>fr"] = { function() require("snacks").picker.resume() end, desc = "Resume" }
         maps.n["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Zoxide" }
 
-        maps.n["<Leader>fn"] = {
-          function()
-            require("snacks").picker.files {
-              dirs = { vim.fn.stdpath "config" },
-              layout = { preset = "vscode" },
-              desc = "Config Files",
-            }
-          end,
-          desc = "Find AstroNvim config files",
-        }
-        maps.n["<Leader>fd"] = {
-          function()
-            require("snacks").picker.git_files {
-              cwd = vim.fn.expand "~/Documents/dotfiles/",
-              layout = { preset = "vscode" },
-              desc = "Dotfiles",
-            }
-          end,
-          desc = "Dotfiles",
-        }
+        -- maps.n["<Leader>fn"] = {
+        --   function()
+        --     require("snacks").picker.files {
+        --       dirs = { vim.fn.stdpath "config" },
+        --       layout = { preset = "vscode" },
+        --       desc = "Config Files",
+        --     }
+        --   end,
+        --   desc = "Find AstroNvim config files",
+        -- }
+        -- maps.n["<Leader>fd"] = {
+        --   function()
+        --     require("snacks").picker.git_files {
+        --       cwd = vim.fn.expand "~/Documents/dotfiles/",
+        --       layout = { preset = "vscode" },
+        --       desc = "Dotfiles",
+        --     }
+        --   end,
+        --   desc = "Dotfiles",
+        -- }
         maps.n["<Leader>fN"] = { function() require("snacks").picker.notifications() end, desc = "Find notifications" }
         maps.n["<Leader>fL"] = { function() require("snacks").picker.lazy() end, desc = "Lazy" }
 

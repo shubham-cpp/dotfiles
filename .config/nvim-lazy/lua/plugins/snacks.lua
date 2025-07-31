@@ -215,13 +215,13 @@ return {
         end,
         desc = "Find files",
       },
-      {
-        "<C-p>",
-        function()
-          Snacks.picker.files({ layout = { preset = "vscode" } })
-        end,
-        desc = "Find Files",
-      },
+      -- {
+      --   "<C-p>",
+      --   function()
+      --     Snacks.picker.files({ layout = { preset = "vscode" } })
+      --   end,
+      --   desc = "Find Files",
+      -- },
       {
         "<leader>ff",
         LazyVim.pick("files", { layout = { preset = "vscode" } }),
@@ -232,20 +232,20 @@ return {
         LazyVim.pick("files", { layout = { preset = "vscode" }, root = false }),
         desc = "Find Files (cwd)",
       },
-      {
-        "<leader>fg",
-        function()
-          Snacks.picker.git_files({ layout = { preset = "vscode" } })
-        end,
-        desc = "Find Files(git)",
-      },
-      {
-        "<leader>fn",
-        function()
-          Snacks.picker.files({ cwd = vim.fn.stdpath("config"), layout = { preset = "vscode" } })
-        end,
-        desc = "Find Config File",
-      },
+      -- {
+      --   "<leader>fg",
+      --   function()
+      --     Snacks.picker.git_files({ layout = { preset = "vscode" } })
+      --   end,
+      --   desc = "Find Files(git)",
+      -- },
+      -- {
+      --   "<leader>fn",
+      --   function()
+      --     Snacks.picker.files({ cwd = vim.fn.stdpath("config"), layout = { preset = "vscode" } })
+      --   end,
+      --   desc = "Find Config File",
+      -- },
       {
         "<leader>fN",
         function()
@@ -253,16 +253,16 @@ return {
         end,
         desc = "notifications",
       },
-      {
-        "<leader>fd",
-        function()
-          Snacks.picker.git_files({
-            cwd = vim.fn.expand("~/Documents/dotfiles"),
-            layout = { preset = "vscode" },
-          })
-        end,
-        desc = "Find Dotfiles",
-      },
+      -- {
+      --   "<leader>fd",
+      --   function()
+      --     Snacks.picker.git_files({
+      --       cwd = vim.fn.expand("~/Documents/dotfiles"),
+      --       layout = { preset = "vscode" },
+      --     })
+      --   end,
+      --   desc = "Find Dotfiles",
+      -- },
       {
         "<leader>fz",
         function()
