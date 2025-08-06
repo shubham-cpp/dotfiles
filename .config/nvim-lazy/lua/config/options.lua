@@ -37,10 +37,10 @@ vim.opt.wildignore:append({
 })
 
 if vim.fn.executable("rg") == 1 then
-  vim.opt.grepprg = "rg --vimgrep --smart-case" -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
+  vim.opt.grepprg = "rg --vimgrep --smart-case --no-heading --sort=path" -- Also check RIPGREP_CONFIG_PATH="$HOME/.config/ripgreprc"
 end
 
-function Fd(file_pattern, _)
+function _G.Fd(file_pattern, _)
   -- if first char is * then fuzzy search
   if file_pattern:sub(1, 1) == "*" then
     file_pattern = file_pattern:gsub(".", ".*%0") .. ".*"
@@ -123,5 +123,25 @@ end, {
         return true
       end)
       :totable()
+  end,
+})
+
+vim.api.nvim_create_user_command("RunMake", function(opts)
+  vim.cmd("update")
+  vim.cmd("compiler " .. opts.args)
+  vim.cmd("Make")
+end, {
+  nargs = 1,
+  complete = function(arg_lead)
+    local rtps = vim.api.nvim_list_runtime_paths()
+    local comps = {}
+    for _, p in ipairs(rtps) do
+      for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
+        table.insert(comps, vim.fn.fnamemodify(f, ":t:r"))
+      end
+    end
+    return vim.tbl_filter(function(c)
+      return vim.startswith(c, arg_lead)
+    end, comps)
   end,
 })

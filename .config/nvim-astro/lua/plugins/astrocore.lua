@@ -202,6 +202,24 @@ return {
           desc = "Redirect output of a command to scratch tab",
           complete = function(query) return vim.fn.getcompletion(query, "command") end,
         },
+        RunMake = {
+          function(opts)
+            vim.cmd "update"
+            vim.cmd("compiler " .. opts.args)
+            vim.cmd "Make"
+          end,
+          nargs = 1,
+          complete = function(arg_lead)
+            local rtps = vim.api.nvim_list_runtime_paths()
+            local comps = {}
+            for _, p in ipairs(rtps) do
+              for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
+                table.insert(comps, vim.fn.fnamemodify(f, ":t:r"))
+              end
+            end
+            return vim.tbl_filter(function(c) return vim.startswith(c, arg_lead) end, comps)
+          end,
+        },
       },
     },
   },

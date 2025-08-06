@@ -1,9 +1,9 @@
 # vim: commentstring=#\ %s
 command = fish --login
 window-padding-color = background
-font-family = "RecMonoCasual Nerd Font"
-font-size=12
-# font-family = "FiraCode Nerd Font"
+# font-family = "MonoLisa\-Black"
+font-size=12.5
+font-family = "JetBrainsMono Nerd Font"
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig

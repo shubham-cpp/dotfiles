@@ -78,6 +78,14 @@ return {
           end,
           desc = "Dotfiles",
         }
+        maps.n["<Leader>fh"] = {
+          function() require("fzf-lua").help_tags {} end,
+          desc = "Help tags",
+        }
+        maps.n["<Leader>fk"] = {
+          function() require("fzf-lua").keymaps {} end,
+          desc = "Keymaps",
+        }
       end,
     },
   },

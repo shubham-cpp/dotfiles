@@ -2,7 +2,7 @@
 
 # terminal emulator
 super +{_,shift +} Return
-    {$TERMINAL || st,kitty}
+    {$TERMINAL || st,wezterm}
 super + {KP_Enter,KP_End}
     {alacritty,xterm}
 
@@ -16,7 +16,7 @@ super +{_,shift + } e
     {thunar || pcmanfm || nemo ,alacritty -e yazi}
 
 super +{_,shift +} w
-    { $BROWSER || notify-send -t 1500 -u critical "No Browser is set", brave-browser || brave || flatpak run com.github.Eloston.UngoogledChromium || chromium}
+    { flatpak run com.brave.Browser || notify-send -t 1500 -u critical "No Browser is set", flatpak run io.gitlab.librewolf-community}
 
 super + control + s
     logout_prompt
@@ -47,7 +47,7 @@ super +{_,shift + } Escape
 
 # Control the Brightness
 XF86MonBrightness{Up,Down}
-    brightnessctl s 10{+,-} && polybar-msg action mbrightness hook 0 &&  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
+    brightnessctl s 10{+,-} && polybar-msg action mbrightness hook 0 &&  notify-send "Brightness: " -t 10011 -i display-brightness-symbolic -h int:value:$(brightnessctl g)
 
 shift + XF86MonBrightness{Up,Down}
     brightnessctl s {200,30} && polybar-msg action mbrightness hook 0

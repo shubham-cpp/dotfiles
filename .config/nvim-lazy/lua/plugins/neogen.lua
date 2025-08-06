@@ -12,6 +12,7 @@ return {
   },
   keys = {
     { prefix, desc = "Annotation" },
+    { "<leader>cn", false },
     {
       prefix .. "<CR>",
       function()
@@ -46,6 +47,13 @@ return {
         require("neogen").generate({ type = "file" })
       end,
       desc = "File",
+    },
+    {
+      "<leader>ln",
+      function()
+        require("neogen").generate()
+      end,
+      desc = "Generate Annotations (Neogen)",
     },
   },
 }

@@ -1,3 +1,16 @@
+local function filter(arr, fn)
+  if type(arr) ~= "table" then return arr end
+
+  local filtered = {}
+  for k, v in pairs(arr) do
+    if fn(v, k, arr) then table.insert(filtered, v) end
+  end
+
+  return filtered
+end
+
+local function filterReactDTS(value) return string.match(value.targetUri or value.uri, "%/index.d.ts") == nil end
+
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
@@ -7,7 +20,7 @@ return {
     -- Configuration table of features provided by AstroLSP
     features = {
       -- codelens = true, -- enable/disable codelens refresh on start
-      inlay_hints = true, -- enable/disable inlay hints on start
+      inlay_hints = false, -- enable/disable inlay hints on start
       -- semantic_tokens = true, -- enable/disable semantic token highlighting
     },
     -- enable servers that you already have installed without mason
@@ -49,6 +62,16 @@ return {
               variableTypes = { enabled = false },
             },
           },
+        },
+        handlers = {
+          ["textDocument/definition"] = function(err, result, method, ...)
+            if vim.islist(result) and #result > 1 then
+              local filtered_result = filter(result, filterReactDTS)
+              return vim.lsp.handlers["textDocument/definition"](err, filtered_result, method, ...)
+            end
+
+            vim.lsp.handlers["textDocument/definition"](err, result, method, ...)
+          end,
         },
       },
       emmet_ls = false,
