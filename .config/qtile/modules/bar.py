@@ -2,10 +2,12 @@ import subprocess
 from typing import List, Union
 
 # from libqtile.command import lazy
-from libqtile import bar, widget, qtile
+from libqtile import bar, qtile, widget
 from libqtile.config import Screen
 
 from .colors import backgroundColor, colors, foregroundColor
+
+is_wayland = qtile.core.name == "wayland"
 
 layout_theme: dict[str, Union[str, int, list[str]]] = {
     "margin": 5,
@@ -15,9 +17,9 @@ layout_theme: dict[str, Union[str, int, list[str]]] = {
 }
 
 widget_defaults = dict(
-    font="JetBrainsMonoNL NF SemiBold",
-    fontsize=13,
-    padding=3,
+    font="Fira Sans Regular",
+    fontsize=12,
+    padding=2,
 )
 extension_defaults = widget_defaults.copy()
 
@@ -88,39 +90,39 @@ screens: List[Screen] = [
                     name_transform=lambda name: name.upper(),
                 ),
                 widget.Net(
-                    format='<span size="large">\uf1eb</span> {down: 4.2f} {down_suffix} <span size="large">\uf175\uf176</span> {up: 4.2f} {up_suffix}',
+                    format='<span size="large">\uf1eb</span>   {down: 4.2f} {down_suffix} <span size="large">\uf175\uf176</span> {up: 4.2f} {up_suffix}',
                     fontsize=13,
                     padding=10,
                     # prefix='M',
                     update_interval=3,
                 ),
-                # widget.Battery(
-                #     foreground=colors[11],
-                #     fontsize=16,
-                #     low_percentage=0.2,
-                #     low_foreground=colors[5],
-                #     font="JetBrainsMono Nerd Font",
-                #     format="{char}",
-                #     charge_char=" ",
-                #     discharge_char=" ",
-                #     # discharge_char='󰁹',
-                #     empty_char="󱃍",
-                #     full_char="󰂅",
-                #     not_charging_char="",
-                #     unknown_char="󰂑",
-                #     update_interval=3,
-                # ),
-                # widget.Battery(
-                #     font="JetBrainsMonoNL NF SemiBold",
-                #     charge_char="󰄿",
-                #     discharge_char="󰄼",
-                #     notify_below=10,
-                #     # format="<span size=\"xx-large\"{char}</span> {percent:2.0%}",
-                #     format="{percent:2.0%}",
-                #     foreground=foregroundColor,
-                #     padding=5,
-                #     update_interval=3,
-                # ),
+                widget.Battery(
+                    foreground=colors[11],
+                    fontsize=16,
+                    low_percentage=0.2,
+                    low_foreground=colors[5],
+                    font="JetBrainsMono Nerd Font",
+                    format="{char}",
+                    charge_char=" ",
+                    discharge_char=" ",
+                    # discharge_char='󰁹',
+                    empty_char="󱃍",
+                    full_char="󰂅",
+                    not_charging_char="",
+                    unknown_char="󰂑",
+                    update_interval=3,
+                ),
+                widget.Battery(
+                    font="JetBrainsMonoNL NF SemiBold",
+                    charge_char="󰄿",
+                    discharge_char="󰄼",
+                    notify_below=10,
+                    # format="<span size=\"xx-large\"{char}</span> {percent:2.0%}",
+                    format="{percent:2.0%}",
+                    foreground=foregroundColor,
+                    padding=5,
+                    update_interval=3,
+                ),
                 widget.TextBox(
                     text=" ",
                     fontsize=16,
@@ -192,20 +194,20 @@ screens: List[Screen] = [
                     foreground=foregroundColor,
                     update_interval=300,
                 ),
-                # widget.Sep(linewidth=0, padding=10),
-                # widget.TextBox(
-                #     text="󰃠 ",
-                #     fontsize=16,
-                #     font="JetBrainsMono Nerd Font",
-                #     foreground=colors[2],
-                # ),
-                # widget.GenPollCommand(
-                #     name="brightness",
-                #     cmd=["brightnessctl", "g"],
-                #     fontsize=14,
-                #     foreground=foregroundColor,
-                #     update_interval=300,
-                # ),
+                widget.Sep(linewidth=0, padding=10),
+                widget.TextBox(
+                    text="󰃠 ",
+                    fontsize=16,
+                    font="JetBrainsMono Nerd Font",
+                    foreground=colors[2],
+                ),
+                widget.GenPollCommand(
+                    name="brightness",
+                    cmd=["brightnessctl", "g"],
+                    fontsize=14,
+                    foreground=foregroundColor,
+                    update_interval=300,
+                ),
                 widget.Sep(linewidth=0, padding=10),
                 widget.TextBox(
                     text=" ",
@@ -221,11 +223,11 @@ screens: List[Screen] = [
                     background=backgroundColor,
                 ),
                 # widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
-                widget.Systray(
-                    icon_size=28,
+                widget.StatusNotifier()
+                if is_wayland
+                else widget.Systray(
+                    icon_size=24,
                 ),
-                # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
-                # widget.StatusNotifier(),
                 widget.Sep(
                     linewidth=1,
                     padding=10,
@@ -235,19 +237,13 @@ screens: List[Screen] = [
                 widget.CurrentLayoutIcon(
                     scale=0.7, foreground=colors[6], background=backgroundColor
                 ),
-                # widget.Sep(
-                #     linewidth=1,
-                #     padding=10,
-                #     foreground=colors[5],
-                #     background=backgroundColor,
-                # ),
-                # widget.QuickExit(),
             ],
             24,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
             background=backgroundColor,
-            opacity=0.8,
+            # background="#23263366",
+            opacity=1,
         ),
     ),
 ]

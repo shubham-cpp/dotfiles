@@ -19,7 +19,34 @@ return {
           },
         },
         eslint = { keys = { { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" } } },
+        -- lua_ls = false,
         pyright = false,
+        -- emmylua_ls = {
+        --   settings = {
+        --     Lua = {
+        --       completion = { callSnippet = true },
+        --       diagnostics = { enables = { "undefined-field" } },
+        --       runtime = {
+        --         version = "LuaJIT",
+        --         extensions = { ".lua", ".lua.txt" },
+        --         requirePattern = {
+        --           "lua/?.lua",
+        --           "lua/?/init.lua",
+        --           "?/lua/?.lua",
+        --           "?/lua/?/init.lua",
+        --         },
+        --       },
+        --       workspace = {
+        --         library = {
+        --           "$VIMRUNTIME",
+        --           "$LLS_Addons/luvit",
+        --           "$HOME/.local/share/nvim/lazy",
+        --         },
+        --         ignoreGlobs = { "**/*_spec.lua" },
+        --       },
+        --     },
+        --   },
+        -- },
         basedpyright = {
           settings = {
             basedpyright = {
@@ -168,7 +195,7 @@ return {
         ft = { "c", "cpp" },
       }
       keys[#keys + 1] = {
-        "<leader>cp",
+        "<leader>lp",
         function()
           local params = vim.lsp.util.make_position_params()
           LazyVim.lsp.execute({
@@ -180,7 +207,7 @@ return {
         desc = "To Pipe",
       }
       keys[#keys + 1] = {
-        "<leader>cP",
+        "<leader>lP",
         function()
           local params = vim.lsp.util.make_position_params()
           LazyVim.lsp.execute({
@@ -194,17 +221,10 @@ return {
     end,
   },
   {
-    "folke/trouble.nvim",
-    optional = true,
-    keys = {
-      { "<leader>cs", false },
-      { "<leader>cS", false },
-      { "<leader>ls", "<cmd>Trouble symbols toggle<cr>", desc = "Symbols (Trouble)" },
-      { "<leader>lS", "<cmd>Trouble lsp toggle<cr>", desc = "LSP references/definitions/... (Trouble)" },
-    },
-  },
-  {
     "mfussenegger/nvim-lint",
+    init = function()
+      vim.env.ESLINT_D_PPID = vim.fn.getpid()
+    end,
     opts = { linters_by_ft = { go = { "golangcilint" } } },
   },
   {

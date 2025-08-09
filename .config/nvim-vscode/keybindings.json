@@ -1,3 +1,4 @@
+// vim:ft=jsonc
 // Place your key bindings in this file to override the defaults
 [
   {
@@ -24,5 +25,20 @@
     "key": "ctrl+k",
     "command": "selectPrevSuggestion",
     "when": "neovim.init && neovim.mode == insert && suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+  },
+  {
+    "key": "alt+o",
+    "command": "workbench.action.navigateBackInEditLocations",
+    "when": "!neovim.init || (neovim.init && neovim.mode == insert)"
+  },
+  {
+    "key": "alt+i",
+    "command": "workbench.action.navigateForwardInEditLocations",
+    "when": "!neovim.init || (neovim.init && neovim.mode == insert)"
+  },
+  {
+    "key": "ctrl+b",
+    "command": "workbench.action.toggleSidebarVisibility",
+    "when": "!neovim.init || (neovim.init && (neovim.mode == normal || neovim.mode == insert))"
   }
 ]

@@ -47,8 +47,10 @@ return {
           exrc = true, -- allows to create project specific settings
           sessionoptions = { "blank", "buffers", "curdir", "globals", "help", "tabpages", "winsize", "terminal" },
           smoothscroll = true,
-          grepprg = vim.fn.executable('rg') == 1 and "rg --vimgrep --smart-case --no-heading --sort=path" or vim.opt.grepprg,
+          grepprg = vim.fn.executable "rg" == 1 and "rg --vimgrep --smart-case --no-heading --sort=path"
+            or vim.opt.grepprg,
           scrolloff = 8,
+          splitkeep = "topline",
         },
         g = { -- vim.g.<key>
           markdown_recommended_style = 0,

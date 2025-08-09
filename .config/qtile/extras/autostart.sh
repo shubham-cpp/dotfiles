@@ -36,8 +36,6 @@ if [ -x /usr/lib/polkit-kde-authentication-agent-1 ]; then
   run /usr/lib/polkit-kde-authentication-agent-1
 elif [ -x /usr/libexec/kf5/polkit-kde-authentication-agent-1 ]; then
   run /usr/libexec/kf5/polkit-kde-authentication-agent-1
-# elif [ -x "$(which lxpolkit)" ]; then
-# 	run lxpolkit
 elif [ -x /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 ]; then
   run /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
 elif [ -x /usr/libexec/polkit-gnome-authentication-agent-1 ]; then # polkit-gnome kde
@@ -46,10 +44,11 @@ elif [ -x /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 ]; then
   run /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 fi
 
-/usr/lib/xfce4/notifyd/xfce4-notifyd &
-# /usr/lib/pam_kwallet_init &
-nm-applet &
-
 systemctl --user import-environment PATH
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-gtk.service
 dbus-update-activation-environment
+
+run /usr/lib/xfce4/notifyd/xfce4-notifyd
+run /usr/lib/pam_kwallet_init
+run kwalletd6
+run nm-applet

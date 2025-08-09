@@ -141,8 +141,8 @@ if exists('g:vscode')
   map zO <Cmd>call VSCodeNotify('editor.unfoldAll')<CR>
   map zp <Cmd>call VSCodeNotify('editor.gotoParentFold')<CR>
 
-  nnoremap <C-b> <cmd>call VSCodeNotify('workbench.action.toggleSidebarVisibility')<cr>
-  nnoremap <C-j> <Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>
+  nnoremap <c-b> <cmd>call VSCodeNotify('workbench.action.toggleSidebarVisibility')<cr>
+  nnoremap <c-j> <Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>
 
   nnoremap <leader>gg <Cmd>call VSCodeNotify('workbench.view.scm')<cr>
   nnoremap <leader>ge <Cmd>call VSCodeNotify('workbench.view.extensions')<cr>
@@ -150,18 +150,19 @@ if exists('g:vscode')
   nnoremap <leader>gf <Cmd>call VSCodeNotify('workbench.view.explorer')<cr>
   nnoremap <leader>gk <Cmd>call VSCodeNotify('workbench.action.openGlobalKeybindings')<cr>
   nnoremap <C-w><C-c> <Cmd>call VSCodeNotify('workbench.action.closeActiveEditor')<CR>k
+  nnoremap <C-w><C-o> <Cmd>call VSCodeNotify('workbench.action.closeOtherEditors')<CR>k
   nnoremap <leader>R <cmd>call VSCodeNotify('workbench.action.reloadWindow')<cr>
   " imap <C-k> <Cmd>call VSCodeNotify('editor.action.insertLineBefore')<CR>
-  nnoremap <A-h> <Cmd>call VSCodeNotify('workbench.action.previousEditor')<cr>
-  nnoremap <A-l> <Cmd>call VSCodeNotify('workbench.action.nextEditor')<cr>
+  nnoremap <M-h> <cmd>call VSCodeNotify('workbench.action.previousEditor')<cr>
+  nnoremap <M-l> <cmd>call VSCodeNotify('workbench.action.nextEditor')<cr>
 
-  nnoremap <leader>a <cmd>call VSCodeNotify('vscode-harpoon.addEditor')<cr>
-  nnoremap <C-e> <cmd>call VSCodeNotify('vscode-harpoon.editEditors')<cr>
-  nnoremap <M-p> <Cmd>call VSCodeNotify('vscode-harpoon.editorQuickPick')<CR>
-  nnoremap '1 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor1')<cr>
-  nnoremap '2 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor2')<cr>
-  nnoremap '3 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor3')<cr>
-  nnoremap '4 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor4')<cr>
+  nnoremap <leader>te <cmd>call VSCodeNotify('vscode-harpoon.editEditors')<cr>
+  nnoremap <leader>` <cmd>call VSCodeNotify('vscode-harpoon.addEditor')<cr>
+  nnoremap <leader>tp <Cmd>call VSCodeNotify('vscode-harpoon.editorQuickPick')<CR>
+  nnoremap <LocalLeader>1 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor1')<cr>
+  nnoremap <LocalLeader>2 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor2')<cr>
+  nnoremap <LocalLeader>3 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor3')<cr>
+  nnoremap <LocalLeader>4 <cmd>call VSCodeNotify('vscode-harpoon.gotoEditor4')<cr>
 
   function! MoveCursor(direction) abort
     if(reg_recording() == '' && reg_executing() == '')
@@ -210,6 +211,7 @@ lua << EOF
 vim.schedule(function()
   vim.opt.clipboard:append(vim.env.SSH_TTY and '' or 'unnamedplus') -- Sync with system clipboard
 end)
+vim.g.maplocalleader = "\\"
 if vim.g.vscode == nil then
   local o = vim.opt
   o.undodir = { vim.fn.stdpath 'state' .. '/undodir//' }

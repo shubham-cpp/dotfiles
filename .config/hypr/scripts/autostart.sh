@@ -11,6 +11,23 @@ gsettings set org.gnome.desktop.interface monospace-font-name 'FiraCode Nerd Fon
 # gsettings set org.gnome.desktop.interface gtk-theme Juno
 # gsettings set org.gnome.desktop.wm.preferences theme Juno
 
+if test -f ~/.config/wall.png; then
+  swaybg --image ~/.config/wall.png --mode stretch &
+fi
+
+if test -f /usr/lib/polkit-kde-authentication-agent-1; then
+  /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+elif test -f /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; then
+  /usr/lib/polkit-kde-authentication-agent-1 &
+fi
+
+if command -v kwalletd6 >/dev/null; then
+  # /usr/lib/pam_kwallet_init
+  kwalletd6 &
+elif command -v gnome-keyring-daemon >/dev/null; then
+  gnome-keyring-daemon &
+fi
+
 sleep 1
 systemctl --user stop xdg-desktop-portal-gtk xdg-desktop-portal xdg-desktop-portal-hyprland
 killall waybar
@@ -25,17 +42,9 @@ systemctl --user start xdg-desktop-portal
 waybar &
 swaync &
 nm-applet &
-if test -f ~/.config/wall.png; then
-  swaybg --image ~/.config/wall.png --mode stretch &
-fi
-if test -f /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; then
-  /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
-fi
-if test -f /usr/lib/polkit-kde-authentication-agent-1; then
-  /usr/lib/polkit-kde-authentication-agent-1 &
-fi
+hypridle &
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
 # hyprshade auto &
-gnome-keyring-daemon &
+
 sleep 5s
 env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &

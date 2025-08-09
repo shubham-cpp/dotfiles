@@ -129,6 +129,8 @@ return {
     optional = true,
     -- enabled = false,
     opts = {
+      cmdline = { enabled = false },
+      messages = { enabled = false },
       popupmenu = {
         ---@type 'nui'|'cmp'
         backend = "cmp",

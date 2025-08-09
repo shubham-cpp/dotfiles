@@ -1,28 +1,39 @@
 import os
-import subprocess
-from typing import TYPE_CHECKING, List, Union
+from typing import List, Union
 
-from extras.floating_window_snapping import move_snap_window
-from libqtile import hook, layout, qtile
+from libqtile import hook, qtile
 from libqtile.backend.base.window import WindowType
 from libqtile.backend.wayland import InputConfig
-from libqtile.config import Click, Drag, DropDown, EzClick, EzDrag, EzKey, Match, Rule, ScratchPad
+from libqtile.config import (
+    Click,
+    Drag,
+    DropDown,
+    EzClick,
+    EzDrag,
+    EzKey,
+    Match,
+    ScratchPad,
+)
+from libqtile.layout import Tile
 from libqtile.layout.base import Layout
 from libqtile.layout.floating import Floating
 from libqtile.layout.max import Max
-from libqtile.layout import Plasma, Bsp
 from libqtile.layout.xmonad import MonadTall, MonadWide
 from libqtile.layout.zoomy import Zoomy
 from libqtile.lazy import lazy
-from libqtile.log_utils import logger
-from libqtile.utils import guess_terminal
-from modules.bar import extension_defaults, layout_theme, screens, widget_defaults
-from modules.colors import backgroundColor, colors, foregroundColor
+
+from extras.floating_window_snapping import move_snap_window
+from modules.bar import layout_theme
 from modules.groups import groups
-from modules.keys import keys, mod, terminal
+from modules.keys import keys
 from modules.lazy_functions import sticky_windows
 
 layouts: List[Layout] = [
+    Tile(
+        margin=2,
+        margin_on_single=False,
+        shift_windows=False,
+    ),
     MonadTall(
         change_size=10,
         single_border_width=0,
@@ -83,17 +94,22 @@ for vt in range(1, 8):
 # Drag floating layouts.
 mouse: List[Union[Drag, Click]] = [
     EzDrag(
-        "M-<Button1>",
+        "M-1",
         move_snap_window(snap_dist=20),
         # lazy.window.set_position_floating(),
         start=lazy.window.get_position(),
     ),
     EzDrag(
-        "M-<Button3>",
+        "M-3",
         lazy.window.set_size_floating(),
         start=lazy.window.get_size(),
     ),
-    EzClick( "M-<Button1>", lazy.window.bring_to_front()),
+    EzDrag(
+        "M-2",
+        lazy.window.set_size_floating(),
+        start=lazy.window.get_size(),
+    ),
+    EzClick("M-<Button1>", lazy.window.bring_to_front()),
 ]
 
 dgroups_key_binder = None
@@ -145,7 +161,7 @@ floating_layout = Floating(
         Match(wm_class="Gnome-disks"),
         Match(wm_class="VirtualBox Manager"),
         Match(wm_class="Virt-manager"),
-        Match(title="Bitwarden"),
+        Match(role="pop-up"),
     ],
 )
 auto_fullscreen = True
@@ -252,9 +268,10 @@ def auto_sticky_windows(window):
     ):
         sticky_windows.append(window)
 
+
 @hook.subscribe.startup_once
 def autostart():
-    home = os.path.expanduser(
+    start_sh = os.path.expanduser(
         "~/.config/qtile/extras/autostart.sh"
     )  # path to my script, under my user directory
-    subprocess.call([home])
+    # subprocess.call([start_sh])
