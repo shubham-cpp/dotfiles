@@ -18,6 +18,25 @@ if vim.g.vscode == nil then
   vim.keymap.set("n", ",W", "<cmd>noautocmd w!<cr>")
   vim.keymap.set("n", "zp", "vaBo^<Esc>")
 else
+  local function repeat_cmd(cmd, mode)
+    local n = vim.v.count1
+    if mode == 'v' then
+      local start_line = vim.fn.line("'<") - 1  -- 0-indexed for VSCode
+      local end_line = vim.fn.line("'>") - 1    -- 0-indexed for VSCode
+      -- Validate line numbers
+      local line_count = vim.api.nvim_buf_line_count(0)
+      if start_line < 0 or end_line < 0 or start_line >= line_count or end_line >= line_count then
+        return  -- Skip if lines are invalid
+      end
+      for i = 1, n do
+        require('vscode').call(cmd, { range = { start_line, end_line }, restore_selection = true })
+      end
+    else
+      for i = 1, n do
+        require('vscode').call(cmd)
+      end
+    end
+  end
   vim.keymap.set('n', 'j', function() repeat_cmd('cursorDown', 'n') end, { silent = true })
   vim.keymap.set('n', 'k', function() repeat_cmd('cursorUp', 'n') end, { silent = true })
 
