@@ -19,7 +19,6 @@ o.backup = true
 o.undofile = true
 o.undolevels = 10000
 
-o.wildmode = "longest:full,full"
 o.wildignorecase = true
 o.splitbelow = true
 o.splitright = true
@@ -30,6 +29,7 @@ o.sessionoptions:append({
   "globals",
 })
 o.sessionoptions:remove "folds"
+o.jumpoptions = 'stack'
 
 -- vim.schedule(function()
 --   o.clipboard:append(vim.env.SSH_TTY and "" or "unnamedplus") -- Sync with system clipboard
@@ -42,6 +42,8 @@ end
 
 if not vim.g.vscode then
   o.scrolloff = 12
+  o.wildmode = "longest:full,full"
+  o.signcolumn = 'yes'
 end
 
 vim.api.nvim_create_autocmd("TextYankPost", {
