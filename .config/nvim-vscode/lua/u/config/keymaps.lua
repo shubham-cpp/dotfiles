@@ -1,12 +1,13 @@
 vim.keymap.set({ "n", "v" }, "0", "^")
-vim.keymap.set("n", "<Esc>", "<cmd>nohl<cr>")
+vim.keymap.set("n", "<Esc>", function()
+  vim.cmd "nohl"
+  return "<Esc>"
+end, { expr = true, silent = true })
+
 vim.keymap.set("n", ",s", [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 vim.keymap.set("v", ",s", '"sy:let @/=@s<CR>cgn')
 vim.keymap.set("v", "p", "'pgv\"'.v:register.'y'", { expr = true })
-vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from clipboard" })
-vim.keymap.set("v", "<leader>p", '"_c<C-r><C-o>+<Esc>', { desc = "Paste from clipboard" })
-vim.keymap.set({ "n", "x", "v" }, "y", '"+y', { desc = "Yank to clipboard" })
-vim.keymap.set({ "n", "x", "v" }, "Y", '"+Y', { desc = "Yank to clipboard" })
+vim.keymap.set({ "n", "x", "v" }, "<LocalLeader>d", '"zd')
 
 if vim.g.vscode == nil then
   vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
@@ -20,27 +21,36 @@ if vim.g.vscode == nil then
 else
   local function repeat_cmd(cmd, mode)
     local n = vim.v.count1
-    if mode == 'v' then
-      local start_line = vim.fn.line("'<") - 1  -- 0-indexed for VSCode
-      local end_line = vim.fn.line("'>") - 1    -- 0-indexed for VSCode
+    if mode == "v" then
+      local start_line = vim.fn.line "'<" - 1 -- 0-indexed for VSCode
+      local end_line = vim.fn.line "'>" - 1 -- 0-indexed for VSCode
       -- Validate line numbers
       local line_count = vim.api.nvim_buf_line_count(0)
       if start_line < 0 or end_line < 0 or start_line >= line_count or end_line >= line_count then
-        return  -- Skip if lines are invalid
+        return -- Skip if lines are invalid
       end
       for i = 1, n do
-        require('vscode').call(cmd, { range = { start_line, end_line }, restore_selection = true })
+        require("vscode").call(cmd, { range = { start_line, end_line }, restore_selection = true })
       end
     else
       for i = 1, n do
-        require('vscode').call(cmd)
+        require("vscode").call(cmd)
       end
     end
   end
-  vim.keymap.set('n', 'j', function() repeat_cmd('cursorDown', 'n') end, { silent = true })
-  vim.keymap.set('n', 'k', function() repeat_cmd('cursorUp', 'n') end, { silent = true })
+  vim.keymap.set("n", "j", function()
+    repeat_cmd("cursorDown", "n")
+  end, { silent = true })
+  vim.keymap.set("n", "k", function()
+    repeat_cmd("cursorUp", "n")
+  end, { silent = true })
 
-  vim.keymap.set("n","<c-j>","<Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>")
+  vim.keymap.set("i", "<c-d>", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<cr>")
+  vim.keymap.set("i", "<c-s-d>", "<Cmd>call VSCodeNotify('editor.action.previousSelectionMatchFindAction')<cr>")
+  vim.keymap.set("i", "<c-x>", "<Cmd>call VSCodeNotify('editor.action.moveSelectionToNextFindMatch')<cr>")
+
+  vim.keymap.set("n", "<c-j>", "<Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>")
+
   vim.keymap.set("n", "ze", "<Cmd>call VSCodeNotify('scrollLineDown')<CR>")
   vim.keymap.set("n", "zy", "<Cmd>call VSCodeNotify('scrollLineUp')<CR>")
 
@@ -93,15 +103,14 @@ else
   vim.keymap.set(
     "n",
     "<leader>f",
-    "<Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', { args = { query = vim.fn.expand('<cword>') } })<CR>"
+    "<Cmd>lua require('vscode').action('workbench.action.findInFiles', { args = { query = vim.fn.expand('<cword>') } })<CR>"
   )
   vim.keymap.set(
-    "n",
+    { "v" },
     "<leader>f",
-    [[<Cmd>lua require('vscode-neovim').action('workbench.action.findInFiles', { args = { query = vim.fn.getline(vim.fn.getpos("'<")[2],vim.fn.getpos("'>")[2]) } })<CR>]]
+    [[<Cmd>lua require('vscode').action('workbench.action.findInFiles', { args = { query = vim.fn.getline(vim.fn.getpos("'<")[2],vim.fn.getpos("'>")[2]) } })<CR>]]
   )
 
-  vim.keymap.set("n", "gb", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<cr>")
   vim.keymap.set("n", "<C-Up>", "<Cmd>call VSCodeNotify('editor.action.insertCursorAbove')<cr>")
   vim.keymap.set("n", "<C-Down>", "<Cmd>call VSCodeNotify('editor.action.insertCursorBelow')<cr>")
 
@@ -119,9 +128,6 @@ else
   vim.keymap.set("n", "zC", "<Cmd>call VSCodeNotify('editor.foldAll')<CR>")
   vim.keymap.set("n", "zO", "<Cmd>call VSCodeNotify('editor.unfoldAll')<CR>")
   vim.keymap.set("n", "zp", "<Cmd>call VSCodeNotify('editor.gotoParentFold')<CR>")
-
-  vim.keymap.set("n", "<M-h>", "<cmd>call VSCodeNotify('workbench.action.previousEditor')<cr>")
-  vim.keymap.set("n", "<M-l>", "<cmd>call VSCodeNotify('workbench.action.nextEditor')<cr>")
 
   vim.keymap.set("n", "<leader>te", "<cmd>call VSCodeNotify('vscode-harpoon.editEditors')<cr>")
   vim.keymap.set("n", "<leader>`", "<cmd>call VSCodeNotify('vscode-harpoon.addEditor')<cr>")
