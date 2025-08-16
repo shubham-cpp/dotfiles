@@ -6,8 +6,38 @@ end, { expr = true, silent = true })
 
 vim.keymap.set("n", ",s", [[:let @/='\<'.expand('<cword>').'\>'<CR>cgn]])
 vim.keymap.set("v", ",s", '"sy:let @/=@s<CR>cgn')
-vim.keymap.set("v", "p", "'pgv\"'.v:register.'y'", { expr = true })
-vim.keymap.set({ "n", "x", "v" }, "<LocalLeader>d", '"zd')
+-- Pasting in visual mode doesn't copy
+vim.keymap.set("x", "p", [[ 'pgv"'.v:register.'y' ]], { expr = true })
+vim.keymap.set("n", "dl", '"_dl')
+vim.keymap.set("v", "D", '"_D')
+vim.keymap.set({ "n", "v" }, "c", '"_c')
+vim.keymap.set("n", "C", '"_C')
+
+vim.keymap.set(
+  "n",
+  "<LocalLeader>e",
+  ':e <C-R>=expand("%:p:h") . "/" <CR>',
+  { silent = false, desc = "Edit in same dir" }
+)
+vim.keymap.set(
+  "n",
+  "<LocalLeader>t",
+  ':tabe <C-R>=expand("%:p:h") . "/" <CR>',
+  { silent = false, desc = "Edit in same dir(Tab)" }
+)
+vim.keymap.set(
+  "n",
+  "<LocalLeader>v",
+  ':vsplit <C-R>=expand("%:p:h") . "/" <CR>',
+  { silent = false, desc = "Edit in same dir(Split)" }
+)
+
+vim.keymap.set("n", "gco", "o<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Below" })
+vim.keymap.set("n", "gcO", "O<esc>Vcx<esc><cmd>normal gcc<cr>fxa<bs>", { desc = "Add Comment Above" })
+
+for i = 1, 9 do
+  vim.keymap.set("n", "<Leader>" .. i, i .. "gt", { desc = "Goto Tab" .. i })
+end
 
 if vim.g.vscode == nil then
   vim.keymap.set("n", "<C-j>", "<C-w><C-j>")

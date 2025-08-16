@@ -14,6 +14,7 @@ later(function()
     },
   })
   add({ source = "nvim-treesitter/nvim-treesitter-textobjects" })
+  add({ source = "andymass/vim-matchup" })
 
   -- vim.opt.rtp:append(vim.fn.stdpath "data" .. "/site/pack/deps/opt/nvim-treesitter")
 
@@ -111,5 +112,4 @@ later(function()
     },
   })
   vim.g.matchup_treesitter_stopline = 500
-  add({ source = "andymass/vim-matchup" })
 end)

@@ -54,3 +54,4 @@ end
 
 require "u.config.options"
 require "u.config.keymaps"
+require "u.config.autocmds"

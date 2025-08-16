@@ -42,3 +42,13 @@ vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>")
 vim.keymap.set({ "n", "v" }, "<leader>lf", function()
   LazyVim.format({ force = true })
 end, { desc = "Format" })
+
+for _, key in ipairs({ "h", "j", "k", "l" }) do
+  vim.keymap.set("n", "<C-w>" .. key, function()
+    require("config.better_window_navigation").navigate(key)
+  end, { desc = "Smart window navigation: " .. key })
+
+  vim.keymap.set("n", "<C-" .. key .. ">", function()
+    require("config.better_window_navigation").navigate(key)
+  end, { desc = "Smart window navigation: " .. key })
+end

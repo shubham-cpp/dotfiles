@@ -6,6 +6,14 @@ function _G.Fd(file_pattern, _)
   return result
 end
 
+local rtps = vim.api.nvim_list_runtime_paths()
+local all_comps = {}
+for _, p in ipairs(rtps) do
+  for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
+    table.insert(all_comps, vim.fn.fnamemodify(f, ":t:r"))
+  end
+end
+
 ---@type LazySpec
 return {
   {
@@ -185,20 +193,31 @@ return {
         RunMake = {
           function(opts)
             vim.cmd "update"
-            vim.cmd("compiler " .. opts.args)
-            vim.cmd "Make"
-          end,
-          nargs = 1,
-          complete = function(arg_lead)
-            local rtps = vim.api.nvim_list_runtime_paths()
-            local comps = {}
-            for _, p in ipairs(rtps) do
-              for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
-                table.insert(comps, vim.fn.fnamemodify(f, ":t:r"))
-              end
+            local compiler = opts.fargs[1]
+            vim.cmd("compiler " .. compiler)
+            -- If there are more arguments, pass them to Make
+            if #opts.fargs > 1 then
+              -- Join remaining args and append to Make
+              local make_args = table.concat(vim.list_slice(opts.fargs, 2), " ")
+              vim.cmd("Make " .. make_args)
+            else
+              vim.cmd "Make"
             end
-            return vim.tbl_filter(function(c) return vim.startswith(c, arg_lead) end, comps)
           end,
+          nargs = "+",
+          complete = function(arg_lead, cmd_line)
+            local parts = vim.split(cmd_line, "%s+")
+            if #parts == 1 or (#parts == 2 and arg_lead == parts[2]) then
+              return vim.tbl_filter(function(c) return vim.startswith(c, arg_lead) end, all_comps)
+            else
+              return vim.fn.getcompletion(arg_lead, "file")
+            end
+          end,
+        },
+        BetterWinNavClearHistory = {
+          require("better_window_navigation").clear_history,
+          nargs = 0,
+          desc = "Clear the window navigation history for the current tab",
         },
       },
     },
@@ -212,6 +231,17 @@ return {
       for i = 1, 9 do
         local k = "<leader>" .. i
         opts.mappings.n[k] = { "<cmd>" .. i .. "tabnext<cr>", desc = "Goto Tab " .. i }
+      end
+
+      for _, key in ipairs { "h", "j", "k", "l" } do
+        opts.mappings.n["<C-W>" .. key] = {
+          function() require("better_window_navigation").navigate(key) end,
+          desc = "Smart window navigation: " .. key,
+        }
+        opts.mappings.n["<C-" .. string.upper(key) .. ">"] = {
+          function() require("better_window_navigation").navigate(key) end,
+          desc = "Smart window navigation: " .. key,
+        }
       end
 
       vim.opt.path:append "**"

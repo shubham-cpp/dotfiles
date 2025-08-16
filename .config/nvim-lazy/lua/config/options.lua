@@ -126,22 +126,36 @@ end, {
   end,
 })
 
+local rtps = vim.api.nvim_list_runtime_paths()
+local all_comps = {}
+for _, p in ipairs(rtps) do
+  for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
+    table.insert(all_comps, vim.fn.fnamemodify(f, ":t:r"))
+  end
+end
+
 vim.api.nvim_create_user_command("RunMake", function(opts)
   vim.cmd("update")
-  vim.cmd("compiler " .. opts.args)
-  vim.cmd("Make")
+  local compiler = opts.fargs[1]
+  vim.cmd("compiler " .. compiler)
+  -- If there are more arguments, pass them to Make
+  if #opts.fargs > 1 then
+    -- Join remaining args and append to Make
+    local make_args = table.concat(vim.list_slice(opts.fargs, 2), " ")
+    vim.cmd("Make " .. make_args)
+  else
+    vim.cmd("Make")
+  end
 end, {
-  nargs = 1,
-  complete = function(arg_lead)
-    local rtps = vim.api.nvim_list_runtime_paths()
-    local comps = {}
-    for _, p in ipairs(rtps) do
-      for _, f in ipairs(vim.fn.globpath(p, "compiler/*.vim", 0, 1)) do
-        table.insert(comps, vim.fn.fnamemodify(f, ":t:r"))
-      end
+  nargs = "+",
+  complete = function(arg_lead, cmd_line)
+    local parts = vim.split(cmd_line, "%s+")
+    if #parts == 1 or (#parts == 2 and arg_lead == parts[2]) then
+      return vim.tbl_filter(function(c)
+        return vim.startswith(c, arg_lead)
+      end, all_comps)
+    else
+      return vim.fn.getcompletion(arg_lead, "file")
     end
-    return vim.tbl_filter(function(c)
-      return vim.startswith(c, arg_lead)
-    end, comps)
   end,
 })
