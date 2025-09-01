@@ -123,74 +123,69 @@ return {
         }, defaults.sorting.comparators),
       }
     end,
-  },
-  {
-    "folke/noice.nvim",
-    optional = true,
-    -- enabled = false,
-    opts = {
-      cmdline = { enabled = false },
-      messages = { enabled = false },
-      popupmenu = {
-        ---@type 'nui'|'cmp'
-        backend = "cmp",
-      },
-      ---@type NoicePresets
-      presets = {
-        bottom_search = false,
-        command_palette = true,
-        lsp_doc_border = true,
-      },
-    },
-  },
-  {
-    "hrsh7th/cmp-cmdline",
-    keys = { ":", "/", "?" }, -- lazy load cmp on more keys along with insert mode
-    dependencies = "hrsh7th/nvim-cmp",
-    opts = function()
-      local cmp = require("cmp")
-      return {
-        {
-          type = "/",
-          completion = { completeopt = "menu,menuone,noselect" },
-          mapping = cmp.mapping.preset.cmdline(),
-          sources = {
-            { name = "buffer" },
+    specs = {
+      {
+        "folke/noice.nvim",
+        optional = true,
+        opts = {
+          cmdline = { enabled = false },
+          messages = { enabled = false },
+          popupmenu = {
+            ---@type 'nui'|'cmp'
+            backend = "cmp",
           },
         },
-        {
-          type = ":",
-          completion = { completeopt = "menu,menuone,noselect" },
-          mapping = cmp.mapping.preset.cmdline({
-            ["<Tab>"] = cmp.mapping({
-              c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-              i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-            }),
-            ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-            ["<CR>"] = cmp.mapping({
-              i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
-              c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-            }),
-          }),
-          sources = cmp.config.sources({
-            { name = "path" },
-          }, {
+      },
+      {
+        "hrsh7th/cmp-cmdline",
+        keys = { ":", "/", "?" }, -- lazy load cmp on more keys along with insert mode
+        dependencies = "hrsh7th/nvim-cmp",
+        opts = function()
+          local cmp = require("cmp")
+          return {
             {
-              name = "cmdline",
-              option = {
-                ignore_cmds = { "Man", "!", "find", "grep", "vimgrep" },
+              type = "/",
+              completion = { completeopt = "menu,menuone,noselect" },
+              mapping = cmp.mapping.preset.cmdline(),
+              sources = {
+                { name = "buffer" },
               },
             },
-          }),
-          matching = { disallow_symbol_nonprefix_matching = false },
-        },
-      }
-    end,
-    config = function(_, opts)
-      local cmp = require("cmp")
-      vim.tbl_map(function(val)
-        cmp.setup.cmdline(val.type, val)
-      end, opts)
-    end,
+            {
+              type = ":",
+              completion = { completeopt = "menu,menuone,noselect" },
+              mapping = cmp.mapping.preset.cmdline({
+                ["<Tab>"] = cmp.mapping({
+                  c = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+                  i = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+                }),
+                ["<C-j>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+                ["<CR>"] = cmp.mapping({
+                  i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = true }),
+                  c = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
+                }),
+              }),
+              sources = cmp.config.sources({
+                { name = "path" },
+              }, {
+                {
+                  name = "cmdline",
+                  option = {
+                    ignore_cmds = { "Man", "!", "find", "grep", "vimgrep" },
+                  },
+                },
+              }),
+              matching = { disallow_symbol_nonprefix_matching = false },
+            },
+          }
+        end,
+        config = function(_, opts)
+          local cmp = require("cmp")
+          vim.tbl_map(function(val)
+            cmp.setup.cmdline(val.type, val)
+          end, opts)
+        end,
+      },
+    },
   },
 }

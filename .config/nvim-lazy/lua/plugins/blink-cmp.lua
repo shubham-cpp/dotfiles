@@ -72,34 +72,35 @@ return {
         },
       },
       fuzzy = {
-        sorts = {
-          function(a, b)
-            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-              return
-            end
-            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-          end,
-          "score",
-          "sort_text",
-          "exact",
-        },
+        implementation = "prefer_rust",
+        -- sorts = {
+        --   function(a, b)
+        --     if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+        --       return
+        --     end
+        --     return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+        --   end,
+        --   "score",
+        --   "sort_text",
+        --   "exact",
+        -- },
       },
     },
   },
   {
     "saghen/blink.cmp",
     optional = true,
-    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
+    dependencies = { "mikavilpas/blink-ripgrep.nvim", { "xzbdmw/colorful-menu.nvim", opts = {} } },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      snippets = { score_offset = 9 },
+      -- snippets = { score_offset = 9 },
       sources = {
         default = { "ripgrep" },
         providers = {
-          snippets = { score_offset = 9 },
-          lsp = { score_offset = 10 },
-          path = { score_offset = 30 },
+          -- snippets = { score_offset = 9 },
+          -- lsp = { score_offset = 10 },
+          -- path = { score_offset = 30 },
           buffer = {
             score_offset = -3,
             opts = {
@@ -113,12 +114,33 @@ return {
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
+            score_offset = -5,
             ---@module "blink-ripgrep"
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              score_offset = -2,
-              search_casing = "--smart-case",
+              backend = {
+                ripgrep = { search_casing = "--smart-case" },
+              },
+            },
+          },
+        },
+      },
+      completion = {
+        menu = {
+          draw = {
+            -- We don't need label_description now because label and label_description are already
+            -- combined together in label by colorful-menu.nvim.
+            columns = { { "kind_icon" }, { "label", gap = 1 } },
+            components = {
+              label = {
+                text = function(ctx)
+                  return require("colorful-menu").blink_components_text(ctx)
+                end,
+                highlight = function(ctx)
+                  return require("colorful-menu").blink_components_highlight(ctx)
+                end,
+              },
             },
           },
         },

@@ -75,6 +75,26 @@ return {
         },
       },
       emmet_ls = false,
+      codebook = {
+        cmd = { "codebook-lsp", "serve" },
+        filetypes = {
+          "c",
+          "cpp",
+          "css",
+          "scss",
+          "html",
+          "javascript",
+          "javascriptreact",
+          "typescript",
+          "typescriptreact",
+          "go",
+          "rust",
+          "toml",
+          "markdown",
+          "python",
+        },
+        root_markers = { ".git", "codebook.toml", ".codebook.toml" },
+      },
     },
     handlers = {
       tailwindcss = function(server, opts)

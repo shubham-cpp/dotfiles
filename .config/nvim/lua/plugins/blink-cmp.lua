@@ -11,6 +11,7 @@ return {
   {
     "Saghen/blink.cmp",
     optional = true,
+    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
     opts = {
       keymap = {
         ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
@@ -33,6 +34,7 @@ return {
         },
       },
       sources = {
+        default = { "ripgrep" },
         providers = {
           cmdline = {
             -- ignores cmdline completions when executing shell commands
@@ -45,9 +47,23 @@ return {
               end,
             },
           },
+          ripgrep = {
+            module = "blink-ripgrep",
+            name = "Ripgrep",
+            score_offset = -5,
+            ---@module "blink-ripgrep"
+            ---@type blink-ripgrep.Options
+            opts = {
+              prefix_min_len = 4,
+              backend = {
+                ripgrep = { search_casing = "--smart-case" },
+              },
+            },
+          },
         },
       },
       fuzzy = {
+        implementation = "prefer_rust",
         sorts = {
           function(a, b)
             if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then return end

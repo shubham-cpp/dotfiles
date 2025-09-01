@@ -73,6 +73,13 @@ return {
         option = { additional_arguments = "--smart-case" },
       },
     }
+
+    opts.performance = {
+      max_view_entries = 40,
+      debounce = 5,
+      throttle = 5,
+    }
+
     opts.sorting = {
       priority_weight = defaults.sorting.priority_weight,
       comparators = vim.tbl_extend("keep", {
