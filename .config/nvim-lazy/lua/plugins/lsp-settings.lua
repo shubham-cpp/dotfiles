@@ -13,40 +13,14 @@ return {
       },
       -- make sure mason installs the server
       servers = {
+        -- codebook = {},
         vtsls = {
           settings = {
             vtsls = { experimental = { completion = { enableServerSideFuzzyMatch = false } } },
           },
         },
         eslint = { keys = { { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" } } },
-        -- lua_ls = false,
         pyright = false,
-        -- emmylua_ls = {
-        --   settings = {
-        --     Lua = {
-        --       completion = { callSnippet = true },
-        --       diagnostics = { enables = { "undefined-field" } },
-        --       runtime = {
-        --         version = "LuaJIT",
-        --         extensions = { ".lua", ".lua.txt" },
-        --         requirePattern = {
-        --           "lua/?.lua",
-        --           "lua/?/init.lua",
-        --           "?/lua/?.lua",
-        --           "?/lua/?/init.lua",
-        --         },
-        --       },
-        --       workspace = {
-        --         library = {
-        --           "$VIMRUNTIME",
-        --           "$LLS_Addons/luvit",
-        --           "$HOME/.local/share/nvim/lazy",
-        --         },
-        --         ignoreGlobs = { "**/*_spec.lua" },
-        --       },
-        --     },
-        --   },
-        -- },
         basedpyright = {
           settings = {
             basedpyright = {

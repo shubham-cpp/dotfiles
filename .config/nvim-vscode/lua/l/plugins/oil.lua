@@ -1,7 +1,8 @@
-local add, later = MiniDeps.add, MiniDeps.later
-later(function()
-  add({ source = "stevearc/oil.nvim" })
-  require("oil").setup({
+---@type LazySpec
+return {
+  "stevearc/oil.nvim",
+  enabled = vim.g.vscode == nil,
+  opts = {
     columns = { "icon", "size" },
     watch_for_changes = true,
     delete_to_trash = true,
@@ -14,6 +15,8 @@ later(function()
     keymaps = {
       Q = { "actions.close", mode = "n" },
     },
-  })
-  vim.keymap.set("n", "-", require("u.utils").cmd_str "Oil --float", { desc = "Open parent directory" })
-end)
+  },
+  keys = {
+    { "-", require("l.config.utils").cmd_str "Oil --float", desc = "Open parent directory" },
+  },
+}

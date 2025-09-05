@@ -1,25 +1,20 @@
-local add, later = MiniDeps.add, MiniDeps.later
-
-later(function()
-  add({
-    source = "nvim-treesitter/nvim-treesitter",
-    -- Use 'master' while monitoring updates in 'main'
-    checkout = "master",
-    monitor = "main",
-    -- Perform action after every checkout
-    hooks = {
-      post_checkout = function()
-        vim.cmd "TSUpdate"
-      end,
-    },
-  })
-  add({ source = "nvim-treesitter/nvim-treesitter-textobjects" })
-  add({ source = "andymass/vim-matchup" })
-
-  -- vim.opt.rtp:append(vim.fn.stdpath "data" .. "/site/pack/deps/opt/nvim-treesitter")
-
+---@type LazySpec
+return {
+  "nvim-treesitter/nvim-treesitter",
+  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+  version = false, -- last release is way too old and doesn't work on Windows
+  build = ":TSUpdate",
+  event = "VeryLazy",
+  lazy = vim.fn.argc(-1) == 0,
+  init = function(plugin)
+    require("lazy.core.loader").add_to_rtp(plugin)
+    require "nvim-treesitter.query_predicates"
+  end,
+  cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+  opts_extend = { "ensure_installed" },
+  ---@type TSConfig
   ---@diagnostic disable-next-line: missing-fields
-  require("nvim-treesitter.configs").setup({
+  opts = {
     highlight = {
       enable = vim.g.vscode == nil,
       disable = function(_, buf)
@@ -110,6 +105,12 @@ later(function()
         },
       },
     },
-  })
-  vim.g.matchup_treesitter_stopline = 500
-end)
+  },
+  config = function(_, opts)
+    if type(opts.ensure_installed) == "table" then
+      opts.ensure_installed = require("l.config.utils").dedup(opts.ensure_installed)
+    end
+    ---@diagnostic disable-next-line: missing-fields
+    require("nvim-treesitter.configs").setup(opts)
+  end,
+}
