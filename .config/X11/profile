@@ -122,6 +122,7 @@ export MIX_XDG="true"
 export FFMPEG_DATADIR="$XDG_CONFIG_HOME"/ffmpeg
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgreprc"
 export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion
+export ODIN_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/odin-linux"
 
 checked_paths=(
 	"${XDG_DATA_HOME:-$HOME/.local/share}/bob/nvim-bin"
@@ -140,6 +141,7 @@ checked_paths=(
 	"$ANDROID_HOME/cmdline-tools/latest"
 	"$ANDROID_HOME/cmdline-tools/latest/bin"
 	"$ANDROID_HOME/platform-tools"
+	"$ODIN_ROOT"
 )
 for p in "${checked_paths[@]}"; do
 	append_path "$p" "check"

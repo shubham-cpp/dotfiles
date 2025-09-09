@@ -1,11 +1,11 @@
 ---@type LazySpec
 return {
   "ibhagwan/fzf-lua",
-  -- dependencies = { "echasnovski/mini.icons", "elanmed/fzf-lua-frecency.nvim" },
   dependencies = "echasnovski/mini.icons",
   cmd = "FzfLua",
   opts = function()
     local actions = require("fzf-lua.actions")
+    -- local config = require("fzf-lua").config
 
     local vscode = {
       height = 0.55,
@@ -20,11 +20,38 @@ return {
       },
     }
 
+    -- config.set_action_helpstr(config.defaults.actions.files["ctrl-r"], "toggle-root-dir")
+
     return {
       { "border-fused", "hide" },
       defaults = {
         formatter = { "path.filename_first", 2 },
         fzf_opts = { ["--scheme"] = "default" },
+        -- actions = {
+        --   files = {
+        --     ["ctrl-r"] = function(_, ctx)
+        --       local o = vim.deepcopy(ctx.__call_opts)
+        --       o.root = o.root == false
+        --       o.cwd = nil
+        --       o.buf = ctx.__CTX.bufnr
+        --       LazyVim.pick.open(ctx.__INFO.cmd, o)
+        --     end,
+        --   },
+        -- },
+        keymap = {
+          fzf = {
+            ["ctrl-q"] = "select-all+accept",
+            ["ctrl-u"] = "half-page-up",
+            ["ctrl-d"] = "half-page-down",
+            ["ctrl-x"] = "jump",
+            ["ctrl-f"] = "preview-page-down",
+            ["ctrl-b"] = "preview-page-up",
+          },
+          builtin = {
+            ["<c-f>"] = "preview-page-down",
+            ["<c-b>"] = "preview-page-up",
+          },
+        },
       },
       winopts = { preview = { layout = "vertical" } },
       files = {
@@ -54,10 +81,6 @@ return {
       },
     }
   end,
-  -- config = function(_, opts)
-  --   require("fzf-lua").setup(opts)
-  --   require("fzf-lua-frecency").setup()
-  -- end,
   keys = {
     {
       "<c-p>",

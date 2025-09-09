@@ -8,11 +8,14 @@ return {
           LazyVim.lsp.on_attach(function(client)
             client.server_capabilities.completionProvider.triggerCharacters =
               { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
-          end, "sp_tailwind")
+          end, "tailwindcss")
         end,
       },
       -- make sure mason installs the server
       servers = {
+        ols = {},
+        -- lua_ls = { enabled = false },
+        -- emmylua_ls = { enabled = true },
         -- codebook = {},
         vtsls = {
           settings = {
@@ -20,7 +23,7 @@ return {
           },
         },
         eslint = { keys = { { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" } } },
-        pyright = false,
+        pyright = { enabled = false },
         basedpyright = {
           settings = {
             basedpyright = {
@@ -56,7 +59,7 @@ return {
       keys[#keys + 1] = { "gl", vim.diagnostic.open_float, desc = "Open diagnostic" }
       --{{{  disable a keymap
       keys[#keys + 1] = { "<C-k>", mode = "i", false }
-      -- I'm used to <leader>l being my "lsp" prefix. Can't change my musle memory now
+      -- I'm used to <leader>l being my "lsp" prefix. Can't change my muscle memory now
       keys[#keys + 1] = { "<leader>cl", false }
       keys[#keys + 1] = { "<leader>ca", false }
       keys[#keys + 1] = { "<leader>cc", false }
@@ -196,6 +199,7 @@ return {
   },
   {
     "mfussenegger/nvim-lint",
+    optional = true,
     init = function()
       vim.env.ESLINT_D_PPID = vim.fn.getpid()
     end,

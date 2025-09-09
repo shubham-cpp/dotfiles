@@ -49,7 +49,7 @@ function _G.Fd(file_pattern, _)
   local result = vim.fn.systemlist(cmd)
   return result
 end
-if vim.fn.has("nvim-0.11") == 1 and vim.fn.executable("fd") then
+if vim.fn.has("nvim-0.11") == 1 and vim.fn.executable("fd") == 1 then
   vim.opt.findfunc = "v:lua.Fd"
 end
 

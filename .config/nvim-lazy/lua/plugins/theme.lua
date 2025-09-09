@@ -1,11 +1,8 @@
 ---@type LazySpec
 return {
   {
-    "LazyVim",
-    opts = { colorscheme = "vague" },
-  },
-  {
     "catppuccin",
+    enabled = false,
     optional = true,
     opts = {
       ---@type "latte"| "frappe"| "macchiato"| "mocha" |"auto"
@@ -21,8 +18,10 @@ return {
   },
   {
     "vague2k/vague.nvim",
+    enabled = true,
     lazy = true,
     opts = { transparent = false },
+    specs = { { "LazyVim", opts = { colorscheme = "vague" } } },
     config = function(_, opts)
       require("vague").setup(opts)
 

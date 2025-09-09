@@ -95,7 +95,7 @@ return {
       opts.sources = cmp.config.sources({
         { name = "lazydev", priority = 1000, group_index = 0 },
         { name = "nvim_lsp", priority = 1000, group_index = 1 },
-        { name = "async_path", priority = 1000, group_index = 1 },
+        { name = "async_path", priority = 1100, group_index = 1 },
         { name = "luasnip", priority = 950, group_index = 1 },
         {
           name = "buffer",
