@@ -21,15 +21,16 @@ return {
     features = {
       -- codelens = true, -- enable/disable codelens refresh on start
       inlay_hints = false, -- enable/disable inlay hints on start
+      signature_help = true,
       -- semantic_tokens = true, -- enable/disable semantic token highlighting
     },
     -- enable servers that you already have installed without mason
-    servers = {
-      -- "pyright"
-    },
+    -- servers = {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
+      djlsp = {},
+      zls = {},
       clangd = { capabilities = { offsetEncoding = "utf-8" } },
       vtsls = {
         settings = {
@@ -37,6 +38,17 @@ return {
           vtsls = {
             enableMoveToFileCodeAction = true,
             autoUseWorkspaceTsdk = true,
+            tsserver = {
+              globalPlugins = {
+                {
+                  configNamespace = "typescript",
+                  name = "typescript-svelte-plugin",
+                  location = vim.fn.stdpath "data"
+                    .. "/mason/packages/svelte-language-server/node_modules/typescript-svelte-plugin",
+                  enableForWorkspaceTypeScriptVersions = true,
+                },
+              },
+            },
           },
           typescript = {
             updateImportsOnFileMove = { enabled = "always" },
@@ -146,9 +158,24 @@ return {
           cond = function(client) return client.name == "eslint" end,
         },
         ["<Leader>lo"] = {
-          function() vim.cmd "VtsExec organize_imports" end,
+          function()
+            local clients = vim.lsp.get_clients { bufnr = 0, name = "vtsls" }
+            local is_vtsls = #clients ~= 0
+
+            if is_vtsls then
+              vim.cmd "VtsExec organize_imports"
+              return
+            end
+
+            vim.lsp.buf.code_action {
+              apply = true,
+              context = {
+                only = { "source.organizeImports" },
+                diagnostics = {},
+              },
+            }
+          end,
           desc = "Organize Imports",
-          cond = function(client) return client.name == "vtsls" end,
         },
         ["<Leader>lv"] = {
           function() vim.cmd "VtsExec select_ts_version" end,

@@ -120,6 +120,7 @@ return {
         --   end,
         --   desc = "Dotfiles",
         -- }
+        maps.n["<Leader>fc"] = { "<cmd>CreateFileInDir<cr>" }
         maps.n["<Leader>fN"] = { function() require("snacks").picker.notifications() end, desc = "Find notifications" }
         maps.n["<Leader>fL"] = { function() require("snacks").picker.lazy() end, desc = "Lazy" }
 

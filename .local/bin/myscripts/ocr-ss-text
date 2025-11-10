@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# Create temp files
+img=$(mktemp /tmp/ocr-img.XXXXXX.png)
+txt=$(mktemp /tmp/ocr-text.XXXXXX)
+
+cleanup() {
+  rm -f "$img" "$txt"
+}
+trap cleanup EXIT
+
+# Step 1: Screenshot a region
+grim -g "$(slurp)" "$img"
+# Step 2: OCR it
+tesseract "$img" "$txt"
+
+if zenity --width=600 --height=400 \
+  --text-info \
+  --title="OCR Result" \
+  --filename="$txt.txt" \
+  --editable \
+  --ok-label="Copy & OK"; then
+  if [[ $XDG_SESSION_TYPE = "wayland" ]]; then
+    wl-copy <"$txt.txt"
+  else
+    xclip -selection clipboard -i "$txt.txt"
+  fi
+fi

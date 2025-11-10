@@ -29,19 +29,6 @@ return {
         },
       },
       cmdline = {
-        enabled = true,
-        sources = function()
-          local type = vim.fn.getcmdtype()
-          -- Search forward and backward
-          if type == "/" or type == "?" then
-            return { "buffer" }
-          end
-          -- Commands
-          if type == ":" or type == "@" then
-            return { "cmdline" }
-          end
-          return {}
-        end,
         keymap = {
           preset = "cmdline",
           ["<Left>"] = {},
@@ -90,7 +77,7 @@ return {
   {
     "saghen/blink.cmp",
     optional = true,
-    dependencies = { "mikavilpas/blink-ripgrep.nvim", { "xzbdmw/colorful-menu.nvim", opts = {} } },
+    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
@@ -121,23 +108,6 @@ return {
               prefix_min_len = 4,
               backend = {
                 ripgrep = { search_casing = "--smart-case" },
-              },
-            },
-          },
-        },
-      },
-      completion = {
-        menu = {
-          draw = {
-            columns = { { "kind_icon" }, { "label", gap = 1 } },
-            components = {
-              label = {
-                text = function(ctx)
-                  return require("colorful-menu").blink_components_text(ctx)
-                end,
-                highlight = function(ctx)
-                  return require("colorful-menu").blink_components_highlight(ctx)
-                end,
               },
             },
           },

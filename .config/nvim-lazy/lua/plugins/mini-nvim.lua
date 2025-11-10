@@ -1,13 +1,13 @@
 ---@type LazySpec
 return {
   {
-    "echasnovski/mini.align",
+    "nvim-mini/mini.align",
     version = "*",
     keys = { { "ga", mode = { "n", "x" } }, { "gA", mode = { "n", "x" } } },
     opts = {},
   },
   {
-    "echasnovski/mini.move",
+    "nvim-mini/mini.move",
     keys = {
       { "<", mode = "v" },
       { "J", mode = "v" },
@@ -35,7 +35,7 @@ return {
     },
   },
   {
-    "echasnovski/mini.operators",
+    "nvim-mini/mini.operators",
     version = "*",
     enabled = true,
     keys = {
@@ -57,7 +57,7 @@ return {
     end,
   },
   {
-    "echasnovski/mini.files",
+    "nvim-mini/mini.files",
     optional = true,
     keys = {
       {

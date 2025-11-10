@@ -20,7 +20,6 @@ config.color_scheme = "iceberg-dark" -- "iceberg-dark" -- "Ashes (dark) (termina
 -- config.colors = { background = "#14131A" }
 config.default_prog = { "/bin/fish", "-l" }
 config.font = wezterm.font_with_fallback({
-  -- "D2CodingLigature Nerd Font",
   "FiraCode Nerd Font",
   "JetBrainsMono Nerd Font",
   "FontAwesome",
@@ -149,7 +148,7 @@ tabline.setup({
         max_length = 28,
         padding = { left = 0, right = 1 },
       },
-      { "zoomed", padding = 0 },
+      { "zoomed",  padding = 0 },
     },
     tab_inactive = {
       "index",

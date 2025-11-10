@@ -8,7 +8,7 @@ font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
 font-feature = -clig
-theme = "catppuccin-mocha"
+theme = Catppuccin Mocha
 # shell-integration = fish
 
 background =#0f0f11

@@ -1,7 +1,7 @@
-alias du="/bin/du -h"
-alias df="/bin/df -h"
-# alias curl="/bin/curl -O -L -C -"
-alias grep="/bin/grep -Ei --color=auto"
+alias du="command du -h"
+alias df="command df -h"
+# alias curl="command curl -O -L -C -"
+alias grep="command grep -Ei --color=auto"
 alias ss="sudo systemctl"
 
 # Changing "ls" to "exa"
@@ -18,7 +18,7 @@ else
   alias lt="ls --recursive"
 fi
 
-alias rr="/bin/rm -rf"
+alias rr="command rm -rf"
 if command -v trash >/dev/null; then
   alias rm="trash"
   alias rmd="trash -rf"

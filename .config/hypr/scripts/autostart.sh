@@ -46,5 +46,10 @@ hypridle &
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
 # hyprshade auto &
 
+if ! pgrep vicinae >/dev/null; then
+  vicinae server &
+fi
+
 sleep 5s
 env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
+wlsunset -l 18.5204 -L 73.8567 -t 3500 &

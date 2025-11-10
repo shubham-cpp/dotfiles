@@ -9,6 +9,12 @@
       },
       {
         "language": [
+          "svelte"
+        ],
+        "path": "./svelte.json"
+      },
+      {
+        "language": [
           "javascriptreact",
           "typescriptreact"
         ],

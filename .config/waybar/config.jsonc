@@ -5,10 +5,11 @@
   "exclusive": true,
   "passthrough": false,
   "modules-left": [
+    "niri/workspaces",
     "hyprland/workspaces",
     "memory",
     "cpu",
-    "keyboard-state"
+    "keyboard-state",
   ],
   "modules-center": [
     "clock",
@@ -25,6 +26,9 @@
     "tray",
     "custom/swaync",
   ],
+  "niri/workspaces": {
+    // "current-only": true,
+  },
   "hyprland/workspaces": {
     "active-only": false,
     "all-outputs": true,
@@ -188,6 +192,11 @@
     "format-time": "{H}h {M}min",
     "tooltip": true,
     "tooltip-format": "{timeTo} {power}w",
+    "events": {
+      "on-discharging-warning": "notify-send -i battery-low-symbolic -u normal 'Low Battery'",
+      "on-discharging-critical": "notify-send -i battery-low-symbolic -u critical 'Very Low Battery'",
+      "on-charging-100": "notify-send -i battery-full-symbolic -u normal 'Battery Full!'",
+    },
   },
   "backlight": {
     "interval": 2,

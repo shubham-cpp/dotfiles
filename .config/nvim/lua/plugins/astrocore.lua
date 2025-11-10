@@ -59,6 +59,7 @@ return {
             or vim.opt.grepprg,
           scrolloff = 8,
           splitkeep = "topline",
+          jumpoptions = "stack",
         },
         g = { -- vim.g.<key>
           markdown_recommended_style = 0,

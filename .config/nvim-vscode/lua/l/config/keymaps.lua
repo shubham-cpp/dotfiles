@@ -75,9 +75,9 @@ else
     repeat_cmd("cursorUp", "n")
   end, { silent = true })
 
-  vim.keymap.set("i", "<c-d>", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<cr>")
-  vim.keymap.set("i", "<c-s-d>", "<Cmd>call VSCodeNotify('editor.action.previousSelectionMatchFindAction')<cr>")
-  vim.keymap.set("i", "<c-x>", "<Cmd>call VSCodeNotify('editor.action.moveSelectionToNextFindMatch')<cr>")
+  -- vim.keymap.set("i", "<c-d>", "<Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<cr>")
+  -- vim.keymap.set("i", "<c-s-d>", "<Cmd>call VSCodeNotify('editor.action.previousSelectionMatchFindAction')<cr>")
+  -- vim.keymap.set("i", "<c-x>", "<Cmd>call VSCodeNotify('editor.action.moveSelectionToNextFindMatch')<cr>")
 
   vim.keymap.set("n", "<c-j>", "<Cmd>call VSCodeNotify('workbench.action.terminal.toggleTerminal')<cr>")
 

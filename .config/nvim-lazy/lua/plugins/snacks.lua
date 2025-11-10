@@ -215,13 +215,7 @@ return {
         end,
         desc = "Find files",
       },
-      -- {
-      --   "<C-p>",
-      --   function()
-      --     Snacks.picker.files({ layout = { preset = "vscode" } })
-      --   end,
-      --   desc = "Find Files",
-      -- },
+      { "<leader>fc", "<cmd>CreateFileInDir<cr>" },
       {
         "<leader>ff",
         LazyVim.pick("files", { layout = { preset = "vscode" } }),
@@ -349,13 +343,13 @@ return {
         end,
         desc = "Autocmds",
       },
-      {
-        "<leader>fc",
-        function()
-          Snacks.picker.command_history()
-        end,
-        desc = "Command History",
-      },
+      -- {
+      --   "<leader>fc",
+      --   function()
+      --     Snacks.picker.command_history()
+      --   end,
+      --   desc = "Command History",
+      -- },
       {
         "<leader>fC",
         function()

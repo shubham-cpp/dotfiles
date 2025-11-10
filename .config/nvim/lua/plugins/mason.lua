@@ -5,7 +5,7 @@ return {
     optional = true,
     opts = {
       ---@type '"prepend"' | '"append"' | '"skip"'
-      PATH = "append",
+      PATH = "prepend",
     },
   },
   {
@@ -14,7 +14,7 @@ return {
     opts = function(_, opts)
       opts.ensure_installed = require("astrocore").list_insert_unique(
         opts.ensure_installed,
-        { "css_variables", "cssmodules_ls", "emmet_language_server" }
+        { "css_variables", "cssmodules_ls", "emmet_language_server", "django-template-lsp" }
       )
       opts.ensure_installed = vim.tbl_filter(
         function(server) return server ~= "emmet_ls" end,
@@ -26,10 +26,12 @@ return {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     optional = true,
     opts = function(_, opts)
-      opts.ensure_installed = require("astrocore").list_insert_unique(
-        opts.ensure_installed,
-        { "emmet-language-server", "cssmodules-language-server", "css-variables-language-server" }
-      )
+      opts.ensure_installed = require("astrocore").list_insert_unique(opts.ensure_installed, {
+        "emmet-language-server",
+        "cssmodules-language-server",
+        "css-variables-language-server",
+        "django-template-lsp",
+      })
       opts.ensure_installed = vim.tbl_filter(
         function(server) return server ~= "emmet-ls" end,
         opts.ensure_installed or {}

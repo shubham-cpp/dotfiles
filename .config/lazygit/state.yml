@@ -1,13 +1,10 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/Documents/Programming/WebDev/sveltekit-trello-clone
     - /home/shubham/Documents/Programming/WebDev/dexter-ai
-    - /home/shubham/Documents/Programming/WebDev/dexter-ai-2
-    - /home/shubham/Documents/Programming/WebDev/ai-presentation
     - /home/shubham/.config/st-terminal
-    - /home/shubham/Documents/Programming/WebDev/travel-vue3-app/visit-trails
     - /home/shubham/.local/share/nvim-lazy/lazy/LazyVim
-    - /home/shubham/Documents/Programming/WebDev/invoice-generator-nextjs
 startuppopupversion: 5
 lastversion: 0.48.0
 customcommandshistory: []

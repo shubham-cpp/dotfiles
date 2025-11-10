@@ -2,7 +2,7 @@
 return {
   "cbochs/grapple.nvim",
   enabled = true,
-  dependencies = "echasnovski/mini.icons",
+  dependencies = "nvim-mini/mini.icons",
   cmd = "Grapple",
   opts = {
     --- @type "git_branch"|"git"|"cwd"|"global"|"static"|"lsp"

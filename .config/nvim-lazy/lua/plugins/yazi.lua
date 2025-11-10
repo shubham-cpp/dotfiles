@@ -34,8 +34,7 @@ return {
       kip_confirm_for_simple_edits = true,
       watch_for_changes = false,
     },
-    -- Optional dependencies
-    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    dependencies = { "nvim-mini/mini.icons" },
     cmd = "Oil",
   },
 }

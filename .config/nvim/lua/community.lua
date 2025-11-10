@@ -25,6 +25,7 @@ return {
   { import = "astrocommunity.pack.cpp" },
   { import = "astrocommunity.pack.full-dadbod" },
   { import = "astrocommunity.pack.hyprlang" },
+  { import = "astrocommunity.pack.laravel" },
 
   { import = "astrocommunity.debugging.nvim-dap-repl-highlights" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
@@ -45,6 +46,7 @@ return {
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
   { import = "astrocommunity.recipes.picker-lsp-mappings" },
   { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
+  { import = "astrocommunity.recipes.cache-colorscheme" },
 
   { import = "astrocommunity.test.neotest" },
   { import = "astrocommunity.git.diffview-nvim" },

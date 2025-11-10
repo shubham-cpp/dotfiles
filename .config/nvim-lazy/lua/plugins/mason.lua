@@ -1,11 +1,10 @@
 return {
   {
     "mason-org/mason.nvim",
-    version = "^1.0.0",
     optional = true,
     opts = {
       ---@type '"prepend"' | '"append"' | '"skip"'
-      PATH = "append",
+      PATH = "prepend",
       ui = {
         icons = { package_pending = " ", package_installed = " ", package_uninstalled = " " },
       },
@@ -21,10 +20,5 @@ return {
         "emmet-language-server",
       },
     },
-  },
-  {
-    "mason-org/mason-lspconfig.nvim",
-    version = "^1.0.0",
-    optional = true,
   },
 }
