@@ -1,0 +1,453 @@
+* {
+  border: none;
+  border-radius: 10px;
+  font-family: "JetbrainsMono Nerd Font";
+  font-size: 13px;
+  min-height: 10px;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+#network {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#network:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#cava {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#cava:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#battery {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#battery:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#backlight:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#backlight {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#language {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#language:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#pulseaudio {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  padding: 8px;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#pulseaudio:hover {
+  background: #bd93f9;
+  color: #292c3c;
+}
+
+#pulseaudio.muted {
+  color: #f38ba8;
+  background: #292c3c;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #f38ba8;
+  transition: 0.3s;
+}
+
+#pulseaudio.muted:hover {
+  background: #f38ba8;
+  color: #292c3c;
+}
+
+#clock {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#clock:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#disk {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#disk:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#privacy {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#idle_inhibitor {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#idle_inhibitor.activated {
+  color: #89b4fa;
+  border-color: #89b4fa;
+}
+
+#idle_inhibitor.activated:hover {
+  background: #89b4fa;
+  color: #292c3c;
+  border-color: #89b4fa;
+}
+
+#idle_inhibitor.deactivated {
+  color: #bd93f9;
+}
+
+#idle_inhibitor.deactivated:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#memory {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  margin-bottom: 0px;
+  padding-right: 10px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#memory:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#cpu {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  margin-bottom: 0px;
+  padding-right: 10px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#cpu:hover {
+  color: #292c3c;
+  background: #bd93f9;
+}
+
+#custom-launcher {
+  font-size: 20px;
+  margin-top: 10px;
+  margin-left: 17px;
+  padding-left: 10px;
+  padding-right: 5px;
+  border-radius: 10px;
+  transition: none;
+  color: #bd93f9;
+  background: #292c3c;
+  transition: 0.3s;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+}
+
+#custom-launcher:hover {
+  background: #bd93f9;
+  color: #292c3c;
+}
+
+#network.disconnected {
+  color: #f38ba8;
+  background: #292c3c;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #f38ba8;
+}
+
+#network.disconnected:hover {
+  background: #f38ba8;
+  color: #292c3c;
+}
+
+#custom-lock {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-left: 8px;
+  margin-right: 17px;
+  padding-left: 10px;
+  padding-right: 5px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+#custom-swaync {
+  font-size: 15px;
+  margin-top: 10px;
+  margin-left: 8px;
+  margin-right: 6px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#custom-lock:hover,
+#custom-swaync:hover {
+  background: #fab387;
+  color: #292c3c;
+  border-color: #fab387;
+}
+
+#workspaces {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-right: 4px;
+  background: #292c3c;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  color: #bd93f9;
+  transition: 0.3s;
+}
+
+#workspaces button {
+  color: #bd93f9;
+  transition: 0.3s;
+}
+
+#workspaces button:hover {
+  background: transparent;
+  color: transparent;
+}
+
+#workspaces button.active {
+  color: #b4befe;
+  transition: 0.3s;
+}
+
+#tray {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#tray menu {
+  margin-top: 10px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  background: #292c3c;
+  color: #bd93f9;
+  border-bottom: 3px;
+  border-style: solid;
+  border-color: #bd93f9;
+  transition: 0.3s;
+}
+
+#taskbar {
+  background-color: #101010;
+  margin: 5px 2px;
+  padding: 0 4px;
+}
+
+/* Each window entry (button) */
+#taskbar button {
+  color: #babbf1;
+  padding: 0.4rem;
+  border-radius: 5px; /* matches global */
+  background: transparent;
+}
+
+/* Focused window */
+#taskbar button.active {
+  color: #99d1db;
+  background: #252525;
+}
+
+/* Minimized window (if you use minimize) */
+#taskbar button.minimized {
+  opacity: 0.5;
+}
+
+/* Hover effect, same as workspaces */
+#taskbar button:hover {
+  background: #1e1e1e;
+}

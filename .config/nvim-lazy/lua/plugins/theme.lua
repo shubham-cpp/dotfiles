@@ -69,4 +69,13 @@ return {
       })
     end,
   },
+  {
+    "blazkowolf/gruber-darker.nvim",
+    enabled = false,
+    lazy = true,
+    opts = {
+      transparent = false,
+    },
+    specs = { { "LazyVim", opts = { colorscheme = "gruber-darker" } } },
+  },
 }

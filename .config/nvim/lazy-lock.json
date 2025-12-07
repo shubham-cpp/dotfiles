@@ -54,6 +54,7 @@
   "mini.icons": { "branch": "main", "commit": "397ed3807e96b59709ef3292f0a3e253d5c1dc0a" },
   "mini.move": { "branch": "main", "commit": "4d214202d71e0a4066b6288176bbe88f268f9777" },
   "mini.operators": { "branch": "main", "commit": "59f5fdbaaed7cce160076e70926cb16faadea78c" },
+  "moonfly": { "branch": "master", "commit": "1ad5a8d40176a8749f0c77b8875225d9d299a438" },
   "multicursor.nvim": { "branch": "1.0", "commit": "0c6ceae228bf209e8b8717df9de500770c4e7022" },
   "neo-tree.nvim": { "branch": "main", "commit": "f3df514fff2bdd4318127c40470984137f87b62e" },
   "neoconf.nvim": { "branch": "main", "commit": "7a8d7fd36f95f5cbbf57d4a5c463f6c54ad54cd3" },
@@ -115,5 +116,6 @@
   "vim-matchup": { "branch": "master", "commit": "1c276e12b49a83c1bdca74351187b8adea5da4b9" },
   "which-key.nvim": { "branch": "main", "commit": "fcbf4eea17cb299c02557d576f0d568878e354a4" },
   "window-picker": { "branch": "main", "commit": "6382540b2ae5de6c793d4aa2e3fe6dbb518505ec" },
-  "yazi.nvim": { "branch": "main", "commit": "733277c9bba896d55a2a8ab4b82d469855ed17b2" }
+  "yazi.nvim": { "branch": "main", "commit": "733277c9bba896d55a2a8ab4b82d469855ed17b2" },
+  "zen.nvim": { "branch": "main", "commit": "c16a8213ef6e969cdf283e9f52e80c3059080660" }
 }

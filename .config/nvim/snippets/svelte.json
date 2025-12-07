@@ -13,7 +13,7 @@
       "<script lang=\"ts\">",
       "let { $1 } = $$props()",
       "</script>",
-      "<div>\n\t$0\n</div"
+      "<div>\n\t$0\n</div>"
     ]
   },
   "Svelte Props": {

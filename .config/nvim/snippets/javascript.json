@@ -1,0 +1,32 @@
+{
+  "describeBlock": {
+    "prefix": "desc",
+    "body": [
+      "describe('$1', () => {",
+      "  $0",
+      "})",
+      ""
+    ],
+    "description": "Testing `describe` block"
+  },
+  "itBlock": {
+    "prefix": "tit",
+    "body": [
+      "it('should $1', () => {",
+      "  $0",
+      "})",
+      ""
+    ],
+    "description": "Testing `it` block"
+  },
+  "itAsyncBlock": {
+    "prefix": "tita",
+    "body": [
+      "it('should $1', async () => {",
+      "  $0",
+      "})",
+      ""
+    ],
+    "description": "Testing async `it` block"
+  }
+}

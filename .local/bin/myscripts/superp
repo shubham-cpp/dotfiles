@@ -49,6 +49,7 @@ rg --files ~/ --iglob '!.*' --iglob '!Git*' --iglob '!Project-Imgs' | while IFS=
 
     # Pipe the list of formatted names to fuzzel
 done | fuzzel --dmenu --placeholder 'Open File' | {
+# done | rofi -dmenu -theme-str  'window { width: 90%; height:50%;}' | {
     # Read the selected formatted name from fuzzel's output
     read -r selected_display_name
 

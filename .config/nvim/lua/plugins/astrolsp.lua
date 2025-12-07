@@ -31,6 +31,11 @@ return {
     config = {
       djlsp = {},
       zls = {},
+      emmet_language_server = {
+        filetypes = {
+          "templ",
+        },
+      },
       clangd = { capabilities = { offsetEncoding = "utf-8" } },
       vtsls = {
         settings = {

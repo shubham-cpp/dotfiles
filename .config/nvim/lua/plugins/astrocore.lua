@@ -39,8 +39,7 @@ return {
       filetypes = {
         filename = {
           dwm_sxhkdrc = "sxhkdrc",
-          [".env"] = "conf",
-          [".env.*"] = "conf",
+          [".env*"] = "conf",
         },
         pattern = {
           ["tsconfig*.json"] = "jsonc",

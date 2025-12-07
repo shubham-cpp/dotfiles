@@ -51,5 +51,5 @@ if ! pgrep vicinae >/dev/null; then
 fi
 
 sleep 5s
-env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
+# env XDG_CURRENT_DESKTOP=sway XDG_SESSION_DESKTOP=sway QT_QPA_PLATFORM=wayland flameshot &
 wlsunset -l 18.5204 -L 73.8567 -t 3500 &

@@ -60,6 +60,7 @@ button {
   background: #1e1e1e;
 }
 
+#idle_inhibitor,
 #custom-music,
 #keyboard-state,
 #tray,
@@ -79,6 +80,10 @@ button {
   background-color: #101010;
   padding: 0.5rem 1rem;
   margin: 5px 2px;
+}
+#pulseaudio {
+  padding-left: 0.65rem;
+  padding-right: 0.65rem;
 }
 
 #custom-weather {
@@ -100,4 +105,63 @@ button {
 #battery.critical {
   color: #e78284;
   /* color: #fa5c4a; */
+}
+#pulseaudio.muted {
+  padding-left: 0.65rem;
+  padding-right: 0.85rem;
+}
+#taskbar {
+  background-color: #101010;
+  margin: 5px 2px;
+  padding: 0 4px;
+}
+
+/* Each window entry (button) */
+#taskbar button {
+  color: #babbf1;
+  padding: 0.4rem;
+  border-radius: 5px; /* matches global */
+  background: transparent;
+}
+
+/* Focused window */
+#taskbar button.active {
+  color: #99d1db;
+  background: #252525;
+}
+
+/* Minimized window (if you use minimize) */
+#taskbar button.minimized {
+  opacity: 0.5;
+}
+
+/* Hover effect, same as workspaces */
+#taskbar button:hover {
+  background: #1e1e1e;
+}
+
+#custom-launcher,
+#custom-swaync,
+#custom-launcher button {
+  background-color: #101010;
+  padding: 0.35rem 0.8rem;
+  margin: 5px 2px;
+  color: #babbf1;
+  border-radius: 5px;
+}
+
+#custom-launcher:hover,
+#custom-swaync:hover,
+#custom-launcher button:hover {
+  background: #1e1e1e;
+  color: #99d1db;
+}
+/* Unread notifications highlight */
+#custom-swaync.notification {
+  color: #e5c890; /* warm yellow pop */
+}
+
+/* DND mode highlight */
+#custom-swaync.dnd {
+  color: #e78284; /* same red as your warning modules */
 }

@@ -18,6 +18,7 @@ return {
         -- emmylua_ls = { enabled = true },
         -- codebook = {},
         vtsls = {
+          -- cmd = { "lspmux", "client", "--server-path", "vtsls --stdio" },
           settings = {
             vtsls = { experimental = { completion = { enableServerSideFuzzyMatch = false } } },
           },
