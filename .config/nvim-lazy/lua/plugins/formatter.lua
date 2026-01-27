@@ -62,5 +62,17 @@ return {
       end,
       python = { "ruff_format", "ruff_fix", "ruff_organize_imports" },
     },
+    formatters = {
+      prettierd = {
+        condition = function()
+          return not (vim.b.disable_prettier or vim.g.disabled_prettier)
+        end,
+      },
+      prettier = {
+        condition = function()
+          return not (vim.b.disable_prettier or vim.g.disabled_prettier)
+        end,
+      },
+    },
   },
 }

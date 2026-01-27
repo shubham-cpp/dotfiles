@@ -1,0 +1,37 @@
+{
+  "Script": {
+    "prefix": "s-script",
+    "body": [
+      "<script lang=\"ts\">",
+      "$0",
+      "</script>"
+    ]
+  },
+  "Default template": {
+    "prefix": "s-props",
+    "body": [
+      "<script lang=\"ts\">",
+      "let { $1 } = $$props()",
+      "</script>",
+      "<div>\n\t$0\n</div>"
+    ]
+  },
+  "Svelte Props": {
+    "prefix": "props",
+    "body": [
+      "let { $1 } = $$props()"
+    ]
+  },
+  "inspect with console.log": {
+    "prefix": "ins",
+    "body": [
+      "$$inspect($1).with(console.log)"
+    ]
+  },
+  "inspect with console.log(full)": {
+    "prefix": "inspect",
+    "body": [
+      "$$inspect($1).with(console.log)"
+    ]
+  }
+}

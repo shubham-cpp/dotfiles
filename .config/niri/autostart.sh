@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-xwayland-satellite &
 gnome-keyring-daemon &
 /usr/lib/xdg-desktop-portal-gtk &
 /usr/lib/xdg-desktop-portal-gnome &
@@ -19,5 +18,7 @@ alacritty -e tmux &
 if ! pgrep vicinae >/dev/null; then
   vicinae server &
 fi
+
+xwayland-satellite &
 
 wlsunset -l 18.5204 -L 73.8567 -t 3500 &

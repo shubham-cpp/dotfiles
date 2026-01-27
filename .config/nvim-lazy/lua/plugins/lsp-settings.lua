@@ -3,22 +3,20 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      setup = {
-        tailwindcss = function()
-          Snacks.util.lsp.on({ name = "tailwindcss" }, function(_, client)
-            client.server_capabilities.completionProvider.triggerCharacters =
-              { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
-          end)
-        end,
-      },
+      -- setup = {
+      --   tailwindcss = function()
+      --     Snacks.util.lsp.on({ name = "tailwindcss" }, function(_, client)
+      --       client.server_capabilities.completionProvider.triggerCharacters =
+      --       { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
+      --     end)
+      --   end,
+      -- },
       -- make sure mason installs the server
       servers = {
         ols = {},
-        -- lua_ls = { enabled = false },
-        -- emmylua_ls = { enabled = true },
-        -- codebook = {},
+        lua_ls = { enabled = false },
+        emmylua_ls = { enabled = true },
         vtsls = {
-          -- cmd = { "lspmux", "client", "--server-path", "vtsls --stdio" },
           settings = {
             vtsls = { experimental = { completion = { enableServerSideFuzzyMatch = false } } },
           },
@@ -59,9 +57,9 @@ return {
       servers = {
         ["*"] = {
           keys = {
-            { "gl", vim.diagnostic.open_float, desc = "Open diagnostic" },
+            { "gl",         vim.diagnostic.open_float, desc = "Open diagnostic" },
             --{{{  disable a keymap
-            { "<C-k>", mode = "i", false },
+            { "<C-k>",      mode = "i",                false },
             -- I'm used to <leader>l being my "lsp" prefix. Can't change my muscle memory now
             { "<leader>cl", false },
             { "<leader>ca", false },
@@ -90,16 +88,8 @@ return {
               desc = "Signature Help",
               has = "signatureHelp",
             },
-            {
-              "<leader>ll",
-              function()
-                Snacks.picker.lsp_config()
-              end,
-              desc = "Lsp Info",
-            },
-
-            { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
-            { "<leader>lc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
+            { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action",  mode = { "n", "v" }, has = "codeAction" },
+            { "<leader>lc", vim.lsp.codelens.run,    desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
             {
               "<leader>lC",
               vim.lsp.codelens.refresh,
@@ -116,11 +106,19 @@ return {
               mode = { "n" },
               has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
             },
-            { "<leader>lr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
+            { "<leader>lr", vim.lsp.buf.rename,                           desc = "Rename",          has = "rename" },
             {
               "<leader>lw",
               function()
-                Snacks.picker.lsp_symbols({ filter = LazyVim.config.kind_filter })
+                local ok_fzf, fzf = pcall(require, "fzf-lua")
+                local ok_snacks, picker = pcall(require, "snacks.picker")
+                if ok_fzf then
+                  fzf.lsp_document_symbols({})
+                elseif ok_snacks then
+                  picker.lsp_symbols({ filter = LazyVim.config.kind_filter })
+                else
+                  vim.lsp.buf.document_symbol()
+                end
               end,
               desc = "LSP Symbols",
               has = "documentSymbol",
@@ -128,12 +126,25 @@ return {
             {
               "<leader>lW",
               function()
-                Snacks.picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter })
+                local ok_fzf, fzf = pcall(require, "fzf-lua")
+                local ok_snacks, picker = pcall(require, "snacks.picker")
+                if ok_fzf then
+                  fzf.lsp_workspace_symbols({ fzf_cli_args = "--nth 1..2" })
+                elseif ok_snacks then
+                  picker.lsp_workspace_symbols({ filter = LazyVim.config.kind_filter })
+                else
+                  vim.lsp.buf.workspace_symbol()
+                end
               end,
               desc = "LSP Workspace Symbols",
               has = "workspace/symbols",
             },
-            { "<leader>lA", LazyVim.lsp.action.source, desc = "Source Action", has = "codeAction" },
+            {
+              "<leader>lA",
+              LazyVim.lsp.action.source,
+              desc = "Source Action",
+              has = "codeAction",
+            },
             { "<leader>lo", LazyVim.lsp.action["source.organizeImports"], desc = "Organize Imports" },
             {
               "<leader>lM",

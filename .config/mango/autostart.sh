@@ -3,12 +3,21 @@
 if ! pgrep -x "swaync" >/dev/null; then
   swaync >/dev/null 2>&1 &
 fi
-if ! pgrep -x "gnome-keyring-daemon"; then
-  gnome-keyring-daemon >/dev/null 2>&1 &
-  dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
-  # The next line of command is not necessary. It is only to avoid some situations where it cannot start automatically
-  /usr/lib/xdg-desktop-portal-wlr >/dev/null 2>&1 &
-fi
+
+systemctl --user stop xdg-desktop-portal-gtk xdg-desktop-portal xdg-desktop-portal-hyprland
+systemctl --user set-environment XDG_CURRENT_DESKTOP=wlroots
+systemctl --user import-environment \
+  DISPLAY \
+  WAYLAND_DISPLAY \
+  XDG_CURRENT_DESKTOP
+# dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots
+hash dbus-update-activation-environment 2>/dev/null &&
+  dbus-update-activation-environment --systemd \
+    DISPLAY \
+    SWAYSOCK \
+    XDG_CURRENT_DESKTOP=wlroots \
+    WAYLAND_DISPLAY
+
 # clipboard content manager
 wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
 wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
@@ -38,9 +47,19 @@ fi
 if ! pgrep -x "blueman-applet"; then
   blueman-applet &
 fi
+if ! pgrep -x "swww-daemon"; then
+  swww-daemon &
+  swww img ~/.config/wall.png &
+fi
 
 if ! pgrep -x "swayidle"; then
   setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg -d reload_config' >/tmp/mango-config-watch.log
 fi
+
+systemctl --user start xdg-desktop-portal-wlr.service
+sleep 2s
+systemctl --user start xdg-desktop-portal
+sleep 2s
+systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-wlr.service &
 
 setsid -f $HOME/.local/bin/sway-audio-idle-inhibit

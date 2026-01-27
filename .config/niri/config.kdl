@@ -578,8 +578,10 @@ binds {
 }
 
 environment {
-    XDG_CURRENT_DESKTOP "niri"
+    QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
     QT_QPA_PLATFORM "wayland"
+    XDG_SESSION_TYPE "wayland"
+    XDG_CURRENT_DESKTOP "niri"
     HYPRCURSOR_THEME "Breeze_Light"
     HYPRCURSOR_SIZE "28"
     XCURSOR_THEME "Breeze_Light"
@@ -592,6 +594,10 @@ environment {
 cursor {
     xcursor-theme "Breeze_Light"
     xcursor-size 28
+}
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
 }
 
 spawn-at-startup "~/.config/niri/autostart.sh"

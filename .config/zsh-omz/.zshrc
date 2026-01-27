@@ -121,3 +121,5 @@ if [ -x "$(which yazi)" ]; then
     rm -f -- "$tmp"
   }
 fi
+
+compdef _git gitc

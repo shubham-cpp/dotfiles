@@ -8,6 +8,26 @@ use = "yazi-rs/plugins:smart-enter"
 rev = "56971d0"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
+[[plugin.deps]]
+use = "pirafrank/what-size"
+rev = "179ebf6"
+hash = "57056b9728006881d580ccabe8154a9c"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:zoom"
+rev = "de33976"
+hash = "a638db397a5a41d3f3a08a7427ccead1"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:smart-filter"
+rev = "de33976"
+hash = "407d19bc4fb46eff5fa8ff8337644847"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:mount"
+rev = "de33976"
+hash = "e2d4bfccf31e5ab05f46fee4797c5215"
+
 [[flavor.deps]]
 use = "BennyOe/tokyo-night"
 rev = "8e6296f"

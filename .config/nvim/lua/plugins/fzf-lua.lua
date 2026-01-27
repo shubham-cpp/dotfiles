@@ -1,8 +1,7 @@
 ---@type LazySpec
 return {
   "ibhagwan/fzf-lua",
-  dependencies = "echasnovski/mini.icons",
-  cmd = "FzfLua",
+  optional = true,
   opts = function()
     local actions = require "fzf-lua.actions"
 
@@ -18,14 +17,26 @@ return {
         prefix = "select-all+",
       },
     }
-
     return {
-      { "border-fused", "hide" },
+      { "border-fused", "skim" },
       defaults = {
-        formatter = { "path.filename_first", 2 },
-        fzf_opts = { ["--scheme"] = "default" },
+        -- formatter = { "path.filename_first", 1 },
       },
+      -- fzf_opts = { ["--algo"] = "frizbee" },
       winopts = { preview = { default = "bat", layout = "vertical" } },
+      keymap = {
+        builtin = {
+          true,
+          ["<C-d>"] = "preview-page-down",
+          ["<C-u>"] = "preview-page-up",
+        },
+        fzf = {
+          true,
+          ["ctrl-d"] = "preview-page-down",
+          ["ctrl-u"] = "preview-page-up",
+          ["ctrl-q"] = "select-all+accept",
+        },
+      },
       files = {
         actions = action_keys,
         previewer = false,
@@ -33,14 +44,18 @@ return {
       },
       git = {
         files = {
+          cmd = "git ls-files --cached --others --exclude-standard",
           actions = action_keys,
           previewer = false,
           winopts = vscode,
         },
+        branches = {
+          cmd_add = { "git", "switch", "-c" },
+        },
       },
       grep = {
         actions = action_keys,
-        fzf_opts = { ["--scheme"] = "path" },
+        -- fzf_opts = { ["--scheme"] = "path" },
         rg_glob = true,
         ---@param query string - first returned string is the new search query
         ---@param opts table - second returned string are (optional) additional rg flags
@@ -56,58 +71,47 @@ return {
   specs = {
     {
       "AstroNvim/astrocore",
-      optional = true,
       opts = function(_, opts)
         local maps = opts.mappings
+        maps.n["<C-p>"] = { function() require("fzf-lua").files() end, desc = "Find files" }
+        maps.n["<Leader>fr"] = { function() require("fzf-lua").resume() end, desc = "Resume previous search" }
+        maps.n["<Leader>fl"] = { function() require("fzf-lua").grep_curbuf() end, desc = "Search(buf)" }
 
-        maps.n["<c-p>"] = {
-          function() require("fzf-lua").files {} end,
-          desc = "Find files",
-        }
-
-        maps.n["<Leader>fg"] = {
-          function() require("fzf-lua").git_files {} end,
-          desc = "Find git files",
-        }
-        maps.n["<Leader>fG"] = {
-          function()
-            require("fzf-lua").live_grep {
-              cmd = "git grep -i --line-number --column --color=always",
-              fn_transform_cmd = function(query, cmd, _)
-                local search_query, glob_str = query:match "(.-)%s-%-%-(.*)"
-                if not glob_str then return end
-                local new_cmd = string.format("%s %s %s", cmd, vim.fn.shellescape(search_query), glob_str)
-                return new_cmd, search_query
-              end,
+        if maps.n["<Leader>lR"] then
+          maps.n["<Leader>lR"][1] = function()
+            require("fzf-lua").lsp_references {
+              ignore_current_line = true,
+              includeDeclaration = false,
             }
-          end,
-          desc = "Git grep",
-        }
+          end
+        end
 
-        maps.n["<Leader>fn"] = {
-          function()
-            require("fzf-lua").files {
-              cwd = vim.fn.stdpath "config",
-            }
-          end,
-          desc = "Find AstroNvim config files",
-        }
+        maps.n["<Leader>fn"] =
+          { function() require("fzf-lua").files { cwd = vim.fn.stdpath "config" } end, desc = "Neovim Config" }
         maps.n["<Leader>fd"] = {
-          function()
-            require("fzf-lua").git_files {
-              cwd = vim.fn.expand "~/Documents/dotfiles/",
-            }
-          end,
+          function() require("fzf-lua").git_files { cwd = vim.fn.expand "~/Documents/dotfiles" } end,
           desc = "Dotfiles",
         }
-        maps.n["<Leader>fh"] = {
-          function() require("fzf-lua").help_tags {} end,
-          desc = "Help tags",
+
+        maps.n["<Leader>fw"] = { function() require("fzf-lua").grep_cword() end, desc = "Find current word" }
+        maps.n["<Leader>fW"] = {
+          function() require("fzf-lua").grep_cword { cwd = vim.fn.expand "%:p:h" } end,
+          desc = "Find current word(cur_dir)",
         }
-        maps.n["<Leader>fk"] = {
-          function() require("fzf-lua").keymaps {} end,
-          desc = "Keymaps",
+
+        maps.n["<Leader>fs"] = { function() require("fzf-lua").live_grep() end, desc = "Search" }
+        maps.n["<Leader>fS"] = {
+          function() require("fzf-lua").live_grep { cwd = vim.fn.expand "%:p:h" } end,
+          desc = "Search(current directory)",
         }
+        maps.x["<Leader>fs"] = { function() require("fzf-lua").grep_visual() end, desc = "Search" }
+        maps.x["<Leader>fS"] = {
+          function() require("fzf-lua").grep_visual { cwd = vim.fn.expand "%:p:h" } end,
+          desc = "Search(current directory)",
+        }
+        maps.n["<Leader>fT"] = { function() require("fzf-lua").colorschemes() end, desc = "Find themes" }
+        maps.n["<Leader>fu"] = { function() require("fzf-lua").undotree() end, desc = "undotree" }
+        maps.n["<Leader>fz"] = { function() require("fzf-lua").zoxide() end, desc = "zoxide" }
       end,
     },
   },

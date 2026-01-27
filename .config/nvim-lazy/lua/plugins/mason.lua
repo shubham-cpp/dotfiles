@@ -9,6 +9,7 @@ return {
         icons = { package_pending = " ", package_installed = " ", package_uninstalled = " " },
       },
       ensure_installed = {
+        "emmylua_ls",
         "goimports",
         "gofumpt",
         "golangci-lint",

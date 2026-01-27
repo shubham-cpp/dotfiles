@@ -389,6 +389,11 @@ key = "N"
 mode = "Vi"
 mods = "Shift"
 
+[[keyboard.bindings]]
+chars = "\u001b\r"
+key = "Return"
+mods = "Shift"
+
 [mouse]
 hide_when_typing = true
 

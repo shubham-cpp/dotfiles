@@ -123,9 +123,9 @@ else
   vim.keymap.set("n", "<leader>6", "<cmd>call VSCodeNotify('workbench.action.openEditorAtIndex6')<cr>")
 
   vim.keymap.set("n", "<leader>-", "<Cmd>call VSCodeNotify('eslint.executeAutofix')<CR>")
-  vim.keymap.set("n", "<leader>=", "<Cmd>call VSCodeNotify('editor.action.formatSelection')<CR>")
+  vim.keymap.set("n", "<leader>=", "<Cmd>call VSCodeNotify('editor.action.formatDocument')<CR>")
   vim.keymap.set(
-    "n",
+    "v",
     "<leader>=",
     [[<Cmd>call VSCodeNotifyRangePos('editor.action.formatSelection', line("v"), line("."), col("v"), col("."), 1)<CR>]]
   )
@@ -136,7 +136,7 @@ else
     "<Cmd>lua require('vscode').action('workbench.action.findInFiles', { args = { query = vim.fn.expand('<cword>') } })<CR>"
   )
   vim.keymap.set(
-    { "v" },
+    "v",
     "<leader>f",
     [[<Cmd>lua require('vscode').action('workbench.action.findInFiles', { args = { query = vim.fn.getline(vim.fn.getpos("'<")[2],vim.fn.getpos("'>")[2]) } })<CR>]]
   )

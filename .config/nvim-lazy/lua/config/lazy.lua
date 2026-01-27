@@ -15,6 +15,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 vim.g.lazyvim_python_lsp = "basedpyright"
+vim.g.maplocalleader = "\\"
 
 require("lazy").setup({
   spec = {

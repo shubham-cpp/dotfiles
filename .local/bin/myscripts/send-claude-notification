@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Default values if no arguments provided
+TITLE="${1:-Claude Code}"
+MESSAGE="${2:-Attention required: permission or input needed.}"
+
+OS=$(uname -s)
+
+# notify-send -u critical  'Claude Code' 'Attention required: permission or input needed'
+# osascript -e 'display notification "Claude is waiting for your input or permission" with title "Claude Code Needs Attention" sound name "Ping"'
+if [ "$OS" = "Darwin" ]; then
+  # macOS: Use osascript with sound
+  osascript -e "display notification \"$MESSAGE\" with title \"$TITLE\" sound name \"Glass\""
+elif [ "$OS" = "Linux" ]; then
+  notify-send -t 5000 -i dialog-information "$TITLE" "$MESSAGE"
+else
+  echo "Unsupported OS: $OS"
+  exit 1
+fi

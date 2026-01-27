@@ -3,7 +3,7 @@ command = fish --login
 window-padding-color = background
 # font-family = "MonoLisa\-Black"
 font-size=12.5
-font-family = "JetBrainsMono Nerd Font"
+font-family = "CaskaydiaCove Nerd Font"
 font-feature = -calt
 font-feature = -liga
 font-feature = -dlig
@@ -54,3 +54,4 @@ keybind = alt+shift+n=move_tab:1
 keybind = alt+shift+p=move_tab:-1
 
 keybind = alt+z=toggle_split_zoom
+keybind = shift+enter=text:\x1b\r

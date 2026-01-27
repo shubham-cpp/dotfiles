@@ -37,5 +37,5 @@ set --export BUN_INSTALL "$HOME/.local/share/bun"
 set --export PATH $BUN_INSTALL/bin $PATH
 
 if status --is-login; and not set -q CARGO_HOME
-  bass source ~/.profile
+    bass source ~/.profile
 end

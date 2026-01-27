@@ -1,42 +1,22 @@
-local function filter(arr, fn)
-  if type(arr) ~= "table" then return arr end
-
-  local filtered = {}
-  for k, v in pairs(arr) do
-    if fn(v, k, arr) then table.insert(filtered, v) end
-  end
-
-  return filtered
-end
-
-local function filterReactDTS(value) return string.match(value.targetUri or value.uri, "%/index.d.ts") == nil end
-
 ---@type LazySpec
 return {
   "AstroNvim/astrolsp",
-  optional = true,
   ---@type AstroLSPOpts
   opts = {
-    -- Configuration table of features provided by AstroLSP
     features = {
-      -- codelens = true, -- enable/disable codelens refresh on start
+      codelens = true, -- enable/disable codelens refresh on start
       inlay_hints = false, -- enable/disable inlay hints on start
+      semantic_tokens = true, -- enable/disable semantic token highlighting
       signature_help = true,
-      -- semantic_tokens = true, -- enable/disable semantic token highlighting
     },
     -- enable servers that you already have installed without mason
-    -- servers = {},
+    servers = {},
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
-      djlsp = {},
-      zls = {},
-      emmet_language_server = {
-        filetypes = {
-          "templ",
-        },
-      },
       clangd = { capabilities = { offsetEncoding = "utf-8" } },
+      emmet_language_server = { filetypes = { "templ" } },
+      emmet_ls = false,
       vtsls = {
         settings = {
           complete_function_calls = true,
@@ -80,49 +60,26 @@ return {
             },
           },
         },
-        handlers = {
-          ["textDocument/definition"] = function(err, result, method, ...)
-            if vim.islist(result) and #result > 1 then
-              local filtered_result = filter(result, filterReactDTS)
-              return vim.lsp.handlers["textDocument/definition"](err, filtered_result, method, ...)
-            end
-
-            vim.lsp.handlers["textDocument/definition"](err, result, method, ...)
-          end,
-        },
-      },
-      emmet_ls = false,
-      codebook = {
-        cmd = { "codebook-lsp", "serve" },
-        filetypes = {
-          "c",
-          "cpp",
-          "css",
-          "scss",
-          "html",
-          "javascript",
-          "javascriptreact",
-          "typescript",
-          "typescriptreact",
-          "go",
-          "rust",
-          "toml",
-          "markdown",
-          "python",
-        },
-        root_markers = { ".git", "codebook.toml", ".codebook.toml" },
+        -- handlers = {
+        --   ["textDocument/definition"] = function(err, result, method, ...)
+        --     if vim.islist(result) and #result > 1 then
+        --       local filtered_result = filter(result, filterReactDTS)
+        --       return vim.lsp.handlers["textDocument/definition"](err, filtered_result, method, ...)
+        --     end
+        --
+        --     vim.lsp.handlers["textDocument/definition"](err, result, method, ...)
+        --   end,
+        -- },
       },
     },
+    -- customize how language servers are attached
     handlers = {
-      tailwindcss = function(server, opts)
-        local default_attach = opts.on_attach
-        opts.on_attach = function(client, bufnr)
-          default_attach(client, bufnr)
-          client.server_capabilities.completionProvider.triggerCharacters =
-            { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
-        end
-        require("lspconfig")[server].setup(opts)
-      end,
+      -- a function without a key is simply the default handler, functions take two parameters, the server name and the configured options table for that server
+      -- function(server, opts) require("lspconfig")[server].setup(opts) end
+
+      -- the key is the server that is being setup with `lspconfig`
+      -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
+      -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
@@ -145,18 +102,16 @@ return {
           end,
         },
       },
-      eslint_auto_fix = {
-        cond = function(client) return client.name == "eslint" end,
-        {
-          event = "BufWritePre",
-          desc = "Run Eslint fix on save",
-          command = "EslintFixAll",
-        },
-      },
     },
     -- mappings to be set up on attaching of a language server
     mappings = {
       n = {
+        -- a `cond` key can provided as the string of a server capability to be required to attach, or a function with `client` and `bufnr` parameters from the `on_attach` that returns a boolean
+        gD = {
+          function() vim.lsp.buf.declaration() end,
+          desc = "Declaration of current symbol",
+          cond = "textDocument/declaration",
+        },
         ["<Leader>le"] = {
           function() vim.cmd "EslintFixAll" end,
           desc = "Eslint Fix",
@@ -189,9 +144,27 @@ return {
         },
         gro = {
           function()
-            local ok, picker = pcall(require, "snacks.picker")
-            if ok then
-              picker.lsp_symbols()
+            local is_available = require("astrocore").is_available
+
+            if is_available "fzf-lua" then
+              require("fzf-lua").lsp_document_symbols { fzf_cli_args = "--tiebreak=end,index" }
+            elseif is_available "snacks.nvim" then
+              require("snacks.picker").lsp_symbols()
+            else
+              vim.lsp.buf.document_symbol()
+            end
+          end,
+          desc = "Document symbols",
+          cond = "textDocument/documentSymbol",
+        },
+        ["<leader>ls"] = {
+          function()
+            local is_available = require("astrocore").is_available
+
+            if is_available "fzf-lua" then
+              require("fzf-lua").lsp_document_symbols { fzf_cli_args = "--tiebreak=end,index" }
+            elseif is_available "snacks.nvim" then
+              require("snacks.picker").lsp_symbols()
             else
               vim.lsp.buf.document_symbol()
             end
@@ -201,9 +174,12 @@ return {
         },
         grO = {
           function()
-            local ok, picker = pcall(require, "snacks.picker")
-            if ok then
-              picker.lsp_workspace_symbols()
+            local is_available = require("astrocore").is_available
+
+            if is_available "fzf-lua" then
+              require("fzf-lua").lsp_workspace_symbols { fzf_cli_args = "--nth 1..2" }
+            elseif is_available "snacks.nvim" then
+              require("snacks.picker").lsp_workspace_symbols()
             else
               vim.lsp.buf.workspace_symbol()
             end
@@ -211,7 +187,20 @@ return {
           desc = "Workspace symbols",
           cond = "workspace/symbol",
         },
+        ["<Leader>uY"] = {
+          function() require("astrolsp.toggles").buffer_semantic_tokens() end,
+          desc = "Toggle LSP semantic highlight (buffer)",
+          cond = function(client)
+            return client.supports_method "textDocument/semanticTokens/full" and vim.lsp.semantic_tokens ~= nil
+          end,
+        },
       },
     },
+    -- A custom `on_attach` function to be run after the default `on_attach` function
+    -- takes two parameters `client` and `bufnr`  (`:h lspconfig-setup`)
+    -- on_attach = function(client, bufnr)
+    -- this would disable semanticTokensProvider for all clients
+    -- client.server_capabilities.semanticTokensProvider = nil
+    -- end,
   },
 }

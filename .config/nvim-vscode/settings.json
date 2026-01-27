@@ -1,42 +1,162 @@
 // vim:ft=jsonc
 {
+  "update.mode": "manual",
+  "update.showReleaseNotes": false,
+
   "files.autoSave": "onWindowChange",
-  "editor.tabSize": 2,
-  "editor.fontFamily": "'RecMonoLinear Nerd Font','FiraCode Nerd Font','Droid Sans Mono', 'monospace', monospace",
+
+  "editor.fontSize": 14.5,
+  "editor.fontFamily": "'CaskaydiaCove Nerd Font','FiraCode Nerd Font','Droid Sans Mono', 'monospace', monospace",
   "editor.guides.bracketPairs": "active",
-  // "editor.bracketPairColorization.independentColorPoolPerBracketType": true,
-  "editor.minimap.enabled": false,
-  "editor.minimap.autohide": true,
-  "editor.minimap.scale": 3,
+  "editor.defaultColorDecorators": "auto",
   "editor.wordWrap": "on",
-  "editor.colorDecorators": true,
+  "editor.minimap.autohide": "mouseover",
+  "editor.minimap.scale": 3,
+  "editor.cursorSurroundingLines": 10,
+  "editor.lineNumbers": "relative",
+  "editor.minimap.enabled": false,
+  "window.commandCenter": true,
+  "editor.formatOnSave": true,
   "editor.linkedEditing": true,
-  "editor.semanticHighlighting.enabled": true,
-  "editor.semanticTokenColorCustomizations": { "enabled": true },
+  "editor.colorDecorators": true,
   "editor.definitionLinkOpensInPeek": false,
   "editor.gotoLocation.multipleDefinitions": "gotoAndPeek",
   "editor.suggest.showReferences": true,
-  "references.preferredLocation": "view",
-  "workbench.sideBar.location": "right",
-  "workbench.editor.revealIfOpen": true,
-  // NEOVIM
-  "extensions.experimental.affinity": { "asvetliakov.vscode-neovim": 1 },
-  "vscode-neovim.NVIM_APPNAME": "nvim-vscode",
-  "editor.cursorSurroundingLines": 12,
-  "editor.lineNumbers": "relative",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.semanticTokenColorCustomizations": { "enabled": true },
 
-  "typescript.updateImportsOnFileMove.enabled": "always",
+  "references.preferredLocation": "view",
+
   "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+
+  "python.analysis.typeCheckingMode": "standard",
+
+  "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-auto",
+  "workbench.sideBar.location": "right",
+  "workbench.editor.revealIfOpen": true,
+
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb, bun.lock",
+    "*.sqlite": "${capture}.${extname}-*",
+    "*.db": "${capture}.${extname}-*",
+    "*.sqlite3": "${capture}.${extname}-*",
+    "*.db3": "${capture}.${extname}-*",
+    "*.sdb": "${capture}.${extname}-*",
+    "*.s3db": "${capture}.${extname}-*"
+  },
+
+  "telemetry.telemetryLevel": "off",
+  "telemetry.feedback.enabled": false,
+  "telemetry.editStats.enabled": false,
+
+  "workbench.colorTheme": "Maple Dark",
+  "workbench.activityBar.location": "top",
+
+  "svelte.enable-ts-plugin": true,
+  "vue.inlayHints.missingProps": true,
+  "C_Cpp.copilotHover": "disabled",
+  "chat.disableAIFeatures": true,
+
+  "git.blame.editorDecoration.enabled": true,
+
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontFamily": "CaskaydiaCove Nerd Font",
+  "terminal.integrated.scrollback": 10000,
+  "terminal.integrated.suggest.inlineSuggestion": "alwaysOnTopExceptExactMatch",
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.stickyScroll.enabled": false,
+  "terminal.integrated.enableImages": true,
+  "terminal.integrated.gpuAcceleration": "on",
+  "terminal.integrated.tabStopWidth": 4,
+
+  "errorLens.fontSize": "13",
+  "errorLens.onSave": true,
+  "errorLens.editorHoverPartsEnabled": {
+    "messageEnabled": false,
+    "buttonsEnabled": false
+  },
+  "errorLens.excludeByMessage": ["Unknown word"],
+  "errorLens.excludeBySource": ["Code Spell Checked"],
+
+  "vscode-neovim.NVIM_APPNAME": "nvim-vscode",
+  "extensions.experimental.affinity": { "asvetliakov.vscode-neovim": 1 },
+
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets"
+  },
+  "dart.flutterSdkPath": "/home/shubham/Downloads/Packages/GitClones/flutter",
+
+  "workbench.colorCustomizations": {
+    "errorLens.errorForeground": "#edabab",
+    "errorLens.errorBackground": "#1e1e1f1b",
+    "errorLens.warningForeground": "#eecfa0",
+    "errorLens.warningBackground": "#1e1e1f1b",
+    "errorLens.hintForeground": "#8fc7ff",
+    "errorLens.hintBackground": "#1e1e1f1b",
+
+    "[Rosé Pine (no italics)]": {
+      "editorCursor.foreground": "#e0def4",
+      "editorCursor.background": "#524f67",
+      "terminalCursor.foreground": "#f6c177"
+    },
+    "[Rosé Pine Moon (no italics)]": {
+      "editorCursor.foreground": "#e0def4",
+      "editorCursor.background": "#524f67",
+      "terminalCursor.foreground": "#f6c177"
+    },
+    "[Kanso Ink]": {
+      // wordHighlightStrongBackground
+      "editorGroup.dropBackground": "#393b424d",
+      "activityBar.background": "#14171dfe"
+    },
+    "[Kanso Zen]": {
+      "editorGroup.dropBackground": "#393b424d",
+      "activityBar.background": "#14171dfe"
+    },
+    "[Kanso Mist]": {
+      "editorGroup.dropBackground": "#393b424d"
+    },
+    "[Kanso Pearl]": {
+      "editorGroup.dropBackground": "#393b424d"
+    }
+  },
   "reactSnippets.settings.importReactOnTop": false,
-  "github.copilot.enable": { "markdown": "true" },
-  "github.copilot.editor.enableAutoCompletions": true,
-  "terminal.integrated.scrollback": 10000
+  "roo-cline.allowedCommands": [
+    "git log",
+    "git diff",
+    "git show",
+    "npm test",
+    "npm install",
+    "tsc"
+  ],
+  "roo-cline.deniedCommands": [],
+  "kilo-code.deniedCommands": [],
+  "kilo-code.allowedCommands": [
+    "git log",
+    "git diff",
+    "git show",
+    "npm test",
+    "npm install",
+    "tsc"
+  ]
 }

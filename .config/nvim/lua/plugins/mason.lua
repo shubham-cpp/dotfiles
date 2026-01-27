@@ -1,14 +1,6 @@
 ---@type LazySpec
 return {
   {
-    "williamboman/mason.nvim",
-    optional = true,
-    opts = {
-      ---@type '"prepend"' | '"append"' | '"skip"'
-      PATH = "prepend",
-    },
-  },
-  {
     "williamboman/mason-lspconfig.nvim",
     optional = true,
     opts = function(_, opts)

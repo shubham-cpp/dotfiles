@@ -1,6 +1,11 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/.config/nvim-12
+    - /home/shubham/Downloads/Packages/GitClones/crush
+    - /home/shubham/Documents/Programming/WebDev/vexo
+    - /home/shubham/Documents/Programming/WebDev/vexo-sveltekit
+    - /home/shubham/.config/nvim-chad
     - /home/shubham/Documents/Programming/WebDev/starter-templates
     - /home/shubham/Documents/Programming/WebDev/sveltekit-trello-clone
     - /home/shubham/Documents/Programming/WebDev/dexter-ai

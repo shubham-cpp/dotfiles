@@ -20,18 +20,23 @@ config.color_scheme = "iceberg-dark" -- "iceberg-dark" -- "Ashes (dark) (termina
 -- config.colors = { background = "#14131A" }
 config.default_prog = { "/bin/fish", "-l" }
 config.font = wezterm.font_with_fallback({
-  "FiraCode Nerd Font",
+  "CaskaydiaCove Nerd Font",
   "JetBrainsMono Nerd Font",
+  "FiraCode Nerd Font",
   "FontAwesome",
 })
+
+config.freetype_load_target = "Light"
+-- config.font_shaper = "Harfbuzz"
 config.window_background_opacity = 0.95
-config.font_size = 11.5
+config.font_size = 12
 config.harfbuzz_features = { "calt=0", "clig=0", "liga=0" }
 config.switch_to_last_active_tab_when_closing_tab = true
 config.scrollback_lines = 10000
 config.check_for_updates = false
 config.default_cursor_style = "SteadyBar"
-config.enable_wayland = require("os").getenv "XDG_CURRENT_DESKTOP" ~= "Hyprland"
+-- config.enable_wayland = require("os").getenv "XDG_CURRENT_DESKTOP" ~= "Hyprland"
+config.enable_wayland = false
 
 local alt_keys = {}
 
@@ -58,6 +63,7 @@ table.insert(alt_keys, { key = ")", mods = "SHIFT|ALT", action = act.PaneSelect 
 table.insert(alt_keys, { key = "0", mods = "ALT", action = act.PaneSelect({ mode = "SwapWithActiveKeepFocus" }) })
 table.insert(alt_keys, { key = "v", mods = "ALT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) })
 table.insert(alt_keys, { key = "s", mods = "ALT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) })
+table.insert(alt_keys, { key = "Enter", mods = "SHIFT", action = act({ SendString = "\x1b\r" }) })
 
 table.insert(alt_keys, { key = "{", mods = "SHIFT|ALT", action = act.MoveTabRelative(-1) })
 table.insert(alt_keys, { key = "}", mods = "SHIFT|ALT", action = act.MoveTabRelative(1) })
@@ -148,7 +154,7 @@ tabline.setup({
         max_length = 28,
         padding = { left = 0, right = 1 },
       },
-      { "zoomed",  padding = 0 },
+      { "zoomed", padding = 0 },
     },
     tab_inactive = {
       "index",

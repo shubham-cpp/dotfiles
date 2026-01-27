@@ -203,29 +203,29 @@ return {
       -- { "<leader>e", false },
       -- { "<leader>E", false },
       ---}}}
-      {
-        "<Leader><Leader>",
-        function()
-          local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
-          if is_git then
-            require("snacks").picker.git_files({ layout = { preset = "vscode" } })
-          else
-            require("snacks").picker.files({ layout = { preset = "vscode" } })
-          end
-        end,
-        desc = "Find files",
-      },
-      { "<leader>fc", "<cmd>CreateFileInDir<cr>" },
-      {
-        "<leader>ff",
-        LazyVim.pick("files", { layout = { preset = "vscode" } }),
-        desc = "Find Files (Root Dir)",
-      },
-      {
-        "<leader>fF",
-        LazyVim.pick("files", { layout = { preset = "vscode" }, root = false }),
-        desc = "Find Files (cwd)",
-      },
+      -- {
+      --   "<Leader><Leader>",
+      --   function()
+      --     local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
+      --     if is_git then
+      --       require("snacks").picker.git_files({ layout = { preset = "vscode" } })
+      --     else
+      --       require("snacks").picker.files({ layout = { preset = "vscode" } })
+      --     end
+      --   end,
+      --   desc = "Find files",
+      -- },
+      -- { "<leader>fc", "<cmd>CreateFileInDir<cr>" },
+      -- {
+      --   "<leader>ff",
+      --   LazyVim.pick("files", { layout = { preset = "vscode" } }),
+      --   desc = "Find Files (Root Dir)",
+      -- },
+      -- {
+      --   "<leader>fF",
+      --   LazyVim.pick("files", { layout = { preset = "vscode" }, root = false }),
+      --   desc = "Find Files (cwd)",
+      -- },
       -- {
       --   "<leader>fg",
       --   function()
@@ -233,37 +233,20 @@ return {
       --   end,
       --   desc = "Find Files(git)",
       -- },
-      -- {
-      --   "<leader>fn",
-      --   function()
-      --     Snacks.picker.files({ cwd = vim.fn.stdpath("config"), layout = { preset = "vscode" } })
-      --   end,
-      --   desc = "Find Config File",
-      -- },
       {
         "<leader>fN",
         function()
-          Snacks.picker.notifications()
+          Snacks.picker.notifications({ layout = { preset = "vertical" } })
         end,
         desc = "notifications",
       },
       -- {
-      --   "<leader>fd",
+      --   "<leader>fz",
       --   function()
-      --     Snacks.picker.git_files({
-      --       cwd = vim.fn.expand("~/Documents/dotfiles"),
-      --       layout = { preset = "vscode" },
-      --     })
+      --     Snacks.picker.zoxide()
       --   end,
-      --   desc = "Find Dotfiles",
+      --   desc = "Zoxided",
       -- },
-      {
-        "<leader>fz",
-        function()
-          Snacks.picker.zoxide()
-        end,
-        desc = "Zoxided",
-      },
       {
         "<leader>uN",
         function()
@@ -279,32 +262,19 @@ return {
         desc = "Toggle Zoom",
       },
       -- {
-      --   "<C-\\>",
+      --   "<leader>fl",
       --   function()
-      --     Snacks.terminal(nil, { win = { style = "float", border = "rounded" } })
+      --     Snacks.picker.lines()
       --   end,
-      --   desc = "Toggle terminal",
+      --   desc = "Buffer Lines",
       -- },
       -- {
-      --   "<C-\\>",
-      --   "<cmd>close<cr>",
-      --   mode = "t",
-      --   desc = "Hide terminal",
+      --   "<leader>fG",
+      --   function()
+      --     Snacks.picker.grep_buffers()
+      --   end,
+      --   desc = "Grep Open Buffers",
       -- },
-      {
-        "<leader>fl",
-        function()
-          Snacks.picker.lines()
-        end,
-        desc = "Buffer Lines",
-      },
-      {
-        "<leader>fG",
-        function()
-          Snacks.picker.grep_buffers()
-        end,
-        desc = "Grep Open Buffers",
-      },
       { "<leader>fs", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
       { "<leader>fS", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
       {
@@ -322,27 +292,27 @@ return {
         mode = { "n", "x" },
       },
       -- search
-      {
-        '<leader>f"',
-        function()
-          Snacks.picker.registers()
-        end,
-        desc = "Registers",
-      },
-      {
-        "<leader>f/",
-        function()
-          Snacks.picker.search_history()
-        end,
-        desc = "Search History",
-      },
-      {
-        "<leader>fa",
-        function()
-          Snacks.picker.autocmds()
-        end,
-        desc = "Autocmds",
-      },
+      -- {
+      --   '<leader>f"',
+      --   function()
+      --     Snacks.picker.registers()
+      --   end,
+      --   desc = "Registers",
+      -- },
+      -- {
+      --   "<leader>f/",
+      --   function()
+      --     Snacks.picker.search_history()
+      --   end,
+      --   desc = "Search History",
+      -- },
+      -- {
+      --   "<leader>fa",
+      --   function()
+      --     Snacks.picker.autocmds()
+      --   end,
+      --   desc = "Autocmds",
+      -- },
       -- {
       --   "<leader>fc",
       --   function()
@@ -350,145 +320,145 @@ return {
       --   end,
       --   desc = "Command History",
       -- },
-      {
-        "<leader>fC",
-        function()
-          Snacks.picker.commands()
-        end,
-        desc = "Commands",
-      },
-      {
-        "<leader>ld",
-        function()
-          Snacks.picker.diagnostics()
-        end,
-        desc = "Diagnostics",
-      },
-      {
-        "<leader>lD",
-        function()
-          Snacks.picker.diagnostics_buffer()
-        end,
-        desc = "Buffer Diagnostics",
-      },
-      {
-        "<leader>fh",
-        function()
-          Snacks.picker.help()
-        end,
-        desc = "Help Pages",
-      },
-      {
-        "<leader>fH",
-        function()
-          Snacks.picker.highlights()
-        end,
-        desc = "Highlights",
-      },
-      {
-        "<leader>fi",
-        function()
-          Snacks.picker.icons()
-        end,
-        desc = "Icons",
-      },
-      {
-        "<leader>fk",
-        function()
-          Snacks.picker.keymaps()
-        end,
-        desc = "Keymaps",
-      },
-      {
-        "<leader>fl",
-        function()
-          Snacks.picker.loclist()
-        end,
-        desc = "Location List",
-      },
-      {
-        "<leader>fm",
-        function()
-          Snacks.picker.man()
-        end,
-        desc = "Man Pages",
-      },
-      {
-        "<leader>fM",
-        function()
-          Snacks.picker.marks()
-        end,
-        desc = "Marks",
-      },
-      {
-        "<leader>fr",
-        function()
-          Snacks.picker.resume()
-        end,
-        desc = "Resume",
-      },
-      {
-        "<leader>fo",
-        LazyVim.pick("oldfiles"),
-        desc = "Resume",
-      },
-      {
-        "<leader>fR",
-        function()
-          Snacks.picker.recent({ filter = { cwd = true } })
-        end,
-        desc = "Recent (cwd)",
-      },
-      {
-        "<leader>fq",
-        function()
-          Snacks.picker.qflist()
-        end,
-        desc = "Quickfix List",
-      },
-      {
-        "<leader>fu",
-        function()
-          Snacks.picker.undo()
-        end,
-        desc = "Undotree",
-      },
-      {
-        "<leader>fp",
-        function()
-          Snacks.picker.projects()
-        end,
-        desc = "Projects",
-      },
-      {
-        "<leader>fj",
-        function()
-          Snacks.picker.jumps()
-        end,
-        desc = "Jumps",
-      },
+      -- {
+      --   "<leader>fC",
+      --   function()
+      --     Snacks.picker.commands()
+      --   end,
+      --   desc = "Commands",
+      -- },
+      -- {
+      --   "<leader>ld",
+      --   function()
+      --     Snacks.picker.diagnostics()
+      --   end,
+      --   desc = "Diagnostics",
+      -- },
+      -- {
+      --   "<leader>lD",
+      --   function()
+      --     Snacks.picker.diagnostics_buffer()
+      --   end,
+      --   desc = "Buffer Diagnostics",
+      -- },
+      -- {
+      --   "<leader>fh",
+      --   function()
+      --     Snacks.picker.help()
+      --   end,
+      --   desc = "Help Pages",
+      -- },
+      -- {
+      --   "<leader>fH",
+      --   function()
+      --     Snacks.picker.highlights()
+      --   end,
+      --   desc = "Highlights",
+      -- },
+      -- {
+      --   "<leader>fi",
+      --   function()
+      --     Snacks.picker.icons()
+      --   end,
+      --   desc = "Icons",
+      -- },
+      -- {
+      --   "<leader>fk",
+      --   function()
+      --     Snacks.picker.keymaps()
+      --   end,
+      --   desc = "Keymaps",
+      -- },
+      -- {
+      --   "<leader>fl",
+      --   function()
+      --     Snacks.picker.loclist()
+      --   end,
+      --   desc = "Location List",
+      -- },
+      -- {
+      --   "<leader>fm",
+      --   function()
+      --     Snacks.picker.man()
+      --   end,
+      --   desc = "Man Pages",
+      -- },
+      -- {
+      --   "<leader>fM",
+      --   function()
+      --     Snacks.picker.marks()
+      --   end,
+      --   desc = "Marks",
+      -- },
+      -- {
+      --   "<leader>fr",
+      --   function()
+      --     Snacks.picker.resume()
+      --   end,
+      --   desc = "Resume",
+      -- },
+      -- {
+      --   "<leader>fo",
+      --   LazyVim.pick("oldfiles"),
+      --   desc = "Resume",
+      -- },
+      -- {
+      --   "<leader>fR",
+      --   function()
+      --     Snacks.picker.recent({ filter = { cwd = true } })
+      --   end,
+      --   desc = "Recent (cwd)",
+      -- },
+      -- {
+      --   "<leader>fq",
+      --   function()
+      --     Snacks.picker.qflist()
+      --   end,
+      --   desc = "Quickfix List",
+      -- },
+      -- {
+      --   "<leader>fu",
+      --   function()
+      --     Snacks.picker.undo()
+      --   end,
+      --   desc = "Undotree",
+      -- },
+      -- {
+      --   "<leader>fp",
+      --   function()
+      --     Snacks.picker.projects()
+      --   end,
+      --   desc = "Projects",
+      -- },
+      -- {
+      --   "<leader>fj",
+      --   function()
+      --     Snacks.picker.jumps()
+      --   end,
+      --   desc = "Jumps",
+      -- },
     },
   },
-  {
-    "folke/todo-comments.nvim",
-    optional = true,
-    keys = {
-      { "<leader>st", false },
-      { "<leader>sT", false },
-      {
-        "<leader>ft",
-        function()
-          Snacks.picker.todo_comments()
-        end,
-        desc = "Todo",
-      },
-      {
-        "<leader>fT",
-        function()
-          Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
-        end,
-        desc = "Todo/Fix/Fixme",
-      },
-    },
-  },
+  -- {
+  --   "folke/todo-comments.nvim",
+  --   optional = true,
+  --   keys = {
+  --     { "<leader>st", false },
+  --     { "<leader>sT", false },
+  --     {
+  --       "<leader>ft",
+  --       function()
+  --         Snacks.picker.todo_comments()
+  --       end,
+  --       desc = "Todo",
+  --     },
+  --     {
+  --       "<leader>fT",
+  --       function()
+  --         Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } })
+  --       end,
+  --       desc = "Todo/Fix/Fixme",
+  --     },
+  --   },
+  -- },
 }

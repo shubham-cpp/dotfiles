@@ -40,17 +40,6 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- vim.api.nvim_create_autocmd("BufReadPost", {
---   group = au_buffer,
---   pattern = {},
---   desc = "set env ESLINT_D_PPID",
---   callback = function()
---     --- If this is not present, then eslint_d doesn't work
---     vim.env.ESLINT_D_PPID = vim.fn.getpid()
---   end,
---   once = true,
--- })
-
 ---{{{ Mini.files mappings
 vim.api.nvim_create_autocmd("User", {
   group = au_mini,

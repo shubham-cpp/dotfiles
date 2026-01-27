@@ -38,6 +38,7 @@ o.sessionoptions:append({
 })
 o.sessionoptions:remove "folds"
 o.jumpoptions = "stack"
+vim.opt.shortmess:append "IWc"
 
 vim.schedule(function()
   o.clipboard:append(vim.env.SSH_TTY and "" or "unnamedplus") -- Sync with system clipboard
@@ -52,6 +53,8 @@ if not vim.g.vscode then
   o.scrolloff = 12
   o.wildmode = "longest:full,full"
   o.signcolumn = "yes"
+else
+  o.cmdheight = 8
 end
 
 function _G.Fd(file_pattern, _)

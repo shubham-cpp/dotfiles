@@ -1,15 +1,6 @@
+---@type LazySpec
 return {
   "folke/flash.nvim",
-  optional = true,
-  ---@type Flash.Config
-  opts = {
-    modes = {
-      char = {
-        enabled = false,
-        jump_labels = true,
-      },
-    },
-  },
   specs = {
     {
       "AstroNvim/astrocore",
@@ -17,6 +8,14 @@ return {
         local maps = opts.mappings
         maps.x["S"] = false
       end,
+    },
+  },
+  opts = {
+    modes = {
+      char = {
+        enabled = false,
+        jump_labels = true,
+      },
     },
   },
 }

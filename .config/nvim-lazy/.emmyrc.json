@@ -2,14 +2,8 @@
   "$schema": "https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json",
   "runtime": {
     "version": "LuaJIT",
-    "requireLikeFunction": [
-      "import",
-      "load"
-    ],
-    "extensions": [
-      ".lua",
-      ".lua.txt"
-    ],
+    "requireLikeFunction": ["import", "load"],
+    "extensions": [".lua", ".lua.txt"],
     "requirePattern": [
       "lua/?.lua",
       "lua/?/init.lua",
@@ -23,8 +17,6 @@
       "$LLS_Addons/luvit",
       "$HOME/.local/share/nvim-lazy/lazy"
     ],
-    "ignoreGlobs": [
-      "**/*_spec.lua"
-    ]
+    "ignoreGlobs": ["**/*_spec.lua"]
   }
 }

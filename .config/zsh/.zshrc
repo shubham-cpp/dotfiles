@@ -20,7 +20,6 @@ autoload -Uz edit-command-line
 # Smart Url
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
-
 source "$ZGEN_DIR/zgenom.zsh"
 
 # zgenom autoupdate --background
@@ -29,6 +28,7 @@ if ! zgenom saved; then
   zgenom compdef
 
   zgenom load jandamm/zgenom-ext-eval
+  compdef _git gitc
 
   zgenom ohmyzsh lib/git.zsh
   zgenom ohmyzsh lib/completion.zsh

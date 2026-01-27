@@ -13,28 +13,26 @@ for _, p in ipairs(rtps) do
     table.insert(all_comps, vim.fn.fnamemodify(f, ":t:r"))
   end
 end
-
 ---@type LazySpec
 return {
   {
     "AstroNvim/astrocore",
-    optional = true,
     ---@type AstroCoreOpts
     opts = {
       -- Configure core features of AstroNvim
-      -- features = {
-      --   large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
-      --   autopairs = true, -- enable autopairs at start
-      --   cmp = true, -- enable completion at start
-      --   diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
-      --   highlighturl = true, -- highlight URLs at start
-      --   notifications = true, -- enable notifications at start
-      -- },
+      features = {
+        large_buf = { size = 1024 * 25, lines = 5000 }, -- set global limits for large files for disabling features like treesitter
+        autopairs = true, -- enable autopairs at start
+        cmp = true, -- enable completion at start
+        diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
+        highlighturl = true, -- highlight URLs at start
+        notifications = true, -- enable notifications at start
+      },
       -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
-      -- diagnostics = {
-      --   virtual_text = true,
-      --   underline = true,
-      -- },
+      diagnostics = {
+        virtual_text = true,
+        underline = true,
+      },
       -- passed to `vim.filetype.add`
       filetypes = {
         filename = {
@@ -65,8 +63,6 @@ return {
           tsc_makeprg = "npx tsc",
         },
       },
-      -- Mappings can be configured through AstroCore as well.
-      -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
       mappings = {
         -- first key is the mode
         n = {
@@ -215,9 +211,27 @@ return {
           end,
         },
         BetterWinNavClearHistory = {
-          require("better_window_navigation").clear_history,
+          require("config.better_window_navigation").clear_history,
           nargs = 0,
           desc = "Clear the window navigation history for the current tab",
+        },
+        Make = {
+          function(params)
+            -- Insert args at the '$*' in the makeprg
+            local cmd, num_subs = vim.o.makeprg:gsub("%$%*", params.args)
+            if num_subs == 0 then cmd = cmd .. " " .. params.args end
+            local task = require("overseer").new_task {
+              cmd = vim.fn.expandcmd(cmd),
+              components = {
+                { "on_output_quickfix", open = not params.bang, open_height = 8 },
+                "default",
+              },
+            }
+            task:start()
+          end,
+          desc = "Run your makeprg as an Overseer task",
+          nargs = "*",
+          bang = true,
         },
       },
     },
@@ -235,11 +249,11 @@ return {
 
       for _, key in ipairs { "h", "j", "k", "l" } do
         opts.mappings.n["<C-W>" .. key] = {
-          function() require("better_window_navigation").navigate(key) end,
+          function() require("config.better_window_navigation").navigate(key) end,
           desc = "Smart window navigation: " .. key,
         }
         opts.mappings.n["<C-" .. string.upper(key) .. ">"] = {
-          function() require("better_window_navigation").navigate(key) end,
+          function() require("config.better_window_navigation").navigate(key) end,
           desc = "Smart window navigation: " .. key,
         }
       end

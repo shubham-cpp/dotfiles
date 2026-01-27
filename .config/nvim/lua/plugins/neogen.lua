@@ -1,15 +1,6 @@
 ---@type LazySpec
 return {
   "danymat/neogen",
-  cmd = "Neogen",
-  opts = {
-    snippet_engine = "luasnip",
-    languages = {
-      lua = { template = { annotation_convention = "emmylua" } },
-      typescript = { template = { annotation_convention = "tsdoc" } },
-      typescriptreact = { template = { annotation_convention = "tsdoc" } },
-    },
-  },
   dependencies = {
     { "AstroNvim/astroui", opts = { icons = { Neogen = "󰷉" } } },
     {
@@ -24,6 +15,18 @@ return {
         maps.n[prefix .. "t"] = { function() require("neogen").generate { type = "type" } end, desc = "Type" }
         maps.n[prefix .. "F"] = { function() require("neogen").generate { type = "file" } end, desc = "File" }
       end,
+    },
+  },
+  cmd = "Neogen",
+  opts = {
+    snippet_engine = "luasnip",
+    languages = {
+      javascript = { template = { annotation_convention = "jsdoc" } },
+      javascriptreact = { template = { annotation_convention = "jsdoc" } },
+      lua = { template = { annotation_convention = "ldoc" } },
+      ruby = { template = { annotation_convention = "yard" } },
+      typescript = { template = { annotation_convention = "tsdoc" } },
+      typescriptreact = { template = { annotation_convention = "tsdoc" } },
     },
   },
 }

@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# gitc - git clone + cd helper
+# Usage examples:
+#   gitc https://github.com/user/repo.git
+#   gitc https://github.com/user/repo.git my-custom-name
+#   gitc --depth=1 https://github.com/user/repo.git
+#   gitc -b develop --single-branch https://github.com/user/repo.git cool-project
+
+if [ $# -eq 0 ]; then
+    echo "Usage: gitc [git-clone-options...] <repository> [directory]"
+    echo "  Quickly clone a repo and cd into it"
+    echo
+    echo "Examples:"
+    echo "  gitc https://github.com/user/repo.git"
+    echo "  gitc --depth=1 https://github.com/vercel/next.js.git"
+    echo "  gitc -b dev --single-branch git@github.com:user/project.git my-project"
+    exit 1
+fi
+
+# Last argument is potentially the target directory
+# All previous are considered git clone options + URL
+last_arg="${@: -1}"
+second_last_arg="${@: -2:1}"
+
+# Very simple heuristic: if last argument looks like a URL or repo path → no custom directory
+if [[ "$last_arg" =~ ^(git@|https?://|[a-zA-Z0-9][a-zA-Z0-9.-]+/[a-zA-Z0-9._-]+(.git)?$) ]]; then
+    repo_url="$last_arg"
+    target_dir=""
+    clone_args=("${@:1:$#-1}")
+else
+    # Last arg is probably target directory
+    repo_url="$second_last_arg"
+    target_dir="$last_arg"
+    clone_args=("${@:1:$#-2}")
+fi
+
+# If we still don't have a repo_url → fail early
+if [ -z "$repo_url" ]; then
+    echo "Error: No repository URL found"
+    echo "Last arguments were: '$second_last_arg' '$last_arg'"
+    exit 1
+fi
+
+echo "→ Running: git clone ${clone_args[*]} $repo_url ${target_dir:+\"$target_dir\"}"
+
+git clone "${clone_args[@]}" "$repo_url" ${target_dir:+"$target_dir"}
+
+if [ $? -ne 0 ]; then
+    echo "Clone failed :("
+    exit 1
+fi
+
+# Decide which directory to cd into
+if [ -n "$target_dir" ]; then
+    cd_dir="$target_dir"
+else
+    # Extract repo name from URL (remove .git, take last part)
+    repo_name="${repo_url##*/}"
+    repo_name="${repo_name%.git}"
+    cd_dir="$repo_name"
+fi
+
+if [ ! -d "$cd_dir" ]; then
+    echo "Warning: Directory '$cd_dir' not found after clone"
+    exit 1
+fi
+
+echo "→ Entering: $cd_dir"
+cd "$cd_dir" || { echo "Failed to cd into $cd_dir"; exit 1; }
+
+# Optional: show current branch / status
+git branch --show-current 2>/dev/null || true
