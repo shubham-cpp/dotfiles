@@ -1,7 +1,11 @@
 #!/bin/sh
 
+set -e
+
+copy="xclip -i -r -sel clip"
+
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
-  fc-list | fzf | cut -d':' -f2 | cut -c 2- | wl-copy
-else
-  fc-list | fzf | cut -d':' -f2 | cut -c 2- | xclip -i -r -sel clip
+  copy="wl-copy"
 fi
+
+fc-list : family | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | sort -fu | sk | xargs -r $copy

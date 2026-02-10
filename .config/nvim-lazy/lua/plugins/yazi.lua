@@ -7,6 +7,10 @@ return {
     ---@type YaziConfig | {}
     opts = {
       open_for_directories = false,
+      integrations = {
+        grep_in_directory = "fzf-lua",
+        grep_in_selected_files = "fzf-lua",
+      },
     },
     keys = {
       {

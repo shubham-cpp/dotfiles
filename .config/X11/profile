@@ -105,6 +105,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}"/gnupg
 # [ -d "$HOME/Downloads/GitClones/void-packages" ] && export XBPS_DISTDIR="$HOME/Downloads/GitClones/void-packages"
 export FZF_DEFAULT_COMMAND="rg --files --hidden --follow -g '!{node_modules/,.venv/,venv,.git/,.github,dist,android/,ios/,build/,vendor/}'"
+export SKIM_DEFAULT_COMMAND="fd -t f || rg --files || find ."
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd -t d -H -L --ignore-file ~/.config/git/ignore"
 export FZF_DEFAULT_OPTS="--cycle --marker='+' --keep-right --color=fg:#cdcdcd --color=bg:#141415 --color=hl:#f3be7c --color=fg+:#aeaed1 --color=bg+:#252530 --color=hl+:#f3be7c --color=border:#606079 --color=header:#6e94b2 --color=gutter:#141415 --color=spinner:#7fa563 --color=info:#f3be7c --color=pointer:#aeaed1 --color=marker:#d8647e --color=prompt:#bb9dbd"

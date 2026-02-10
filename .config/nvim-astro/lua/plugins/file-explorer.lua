@@ -42,7 +42,6 @@ return {
         mappings = {
           ["d"] = "trash",
           ["D"] = "delete",
-          ["F"] = "fuzzy_finder_directory",
         },
       },
       filesystem = {
@@ -70,6 +69,7 @@ return {
           mappings = {
             ["l"] = "collapse_or_open",
             ["L"] = "child_or_open",
+            ["F"] = "fuzzy_finder_directory",
           },
         },
       },

@@ -19,5 +19,5 @@ if [ "$layout" = "S" ]; then
   fi
 else
   echo "Layout is not scroller (layout = '$layout'), switching to monocle."
-  mmsg -l "M"
+  ~/.config/mango/scripts/toggle_layout.sh monocle
 fi

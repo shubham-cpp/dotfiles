@@ -13,6 +13,13 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
+config.notification_handling = "AlwaysShow"
+config.visual_bell = {
+  fade_in_function = 'EaseIn',
+  fade_in_duration_ms = 150,
+  fade_out_function = 'EaseOut',
+  fade_out_duration_ms = 150,
+}
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 -- For example, changing the color scheme:
 config.color_scheme = "iceberg-dark" -- "iceberg-dark" -- "Ashes (dark) (terminal.sexy)"

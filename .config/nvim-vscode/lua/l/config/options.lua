@@ -38,7 +38,7 @@ o.sessionoptions:append({
 })
 o.sessionoptions:remove "folds"
 o.jumpoptions = "stack"
-vim.opt.shortmess:append "IWc"
+vim.opt.shortmess:append "IWcs"
 
 vim.schedule(function()
   o.clipboard:append(vim.env.SSH_TTY and "" or "unnamedplus") -- Sync with system clipboard

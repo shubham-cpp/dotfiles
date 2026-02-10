@@ -25,11 +25,12 @@ wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
 if ! pgrep -x "waybar"; then
   setsid -f sh -c 'echo ~/.config/mango/config.jsonc | entr -n waybar -c ~/.config/mango/config.jsonc' >/tmp/waybar-watch.log
 fi
-if ! pgrep -x "swaybg"; then
-  setsid -f sh -c 'echo ~/.config/wall.png | entr -n swaybg -i ~/.config/wall.png' >/tmp/swaybg-watch.log
-fi
+# if ! pgrep -x "swaybg"; then
+#   setsid -f sh -c 'echo ~/.config/wall.png | entr -n swaybg -i ~/.config/wall.png' >/tmp/swaybg-watch.log
+# fi
 if ! pgrep -x "swayidle"; then
   setsid -f sh -c 'echo ~/.config/niri/swayidle-config | entr -n swayidle -C ~/.config/niri/swayidle-config' >/tmp/swayidle-watch.log
+  setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg -d reload_config' >/tmp/mango-config-watch.log
 fi
 
 if ! pgrep -x "wlsunset"; then
@@ -38,8 +39,9 @@ fi
 if ! pgrep -x "vicinae"; then
   vicinae server &
 fi
-if ! pgrep -x "foot"; then
-  foot tmux &
+if ! pgrep -x "wezterm-gui"; then
+  # foot tmux &
+  gtk-launch org.wezfurlong.wezterm
 fi
 if ! pgrep -x "nm-applet"; then
   nm-applet &
@@ -52,14 +54,11 @@ if ! pgrep -x "swww-daemon"; then
   swww img ~/.config/wall.png &
 fi
 
-if ! pgrep -x "swayidle"; then
-  setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg -d reload_config' >/tmp/mango-config-watch.log
-fi
-
 systemctl --user start xdg-desktop-portal-wlr.service
 sleep 2s
 systemctl --user start xdg-desktop-portal
 sleep 2s
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-wlr.service &
 
-setsid -f $HOME/.local/bin/sway-audio-idle-inhibit
+sleep 2s
+setsid -f ~/.local/bin/sway-audio-idle-inhibit

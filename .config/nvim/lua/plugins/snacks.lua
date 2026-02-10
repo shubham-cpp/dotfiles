@@ -33,6 +33,10 @@ return {
           function() require("snacks").zen.zoom() end,
           desc = "Window Zoom",
         }
+        maps.n["<Leader>fN"] = {
+          function() require("snacks").notifier.show_history() end,
+          desc = "Notification history",
+        }
         maps.n["<Leader>gg"] = {
           function() require("snacks").lazygit.open() end,
           desc = "Lazygit",

@@ -100,26 +100,6 @@ return {
         maps.n["<Leader>fr"] = { function() require("snacks").picker.resume() end, desc = "Resume" }
         maps.n["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Zoxide" }
 
-        -- maps.n["<Leader>fn"] = {
-        --   function()
-        --     require("snacks").picker.files {
-        --       dirs = { vim.fn.stdpath "config" },
-        --       layout = { preset = "vscode" },
-        --       desc = "Config Files",
-        --     }
-        --   end,
-        --   desc = "Find AstroNvim config files",
-        -- }
-        -- maps.n["<Leader>fd"] = {
-        --   function()
-        --     require("snacks").picker.git_files {
-        --       cwd = vim.fn.expand "~/Documents/dotfiles/",
-        --       layout = { preset = "vscode" },
-        --       desc = "Dotfiles",
-        --     }
-        --   end,
-        --   desc = "Dotfiles",
-        -- }
         maps.n["<Leader>fc"] = { "<cmd>CreateFileInDir<cr>" }
         maps.n["<Leader>fN"] = { function() require("snacks").picker.notifications({layout = {preset = 'vertical'}}) end, desc = "Find notifications" }
         maps.n["<Leader>fa"] = { function() require("snacks").picker.autocmds() end, desc = "Autocmds" }

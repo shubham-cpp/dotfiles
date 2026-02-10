@@ -142,6 +142,26 @@ return {
           desc = "Change TS version",
           cond = function(client) return client.name == "vtsls" end,
         },
+        grr = {
+          function()
+            local is_available = require("astrocore").is_available
+
+            if is_available "fzf-lua" then
+              require("fzf-lua").lsp_references {
+                ignore_current_line = true,
+                includeDeclaration = false,
+              }
+            elseif is_available "snacks.nvim" then
+              require("snacks.picker").lsp_references {
+                include_declaration = false,
+              }
+            else
+              vim.lsp.buf.document_symbol()
+            end
+          end,
+          desc = "Document symbols",
+          cond = "textDocument/documentSymbol",
+        },
         gro = {
           function()
             local is_available = require("astrocore").is_available

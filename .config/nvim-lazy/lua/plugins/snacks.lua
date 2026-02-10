@@ -84,6 +84,7 @@ local function copy_path_relative(picker)
   local obj = vim.system(cmd, { text = true }):wait()
   on_done(obj)
 end
+local MB = 1024 * 1024
 ---@type LazySpec
 return {
   {
@@ -92,6 +93,31 @@ return {
     ---@type snacks.Config
     opts = {
       dashboard = { enabled = false },
+      bigfile = {
+        size = 0.2 * MB,
+        ---@param ctx {buf: number, ft:string}
+        setup = function(ctx)
+          if vim.fn.exists(":NoMatchParen") ~= 0 then
+            vim.cmd([[NoMatchParen]])
+          end
+          if vim.fn.exists(":UfoDetach") ~= 0 then
+            vim.cmd([[UfoDetach]])
+          end
+          if vim.fn.exists(":TSContext") ~= 0 then
+            vim.cmd([[TSContext disable]])
+          end
+          Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
+          vim.b.completion = false
+          vim.b.minianimate_disable = true
+          vim.b.minihipatterns_disable = true
+          vim.b.ts_highlight = false
+          vim.schedule(function()
+            if vim.api.nvim_buf_is_valid(ctx.buf) then
+              vim.bo[ctx.buf].syntax = ctx.ft
+            end
+          end)
+        end,
+      },
       terminal = {
         shell = vim.fn.exepath("fish") == "" and vim.o.shell or vim.fn.exepath("fish"),
       },

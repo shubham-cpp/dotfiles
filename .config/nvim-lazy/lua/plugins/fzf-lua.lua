@@ -15,12 +15,9 @@ local vscode = {
 return {
   "ibhagwan/fzf-lua",
   opts = {
-    -- { "border-fused", "hide" },
     { "border-fused", "skim" },
-    fzf_opts = { ["--algo"] = "frizbee" },
     defaults = {
-      formatter = "path.filename_first",
-      -- formatter = {"path.filename_first",2},
+      formatter = { "path.filename_first", 2 },
     },
     keymap = {
       builtin = {
@@ -54,7 +51,7 @@ return {
     },
     grep = {
       -- actions = action_keys,
-      fzf_opts = { ["--scheme"] = "path" },
+      -- fzf_opts = { ["--scheme"] = "path" },
       rg_glob = true,
       ---@param query string - first returned string is the new search query
       ---@param opts table - second returned string are (optional) additional rg flags
@@ -67,7 +64,7 @@ return {
     },
   },
   keys = {
-    { "gr",  false },
+    { "gr", false },
     { "grr", "<Cmd>FzfLua lsp_references jump1=true ignore_current_line=true includeDeclaration=false<CR>" },
     {
       "<leader>fu",
@@ -94,30 +91,34 @@ return {
       "<cmd>FzfLua files<cr>",
       desc = "Find files",
     },
-    { "<leader>fq", "<Cmd>FzfLua quickfix<CR>",     desc = "Quickfix List" },
-    { "<leader>fQ", "<Cmd>FzfLua loclist<CR>",      desc = "Location List" },
-    { "<leader>fl", "<Cmd>FzfLua lines<CR>",        desc = "Buffer Lines" },
+    { "<leader>fq", "<Cmd>FzfLua quickfix<CR>", desc = "Quickfix List" },
+    { "<leader>fQ", "<Cmd>FzfLua loclist<CR>", desc = "Location List" },
+    { "<leader>fl", "<Cmd>FzfLua lines<CR>", desc = "Buffer Lines" },
     { "<leader>fG", "<Cmd>FzfLua lgrep_curbuf<CR>", desc = "Grep Open Buffers" },
-    { '<leader>f"', "<Cmd>FzfLua registers<CR>",    desc = "Registers" },
-    { "<leader>fa", "<Cmd>FzfLua autocmds<CR>",     desc = "Autocmds" },
-    { "<leader>fc", "<Cmd>FzfLua commands<CR>",     desc = "Commands" },
+    { '<leader>f"', "<Cmd>FzfLua registers<CR>", desc = "Registers" },
+    { "<leader>fa", "<Cmd>FzfLua autocmds<CR>", desc = "Autocmds" },
+    { "<leader>fc", "<Cmd>FzfLua commands<CR>", desc = "Commands" },
     -- { "<leader>ld", "<Cmd>FzfLua diagnostics_workspace<CR>", desc = "Diagnostics" },
     -- Diagnostics (document/buffer)
     -- { "<leader>lD", "<Cmd>FzfLua diagnostics_document<CR>", desc = "Buffer Diagnostics" },
     -- Help tags
-    { "<leader>fh", "<Cmd>FzfLua helptags<CR>",     desc = "Help Pages" },
-    { "<leader>fH", "<Cmd>FzfLua highlights<CR>",   desc = "Highlights" },
-    { "<leader>fk", "<Cmd>FzfLua keymaps<CR>",      desc = "Keymaps" },
-    { "<leader>fm", "<Cmd>FzfLua manpages<CR>",     desc = "Man Pages" },
-    { "<leader>fM", "<Cmd>FzfLua marks<CR>",        desc = "Marks" },
-    { "<leader>fr", "<Cmd>FzfLua resume<CR>",       desc = "Resume" },
-    { "<leader>fo", "<Cmd>FzfLua oldfiles<CR>",     desc = "Recent Files" },
-    { "<leader>fj", "<Cmd>FzfLua jumps<CR>",        desc = "Jumps" },
+    { "<leader>fh", "<Cmd>FzfLua helptags<CR>", desc = "Help Pages" },
+    { "<leader>fH", "<Cmd>FzfLua highlights<CR>", desc = "Highlights" },
+    { "<leader>fk", "<Cmd>FzfLua keymaps<CR>", desc = "Keymaps" },
+    { "<leader>fm", "<Cmd>FzfLua manpages<CR>", desc = "Man Pages" },
+    { "<leader>fM", "<Cmd>FzfLua marks<CR>", desc = "Marks" },
+    { "<leader>fr", "<Cmd>FzfLua resume<CR>", desc = "Resume" },
+    { "<leader>fo", "<Cmd>FzfLua oldfiles<CR>", desc = "Recent Files" },
+    { "<leader>fj", "<Cmd>FzfLua jumps<CR>", desc = "Jumps" },
 
     {
       "<Leader>fG",
       function()
         require("fzf-lua").live_grep({
+          winopts = {
+            -- title = { { " " .. str .. " ", "IncSearch" } },
+            title = " Git Grep ",
+          },
           cmd = "git grep -i --line-number --column --color=always",
           fn_transform_cmd = function(query, cmd, _)
             local search_query, glob_str = query:match("(.-)%s-%-%-(.*)")
