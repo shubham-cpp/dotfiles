@@ -1,30 +1,96 @@
 #!/usr/bin/env bash
+# ocr-clip: Screenshot a region → OCR → clipboard → notification
+#
+# Dependencies:
+#   Wayland:  grim, slurp, wl-clipboard (wl-copy)
+#   X11:      scrot, slop, xclip
+#   Both:     tesseract, libnotify (notify-send)
 
 set -euo pipefail
 
-# Create temp files
-img=$(mktemp /tmp/ocr-img.XXXXXX.png)
-txt=$(mktemp /tmp/ocr-text.XXXXXX)
+# ── Config ────────────────────────────────────────────────────────────────────
+# PSM 6 = assume a uniform block of text (good default for code/config/prose)
+# PSM 11 = sparse text, better for UI screenshots with scattered labels/buttons
+# PSM 3 = fully automatic page segmentation (Tesseract default)
+TESSERACT_PSM=6
 
-cleanup() {
-  rm -f "$img" "$txt"
+# OEM 1 = LSTM neural net engine (most accurate in Tesseract 4+)
+TESSERACT_OEM=1
+
+# Max characters shown in the notification body
+NOTIFY_MAX_CHARS=300
+
+# ── Dependency checks ─────────────────────────────────────────────────────────
+need() {
+  command -v "$1" &>/dev/null || {
+    notify-send --urgency=critical "ocr-clip: missing dependency" \
+      "'$1' not found. Please install it."
+    echo "Error: '$1' not found in PATH." >&2
+    exit 1
+  }
 }
+
+need tesseract
+need notify-send
+
+if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
+  need grim
+  need slurp
+  need wl-copy
+else
+  need scrot
+  need slop
+  need xclip
+fi
+
+# ── Temp files ────────────────────────────────────────────────────────────────
+img=$(mktemp /tmp/ocr-img.XXXXXX.png)
+txt_base=$(mktemp /tmp/ocr-text.XXXXXX)
+
+cleanup() { rm -f "$img" "${txt_base}.txt"; }
 trap cleanup EXIT
 
-# Step 1: Screenshot a region
-grim -g "$(slurp)" "$img"
-# Step 2: OCR it
-tesseract "$img" "$txt"
-
-if zenity --width=600 --height=400 \
-  --text-info \
-  --title="OCR Result" \
-  --filename="$txt.txt" \
-  --editable \
-  --ok-label="Copy & OK"; then
-  if [[ $XDG_SESSION_TYPE = "wayland" ]]; then
-    wl-copy <"$txt.txt"
-  else
-    xclip -selection clipboard -i "$txt.txt"
-  fi
+# ── Step 1: Capture region ────────────────────────────────────────────────────
+if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
+  grim -g "$(slurp)" "$img"
+else
+  scrot -s --line style=solid,width=2 "$img_raw"
 fi
+
+# ── Step 2: OCR ───────────────────────────────────────────────────────────────
+# Feed the raw screenshot directly — screenshots are already high-quality PNGs.
+# No preprocessing needed (unlike scanned docs which need DPI upscaling).
+tesseract "$img" "$txt_base" \
+  --psm "$TESSERACT_PSM" \
+  --oem "$TESSERACT_OEM" \
+  2>/dev/null
+
+# ── Step 3: Validate output ───────────────────────────────────────────────────
+ocr_file="${txt_base}.txt"
+
+# Collapse whitespace for notification display only
+extracted=$(sed 's/[[:space:]]\+/ /g; s/^ //; s/ $//' "$ocr_file")
+
+if [[ -z "$extracted" ]]; then
+  notify-send --urgency=normal "OCR: No text found" \
+    "No text could be extracted. Try a larger selection, or edit TESSERACT_PSM (try 3 or 11)."
+  exit 0
+fi
+
+# ── Step 4: Copy to clipboard ─────────────────────────────────────────────────
+# Read from the original file to preserve real newlines in the clipboard
+if [[ ${XDG_SESSION_TYPE:-} == "wayland" ]]; then
+  wl-copy <"$ocr_file"
+else
+  xclip -selection clipboard -i "$ocr_file"
+fi
+
+# ── Step 5: Notify ────────────────────────────────────────────────────────────
+notify_body="${extracted:0:$NOTIFY_MAX_CHARS}"
+[[ ${#extracted} -gt $NOTIFY_MAX_CHARS ]] && notify_body+=" …"
+
+notify-send \
+  --urgency=low \
+  --expire-time=4000 \
+  "Text Copied" \
+  "$notify_body"

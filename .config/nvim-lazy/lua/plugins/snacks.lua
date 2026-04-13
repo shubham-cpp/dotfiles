@@ -95,8 +95,9 @@ return {
       dashboard = { enabled = false },
       bigfile = {
         size = 0.2 * MB,
-        ---@param ctx {buf: number, ft:string}
+        ---@param ctx {buf: integer, ft:string}
         setup = function(ctx)
+          local buf = ctx.buf
           if vim.fn.exists(":NoMatchParen") ~= 0 then
             vim.cmd([[NoMatchParen]])
           end
@@ -106,14 +107,16 @@ return {
           if vim.fn.exists(":TSContext") ~= 0 then
             vim.cmd([[TSContext disable]])
           end
-          Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
+          Snacks.util.bo(0, { foldmethod = "indent", swapfile=false, undolevels = -1, statuscolumn = "", conceallevel = 0 })
           vim.b.completion = false
           vim.b.minianimate_disable = true
           vim.b.minihipatterns_disable = true
           vim.b.ts_highlight = false
+          vim.treesitter.stop(buf)
+
           vim.schedule(function()
-            if vim.api.nvim_buf_is_valid(ctx.buf) then
-              vim.bo[ctx.buf].syntax = ctx.ft
+            if vim.api.nvim_buf_is_valid(buf) then
+              vim.bo[buf].syntax = ctx.ft
             end
           end)
         end,

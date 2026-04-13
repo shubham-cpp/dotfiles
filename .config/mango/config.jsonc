@@ -12,6 +12,7 @@
     "idle_inhibitor",
     "keyboard-state",
     "wlr/taskbar",
+    "music",
   ],
   "modules-center": ["audio_idle_inhibitor", "clock", "custom/weather"],
   "modules-right": [
@@ -257,5 +258,15 @@
       "output-input": "  ",
       "none": "",
     },
+  },
+  "custom/music": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "waybar-module-music --format '[ %icon% ] %artist% - %title%' --marquee --title-width 20 --artist-width 15 --effect-speed 200",
+    "on-click": "playerctl play-pause",
+    "on-click-middle": "playerctl stop",
+    "on-click-right": "playerctl next",
+    "on-double-click-right": "playerctl previous",
+    "tooltip": false,
   },
 }

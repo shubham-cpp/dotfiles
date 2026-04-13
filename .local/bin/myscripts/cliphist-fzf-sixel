@@ -12,7 +12,15 @@ preview)
     ;;
 
 *)
-    id="$(cliphist list | fzf --preview-window="top" --layout=reverse --preview "$(realpath "$0") preview {}")"
+    id="$(cliphist list | fzf \
+        --preview-window="top" \
+        --layout=reverse \
+        --preview "$(realpath "$0") preview {}" \
+        --bind 'ctrl-y:execute-silent(echo {} | cliphist decode | wl-copy)' \
+        --bind 'ctrl-x:execute-silent(echo {} | cliphist delete)+reload(cliphist list)' \
+        --bind 'ctrl-delete:execute-silent(echo {} | cliphist delete)+reload(cliphist list)' \
+        --header 'Ctrl-Y: copy & stay | Ctrl-X or Ctrl-Del to delete entry'
+    )"
     test -z "$id" && exit
 
     cliphist decode <<<"$id" | wl-copy

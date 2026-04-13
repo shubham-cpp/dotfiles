@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+
+import sys
+import json
+import os
+import re
+import subprocess
+import hashlib
+from datetime import datetime, timedelta
+from dateutil import parser as dateutil_parser
+from dateutil.relativedelta import relativedelta
+
+STATE_DIR = os.path.expanduser("~/.local/state/remind")
+NOTIFY_SEND = "/usr/bin/notify-send"
+
+
+def ensure_state_dir():
+    os.makedirs(STATE_DIR, exist_ok=True)
+
+
+def generate_id(title: str, now: str) -> str:
+    raw = f"{title}-{now}".encode()
+    return hashlib.sha256(raw).hexdigest()[:6]
+
+
+def print_usage():
+    print(
+        "Usage:\n"
+        "  remind <time> <title> [description]   Set a reminder\n"
+        "  remind list                            List active reminders\n"
+        "  remind cancel <id>                     Cancel a reminder\n"
+        "\n"
+        "Time formats:\n"
+        "  Relative:  10s, 5m, 2h, 1d\n"
+        "  Natural:   in 30 minutes, in 2 hours\n"
+        "  Tomorrow:  tomorrow, 2:30pm tomorrow, tomorrow 3pm\n"
+        "  Absolute:  2:30pm, 14:30, 2pm, 2026-04-13 2:30pm"
+    )
+
+
+def parse_time(time_str: str) -> datetime:
+    now = datetime.now()
+
+    # Relative shorthand: 10s, 5m, 2h, 1d
+    m = re.fullmatch(r"(\d+)([smhd])", time_str)
+    if m:
+        amount = int(m.group(1))
+        unit = m.group(2)
+        deltas = {"s": "seconds", "m": "minutes", "h": "hours", "d": "days"}
+        return now + timedelta(**{deltas[unit]: amount})
+
+    # Natural relative: "in 30 minutes", "in 2 hours"
+    m = re.fullmatch(r"in\s+(\d+)\s+(seconds?|minutes?|hours?|days?)", time_str, re.IGNORECASE)
+    if m:
+        amount = int(m.group(1))
+        unit = m.group(2).rstrip("s")
+        deltas = {"second": "seconds", "minute": "minutes", "hour": "hours", "day": "days"}
+        return now + timedelta(**{deltas[unit]: amount})
+
+    # "tomorrow" alone
+    if re.fullmatch(r"tomorrow", time_str, re.IGNORECASE):
+        return now + relativedelta(days=1)
+
+    # "2:30pm tomorrow"
+    m = re.match(r"(.+?)\s+tomorrow$", time_str, re.IGNORECASE)
+    if m:
+        parsed = dateutil_parser.parse(m.group(1))
+        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
+        return parsed + relativedelta(days=1)
+
+    # "tomorrow 2:30pm"
+    m = re.match(r"tomorrow\s+(.+)$", time_str, re.IGNORECASE)
+    if m:
+        parsed = dateutil_parser.parse(m.group(1))
+        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
+        return parsed + relativedelta(days=1)
+
+    # Absolute: fallback to dateutil
+    parsed = dateutil_parser.parse(time_str)
+    if parsed.year == 1900:
+        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
+    return parsed
+
+
+def get_active_timer_ids():
+    result = subprocess.run(
+        ["systemctl", "--user", "list-timers", "--all", "--no-legend", "--output=json"],
+        capture_output=True, text=True,
+    )
+    ids = set()
+    if result.returncode == 0:
+        try:
+            timers = json.loads(result.stdout)
+            for t in timers:
+                unit = t.get("unit", "")
+                if unit.startswith("remind-") and unit.endswith(".timer"):
+                    remind_id = unit[len("remind-"):-len(".timer")]
+                    ids.add(remind_id)
+        except json.JSONDecodeError:
+            for line in result.stdout.strip().splitlines():
+                parts = line.split()
+                for p in parts:
+                    if p.startswith("remind-") and p.endswith(".timer"):
+                        remind_id = p[len("remind-"):-len(".timer")]
+                        ids.add(remind_id)
+    return ids
+
+
+def cmd_set(args):
+    time_str, title = args[0], args[1]
+    description = args[2] if len(args) > 2 else ""
+
+    try:
+        trigger_at = parse_time(time_str)
+    except (ValueError, OverflowError) as e:
+        print(f"Error: could not parse time '{time_str}': {e}")
+        print_usage()
+        sys.exit(1)
+
+    if trigger_at <= datetime.now():
+        print(f"Error: that time has already passed ({trigger_at})")
+        sys.exit(1)
+
+    remind_id = generate_id(title, str(datetime.now()))
+
+    ensure_state_dir()
+    state = {
+        "id": remind_id,
+        "title": title,
+        "description": description,
+        "trigger_at": trigger_at.strftime("%Y-%m-%dT%H:%M:%S"),
+    }
+    state_path = os.path.join(STATE_DIR, f"{remind_id}.json")
+    with open(state_path, "w") as f:
+        json.dump(state, f, indent=2)
+
+    unit_name = f"remind-{remind_id}"
+    calendar_expr = trigger_at.strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        subprocess.run(
+            [
+                "systemd-run", "--user",
+                f"--on-calendar={calendar_expr}",
+                f"--unit={unit_name}",
+                f"--description=remind: {title}",
+                "--",
+                NOTIFY_SEND, title, description,
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except subprocess.CalledProcessError as e:
+        print(f"Error creating timer: {e.stderr.strip()}")
+        os.remove(state_path)
+        sys.exit(1)
+
+    print(f"Reminder set: {title}")
+    print(f"  ID: {remind_id}")
+    print(f"  At: {trigger_at.strftime('%Y-%m-%d %H:%M:%S')}")
+
+
+def cmd_list(args):
+    ensure_state_dir()
+    active_ids = get_active_timer_ids()
+
+    if not active_ids:
+        print("No active reminders.")
+        return
+
+    reminders = []
+    for fname in os.listdir(STATE_DIR):
+        if not fname.endswith(".json"):
+            continue
+        with open(os.path.join(STATE_DIR, fname)) as f:
+            state = json.load(f)
+        if state["id"] in active_ids:
+            reminders.append(state)
+
+    if not reminders:
+        print("No active reminders.")
+        return
+
+    reminders.sort(key=lambda r: r["trigger_at"])
+    for r in reminders:
+        desc = f" — {r['description']}" if r.get("description") else ""
+        print(f"  {r['id']}  {r['trigger_at']}  {r['title']}{desc}")
+
+
+def cmd_cancel(args):
+    remind_id = args[0]
+    unit_name = f"remind-{remind_id}"
+
+    subprocess.run(["systemctl", "--user", "stop", f"{unit_name}.timer"], capture_output=True)
+    subprocess.run(["systemctl", "--user", "stop", f"{unit_name}.service"], capture_output=True)
+
+    state_path = os.path.join(STATE_DIR, f"{remind_id}.json")
+    if os.path.exists(state_path):
+        os.remove(state_path)
+        print(f"Cancelled: {remind_id}")
+    else:
+        print(f"No reminder found with id: {remind_id}")
+        sys.exit(1)
+
+
+def main():
+    if len(sys.argv) < 2:
+        print_usage()
+        sys.exit(1)
+
+    subcommand = sys.argv[1]
+
+    if subcommand == "list":
+        cmd_list(sys.argv[2:])
+    elif subcommand == "cancel":
+        if len(sys.argv) < 3:
+            print("Usage: remind cancel <id>")
+            sys.exit(1)
+        cmd_cancel(sys.argv[2:])
+    else:
+        if len(sys.argv) < 3:
+            print("Error: need at least <time> and <title>")
+            print_usage()
+            sys.exit(1)
+        time_str = sys.argv[1]
+        title = sys.argv[2]
+        description = " ".join(sys.argv[3:]) if len(sys.argv) > 3 else ""
+        cmd_set([time_str, title, description])
+
+
+if __name__ == "__main__":
+    main()

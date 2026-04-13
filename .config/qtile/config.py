@@ -23,17 +23,12 @@ from libqtile.layout.zoomy import Zoomy
 from libqtile.lazy import lazy
 
 from extras.floating_window_snapping import move_snap_window
-from modules.bar import layout_theme
+from modules.bar import layout_theme, screens
 from modules.groups import groups
 from modules.keys import keys
 from modules.lazy_functions import sticky_windows
 
 layouts: List[Layout] = [
-    Tile(
-        margin=2,
-        margin_on_single=False,
-        shift_windows=False,
-    ),
     MonadTall(
         change_size=10,
         single_border_width=0,

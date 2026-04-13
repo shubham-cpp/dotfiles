@@ -7,20 +7,27 @@ get_brightness() {
   echo "$out"
 }
 
+update_brightness() {
+  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight -r 10011
+  pidof dwmblocks | xargs -r kill -36
+  pgrep polybar && polybar-msg action mbrightness hook 0
+}
+
 case "$1" in
 inc)
   brightnessctl s "$amount"%+
+    update_brightness
   ;;
 dec)
   brightnessctl s "$amount"%-
+  update_brightness
+  ;;
+get)
+  brightnessctl -m | cut -d, -f4
   ;;
 *)
   echo "Program requires argument inc,dec"
   notify-send "Program requires argument inc,dec" -t 2000 -i display-brightness-symbolic -r 10011
   exit 1
   ;;
-
 esac
-notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight -r 10011
-pidof dwmblocks | xargs -r kill -36
-pgrep polybar && polybar-msg action mbrightness hook 0

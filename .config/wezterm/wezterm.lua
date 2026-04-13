@@ -14,6 +14,7 @@ if wezterm.config_builder then
 end
 
 config.notification_handling = "AlwaysShow"
+config.term = 'wezterm'
 config.visual_bell = {
   fade_in_function = 'EaseIn',
   fade_in_duration_ms = 150,

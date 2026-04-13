@@ -140,6 +140,23 @@ button {
   background: #1e1e1e;
 }
 
+#custom-music.playing {
+  color: #99d1db;
+}
+
+#custom-music.paused {
+  color: #e5c890;
+}
+
+#custom-music.stopped {
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  border: none;
+}
+
 #custom-launcher,
 #custom-swaync,
 #custom-launcher button {

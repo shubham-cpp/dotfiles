@@ -1,23 +1,16 @@
----@type LazySpec
 return {
-  "mikavilpas/yazi.nvim",
-  enabled = true,
-  dependencies = { "folke/snacks.nvim" },
-  ---@type YaziConfig | {}
-  opts = {
-    open_for_directories = false,
-  },
+  url = "mikavilpas/yazi.nvim",
+  config = function()
+    require("yazi").setup({
+      open_for_directories = false,
+      integrations = {
+        grep_in_directory = "fzf-lua",
+        grep_in_selected_files = "fzf-lua",
+      },
+    })
+  end,
   keys = {
-    {
-      "<leader>-",
-      mode = { "n", "v" },
-      "<cmd>Yazi<cr>",
-      desc = "Open yazi at the current file",
-    },
-    {
-      "<leader>_",
-      "<cmd>Yazi cwd<cr>",
-      desc = "Resume the last yazi session",
-    },
+    { "<leader>-", "<cmd>Yazi<cr>", mode = { "n", "v" }, desc = "open at current file" },
+    { "<leader>_", "<cmd>Yazi cwd<cr>", desc = "open at working directory" },
   },
 }

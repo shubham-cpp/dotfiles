@@ -320,36 +320,41 @@ keys = [
     # }}}
     # Brightness {{{
     Key(
-        "<XF86AudioNext>",
+        "<XF86AudioPlay>",
         lazy.spawn(
-            'brightnessctl s 10+\
-        && notify-send "Brightness: " -t 2000 -i display-brightness\
-        -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight',
+            'playerctl play-pause',
             shell=True,
         ),
-        update_brightness(),
-        desc="Inc Brightness",
+        desc="Play-Pause",
+    ),
+    Key(
+        "<XF86AudioPause>",
+        lazy.spawn(
+            'playerctl play-pause',
+            shell=True,
+        ),
+        desc="Play-Pause",
+    ),
+    Key(
+        "<XF86AudioNext>",
+        lazy.spawn(
+            'playerctl next',
+            shell=True,
+        ),
+        desc="Play Next",
     ),
     Key(
         "<XF86AudioPrev>",
         lazy.spawn(
-            'brightnessctl s 10-\
-        && notify-send "Brightness: " -t 2000 -i display-brightness\
-        -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight',
+            'playerctl previous',
             shell=True,
         ),
-        update_brightness(),
-        desc="Dec Brightness",
+        desc="Play Prev",
     ),
     Key(
         "<XF86MonBrightnessUp>",
         lazy.spawn(
-            'brightnessctl s 10+\
-        && notify-send "Brightness: " -t 2000 -i display-brightness\
-        -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight',
+            'brightness inc 5',
             shell=True,
         ),
         update_brightness(),
@@ -358,10 +363,7 @@ keys = [
     Key(
         "<XF86MonBrightnessDown>",
         lazy.spawn(
-            'brightnessctl s 10-\
-        && notify-send "Brightness: " -t 2000 -i display-brightness\
-        -h int:value:$(brightnessctl g)\
-        -h string:x-canonical-private-synchronous:backlight',
+            'brightness dec 5',
             shell=True,
         ),
         update_brightness(),

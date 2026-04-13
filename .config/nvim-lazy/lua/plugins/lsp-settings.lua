@@ -57,9 +57,9 @@ return {
       servers = {
         ["*"] = {
           keys = {
-            { "gl",         vim.diagnostic.open_float, desc = "Open diagnostic" },
+            { "gl", vim.diagnostic.open_float, desc = "Open diagnostic" },
             --{{{  disable a keymap
-            { "<C-k>",      mode = "i",                false },
+            { "<C-k>", mode = "i", false },
             -- I'm used to <leader>l being my "lsp" prefix. Can't change my muscle memory now
             { "<leader>cl", false },
             { "<leader>ca", false },
@@ -88,8 +88,8 @@ return {
               desc = "Signature Help",
               has = "signatureHelp",
             },
-            { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action",  mode = { "n", "v" }, has = "codeAction" },
-            { "<leader>lc", vim.lsp.codelens.run,    desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
+            { "<leader>la", vim.lsp.buf.code_action, desc = "Code Action", mode = { "n", "v" }, has = "codeAction" },
+            { "<leader>lc", vim.lsp.codelens.run, desc = "Run Codelens", mode = { "n", "v" }, has = "codeLens" },
             {
               "<leader>lC",
               vim.lsp.codelens.refresh,
@@ -106,7 +106,7 @@ return {
               mode = { "n" },
               has = { "workspace/didRenameFiles", "workspace/willRenameFiles" },
             },
-            { "<leader>lr", vim.lsp.buf.rename,                           desc = "Rename",          has = "rename" },
+            { "<leader>lr", vim.lsp.buf.rename, desc = "Rename", has = "rename" },
             {
               "<leader>lw",
               function()
@@ -219,7 +219,14 @@ return {
     init = function()
       vim.env.ESLINT_D_PPID = vim.fn.getpid()
     end,
-    opts = { linters_by_ft = { go = { "golangcilint" } } },
+    opts = {
+      linters = {
+        markdownlint = {
+          args = { "--disable", "MD013", "--" },
+        },
+      },
+      linters_by_ft = { go = { "golangcilint" } },
+    },
   },
   {
     "linux-cultist/venv-selector.nvim",

@@ -1,118 +1,120 @@
----@type LazySpec
+local vscode_layout = {
+	height = 0.55,
+	width = 0.6,
+	row = 0,
+}
+
+local rg_glob_fn = function(query)
+	local split_index = query:find(" --")
+	if split_index then
+		local search = query:sub(1, split_index - 1)
+		local glob_str = query:sub(split_index + 3)
+		return search, glob_str
+	end
+	return query
+end
+
+local function dotfiles_cwd()
+	return vim.fn.expand("~/Documents/dotfiles")
+end
+
 return {
-  "ibhagwan/fzf-lua",
-  optional = true,
-  opts = function()
-    local actions = require "fzf-lua.actions"
-
-    local vscode = {
-      height = 0.55,
-      width = 0.6,
-      row = 0,
-    }
-
-    local action_keys = {
-      ["ctrl-q"] = {
-        fn = actions.file_edit_or_qf,
-        prefix = "select-all+",
-      },
-    }
-    return {
-      { "border-fused", "skim" },
-      defaults = {
-        -- formatter = { "path.filename_first", 1 },
-      },
-      -- fzf_opts = { ["--algo"] = "frizbee" },
-      winopts = { preview = { default = "bat", layout = "vertical" } },
-      keymap = {
-        builtin = {
-          true,
-          ["<C-d>"] = "preview-page-down",
-          ["<C-u>"] = "preview-page-up",
+	url = "ibhagwan/fzf-lua",
+	config = function()
+		require("fzf-lua").setup({
+			{ "border-fused", "skim" },
+			-- skim is the first element (profile name applied implicitly)
+			defaults = {
+				formatter = { "path.filename_first", 2 },
+			},
+			keymap = {
+				builtin = {
+					true, -- inherit defaults
+					["<C-d>"] = "preview-page-down",
+					["<C-u>"] = "preview-page-up",
+				},
+				fzf = {
+					true, -- inherit defaults
+					["ctrl-d"] = "preview-page-down",
+					["ctrl-u"] = "preview-page-up",
+					["ctrl-q"] = "select-all+accept",
+				},
+			},
+			files = {
+				previewer = false,
+				winopts = vscode_layout,
+        actions = {
+          ["ctrl-x"] = require("fzf-lua").actions.file_split,
+          ["ctrl-t"] = require("fzf-lua").actions.file_tabedit,
         },
-        fzf = {
-          true,
-          ["ctrl-d"] = "preview-page-down",
-          ["ctrl-u"] = "preview-page-up",
-          ["ctrl-q"] = "select-all+accept",
-        },
-      },
-      files = {
-        actions = action_keys,
-        previewer = false,
-        winopts = vscode,
-      },
-      git = {
-        files = {
-          cmd = "git ls-files --cached --others --exclude-standard",
-          actions = action_keys,
-          previewer = false,
-          winopts = vscode,
-        },
-        branches = {
-          cmd_add = { "git", "switch", "-c" },
-        },
-      },
-      grep = {
-        actions = action_keys,
-        -- fzf_opts = { ["--scheme"] = "path" },
-        rg_glob = true,
-        ---@param query string - first returned string is the new search query
-        ---@param opts table - second returned string are (optional) additional rg flags
-        ---@return string, string?
-        rg_glob_fn = function(query, opts)
-          local regex, flags = query:match "^(.-)%s%-%-(.*)$"
-          -- If no separator is detected will return the original query
-          return (regex or query), flags
-        end,
-      },
-    }
-  end,
-  specs = {
-    {
-      "AstroNvim/astrocore",
-      opts = function(_, opts)
-        local maps = opts.mappings
-        maps.n["<C-p>"] = { function() require("fzf-lua").files() end, desc = "Find files" }
-        maps.n["<Leader>fr"] = { function() require("fzf-lua").resume() end, desc = "Resume previous search" }
-        maps.n["<Leader>fl"] = { function() require("fzf-lua").grep_curbuf() end, desc = "Search(buf)" }
-
-        if maps.n["<Leader>lR"] then
-          maps.n["<Leader>lR"][1] = function()
-            require("fzf-lua").lsp_references {
-              ignore_current_line = true,
-              includeDeclaration = false,
-            }
-          end
-        end
-
-        maps.n["<Leader>fn"] =
-          { function() require("fzf-lua").files { cwd = vim.fn.stdpath "config" } end, desc = "Neovim Config" }
-        maps.n["<Leader>fd"] = {
-          function() require("fzf-lua").git_files { cwd = vim.fn.expand "~/Documents/dotfiles" } end,
-          desc = "Dotfiles",
-        }
-
-        maps.n["<Leader>fw"] = { function() require("fzf-lua").grep_cword() end, desc = "Find current word" }
-        maps.n["<Leader>fW"] = {
-          function() require("fzf-lua").grep_cword { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Find current word(cur_dir)",
-        }
-
-        maps.n["<Leader>fs"] = { function() require("fzf-lua").live_grep() end, desc = "Search" }
-        maps.n["<Leader>fS"] = {
-          function() require("fzf-lua").live_grep { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Search(current directory)",
-        }
-        maps.x["<Leader>fs"] = { function() require("fzf-lua").grep_visual() end, desc = "Search" }
-        maps.x["<Leader>fS"] = {
-          function() require("fzf-lua").grep_visual { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Search(current directory)",
-        }
-        maps.n["<Leader>fT"] = { function() require("fzf-lua").colorschemes() end, desc = "Find themes" }
-        maps.n["<Leader>fu"] = { function() require("fzf-lua").undotree() end, desc = "undotree" }
-        maps.n["<Leader>fz"] = { function() require("fzf-lua").zoxide() end, desc = "zoxide" }
-      end,
-    },
-  },
+			},
+			git = {
+				files = {
+					previewer = false,
+					winopts = vscode_layout,
+					cmd = "git ls-files --cached --others --exclude-standard",
+				},
+				branches = {
+					cmd_add = { "git", "switch", "-c" },
+				},
+			},
+			grep = {
+				rg_glob = true,
+				rg_glob_fn = rg_glob_fn,
+			},
+		})
+	end,
+	keys = {
+		{ "<C-p>",      "<cmd>FzfLua files<cr>",                      desc = "Find files" },
+		{ "<leader>ff", "<cmd>FzfLua files<cr>",                      desc = "Find files" },
+		{ "<leader>fg", "<cmd>FzfLua git_files<cr>",                  desc = "Find git files" },
+		{ "<leader>fo", "<cmd>FzfLua lsp_document_symbols<cr>",       desc = "Document symbols" },
+		{ "<leader>fO", "<cmd>FzfLua lsp_live_workspace_symbols<cr>", desc = "Workspace symbols" },
+		{ "<leader>fb", "<cmd>FzfLua buffers<cr>",                    desc = "Find buffers" },
+		{ "<leader>fr", "<cmd>FzfLua resume<cr>",                     desc = "Resume picker" },
+		{ "<leader>fs", "<cmd>FzfLua live_grep<cr>",                  desc = "Grep" },
+		-- { "<leader>fs", "<cmd>FzfLua live_grep<cr>", desc = "Grep" },
+		{ "<leader>fw", "<cmd>FzfLua grep_cword<cr>",                 desc = "Find word under cursor" },
+		{
+			"<leader>fz",
+			"<cmd>FzfLua zoxide<cr>",
+			desc = "Zoxide",
+		},
+		{
+			"<leader>fn",
+			function()
+				require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
+			end,
+			desc = "Find nvim config files",
+		},
+		{
+			"<leader>fd",
+			function()
+				require("fzf-lua").files({ cwd = dotfiles_cwd() })
+			end,
+			desc = "Find dotfiles",
+		},
+		{ "<leader>fq", "<cmd>FzfLua quickfix<cr>",   desc = "Quickfix list" },
+		{ "<leader>fQ", "<cmd>FzfLua loclist<cr>",    desc = "Location list" },
+		{ "<leader>fl", "<cmd>FzfLua lines<cr>",      desc = "Buffer lines" },
+		{ '<leader>f"', "<cmd>FzfLua registers<cr>",  desc = "Registers" },
+		{ "<leader>fa", "<cmd>FzfLua autocmds<cr>",   desc = "Autocmds" },
+		{ "<leader>fh", "<cmd>FzfLua helptags<cr>",   desc = "Help tags" },
+		{ "<leader>fH", "<cmd>FzfLua highlights<cr>", desc = "Highlights" },
+		{ "<leader>fk", "<cmd>FzfLua keymaps<cr>",    desc = "Keymaps" },
+		{ "<leader>fm", "<cmd>FzfLua manpages<cr>",   desc = "Man pages" },
+		{ "<leader>fM", "<cmd>FzfLua marks<cr>",      desc = "Marks" },
+		{ "<leader>fj", "<cmd>FzfLua jumps<cr>",      desc = "Jumps" },
+		{ "<leader>ft", "<cmd>TodoFzfLua<cr>",        desc = "Todo comments" },
+		{ "<leader>fG", "<cmd>FzfLua live_grep<cr>",  desc = "Live grep" },
+		-- Git pickers
+		{ "<leader>gb", "<cmd>FzfLua git_branches<cr>", desc = "Git branches" },
+		{ "<leader>gc", "<cmd>FzfLua git_commits<cr>", desc = "Git commits (project)" },
+		{ "<leader>gC", "<cmd>FzfLua git_bcommits<cr>", desc = "Git commits (buffer)" },
+		{ "<leader>gd", "<cmd>FzfLua git_diff<cr>", desc = "Git diff" },
+		{ "<leader>gs", "<cmd>FzfLua git_status<cr>", desc = "Git status" },
+		{ "<leader>gS", "<cmd>FzfLua git_stash<cr>", desc = "Git stash" },
+		{ "<leader>gt", "<cmd>FzfLua git_tags<cr>", desc = "Git tags" },
+		{ "<leader>gw", "<cmd>FzfLua git_worktree<cr>", desc = "Git worktree" },
+	},
 }

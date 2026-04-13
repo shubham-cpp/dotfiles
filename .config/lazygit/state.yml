@@ -1,16 +1,16 @@
 lastupdatecheck: 0
 recentrepos:
-    - /home/shubham/Documents/dotfiles
     - /home/shubham/.config/nvim-12
-    - /home/shubham/Downloads/Packages/GitClones/crush
-    - /home/shubham/Documents/Programming/WebDev/vexo
+    - /home/shubham/Documents/Programming/WebDev/ai-job-applier
+    - /home/shubham/Documents/Personal-Vault/Travels/Trip-2026/trip-web-app
+    - /home/shubham/Documents/dotfiles
     - /home/shubham/Documents/Programming/WebDev/vexo-sveltekit
+    - /home/shubham/Documents/Programming/WebDev/vexo
     - /home/shubham/.config/nvim-chad
     - /home/shubham/Documents/Programming/WebDev/starter-templates
     - /home/shubham/Documents/Programming/WebDev/sveltekit-trello-clone
     - /home/shubham/Documents/Programming/WebDev/dexter-ai
     - /home/shubham/.config/st-terminal
-    - /home/shubham/.local/share/nvim-lazy/lazy/LazyVim
 startuppopupversion: 5
 lastversion: 0.48.0
 customcommandshistory: []

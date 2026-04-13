@@ -10,8 +10,8 @@ from .colors import backgroundColor, colors, foregroundColor
 is_wayland = qtile.core.name == "wayland"
 
 layout_theme: dict[str, Union[str, int, list[str]]] = {
-    "margin": 5,
-    "border_width": 3,
+    "margin": 3,
+    "border_width": 2,
     "border_focus": colors[3],
     "border_normal": colors[1],
 }
@@ -203,7 +203,7 @@ screens: List[Screen] = [
                 ),
                 widget.GenPollCommand(
                     name="brightness",
-                    cmd=["brightnessctl", "g"],
+                    cmd=["brightness", "get"],
                     fontsize=14,
                     foreground=foregroundColor,
                     update_interval=300,
@@ -234,11 +234,12 @@ screens: List[Screen] = [
                     foreground=colors[5],
                     background=backgroundColor,
                 ),
-                widget.CurrentLayoutIcon(
+                widget.CurrentLayout(
                     scale=0.7, foreground=colors[6], background=backgroundColor
                 ),
             ],
             24,
+            padding=4,
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
             background=backgroundColor,

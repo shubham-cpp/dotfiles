@@ -11,6 +11,7 @@
     "cpu",
     "keyboard-state",
     "wlr/taskbar",
+    "custom/music",
   ],
   "modules-center": [
     "clock",
@@ -277,5 +278,11 @@
     "on-click": "activate", // LEFT click -> focus/activate that window
     "on-click-middle": "close", // MIDDLE click -> close that window
     "on-click-right": "minimize",
+  },
+  "custom/music": {
+    "format": "{}",
+    "return-type": "json",
+    "exec": "waybar-module-music --format '[ %icon% ] %artist% - %title%' --marquee --title-width 20 --artist-width 15 --effect-speed 200",
+    "tooltip": false,
   },
 }

@@ -1,8 +1,6 @@
----@type LazySpec
 return {
-  {
-    "tpope/vim-abolish",
-    keys = { "cr" },
-    cmd = { "Abolish", "Subvert", "S" },
-  },
+  { url = "nvim-lua/plenary.nvim" },
+  { url = "tpope/vim-repeat" },
+  { url = "tpope/vim-abolish" },
+  { url = "tpope/vim-dispatch" },
 }

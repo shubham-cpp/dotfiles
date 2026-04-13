@@ -1,24 +1,13 @@
-/* configuration { */
-/*   display-run: " "; */
-/*   display-drun: "  "; */
-/*   display-window: "  "; */
-/*   /* display-emoji: "🔎  "; */ */
-/*   drun-display-format: "{icon} {name}"; */
-/*   matching: "regex"; */
-/*   font: "FuraCode Nerd Font 12"; */
-/*   show-icons: true; */
-/*   sorting-method: "fzf"; */
-/* } */
 configuration {
     modi:                "drun,run,filebrowser,window";
     show-icons:          true;
-    display-drun:        "";
-    display-run:         "";
-    display-filebrowser: "";
-    display-window:      "";
+    display-drun:        "";
+    display-run:         "";
+    display-filebrowser: "";
+    display-window:      "";
     display-clipboard:   "󰆏";
-	drun-display-format: "{name}";
-	window-format:       "{w} · {c} · {t}";
+    drun-display-format: "{name}";
+    window-format:       "{w} · {c} · {t}";
     matching:            "regex";
     sorting-method:      "fzf";
     sort:                true;
@@ -29,293 +18,216 @@ configuration {
 }
 
 * {
-    font:                        "JetBrainsMono Nerd Font 11";
-    background:                  #1E2127FF;
-    background-alt:              #282B31FF;
-    foreground:                  #FFFFFFFF;
-    selected:                    #61AFEFFF;
-    active:                      #98C379FF;
-    urgent:                      #E06C75FF;
-    border-colour:               var(selected);
-    handle-colour:               var(selected);
-    background-colour:           var(background);
-    foreground-colour:           var(foreground);
-    alternate-background:        var(background-alt);
-    normal-background:           var(background);
-    normal-foreground:           var(foreground);
-    urgent-background:           var(urgent);
-    urgent-foreground:           var(background);
-    active-background:           var(active);
-    active-foreground:           var(background);
-    selected-normal-background:  var(selected);
-    selected-normal-foreground:  var(background);
-    selected-urgent-background:  var(active);
-    selected-urgent-foreground:  var(background);
-    selected-active-background:  var(urgent);
-    selected-active-foreground:  var(background);
-    alternate-normal-background: var(background);
-    alternate-normal-foreground: var(foreground);
-    alternate-urgent-background: var(urgent);
-    alternate-urgent-foreground: var(background);
-    alternate-active-background: var(active);
-    alternate-active-foreground: var(background);
+    font:              "JetBrainsMono Nerd Font 12";
+
+    bg0:               rgba(26, 27, 38, 0.92);
+    bg1:               rgba(255, 255, 255, 0.06);
+    bg2:               rgba(255, 255, 255, 0.12);
+
+    fg0:               #cdd6f4;
+    fg1:               #ffffff;
+    fg2:               rgba(255, 255, 255, 0.3);
+
+    accent:            #89b4fa;
+    urgent:            #f38ba8;
+    active:            #a6e3a1;
+    border-col:        rgba(255, 255, 255, 0.12);
+
+    background-color:  transparent;
+    text-color:        @fg0;
+    margin:            0;
+    padding:           0;
+    spacing:           0;
 }
 
 /*****----- Main Window -----*****/
 window {
-    /* properties for window widget */
-    transparency:       "real";
-    location:           center;
-    anchor:             center;
-    fullscreen:         false;
-    width:              600px;
-    x-offset:           0px;
-    y-offset:           0px;
-
-    /* properties for all widgets */
-    enabled:            true;
-    margin:             0px;
-    padding:            0px;
-    border:             0px solid;
-    border-radius:      10px;
-    border-color:       @border-colour;
-    cursor:             "default";
-    /* Backgroud Colors */
-    background-color:   @background-colour;
-    /* Backgroud Image */
-    //background-image: url("/path/to/image.png", none);
-    /* Simple Linear Gradient */
-    //background-image: linear-gradient(red, orange, pink, purple);
-    /* Directional Linear Gradient */
-    //background-image: linear-gradient(to bottom, pink, yellow, magenta);
-    /* Angle Linear Gradient */
-    //background-image: linear-gradient(45, cyan, purple, indigo);
+    transparency:      "real";
+    background-color:  @bg0;
+    location:          center;
+    anchor:            center;
+    width:             750px;
+    border:            1px solid;
+    border-color:      @border-col;
+    border-radius:     12px;
+    cursor:            "default";
 }
 
 /*****----- Main Box -----*****/
 mainbox {
-    enabled:          true;
-    spacing:          10px;
-    margin:           0px;
-    padding:          30px;
-    border:           0px solid;
-    border-radius:    0px 0px 0px 0px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    children:         [ "inputbar", "message", "listview" ];
+    background-color:  transparent;
+    children:          [ "inputbar", "listview", "message", "mode-switcher" ];
+    spacing:           0;
+    padding:           0;
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
-    enabled:          true;
-    spacing:          10px;
-    margin:           0px;
-    padding:          0px;
-    border:           0px solid;
-    border-radius:    0px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    text-color:       @foreground-colour;
-    children:         [ "textbox-prompt-colon", "entry", "mode-switcher" ];
+    padding:           14px 18px;
+    spacing:           12px;
+    background-color:  transparent;
+    border:            0 0 1px 0;
+    border-color:      @bg1;
+    text-color:        @fg1;
+    children:          [ "textbox-prompt-colon", "entry" ];
 }
 
-prompt {
-    enabled:          true;
-    background-color: inherit;
-    text-color:       inherit;
-}
 textbox-prompt-colon {
-    enabled:          true;
-    padding:          5px 0px;
-    expand:           false;
-    str:              "";
-    background-color: inherit;
-    text-color:       inherit;
+    expand:            false;
+    str:               "";
+    font:              "JetBrainsMono Nerd Font 18";
+    text-color:        @fg2;
+    padding:           4px 0;
+    vertical-align:    0.5;
+    background-color:  transparent;
 }
+
 entry {
-    enabled:           true;
-    padding:           5px 0px;
-    background-color:  inherit;
-    text-color:        inherit;
-    cursor:            text;
+    font:              "JetBrainsMono Nerd Font 16";
     placeholder:       "Search...";
-    placeholder-color: inherit;
-}
-num-filtered-rows {
-    enabled:          true;
-    expand:           false;
-    background-color: inherit;
-    text-color:       inherit;
-}
-textbox-num-sep {
-    enabled:          true;
-    expand:           false;
-    str:              "/";
-    background-color: inherit;
-    text-color:       inherit;
-}
-num-rows {
-    enabled:          true;
-    expand:           false;
-    background-color: inherit;
-    text-color:       inherit;
-}
-case-indicator {
-    enabled:          true;
-    background-color: inherit;
-    text-color:       inherit;
+    placeholder-color: @fg2;
+    text-color:        @fg1;
+    padding:           4px 0;
+    background-color:  transparent;
+    cursor:            text;
+    vertical-align:    0.5;
 }
 
 /*****----- Listview -----*****/
 listview {
-    enabled:          true;
-    columns:          1;
-    lines:            8;
-    cycle:            true;
-    dynamic:          true;
-    scrollbar:        true;
-    layout:           vertical;
-    reverse:          false;
-    fixed-height:     true;
-    fixed-columns:    true;
-
-    spacing:          5px;
-    margin:           0px;
-    padding:          0px;
-    border:           0px solid;
-    border-radius:    0px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    text-color:       @foreground-colour;
-    cursor:           "default";
-}
-scrollbar {
-    handle-width:     5px ;
-    handle-color:     @handle-colour;
-    border-radius:    10px;
-    background-color: @alternate-background;
+    columns:           1;
+    lines:             8;
+    cycle:             true;
+    dynamic:           true;
+    scrollbar:         false;
+    layout:            vertical;
+    fixed-height:      true;
+    spacing:           4px;
+    padding:           8px;
+    background-color:  transparent;
+    cursor:            "default";
 }
 
 /*****----- Elements -----*****/
 element {
-    enabled:          true;
-    spacing:          10px;
-    margin:           0px;
-    padding:          5px 10px;
-    border:           0px solid;
-    border-radius:    10px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    text-color:       @foreground-colour;
-    cursor:           pointer;
-}
-element normal.normal {
-    background-color: var(normal-background);
-    text-color:       var(normal-foreground);
-}
-element normal.urgent {
-    background-color: var(urgent-background);
-    text-color:       var(urgent-foreground);
-}
-element normal.active {
-    background-color: var(active-background);
-    text-color:       var(active-foreground);
-}
-element selected.normal {
-    background-color: var(selected-normal-background);
-    text-color:       var(selected-normal-foreground);
-}
-element selected.urgent {
-    background-color: var(selected-urgent-background);
-    text-color:       var(selected-urgent-foreground);
-}
-element selected.active {
-    background-color: var(selected-active-background);
-    text-color:       var(selected-active-foreground);
-}
-element alternate.normal {
-    background-color: var(alternate-normal-background);
-    text-color:       var(alternate-normal-foreground);
-}
-element alternate.urgent {
-    background-color: var(alternate-urgent-background);
-    text-color:       var(alternate-urgent-foreground);
-}
-element alternate.active {
-    background-color: var(alternate-active-background);
-    text-color:       var(alternate-active-foreground);
-}
-element-icon {
-    background-color: transparent;
-    text-color:       inherit;
-    size:             24px;
-    cursor:           inherit;
-}
-element-text {
-    background-color: transparent;
-    text-color:       inherit;
-    highlight:        inherit;
-    cursor:           inherit;
-    vertical-align:   0.5;
-    horizontal-align: 0.0;
+    spacing:           12px;
+    padding:           10px 14px;
+    border-radius:     8px;
+    background-color:  transparent;
+    text-color:        @fg0;
+    cursor:            pointer;
 }
 
-/*****----- Mode Switcher -----*****/
-mode-switcher{
-    enabled:          true;
-    spacing:          10px;
-    margin:           0px;
-    padding:          0px;
-    border:           0px solid;
-    border-radius:    0px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    text-color:       @foreground-colour;
+element normal.normal {
+    background-color:  transparent;
+    text-color:        @fg0;
 }
-button {
-    padding:          5px 10px;
-    border:           0px solid;
-    border-radius:    10px;
-    border-color:     @border-colour;
-    background-color: @alternate-background;
-    text-color:       inherit;
-    cursor:           pointer;
+
+element normal.urgent {
+    background-color:  transparent;
+    text-color:        @urgent;
 }
-button selected {
-    background-color: var(selected-normal-background);
-    text-color:       var(selected-normal-foreground);
+
+element normal.active {
+    background-color:  transparent;
+    text-color:        @active;
+}
+
+element selected.normal {
+    background-color:  @bg2;
+    text-color:        @fg1;
+}
+
+element selected.urgent {
+    background-color:  @urgent;
+    text-color:        @bg0;
+}
+
+element selected.active {
+    background-color:  @active;
+    text-color:        @bg0;
+}
+
+element alternate.normal {
+    background-color:  transparent;
+    text-color:        @fg0;
+}
+
+element alternate.urgent {
+    background-color:  transparent;
+    text-color:        @urgent;
+}
+
+element alternate.active {
+    background-color:  transparent;
+    text-color:        @active;
+}
+
+element-icon {
+    size:              28px;
+    background-color:  transparent;
+    text-color:        inherit;
+    vertical-align:    0.5;
+    cursor:            inherit;
+}
+
+element-text {
+    font:              "JetBrainsMono Nerd Font 13";
+    background-color:  transparent;
+    text-color:        inherit;
+    vertical-align:    0.5;
+    horizontal-align:  0.0;
+    highlight:         bold underline;
+    cursor:            inherit;
 }
 
 /*****----- Message -----*****/
 message {
-    enabled:          true;
-    margin:           0px;
-    padding:          0px;
-    border:           0px solid;
-    border-radius:    0px 0px 0px 0px;
-    border-color:     @border-colour;
-    background-color: transparent;
-    text-color:       @foreground-colour;
+    padding:           0;
+    border:            1px 0 0 0;
+    border-color:      @bg1;
+    background-color:  transparent;
+    text-color:        @fg2;
+    font:              "JetBrainsMono Nerd Font 10";
 }
+
 textbox {
-    padding:           8px 10px;
-    border:            0px solid;
-    border-radius:     10px;
-    border-color:      @border-colour;
-    background-color:  @alternate-background;
-    text-color:        @foreground-colour;
+    padding:           10px 18px;
+    background-color:  transparent;
     vertical-align:    0.5;
     horizontal-align:  0.0;
     highlight:         none;
-    placeholder-color: @foreground-colour;
-    blink:             true;
     markup:            true;
 }
+
 error-message {
-    padding:          10px;
-    border:           2px solid;
-    border-radius:    10px;
-    border-color:     @border-colour;
-    background-color: @background-colour;
-    text-color:       @foreground-colour;
+    padding:           14px;
+    border:            1px solid;
+    border-radius:     10px;
+    border-color:      @urgent;
+    background-color:  @bg0;
+    text-color:        @urgent;
+}
+
+/*****----- Mode Switcher -----*****/
+mode-switcher {
+    spacing:           8px;
+    padding:           10px 14px;
+    background-color:  transparent;
+    border:            1px 0 0 0;
+    border-color:      @bg1;
+}
+
+button {
+    padding:           6px 14px;
+    border-radius:     8px;
+    background-color:  @bg1;
+    text-color:        @fg0;
+    cursor:            pointer;
+    font:              "JetBrainsMono Nerd Font 11";
+}
+
+button selected {
+    background-color:  @accent;
+    text-color:        #1a1b26;
 }

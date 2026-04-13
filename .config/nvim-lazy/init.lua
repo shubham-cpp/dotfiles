@@ -5,6 +5,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
   once = true,
   desc = "Run lspmux if its not running already",
   callback = function()
+    if vim.fn.executable("lspmux") ~= 1 then return end
     local on_exit = function(obj)
       if obj.code == 1 then
         vim.system({ "lspmux", "server" }, {
