@@ -111,6 +111,25 @@ vim.keymap.set(
 vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
 vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 
+-- Tab-scoped buffer cycling
+vim.keymap.set("n", "]b", function()
+  require("core.tab_buffers").next(1)
+end, { desc = "Next buffer (tab)" })
+vim.keymap.set("n", "[b", function()
+  require("core.tab_buffers").prev(1)
+end, { desc = "Prev buffer (tab)" })
+
+-- Tab-scoped buffer delete
+vim.keymap.set("n", "<leader>bd", function()
+  require("core.tab_buffers").buf_delete(0)
+end, { desc = "Delete buffer" })
+vim.keymap.set("n", "<leader>bD", function()
+  require("core.tab_buffers").buf_delete(0, true)
+end, { desc = "Delete buffer (force)" })
+vim.keymap.set("n", "<leader>bo", function()
+  require("core.tab_buffers").buf_delete(nil)
+end, { desc = "Delete other buffers (tab)" })
+
 -- Window resize
 vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase height" })
 vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease height" })

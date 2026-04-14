@@ -58,18 +58,24 @@ return {
       },
     },
   },
-  {
-    url = "nvim-mini/mini.comment",
-    config = function()
-      require("mini.comment").setup({
-        options = {
-          custom_commentstring = function()
-            return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
-          end,
-        },
-      })
-    end,
-  },
+  -- {
+  --   url = "JoosepAlviste/nvim-ts-context-commentstring",
+  --   config = function()
+  --     require("ts_context_commentstring").setup({ enable_autocmd = false })
+  --   end,
+  -- },
+  -- {
+  --   url = "nvim-mini/mini.comment",
+  --   config = function()
+  --     require("mini.comment").setup({
+  --       options = {
+  --         custom_commentstring = function()
+  --           return require("ts_context_commentstring").calculate_commentstring() or vim.bo.commentstring
+  --         end,
+  --       },
+  --     })
+  --   end,
+  -- },
   {
     url = "nvim-mini/mini.operators",
     config = function()

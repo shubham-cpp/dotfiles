@@ -127,12 +127,6 @@ return {
     },
   },
   {
-    url = "JoosepAlviste/nvim-ts-context-commentstring",
-    config = function()
-      require("ts_context_commentstring").setup({ enable_autocmd = false })
-    end,
-  },
-  {
     url = "tronikelis/ts-autotag.nvim",
     config = function()
       require("ts-autotag").setup({})

@@ -4,6 +4,32 @@ local act = wezterm.action
 local tabline = wezterm.plugin.require "https://github.com/michaelbrusegard/tabline.wez"
 local workspace_switcher = wezterm.plugin.require "https://github.com/MLFlexer/smart_workspace_switcher.wezterm"
 
+-- Helper: directional switch that preserves zoom state if currently zoomed
+local function activate_pane_direction_preserve_zoom(direction)
+  return wezterm.action_callback(function(window, pane)
+    local tab = window:active_tab()
+
+    -- Check if the active pane is currently zoomed
+    local is_zoomed = false
+    for _, info in ipairs(tab:panes_with_info()) do
+      if info.is_active then
+        is_zoomed = info.is_zoomed  -- field name confirmed by Wezterm API
+        break
+      end
+    end
+
+    if is_zoomed then
+      -- Preserve zoom: unzoom → switch → re-zoom the new pane
+      tab:set_zoomed(false)
+      window:perform_action(act.ActivatePaneDirection(direction), pane)
+      tab:set_zoomed(true)
+    else
+      -- Normal behavior when not zoomed
+      window:perform_action(act.ActivatePaneDirection(direction), pane)
+    end
+  end)
+end
+
 -- This table will hold the configuration.
 local config = {}
 
@@ -14,11 +40,11 @@ if wezterm.config_builder then
 end
 
 config.notification_handling = "AlwaysShow"
-config.term = 'wezterm'
+config.term = "wezterm"
 config.visual_bell = {
-  fade_in_function = 'EaseIn',
+  fade_in_function = "EaseIn",
   fade_in_duration_ms = 150,
-  fade_out_function = 'EaseOut',
+  fade_out_function = "EaseOut",
   fade_out_duration_ms = 150,
 }
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
@@ -59,10 +85,14 @@ end
 
 table.insert(alt_keys, { key = "c", mods = "SHIFT|ALT", action = act.CloseCurrentPane({ confirm = false }) })
 table.insert(alt_keys, { key = "x", mods = "SHIFT|ALT", action = act.CloseCurrentTab({ confirm = false }) })
-table.insert(alt_keys, { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" })
-table.insert(alt_keys, { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" })
-table.insert(alt_keys, { key = "l", mods = "ALT", action = act.ActivatePaneDirection "Right" })
-table.insert(alt_keys, { key = "h", mods = "ALT", action = act.ActivatePaneDirection "Left" })
+-- table.insert(alt_keys, { key = "j", mods = "ALT", action = act.ActivatePaneDirection "Down" })
+-- table.insert(alt_keys, { key = "k", mods = "ALT", action = act.ActivatePaneDirection "Up" })
+-- table.insert(alt_keys, { key = "l", mods = "ALT", action = act.ActivatePaneDirection "Right" })
+-- table.insert(alt_keys, { key = "h", mods = "ALT", action = act.ActivatePaneDirection "Left" })
+table.insert(alt_keys, { key = "j", mods = "ALT", action = activate_pane_direction_preserve_zoom "Down" })
+table.insert(alt_keys, { key = "k", mods = "ALT", action = activate_pane_direction_preserve_zoom "Up" })
+table.insert(alt_keys, { key = "l", mods = "ALT", action = activate_pane_direction_preserve_zoom "Right" })
+table.insert(alt_keys, { key = "h", mods = "ALT", action = activate_pane_direction_preserve_zoom "Left" })
 table.insert(alt_keys, { key = "z", mods = "ALT", action = act.TogglePaneZoomState })
 table.insert(alt_keys, { key = "t", mods = "ALT", action = act.SpawnTab "CurrentPaneDomain" })
 table.insert(alt_keys, { key = "g", mods = "ALT", action = act.ShowTabNavigator })
@@ -179,6 +209,7 @@ tabline.setup({
 })
 tabline.apply_to_config(config)
 config.window_decorations = "TITLE|RESIZE"
+config.unzoom_on_switch_pane = true
 
 -- and finally, return the configuration to wezterm
 return config
