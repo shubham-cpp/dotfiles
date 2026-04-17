@@ -1,20 +1,52 @@
 return {
   {
+    url = "dlyongemallo/diffview.nvim",
+    -- cmd = { "DiffviewOpen", "DiffviewFileHistory", "DiffviewClose" },
+    keys = {
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff open" },
+      { "<leader>gH", "<cmd>DiffviewFileHistory %<cr>", desc = "File history" },
+      { "<leader>gF", "<cmd>DiffviewFileHistory<cr>", desc = "Repo history" },
+    },
+    config = function()
+      local actions = require("diffview.actions")
+      require("diffview").setup({
+        enhanced_diff_hl = true,
+        view = {
+          default = { layout = "diff2_horizontal" },
+          merge_tool = { layout = "diff3_horizontal" },
+          file_history = { layout = "diff2_horizontal" },
+        },
+        keymaps = {
+          -- view = {
+          --   { "n", "q", actions.close, { desc = "DiffviewClose" } },
+          -- },
+          file_panel = {
+            { "n", "q", actions.close, { desc = "DiffviewClose" } },
+          },
+          file_history_panel = {
+            { "n", "q", actions.close, { desc = "DiffviewClose" } },
+          },
+        },
+      })
+    end,
+  },
+
+  {
     url = "NeogitOrg/neogit",
     config = function()
       require("neogit").setup({
         graph_style = "unicode",
         kind = "floating",
-        -- integrations = {
-        --   diffview = true,
-        -- },
+        integrations = {
+          diffview = true,
+        },
         commit_editor = {
           staged_diff_split = "split",
         },
       })
     end,
     keys = {
-      { "<leader>gn", "<cmd>Neogit kind=floating<cr>", desc = "Neogit" },
+      { "<leader>gn", "<cmd>Neogit kind=tab<cr>", desc = "Neogit" },
     },
   },
 
@@ -81,11 +113,13 @@ return {
           end, { desc = "Last hunk" })
 
           -- Hunk actions (<leader>gh)
-          map({ "n", "v" }, "<leader>ghs", function()
+          map("n", "<leader>ghs", gs.stage_hunk, { desc = "Stage hunk" })
+          map("v", "<leader>ghs", function()
             gs.stage_hunk({ vim.fn.line("."), vim.fn.virtcol(".") })
           end, { desc = "Stage hunk" })
 
-          map({ "n", "v" }, "<leader>ghr", function()
+          map("n", "<leader>ghr", gs.reset_hunk, { desc = "Stage hunk" })
+          map("v", "<leader>ghr", function()
             gs.reset_hunk({ vim.fn.line("."), vim.fn.virtcol(".") })
           end, { desc = "Reset hunk" })
 
@@ -114,22 +148,5 @@ return {
         end,
       })
     end,
-  },
-
-  {
-    url = "spacedentist/resolve.nvim",
-    config = function()
-      require("resolve").setup({
-        default_keymaps = false,
-      })
-    end,
-    keys = {
-      { "<leader>co", "<Plug>(resolve-ours)", desc = "Resolve: ours" },
-      { "<leader>ct", "<Plug>(resolve-theirs)", desc = "Resolve: theirs" },
-      { "<leader>cb", "<Plug>(resolve-both)", desc = "Resolve: both" },
-      { "<leader>cn", "<Plug>(resolve-none)", desc = "Resolve: none" },
-      { "]x", "<Plug>(resolve-next)", desc = "Next conflict" },
-      { "[x", "<Plug>(resolve-prev)", desc = "Prev conflict" },
-    },
   },
 }

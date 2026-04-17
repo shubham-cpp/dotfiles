@@ -97,16 +97,24 @@ return {
         sources = {
           default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
           providers = {
+            lsp = { fallbacks = {} },
             buffer = {
               score_offset = -3,
+              opts = {
+                get_bufnrs = function()
+                  return vim.tbl_filter(function(bufnr)
+                    return vim.bo[bufnr].buftype == ""
+                  end, vim.api.nvim_list_bufs())
+                end,
+              },
             },
             ripgrep = {
               module = "blink-ripgrep",
               name = "Ripgrep",
+              score_offset = -5,
               opts = {
                 prefix_min_len = 4,
-                score_offset = -5,
-                search_casing = "--smart-case",
+                backend = { ripgrep = { search_casing = "--smart-case" } },
               },
             },
             cmdline = {

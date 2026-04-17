@@ -36,12 +36,9 @@
   "ext/workspaces": {
     "active-only": false,
     "sort-by-id": true,
-    // "all-outputs": true,
-    // "format": "{icon}",
-    // "show-special": false,
-    // "on-click": "activate",
-    // "on-scroll-up": "hyprctl dispatch workspace e+1",
-    // "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "on-click": "activate",
+    "on-scroll-up": "mmsg -d viewtoleft",
+    "on-scroll-down": "mmsg -d viewtoright",
   },
   "bluetooth": {
     "format": "<span size='large'></span>",

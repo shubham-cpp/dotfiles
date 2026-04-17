@@ -57,6 +57,64 @@ function yy() {
 # __git_other_files () {
 # }
 
+gitc() {
+  if [ $# -eq 0 ]; then
+    echo "Usage: gitc [git-clone-options...] <repository> [directory]"
+    echo "  Quickly clone a repo and cd into it"
+    echo
+    echo "Examples:"
+    echo "  gitc https://github.com/user/repo.git"
+    echo "  gitc --depth=1 https://github.com/vercel/next.js.git"
+    echo "  gitc -b dev --single-branch git@github.com:user/project.git my-project"
+    return 1
+  fi
+
+  local last_arg="${@: -1}"
+  local second_last_arg="${@: -2:1}"
+
+  if [[ "$last_arg" =~ ^(git@|https?://|ssh://|[a-zA-Z0-9][a-zA-Z0-9.-]+/[a-zA-Z0-9._/-]+) ]]; then
+    local repo_url="$last_arg"
+    local target_dir=""
+    local clone_args=("${@:1:$#-1}")
+  else
+    local repo_url="$second_last_arg"
+    local target_dir="$last_arg"
+    local clone_args=("${@:1:$#-2}")
+  fi
+
+  if [ -z "$repo_url" ]; then
+    echo "Error: No repository URL found"
+    echo "Last arguments were: '$second_last_arg' '$last_arg'"
+    return 1
+  fi
+
+  echo "→ Running: git clone ${clone_args[*]} $repo_url ${target_dir:+\"$target_dir\"}"
+
+  git clone "${clone_args[@]}" "$repo_url" ${target_dir:+"$target_dir"}
+
+  if [ $? -ne 0 ]; then
+    echo "Clone failed :("
+    return 1
+  fi
+
+  local cd_dir
+  if [ -n "$target_dir" ]; then
+    cd_dir="$target_dir"
+  else
+    cd_dir="${repo_url##*/}"
+    cd_dir="${cd_dir%.git}"
+  fi
+
+  if [ ! -d "$cd_dir" ]; then
+    echo "Warning: Directory '$cd_dir' not found after clone"
+    return 1
+  fi
+
+  echo "→ Entering: $cd_dir"
+  cd "$cd_dir" || { echo "Failed to cd into $cd_dir"; return 1; }
+  git branch --show-current 2>/dev/null || true
+}
+
 gdd() {
   preview="git diff $@ --color=always -- {-1}"
   git diff $@ --name-only | fzf -m --ansi --preview $preview | xargs -r git add

@@ -34,6 +34,10 @@
       "rev": "f2634758455cfa52a8acea6f142dcd6271a1bf57",
       "src": "https://github.com/monaqa/dial.nvim"
     },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "https://github.com/dlyongemallo/diffview.nvim"
+    },
     "flash.nvim": {
       "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
       "src": "https://github.com/folke/flash.nvim"
@@ -57,6 +61,10 @@
     "hydra.nvim": {
       "rev": "8c4a9f621ec7cdc30411a1f3b6d5eebb12b469dc",
       "src": "https://github.com/nvimtools/hydra.nvim"
+    },
+    "local-review.nvim": {
+      "rev": "a73bfce01671f33ebb5e87641eb9686bb980474d",
+      "src": "https://github.com/ssundarraj/local-review.nvim"
     },
     "lualine.nvim": {
       "rev": "f5d2a8570f8b736ddb9bb4be504355bcd6e15ec8",
@@ -215,6 +223,10 @@
     "template-string.nvim": {
       "rev": "d3a26d3c449a97c44891a31736a101b60b64cf2b",
       "src": "https://github.com/axelvc/template-string.nvim"
+    },
+    "tiny-term.nvim": {
+      "rev": "ca3f2736c279b998dc4adb80014cb1cb18d60de2",
+      "src": "https://github.com/jellydn/tiny-term.nvim"
     },
     "todo-comments.nvim": {
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",

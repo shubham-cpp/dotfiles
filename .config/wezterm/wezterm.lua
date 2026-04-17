@@ -13,7 +13,7 @@ local function activate_pane_direction_preserve_zoom(direction)
     local is_zoomed = false
     for _, info in ipairs(tab:panes_with_info()) do
       if info.is_active then
-        is_zoomed = info.is_zoomed  -- field name confirmed by Wezterm API
+        is_zoomed = info.is_zoomed -- field name confirmed by Wezterm API
         break
       end
     end

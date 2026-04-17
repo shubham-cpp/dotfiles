@@ -27,13 +27,13 @@
 
 [merge]
   tool = diffview
-  conflictstyle = zdiff3
+  ; conflictstyle = zdiff3
   ; conflictstyle = diff3
 [mergetool]
   prompt = false
   keepBackup = false
 [mergetool "diffview"]
-  cmd = nvim -n -c "DiffviewOpen" "$MERGE"
+  cmd = nvim -d -c "DiffviewOpen" "$MERGED"
 
 [push]
   autoSetupRemote = true

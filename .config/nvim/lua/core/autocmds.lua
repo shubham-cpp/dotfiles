@@ -162,9 +162,20 @@ vim.api.nvim_create_autocmd("FileType", {
     "sh",
     "zsh",
     "fish",
+    "sxhkdrc",
   },
   group = augroup,
   callback = function()
     vim.treesitter.start()
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Tiny term custom mappings",
+  pattern = "tiny_term",
+  group = augroup,
+  callback = function(ev)
+    local bufnr = ev.buf
+    vim.keymap.set("t", "<C-]>", "<C-\\><C-n>", { buffer = bufnr, desc = "Normal mode" })
   end,
 })

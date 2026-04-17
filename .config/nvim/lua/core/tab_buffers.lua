@@ -2,6 +2,8 @@ local M = {}
 
 -- tabpage_id -> { [bufnr] = true }
 local tab_bufs = {}
+-- reverse index: bufnr -> { [tabpage_id] = true }
+local buf_to_tabs = {}
 
 local function tab_id()
   return tostring(vim.api.nvim_get_current_tabpage())
@@ -19,12 +21,17 @@ function M.track(buf)
   local id = tab_id()
   tab_bufs[id] = tab_bufs[id] or {}
   tab_bufs[id][buf] = true
+  buf_to_tabs[buf] = buf_to_tabs[buf] or {}
+  buf_to_tabs[buf][id] = true
 end
 
 function M.untrack(buf)
-  for _, set in pairs(tab_bufs) do
-    set[buf] = nil
+  for id in pairs(buf_to_tabs[buf] or {}) do
+    if tab_bufs[id] then
+      tab_bufs[id][buf] = nil
+    end
   end
+  buf_to_tabs[buf] = nil
 end
 
 function M.clean_tab(tp)
@@ -70,9 +77,17 @@ function M.buf_delete(buf_id, force)
   if buf_id == nil then
     local bufs = M.get_bufnrs()
     local cur = vim.api.nvim_get_current_buf()
+    local to_delete = {}
     for _, b in ipairs(bufs) do
       if b ~= cur then
-        pcall(vim.api.nvim_buf_delete, b, { force = force })
+        to_delete[#to_delete + 1] = b
+      end
+    end
+    if #to_delete > 0 then
+      local bang = force and "!" or ""
+      vim.cmd("noautocmd bdelete" .. bang .. " " .. table.concat(to_delete, " "))
+      for _, b in ipairs(to_delete) do
+        M.untrack(b)
       end
     end
   else
@@ -104,7 +119,7 @@ function M.setup()
       M.track()
     end,
   })
-  vim.api.nvim_create_autocmd("BufDelete", {
+  vim.api.nvim_create_autocmd({ "BufDelete", "BufWipeout" }, {
     group = group,
     callback = function(ev)
       M.untrack(ev.buf)

@@ -1,10 +1,17 @@
+---@class PluginSpec
+---@field url string GitHub "owner/repo" or full URL
+---@field version? string Semver range string (e.g., "^1")
+---@field config? fun() Setup function called after plugin loads
+---@field keys? (string|{[1]:string,[2]?:string|function,desc?:string,mode?:string|string[]})[]|fun():(string|table)[]
+---@field enabled? boolean|fun(): boolean Whether to load this plugin. Defaults to true.
+
 -- Plugin loader: auto-discovers lua/plugins/*.lua specs and registers with vim.pack
 local plugin_dir = vim.fn.stdpath("config") .. "/lua/plugins"
 local files = vim.fs.dir(plugin_dir)
 
 local specs = {}
-for name, type in files do
-  if type == "file" and name:match("%.lua$") and name ~= "init.lua" then
+for name, kind in files do
+  if kind == "file" and name:match("%.lua$") and name ~= "init.lua" then
     local modname = "plugins." .. name:gsub("%.lua$", "")
     local ok, plugin_specs = pcall(require, modname)
     if ok then
@@ -13,7 +20,19 @@ for name, type in files do
         plugin_specs = { plugin_specs }
       end
       for _, spec in ipairs(plugin_specs) do
-        table.insert(specs, spec)
+        local en = spec.enabled
+        if en == nil then
+          table.insert(specs, spec)
+        elseif type(en) == "function" then
+          local ok, result = pcall(en)
+          if ok and result then
+            table.insert(specs, spec)
+          elseif not ok then
+            vim.notify(("Plugin enabled check error (%s): %s"):format(spec.url, result), vim.log.levels.ERROR)
+          end
+        elseif en then
+          table.insert(specs, spec)
+        end
       end
     else
       vim.notify(("Failed to load plugin spec %s: %s"):format(name, plugin_specs), vim.log.levels.ERROR)

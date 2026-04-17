@@ -24,10 +24,8 @@ super + control + s
 super + @g
     qalculate-gtk || galculator || gnome-calculator || notify-send "Error" "Calculator App not installed" -u critical
 
-super + {d,r,v,y,p}
-    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -drun-reload-desktop-cache -matching fuzzy,virt-manager || virtualbox || VirtualBox,clipboard,superp}
-super + alt + {c,g}
-    {open-rcs,open-games}
+super + {d,r,v,p}
+    {rofi -show run -async-pre-read 10 -config ~/.config/rofi/dmenu.rasi,rofi -show drun -drun-reload-desktop-cache -matching fuzzy,virt-manager || virtualbox || VirtualBox,superp}
 
 # {_,shift + }@Print
 #     take_ss {full,focus}
@@ -94,7 +92,7 @@ super + {t,shift + t,s}
 	bspc node -t \~{tiled,pseudo_tiled,floating}
 
 super + @f
-    toggle_fullscreen
+    ~/.config/bspwm/scripts/toggle_fullscreen
 super + @m
     bspc desktop -l tiled || bspc desktop -l monocle
 
@@ -163,9 +161,9 @@ alt + {_,shift + }Tab
 #
 # expand a window by moving one of its side outward
 super + alt + {h,j,k,l}
-	resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
+	~/.config/bspwm/scripts/resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
 super + alt + {Left,Down,Up,Right}
-	resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
+	~/.config/bspwm/scripts/resize_window {west,south,north,east} || notify-send "Failed" "Resize script not found" -u critical
 
 # Flip layout vertically/horizontally
 super + {_,shift + }a
@@ -180,7 +178,7 @@ super + ctrl + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
 super + {_,shift + } b
-    lapav {hide,show}
+    ~/.config/bspwm/scripts/lapav {hide,show}
 
 
 # Increase/decrease window gap on focused desktop
