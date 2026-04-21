@@ -1,10 +1,10 @@
 return {
-  url = "vague2k/vague.nvim",
+  "vague2k/vague.nvim",
+  priority = 1000,
   config = function()
     require("vague").setup({ transparent = false })
     vim.cmd.colorscheme("vague")
 
-    -- Apply highlight overrides after theme loads
     local c = require("vague").get_palette()
     vim.api.nvim_set_hl(0, "@tag.attribute", { fg = c.property })
     vim.api.nvim_set_hl(0, "WinBar", { bg = c.bg })
@@ -12,7 +12,6 @@ return {
     vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = c.delta, bg = c.visual, bold = true, undercurl = true })
     vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = c.hint, bg = c.visual, bold = true, undercurl = true })
 
-    -- Helper: mix two hex colors
     local function mix_colors(fg_hex, bg_hex, pct)
       local function hex_to_rgb(h)
         h = h:gsub("#", "")
@@ -26,7 +25,6 @@ return {
       return string.format("#%02x%02x%02x", r, g, b)
     end
 
-    -- Helper: adjust lightness of a hex color
     local function adjust_lightness(hex, amount)
       local function hex_to_rgb(h)
         h = h:gsub("#", "")
@@ -39,7 +37,6 @@ return {
       return string.format("#%02x%02x%02x", r, g, b)
     end
 
-    -- BlinkCmp highlights (atom colored style)
     local menu_bg = adjust_lightness(c.bg, -4)
     local doc_bg = adjust_lightness(c.bg, -8)
 
@@ -63,7 +60,6 @@ return {
     vim.api.nvim_set_hl(0, "BlinkCmpSignatureHelpBorder", { fg = c.floatBorder })
     vim.api.nvim_set_hl(0, "BlinkCmpSignatureHelpActiveParameter", { fg = c.func, bold = true })
 
-    -- Atom colored kind highlights — each kind gets a colored pill background
     local blink_kinds = {
       Constant = c.constant,
       Function = c.func,

@@ -1,6 +1,6 @@
 return {
   {
-    url = "nvim-treesitter/nvim-treesitter",
+    "nvim-treesitter/nvim-treesitter",
     version = "main",
     config = function()
       local ensure_installed = {
@@ -38,125 +38,62 @@ return {
         "dockerfile",
         "sxhkdrc",
       }
-      require("nvim-treesitter").setup({
-        -- ensure_installed = ensure_installed,
-        -- auto_install = true,
-      })
+      require("nvim-treesitter").setup({})
       require("nvim-treesitter").install(ensure_installed)
     end,
   },
   {
-    url = "nvim-treesitter/nvim-treesitter-textobjects",
-    config = function()
-      require("nvim-treesitter-textobjects").setup({})
-    end,
-    keys = {
-      {
-        "]/",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_start("@comment.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Next comment start",
-      },
-      {
-        "[/",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_start("@comment.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Previous comment start",
-      },
-      {
-        "]?",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_next_end("@comment.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Next comment end",
-      },
-      {
-        "[?",
-        function()
-          require("nvim-treesitter-textobjects.move").goto_previous_end("@comment.outer")
-        end,
-        mode = { "n", "x", "o" },
-        desc = "Previous comment end",
-      },
-      {
-        "<localleader>k",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_next("@block.outer")
-        end,
-        desc = "Swap next block",
-      },
-      {
-        "<localleader>K",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_previous("@block.outer")
-        end,
-        desc = "Swap prev block",
-      },
-      {
-        "<localleader>f",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_next("@function.outer")
-        end,
-        desc = "Swap next function",
-      },
-      {
-        "<localleader>F",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_previous("@function.outer")
-        end,
-        desc = "Swap prev function",
-      },
-      {
-        "<localleader>a",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
-        end,
-        desc = "Swap next parameter",
-      },
-      {
-        "<localleader>A",
-        function()
-          require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner")
-        end,
-        desc = "Swap prev parameter",
-      },
-    },
-  },
-  {
-    url = "tronikelis/ts-autotag.nvim",
-    config = function()
-      require("ts-autotag").setup({})
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    opts = {},
+    config = function(_, opts)
+      require("nvim-treesitter-textobjects").setup(opts)
+      vim.keymap.set({ "n", "x", "o" }, "]/", function()
+        require("nvim-treesitter-textobjects.move").goto_next_start("@comment.outer")
+      end, { desc = "Next comment start" })
+      vim.keymap.set({ "n", "x", "o" }, "[/", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_start("@comment.outer")
+      end, { desc = "Previous comment start" })
+      vim.keymap.set({ "n", "x", "o" }, "]?", function()
+        require("nvim-treesitter-textobjects.move").goto_next_end("@comment.outer")
+      end, { desc = "Next comment end" })
+      vim.keymap.set({ "n", "x", "o" }, "[?", function()
+        require("nvim-treesitter-textobjects.move").goto_previous_end("@comment.outer")
+      end, { desc = "Previous comment end" })
+      vim.keymap.set("n", "<localleader>k", function()
+        require("nvim-treesitter-textobjects.swap").swap_next("@block.outer")
+      end, { desc = "Swap next block" })
+      vim.keymap.set("n", "<localleader>K", function()
+        require("nvim-treesitter-textobjects.swap").swap_previous("@block.outer")
+      end, { desc = "Swap prev block" })
+      vim.keymap.set("n", "<localleader>f", function()
+        require("nvim-treesitter-textobjects.swap").swap_next("@function.outer")
+      end, { desc = "Swap next function" })
+      vim.keymap.set("n", "<localleader>F", function()
+        require("nvim-treesitter-textobjects.swap").swap_previous("@function.outer")
+      end, { desc = "Swap prev function" })
+      vim.keymap.set("n", "<localleader>a", function()
+        require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner")
+      end, { desc = "Swap next parameter" })
+      vim.keymap.set("n", "<localleader>A", function()
+        require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner")
+      end, { desc = "Swap prev parameter" })
     end,
   },
+  { "tronikelis/ts-autotag.nvim", opts = {} },
   {
-    url = "nvim-treesitter/nvim-treesitter-context",
+    "nvim-treesitter/nvim-treesitter-context",
     config = function()
       require("treesitter-context").setup({
         on_attach = function(buf)
           return not vim.b[buf].bigfile
         end,
       })
+      vim.keymap.set("n", "<localleader>c", function()
+        require("treesitter-context").go_to_context()
+      end, { desc = "Jump to context" })
+      vim.keymap.set("n", "<localleader><localleader>", function()
+        require("treesitter-context").go_to_context()
+      end, { desc = "Jump to context" })
     end,
-    keys = {
-      {
-        "<localleader>c",
-        function()
-          require("treesitter-context").go_to_context()
-        end,
-        desc = "Jump to context",
-      },
-      {
-        "<localleader><localleader>",
-        function()
-          require("treesitter-context").go_to_context()
-        end,
-        desc = "Jump to context",
-      },
-    },
   },
 }

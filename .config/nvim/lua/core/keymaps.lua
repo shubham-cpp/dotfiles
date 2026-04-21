@@ -59,6 +59,17 @@ local function smart_navigate(direction_key)
   end
 end
 
+--- Show floating diagnostic on jump
+---@param count -1|1 1 Jumps forward, -1 jumps backwards
+---@param is_error boolean
+local function diagnostic_jump_with_popup(count, is_error)
+  local severity = is_error == true and vim.diagnostic.severity.ERROR or nil
+  vim.diagnostic.jump({ count = count or 1, severity = severity })
+  vim.schedule(function()
+    vim.diagnostic.open_float()
+  end)
+end
+
 -- Movement
 vim.keymap.set("", "0", "^", { silent = false })
 vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true })
@@ -141,11 +152,17 @@ vim.keymap.set("n", "]q", "<cmd>cnext<cr>", { desc = "Next quickfix" })
 vim.keymap.set("n", "[q", "<cmd>cprev<cr>", { desc = "Prev quickfix" })
 -- Next/prev error diagnostic
 vim.keymap.set("n", "]e", function()
-  vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.ERROR })
+  diagnostic_jump_with_popup(1, true)
 end, { desc = "Next error" })
 vim.keymap.set("n", "[e", function()
-  vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR })
+  diagnostic_jump_with_popup(-1, true)
 end, { desc = "Previous error" })
+vim.keymap.set("n", "]d", function()
+  diagnostic_jump_with_popup(1, false)
+end, { desc = "Next Diagnostic" })
+vim.keymap.set("n", "[d", function()
+  diagnostic_jump_with_popup(-1, false)
+end, { desc = "Previous Diagnostic" })
 
 -- Next/prev tab
 vim.keymap.set("n", "]t", "<cmd>tabnext<cr>", { desc = "Next tab" })
@@ -173,3 +190,11 @@ end
 
 -- Diagnostic float (works with both LSP and nvim-lint diagnostics)
 vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
+
+vim.keymap.set("n", "<Esc>", function()
+  if vim.v.hlsearch then
+    vim.cmd("nohlsearch")
+    return "<esc>"
+  end
+  return "<esc>"
+end, { expr = true })

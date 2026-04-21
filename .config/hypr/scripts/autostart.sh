@@ -21,10 +21,7 @@ elif test -f /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1; then
   /usr/lib/polkit-kde-authentication-agent-1 &
 fi
 
-if command -v kwalletd6 >/dev/null; then
-  # /usr/lib/pam_kwallet_init
-  kwalletd6 &
-elif command -v gnome-keyring-daemon >/dev/null; then
+if command -v gnome-keyring-daemon >/dev/null; then
   gnome-keyring-daemon &
 fi
 
@@ -44,6 +41,7 @@ swaync &
 nm-applet &
 hypridle &
 systemctl --user reload-or-restart xdg-desktop-portal.service xdg-desktop-portal-hyprland.service &
+hyprctl setcursor Bibata-Modern-Ice 24
 # hyprshade auto &
 
 if ! pgrep vicinae >/dev/null; then

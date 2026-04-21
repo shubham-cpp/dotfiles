@@ -4,7 +4,6 @@ local function trash(state)
   if not node or node.type == "message" then
     return
   end
-
   local _, name = require("neo-tree.utils").split_path(node.path)
   local msg = string.format("Are you sure you want to trash '%s'?", name)
   inputs.confirm(msg, function(confirmed)
@@ -19,17 +18,14 @@ end
 local function trash_visual(state, selected_nodes)
   local inputs = require("neo-tree.ui.inputs")
   local paths_to_trash = {}
-
   for _, node in ipairs(selected_nodes) do
     if node.type ~= "message" then
       table.insert(paths_to_trash, node.path)
     end
   end
-
   if #paths_to_trash == 0 then
     return
   end
-
   local msg = "Are you sure you want to trash " .. #paths_to_trash .. " items?"
   inputs.confirm(msg, function(confirmed)
     if not confirmed then
@@ -47,7 +43,6 @@ local function copy_selector(state)
   local filepath = node:get_id()
   local filename = node.name
   local modify = vim.fn.fnamemodify
-
   local vals = {
     ["FILENAME"] = filename,
     ["BASENAME"] = modify(filename, ":r"),
@@ -55,16 +50,13 @@ local function copy_selector(state)
     ["PATH (HOME)"] = modify(filepath, ":~"),
     ["URI"] = vim.uri_from_fname(filepath),
   }
-
   local options = vim.tbl_filter(function(val)
     return vals[val] ~= ""
   end, vim.tbl_keys(vals))
-
   if vim.tbl_isempty(options) then
     vim.notify("No values to copy", vim.log.levels.WARN)
     return
   end
-
   table.sort(options)
   vim.ui.select(options, {
     prompt = "Choose to copy to clipboard:",
@@ -125,21 +117,20 @@ local function collapse_or_open(state)
 end
 
 return {
-  { url = "MunifTanjim/nui.nvim" },
-  { url = "antosha417/nvim-lsp-file-operations" },
   {
-    url = "nvim-neo-tree/neo-tree.nvim",
+    "nvim-neo-tree/neo-tree.nvim",
+    dependencies = {
+      "MunifTanjim/nui.nvim",
+      "antosha417/nvim-lsp-file-operations",
+    },
     config = function()
       local lsp_file_operations = require("core.lsp_file_operations")
-
       require("neo-tree").setup({
         close_if_last_window = true,
         window = {
           position = "right",
           insert_as = "sibling",
-          mappings = {
-            ["<space>"] = "none",
-          },
+          mappings = { ["<space>"] = "none" },
         },
         commands = {
           trash = trash,
@@ -152,9 +143,7 @@ return {
         },
         filesystem = {
           bind_to_cwd = false,
-          follow_current_file = {
-            enabled = true,
-          },
+          follow_current_file = { enabled = true },
           hijack_netrw_behavior = "disabled",
           use_libuv_file_watcher = true,
           window = {
@@ -170,7 +159,6 @@ return {
           },
         },
       })
-
       require("lsp-file-operations").setup({
         operations = lsp_file_operations.operations,
       })
@@ -199,11 +187,7 @@ return {
         end,
         desc = "Toggle Neo-tree",
       },
-      {
-        "<leader>oe",
-        "<cmd>Neotree focus<CR>",
-        desc = "Toggle Neo-tree",
-      },
+      { "<leader>oe", "<cmd>Neotree focus<CR>", desc = "Toggle Neo-tree" },
     },
   },
 }

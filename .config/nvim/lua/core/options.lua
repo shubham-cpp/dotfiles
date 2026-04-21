@@ -39,7 +39,7 @@ opt.termguicolors = true
 opt.wrap = true
 opt.linebreak = true
 opt.breakindent = true
-opt.showbreak = "  "
+opt.showbreak = "󰄾 "
 opt.fillchars = {
   eob = " ",
   foldopen = "",
@@ -73,6 +73,7 @@ opt.diffopt:append({ "algorithm:histogram", "linematch:60" })
 opt.whichwrap:append("<>[]hl")
 opt.writebackup = false
 opt.iskeyword:append("-")
+opt.path:append("**")
 
 -- File & Session Management
 opt.autowrite = true

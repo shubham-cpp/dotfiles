@@ -1,13 +1,15 @@
 return {
-  -- Multi-cursor editing
   {
-    url = "jake-stewart/multicursor.nvim",
-    version = "1.0",
+    "jake-stewart/multicursor.nvim",
+    sem_version = "^1",
+    dependencies = { "nvimtools/hydra.nvim" },
+    keys = {
+      { "<leader>m", desc = "MultiCursors" },
+    },
     config = function()
       local mc = require("multicursor-nvim")
       mc.setup()
 
-      -- ESC: enable cursors / clear cursors / nohl+esc
       vim.keymap.set("n", "<Esc>", function()
         if not mc.cursorsEnabled() then
           mc.enableCursors()
@@ -19,7 +21,6 @@ return {
         end
       end, { expr = true })
 
-      -- Hydra for multicursor motions
       local Hydra = require("hydra")
       Hydra({
         name = "MultiCursors",
@@ -115,45 +116,26 @@ return {
       })
     end,
   },
-
-  -- Hydra (dependency for multicursor heads)
   {
-    url = "nvimtools/hydra.nvim",
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {
+      enable_check_bracket_line = true,
+      disable_in_visualblock = true,
+      check_ts = true,
+      fast_wrap = {},
+    },
   },
-
-  -- Autopairs
+  { "axelvc/template-string.nvim", event = "InsertEnter", opts = {} },
   {
-    url = "windwp/nvim-autopairs",
-    config = function()
-      require("nvim-autopairs").setup({
-        enable_check_bracket_line = true,
-        disable_in_visualblock = true,
-        check_ts = true,
-        fast_wrap = {},
-      })
-    end,
-  },
-
-  -- Auto template strings (backtick strings in JS/TS)
-  {
-    url = "axelvc/template-string.nvim",
-    config = function()
-      require("template-string").setup({})
-    end,
-  },
-
-  -- Annotation generator
-  {
-    url = "danymat/neogen",
-    config = function()
-      require("neogen").setup({
-        languages = {
-          lua = { template = { annotation_convention = "emmylua" } },
-          typescript = { template = { annotation_convention = "tsdoc" } },
-          typescriptreact = { template = { annotation_convention = "tsdoc" } },
-        },
-      })
-    end,
+    "danymat/neogen",
+    opts = {
+      languages = {
+        lua = { template = { annotation_convention = "emmylua" } },
+        typescript = { template = { annotation_convention = "tsdoc" } },
+        typescriptreact = { template = { annotation_convention = "tsdoc" } },
+      },
+    },
     keys = {
       {
         "<leader>n<CR>",
@@ -192,10 +174,9 @@ return {
       },
     },
   },
-
-  -- Extended increment/decrement (dates, booleans, semver, etc.)
   {
-    url = "monaqa/dial.nvim",
+    "monaqa/dial.nvim",
+    -- lazy = false,
     config = function()
       local augend = require("dial.augend")
       require("dial.config").augends:register_group({
@@ -273,35 +254,8 @@ return {
       },
     },
   },
-
-  -- Winbar code context (used by lualine)
   {
-    url = "SmiteshP/nvim-navic",
-    config = function()
-      require("nvim-navic").setup({
-        lsp = { auto_attach = true },
-        highlight = true,
-      })
-    end,
-  },
-
-  -- Wiki / personal knowledge base
-  {
-    url = "echaya/neowiki.nvim",
-    config = function()
-      local nw = require("neowiki")
-      nw.setup({
-        wiki_dirs = {
-          -- neowiki.nvim supports both absolute and tilde-expanded paths
-          { name = "Work", path = "~/Documents/Personal-Vault/Notes/wiki" },
-          { name = "Personal", path = "~/Documents/Personal-Vault/Notes/personal-wiki" },
-        },
-      })
-    end,
-    keys = {
-      { "<leader>pp", "<cmd>lua require('neowiki').open_wiki()<cr>", desc = "Open Wiki" },
-      { "<leader>pP", "<cmd>lua require('neowiki').open_wiki_floating()<cr>", desc = "Open Wiki in Floating Window" },
-      { "<leader>pT", "<cmd>lua require('neowiki').open_wiki_new_tab()<cr>", desc = "Open Wiki in Tab" },
-    },
+    "SmiteshP/nvim-navic",
+    opts = { lsp = { auto_attach = true }, highlight = true },
   },
 }

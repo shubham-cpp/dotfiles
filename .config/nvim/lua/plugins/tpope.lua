@@ -1,6 +1,6 @@
 return {
-  { url = "nvim-lua/plenary.nvim" },
-  { url = "tpope/vim-repeat" },
-  { url = "tpope/vim-abolish" },
-  { url = "tpope/vim-dispatch" },
+  { "nvim-lua/plenary.nvim" },
+  { "tpope/vim-repeat" },
+  { "tpope/vim-abolish" },
+  { "tpope/vim-dispatch" },
 }

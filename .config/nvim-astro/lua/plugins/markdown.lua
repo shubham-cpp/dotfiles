@@ -1,9 +1,5 @@
+---@type LazySpec
 return {
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    ft = "markdown",
-    opts = {},
-  },
   {
     "bullets-vim/bullets.vim",
     ft = { "markdown", "gitcommit" },

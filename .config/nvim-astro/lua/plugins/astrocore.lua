@@ -18,67 +18,62 @@ end
 return {
   {
     "AstroNvim/astrocore",
-    optional = true,
     ---@type AstroCoreOpts
     opts = {
       -- Configure core features of AstroNvim
-      -- features = {
-      --   large_buf = { size = 1024 * 256, lines = 10000 }, -- set global limits for large files for disabling features like treesitter
-      --   autopairs = true, -- enable autopairs at start
-      --   cmp = true, -- enable completion at start
-      --   diagnostics = { virtual_text = true, virtual_lines = false }, -- diagnostic settings on startup
-      --   highlighturl = true, -- highlight URLs at start
-      --   notifications = true, -- enable notifications at start
-      -- },
+      features = {
+        large_buf = { enabled = true, size = 1024 * 25, lines = 6000, line_length = 1000 }, -- set global limits for large files for disabling features like treesitter
+      },
       -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
-      -- diagnostics = {
-      --   virtual_text = true,
-      --   underline = true,
-      -- },
+      diagnostics = {
+        virtual_text = true,
+        underline = true,
+      },
       -- passed to `vim.filetype.add`
       filetypes = {
         filename = {
           dwm_sxhkdrc = "sxhkdrc",
-          [".env*"] = "conf",
         },
         pattern = {
+          [".env*"] = "conf",
           ["tsconfig*.json"] = "jsonc",
           [".*/kitty/.+%.conf"] = "kitty",
         },
       },
       -- vim options can be configured here
       options = {
-        opt = {
+        opt = { -- vim.opt.<key>
+          showbreak = "󰄾 ",
           undolevels = 10000,
-          wrap = true, -- sets vim.opt.wrap
           exrc = true, -- allows to create project specific settings
           sessionoptions = { "blank", "buffers", "curdir", "globals", "help", "tabpages", "winsize", "terminal" },
           smoothscroll = true,
+          wrap = true, -- sets vim.opt.wrap
           grepprg = vim.fn.executable "rg" == 1 and "rg --vimgrep --smart-case --no-heading --sort=path"
             or vim.opt.grepprg,
           scrolloff = 8,
           splitkeep = "topline",
-          jumpoptions = "stack",
         },
         g = { -- vim.g.<key>
+          -- unblevable/quick-scope
+          qs_lazy_highlight = 1,
+          qs_buftype_blacklist = { "terminal", "nofile", "dashboard", "startify" },
+          -- end: unblevable/quick-scope
           markdown_recommended_style = 0,
           tsc_makeprg = "npx tsc",
         },
       },
-      -- Mappings can be configured through AstroCore as well.
-      -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
       mappings = {
-        -- first key is the mode
         n = {
           [","] = false,
           ["\\"] = false,
-          ["<leader>c"] = false,
-          ["0"] = { "^", desc = "Goto Beginning" },
+          ["<Leader>c"] = false,
           dl = { '"_dl' },
           c = { '"_c' },
           C = { '"_C' },
-          [",w"] = { "<cmd>w!<cr>", desc = "Save File" },
-          [",W"] = { "<cmd>noautocmd w!<cr>", desc = "Save File(autocmd)" },
+          ["0"] = { "^", desc = "Goto Beginning" },
+          [",w"] = { "<cmd>w!<cr>", desc = "Save" },
+          [",W"] = { "<cmd>noautocmd w!<cr>", desc = "Save(noautocmd)" },
           ["<localleader>e"] = {
             ':e <C-R>=expand("%:p:h") . "/" <CR>',
             silent = false,
@@ -98,6 +93,31 @@ return {
             function() vim.lsp.buf.format(require("astrolsp").format_opts) end,
             desc = "Format buffer",
           },
+          ["<Leader>bn"] = { "<cmd>tabnew<cr>", desc = "New tab" },
+          -- ["<LocalLeader>a"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@parameter.inner" end,
+          --   desc = "Swap next argument",
+          -- },
+          -- ["<LocalLeader>A"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@parameter.inner" end,
+          --   desc = "Swap prev argument",
+          -- },
+          -- ["<LocalLeader>k"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@block.outer" end,
+          --   desc = "Swap next block",
+          -- },
+          -- ["<LocalLeader>K"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@block.outer" end,
+          --   desc = "Swap prev block",
+          -- },
+          -- ["<LocalLeader>f"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@function.outer" end,
+          --   desc = "Swap next function",
+          -- },
+          -- ["<LocalLeader>F"] = {
+          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@function.outer" end,
+          --   desc = "Swap prev function",
+          -- },
         },
         v = {
           ["0"] = { "^", desc = "Goto Beginning" },
@@ -114,6 +134,9 @@ return {
             desc = "Paste without overriding clipboard",
           },
         },
+        t = {
+          ["<C-]>"] = { "<C-\\><C-n>", desc = "Goto Normal Mode" },
+        },
       },
       autocmds = {
         fix_comment_continuation = {
@@ -123,40 +146,62 @@ return {
             callback = function() vim.opt_local.formatoptions = "jcrqlnt" end,
           },
         },
+        -- first key is the augroup name
+        terminal_settings = {
+          -- the value is a list of autocommands to create
+          {
+            -- event is added here as a string or a list-like table of events
+            event = "TermOpen",
+            -- the rest of the autocmd options (:h nvim_create_autocmd)
+            desc = "Disable line number/fold column/sign column for terminals",
+            callback = function(ev)
+              local bufnr = ev.buf
+              vim.opt_local.number = false
+              vim.opt_local.relativenumber = false
+              vim.opt_local.foldcolumn = "0"
+              vim.opt_local.signcolumn = "no"
+              vim.opt_local.foldmethod = "manual"
+
+              vim.keymap.set("t", "<C-]>", "<C-\\><C-n>", { buffer = bufnr, desc = "Goto normal mode" })
+              -- vim.keymap.set("n", "A", "A<C-k>", { buffer = bufnr })
+              -- vim.keymap.set("n", "D", "A<C-k><C-\\><C-n>", { buffer = bufnr })
+              -- vim.keymap.set("n", "cc", "A<C-e><C-u>", { buffer = bufnr })
+              -- vim.keymap.set("n", "dd", "A<C-e><C-u><C-\\><C-n>", { buffer = bufnr })
+            end,
+          },
+        },
+      },
+      treesitter = {
+        auto_install = true,
+        textobjects = {
+          swap = {
+            swap_next = {
+              ["<LocalLeader>k"] = { query = "@block.outer", desc = "Swap next block" },
+              ["<LocalLeader>f"] = { query = "@function.outer", desc = "Swap next function" },
+              ["<LocalLeader>a"] = { query = "@parameter.inner", desc = "Swap next argument" },
+            },
+            swap_previous = {
+              ["<LocalLeader>K"] = { query = "@block.outer", desc = "Swap previous block" },
+              ["<LocalLeader>F"] = { query = "@function.outer", desc = "Swap previous function" },
+              ["<LocalLeader>A"] = { query = "@parameter.inner", desc = "Swap previous argument" },
+            },
+          },
+        },
+      },
+      sessions = {
+        -- Configure auto saving
+        autosave = {
+          last = true, -- auto save last session
+          cwd = true, -- auto save session for each working directory
+        },
+        -- Patterns to ignore when saving sessions
+        ignore = {
+          dirs = {}, -- working directories to ignore sessions in
+          filetypes = { "gitcommit", "gitrebase" }, -- filetypes to ignore sessions
+          buftypes = {}, -- buffer types to ignore sessions
+        },
       },
       commands = {
-        PrintConfig = {
-          function(opts)
-            local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
-            local args = opts.args
-            local function callback(plugin_name)
-              local cmd = "Redir lua =require('lazy.core.config').plugins['" .. plugin_name .. "']"
-              vim.notify(cmd, vim.log.levels.INFO, { title = "Command" })
-              vim.fn.execute(cmd)
-            end
-            if args ~= "" then
-              callback(args)
-              return
-            end
-
-            vim.ui.select(plugins, { prompt = "Select Config to print" }, function(item)
-              if not item then return end
-              callback(item)
-            end)
-          end,
-          desc = "Print final lazy config",
-          nargs = "?",
-          complete = function(prefix)
-            local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
-            return vim
-              .iter(plugins)
-              :filter(function(t)
-                if string.len(prefix:gsub("%s+", "")) > 0 then return t:match(prefix) end
-                return true
-              end)
-              :totable()
-          end,
-        },
         Redir = {
           function(opts)
             local cmd = opts.args
@@ -199,7 +244,7 @@ return {
             if #opts.fargs > 1 then
               -- Join remaining args and append to Make
               local make_args = table.concat(vim.list_slice(opts.fargs, 2), " ")
-              vim.cmd("Make " .. make_args)
+              vim.cmd("make " .. make_args)
             else
               vim.cmd "Make"
             end
@@ -214,17 +259,43 @@ return {
             end
           end,
         },
-        BetterWinNavClearHistory = {
-          require("better_window_navigation").clear_history,
-          nargs = 0,
-          desc = "Clear the window navigation history for the current tab",
+        PrintConfig = {
+          function(opts)
+            local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
+            local args = opts.args
+            local function callback(plugin_name)
+              local cmd = "Redir lua =require('lazy.core.config').plugins['" .. plugin_name .. "']"
+              vim.notify(cmd, vim.log.levels.INFO, { title = "Command" })
+              vim.fn.execute(cmd)
+            end
+            if args ~= "" then
+              callback(args)
+              return
+            end
+
+            vim.ui.select(plugins, { prompt = "Select Config to print" }, function(item)
+              if not item then return end
+              callback(item)
+            end)
+          end,
+          desc = "Print final lazy config",
+          nargs = "?",
+          complete = function(prefix)
+            local plugins = vim.tbl_keys(require("lazy.core.config").plugins)
+            return vim
+              .iter(plugins)
+              :filter(function(t)
+                if string.len(prefix:gsub("%s+", "")) > 0 then return t:match(prefix) end
+                return true
+              end)
+              :totable()
+          end,
         },
       },
     },
   },
   {
     "AstroNvim/astrocore",
-    optional = true,
     ---@param _ any
     ---@param opts AstroCoreOpts
     opts = function(_, opts)

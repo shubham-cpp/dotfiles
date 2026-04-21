@@ -1,16 +1,7 @@
 return {
   {
-    url = "folke/flash.nvim",
-    config = function()
-      require("flash").setup({
-        modes = {
-          char = {
-            enabled = false,
-            autohide = false,
-          },
-        },
-      })
-    end,
+    "folke/flash.nvim",
+    opts = { modes = { char = { enabled = false, autohide = false } } },
     keys = {
       {
         "S",
@@ -22,16 +13,9 @@ return {
       },
     },
   },
-
   {
-    url = "cbochs/grapple.nvim",
-    config = function()
-      require("grapple").setup({
-        scope = "git_branch",
-        icons = true,
-        status = false,
-      })
-    end,
+    "cbochs/grapple.nvim",
+    opts = { scope = "git_branch", icons = true, status = false },
     keys = {
       { "<leader>A", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle" },
       { "<leader>`", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle" },
@@ -49,15 +33,9 @@ return {
       { "<localleader>9", "<cmd>Grapple select index=9<cr>", desc = "Grapple select 9" },
     },
   },
-
   {
-    url = "folke/persistence.nvim",
-    config = function()
-      require("persistence").setup({
-        dir = vim.fn.stdpath("data") .. "/sessions/",
-        branch = true,
-      })
-    end,
+    "folke/persistence.nvim",
+    opts = { dir = vim.fn.stdpath("data") .. "/sessions/", branch = true },
     keys = {
       {
         "<leader>ql",
@@ -89,23 +67,20 @@ return {
       },
     },
   },
-
   {
-    url = "kylechui/nvim-surround",
-    config = function()
-      require("nvim-surround").setup({})
-    end,
+    "kylechui/nvim-surround",
+    lazy = false,
+    opts = {},
     keys = {
       "ys",
       "ds",
       "cs",
-      { "S", desc = "Surround (visual)", mode = "x" },
+      { "S", mode = "x", desc = "Surround (visual)" },
     },
   },
-
   {
-    url = "unblevable/quick-scope",
-    config = function()
+    "unblevable/quick-scope",
+    init = function()
       vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
       vim.g.qs_buftype_blacklist = { "terminal", "nofile", "dashboard", "startify" }
       vim.g.qs_lazy_highlight = 1

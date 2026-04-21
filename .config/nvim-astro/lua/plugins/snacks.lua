@@ -4,69 +4,30 @@ return {
   optional = true,
   ---@type snacks.Config
   opts = {
-    dashboard = { enabled = false },
+    terminal = {},
+    lazygit = {},
     zen = {
-      on_open = function() end,
-      on_close = function() end,
-      ---@type snacks.zen.Config
       zoom = {
-        toggles = {},
         show = { statusline = true, tabline = true },
+        wo = {
+          number = true,
+          relativenumber = true,
+          signcolumn = "yes",
+        },
         win = {
-          wo = {
-            number = true,
-            relativenumber = true,
-            signcolumn = "yes",
-          },
-          backdrop = false,
           width = 0, -- full width
           height = 0, -- full width
         },
       },
     },
-    lazygit = {},
     picker = {
       layout = { preset = "dropdown" },
       matcher = { frecency = true, history_bonus = true },
       ---@class snacks.picker.formatters.Config
       formatters = { file = { filename_first = true } },
       sources = {
-        buffers = {
-          win = {
-            input = {
-              keys = {
-                ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-                ["<a-x>"] = { "bufdelete", mode = { "n", "i" } },
-              },
-            },
-            list = { keys = { ["dd"] = "bufdelete" } },
-          },
-        },
         git_files = { untracked = true },
         git_grep = { untracked = true },
-      },
-      win = {
-        -- input window
-        input = {
-          keys = {
-            ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
-            ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-            ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
-            ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
-            ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-            ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
-            ["<c-c>"] = { "copy", mode = { "i", "n" } },
-          },
-        },
-        list = {
-          keys = {
-            ["<c-u>"] = "preview_scroll_up",
-            ["<c-d>"] = "preview_scroll_down",
-            ["<c-f>"] = "list_scroll_down",
-            ["<c-b>"] = "list_scroll_up",
-            ["<c-x>"] = "edit_split",
-          },
-        },
       },
     },
   },
@@ -76,58 +37,28 @@ return {
       opts = function(_, opts)
         local maps = opts.mappings
 
-        maps.n["<Leader><Leader>"] = {
+        maps.n["<Leader>fN"] = {
+          function() require("snacks").picker.notifications { layout = { preset = "vertical" } } end,
+          desc = "Find notifications",
+        }
+        maps.n["<Leader>gg"] = { function() require("snacks.lazygit").open() end, desc = "Lazygit" }
+        local toggle_terminal = {
           function()
-            local is_git = vim.g.gitsigns_head or vim.b.gitsigns_head
-            if is_git then
-              require("snacks").picker.git_files { layout = { preset = "vscode" } }
-            else
-              require("snacks").picker.files { layout = { preset = "vscode" } }
-            end
+            if vim.v.count ~= 0 then vim.g.previous_term_count = vim.v.count1 end
+
+            require("snacks.terminal").toggle(nil, {
+              win = { position = "float", border = "rounded" },
+              count = vim.g.previous_term_count,
+            })
           end,
-          desc = "Find files",
+          desc = "Terminal",
         }
-        -- maps.n["<c-p>"] = {
-        --   function() require("snacks").picker.files { layout = { preset = "vscode" } } end,
-        --   desc = "Find files",
-        -- }
-        -- maps.n["<Leader>fg"] = {
-        --   function() require("snacks").picker.git_files { layout = { preset = "vscode" } } end,
-        --   desc = "Find git files",
-        -- }
+        maps.n["<C-\\>"] = toggle_terminal
+        maps.t["<C-\\>"] = toggle_terminal
 
-        maps.n["<Leader>fH"] = { function() require("snacks").picker.highlights() end, desc = "highlights" }
-        maps.n["<Leader>fr"] = { function() require("snacks").picker.resume() end, desc = "Resume" }
-        maps.n["<Leader>fz"] = { function() require("snacks").picker.zoxide() end, desc = "Zoxide" }
-
-        maps.n["<Leader>fc"] = { "<cmd>CreateFileInDir<cr>" }
-        maps.n["<Leader>fN"] = { function() require("snacks").picker.notifications({layout = {preset = 'vertical'}}) end, desc = "Find notifications" }
-        maps.n["<Leader>fa"] = { function() require("snacks").picker.autocmds() end, desc = "Autocmds" }
-        maps.n["<Leader>fL"] = { function() require("snacks").picker.lazy() end, desc = "Lazy" }
-
-        maps.n["<Leader>fB"] = { function() require("snacks").picker.grep_buffers() end, desc = "Grep Buffers" }
-        maps.n["<Leader>fs"] = { function() require("snacks").picker.grep() end, desc = "Grep" }
-        maps.n["<Leader>fS"] = {
-          function() require("snacks").picker.grep { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Grep(cwd)",
-        }
-        maps.n["<Leader>fw"] = { function() require("snacks").picker.grep_word() end, desc = "Grep cword" }
-        maps.n["<Leader>fW"] = {
-          function() require("snacks").picker.grep_word { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Grep cword(cwd)",
-        }
-        maps.x["<Leader>fw"] = { function() require("snacks").picker.grep_word() end, desc = "Grep cword" }
-        maps.x["<Leader>fW"] = {
-          function() require("snacks").picker.grep_word { cwd = vim.fn.expand "%:p:h" } end,
-          desc = "Grep cword(cwd)",
-        }
         maps.n["<C-w>m"] = {
           function() require("snacks").zen.zoom() end,
           desc = "Window Zoom",
-        }
-        maps.n["<Leader>gg"] = {
-          function() require("snacks").lazygit.open() end,
-          desc = "Lazygit",
         }
       end,
     },

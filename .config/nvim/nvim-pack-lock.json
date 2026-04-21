@@ -109,7 +109,7 @@
     "multicursor.nvim": {
       "rev": "704b99f10a72cc05d370cfeb294ff83412a8ab55",
       "src": "https://github.com/jake-stewart/multicursor.nvim",
-      "version": "'1.0'"
+      "version": "1.0.0 - 2.0.0"
     },
     "neo-tree.nvim": {
       "rev": "aa3500f7038a32ed4b0b765cd458b9c429062cac",
@@ -263,6 +263,10 @@
     "yazi.nvim": {
       "rev": "7d864fd3ccc3fc8fc88ad7765f5a7a1aca76c8ec",
       "src": "https://github.com/mikavilpas/yazi.nvim"
+    },
+    "zpack.nvim": {
+      "rev": "43e8d65bebd95107736f4162673cd451ee75e463",
+      "src": "https://github.com/zuqini/zpack.nvim"
     }
   }
 }

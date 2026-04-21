@@ -1,7 +1,8 @@
 return {
   {
-    url = "saghen/blink.cmp",
-    version = vim.version.range("^1"),
+    "saghen/blink.cmp",
+    dependencies = { "L3MON4D3/LuaSnip", "mikavilpas/blink-ripgrep.nvim" },
+    sem_version = "^1",
     config = function()
       require("blink.cmp").setup({
         keymap = {
@@ -14,16 +15,13 @@ return {
           ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
           ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
         },
-
         completion = {
           list = { selection = { preselect = false, auto_insert = false } },
           ghost_text = { enabled = false },
           documentation = {
             auto_show = true,
             auto_show_delay_ms = 200,
-            window = {
-              border = "none",
-            },
+            window = { border = "none" },
           },
           menu = {
             border = "none",
@@ -34,7 +32,6 @@ return {
               columns = {
                 { "kind_icon" },
                 { "label", "label_description", gap = 1 },
-                -- { "kind" },
               },
               components = {
                 kind_icon = {
@@ -76,24 +73,11 @@ return {
                     return ctx.kind_hl
                   end,
                 },
-                -- kind = {
-                --   text = function(ctx)
-                --     return " " .. ctx.kind .. " "
-                --   end,
-                --   highlight = function(ctx)
-                --     return "BlinkCmpKind" .. (ctx.kind or "")
-                --   end,
-                -- },
               },
             },
           },
-          accept = {
-            auto_brackets = {
-              enabled = true,
-            },
-          },
+          accept = { auto_brackets = { enabled = true } },
         },
-
         sources = {
           default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
           providers = {
@@ -124,23 +108,15 @@ return {
             },
           },
         },
-
-        snippets = {
-          preset = "luasnip",
-        },
-
+        snippets = { preset = "luasnip" },
         fuzzy = {
           implementation = "prefer_rust",
           sorts = { "exact", "score", "sort_text" },
         },
-
         signature = {
           enabled = true,
-          window = {
-            border = "rounded",
-          },
+          window = { border = "rounded" },
         },
-
         cmdline = {
           keymap = {
             preset = "cmdline",
@@ -164,32 +140,19 @@ return {
       })
     end,
   },
-
-  -- Snippet engine
   {
-    url = "L3MON4D3/LuaSnip",
-    version = vim.version.range("^2"),
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    sem_version = "^2",
     config = function()
       require("luasnip").setup({
         history = true,
         delete_check_events = "TextChanged",
       })
-      -- Load VSCode-style snippets from local snippets/ directory
       require("luasnip.loaders.from_vscode").lazy_load({
         paths = { vim.fn.stdpath("config") .. "/snippets" },
       })
-      -- Load VSCode-style snippets from friendly-snippets
       require("luasnip.loaders.from_vscode").lazy_load()
     end,
-  },
-
-  -- Community snippet collection
-  {
-    url = "rafamadriz/friendly-snippets",
-  },
-
-  -- Ripgrep source for blink.cmp (configured as source inside blink setup)
-  {
-    url = "mikavilpas/blink-ripgrep.nvim",
   },
 }

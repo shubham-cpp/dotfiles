@@ -8,10 +8,6 @@ if ! pgrep -x "swaync" >/dev/null; then
   setsid -f gnome-keyring-daemon
 fi
 
-# clipboard content manager
-wl-paste --type text --watch cliphist store >/dev/null 2>&1 &
-wl-paste --type image --watch cliphist store >/dev/null 2>&1 &
-
 if ! pgrep -x "waybar"; then
   setsid -f sh -c 'echo ~/.config/mango/config.jsonc | entr -n waybar -c ~/.config/mango/config.jsonc' >/tmp/waybar-watch.log
 fi
@@ -44,5 +40,10 @@ if ! pgrep -x "awww-daemon"; then
   awww img ~/.config/wall.png &
 fi
 
+gpu-diag watch &
 sleep 2s
 setsid -f ~/.local/bin/sway-audio-idle-inhibit
+
+# clipboard content manager
+wl-paste --type text --watch cliphist store &
+wl-paste --type image --watch cliphist store &
