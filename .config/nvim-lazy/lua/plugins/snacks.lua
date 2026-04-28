@@ -304,8 +304,8 @@ return {
       --   end,
       --   desc = "Grep Open Buffers",
       -- },
-      { "<leader>fs", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
-      { "<leader>fS", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
+      { "<leader>fS", LazyVim.pick("live_grep"), desc = "Grep (Root Dir)" },
+      { "<leader>fs", LazyVim.pick("live_grep", { root = false }), desc = "Grep (cwd)" },
       {
         "<leader>fL",
         function()

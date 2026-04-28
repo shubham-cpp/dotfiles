@@ -47,6 +47,7 @@ return {
       rg_glob_fn = rg_glob_fn,
       actions = action_keys,
     }
+    opts[1] = { "border-fused", "hide" }
   end,
   dependencies = {
     {
