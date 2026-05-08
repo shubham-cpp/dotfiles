@@ -313,10 +313,10 @@ return {
         end,
         desc = "Search for Plugin Spec",
       },
-      { "<leader>fw", LazyVim.pick("grep_word"), desc = "Visual selection or word (Root Dir)", mode = { "n", "x" } },
+      { "<leader>fw", LazyVim.pick("grep_cword"), desc = "Visual selection or word (Root Dir)", mode = { "n", "x" } },
       {
         "<leader>fW",
-        LazyVim.pick("grep_word", { root = false }),
+        LazyVim.pick("grep_cword", { root = false }),
         desc = "Visual selection or word (cwd)",
         mode = { "n", "x" },
       },

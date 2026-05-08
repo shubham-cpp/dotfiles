@@ -21,8 +21,11 @@ fi
 alias rr="command rm -rf"
 if command -v trash >/dev/null; then
   alias rm="trash"
-  alias rmd="trash -rf"
   alias tls="trash-list"
+elif command -v gio >/dev/null; then
+  alias rm="gio trash"
+  alias rmr="gio trash --restore"
+  alias tls="gio trash --list"
 fi
 
 alias cls="clear"
@@ -58,9 +61,9 @@ if command -v xbps-install >/dev/null; then
   alias xs="xbps-query -R --regex -s"
 fi
 
-alias ..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
+# alias ..="cd .."
+# alias ...="cd ../.."
+# alias ....="cd ../../.."
 
 if command -v nvim >/dev/null; then
   alias v="nvim"
@@ -74,31 +77,31 @@ fi
 alias xcp="xclip -i -r -sel clip"
 alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
 
-alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
+# alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 
 # alias tmux="TERM=xterm-256color /usr/bin/tmux"
 # some helpful git aliases
-alias g='git'
+# alias g='git'
 
-alias ga='git add'
-alias gaa='git add --all'
+# alias ga='git add'
+# alias gaa='git add --all'
 
-alias gc='git commit -v'
-alias gca='git commit -v -a'
-alias gcm='git commit -m'
+# alias gc='git commit -v'
+# alias gca='git commit -v -a'
+# alias gcm='git commit -m'
 
-alias gd="git diff"
+# alias gd="git diff"
 
-alias gp='git push'
-alias gpu='git push -u origin main'
+# alias gp='git push'
+# alias gpu='git push -u origin main'
 
-alias gst='git status'
-alias gsb='git status -sb'
+# alias gst='git status'
+# alias gsb='git status -sb'
 
-alias gupav='git pull --rebase --autostash -v'
+# alias gupav='git pull --rebase --autostash -v'
 
-alias gcl='git clone'
-alias gch='git checkout'
+# alias gcl='git clone'
+# alias gch='git checkout'
 
 alias p="corepack pnpm"
 alias y='yazi'

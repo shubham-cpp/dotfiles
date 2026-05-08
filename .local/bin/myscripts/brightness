@@ -3,12 +3,27 @@
 amount=${2:-10}
 
 get_brightness() {
-  out=$(brightnessctl i | awk -F'[()]' '/Current brightness/ {print $2}')
-  echo "$out"
+  brightnessctl i | awk -F'[()%]' '
+    /Current brightness/ {
+      value = int($2 + 0.5)
+      if (value < 0) value = 0
+      if (value > 100) value = 100
+      print value
+    }
+  '
 }
 
 update_brightness() {
-  notify-send "Brightness: " -t 2000 -i display-brightness-symbolic -h int:value:"$(get_brightness)" -h string:x-canonical-private-synchronous:backlight -r 10011
+  value=$(get_brightness)
+  notify-send \
+    -a "System OSD" \
+    -c device \
+    -t 1800 \
+    -i display-brightness-symbolic \
+    -h int:value:"$value" \
+    -h string:x-canonical-private-synchronous:backlight \
+    -r 10011 \
+    "Brightness" "${value}%"
   pidof dwmblocks | xargs -r kill -36
   pgrep polybar && polybar-msg action mbrightness hook 0
 }
@@ -16,7 +31,7 @@ update_brightness() {
 case "$1" in
 inc)
   brightnessctl s "$amount"%+
-    update_brightness
+  update_brightness
   ;;
 dec)
   brightnessctl s "$amount"%-
@@ -27,7 +42,7 @@ get)
   ;;
 *)
   echo "Program requires argument inc,dec"
-  notify-send "Program requires argument inc,dec" -t 2000 -i display-brightness-symbolic -r 10011
+  notify-send -u critical -i dialog-error "Brightness" "Program requires argument inc, dec, or get"
   exit 1
   ;;
 esac

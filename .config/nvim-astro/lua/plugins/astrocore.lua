@@ -22,7 +22,7 @@ return {
     opts = {
       -- Configure core features of AstroNvim
       features = {
-        large_buf = { enabled = true, size = 1024 * 25, lines = 6000, line_length = 1000 }, -- set global limits for large files for disabling features like treesitter
+        large_buf = { enabled = true, size = 1024 * 256, lines = 6000, line_length = 1000 }, -- set global limits for large files for disabling features like treesitter
       },
       -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
       diagnostics = {

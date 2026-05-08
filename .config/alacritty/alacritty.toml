@@ -1,6 +1,9 @@
 [general]
 import = ["~/.config/alacritty/themes/default.toml"]
 
+[scrolling]
+history = 25000
+
 [colors]
 draw_bold_text_with_bright_colors = true
 
@@ -8,22 +11,22 @@ draw_bold_text_with_bright_colors = true
 unfocused_hollow = true
 
 [font]
-size = 11.5
+size = 13
 
 [font.normal]
-family = "JetBrainsMono Nerd Font"
+family = "RecMonoDuotone Nerd Font"
 style = "Regular"
 
 [font.bold]
-family = "JetBrainsMono Nerd Font"
+family = "RecMonoDuotone Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "JetBrainsMono Nerd Font"
+family = "RecMonoDuotone Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "JetBrainsMono Nerd Font"
+family = "RecMonoDuotone Nerd Font"
 style = "Italic"
 
 [hints]
@@ -390,7 +393,8 @@ mode = "Vi"
 mods = "Shift"
 
 [[keyboard.bindings]]
-chars = "\u001b\r"
+# chars = "\u001b\r"
+chars = "\u000A"
 key = "Return"
 mods = "Shift"
 

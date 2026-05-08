@@ -102,7 +102,11 @@ alias gupav="git pull --rebase --autostash -v"
 alias gcl="git clone"
 alias gclr="git clone --recurse-submodules"
 
-alias p="corepack pnpm"
+if command -q eza
+    alias p="corepack pnpm"
+else
+    alias p="pnpm"
+end
 alias y='yazi'
 
 alias sc="./vendor/bin/sail composer"

@@ -16,7 +16,7 @@ preview)
         --preview-window="top" \
         --layout=reverse \
         --preview "$(realpath "$0") preview {}" \
-        --bind 'ctrl-y:execute-silent(echo {} | cliphist decode | wl-copy)' \
+        --bind 'ctrl-y:execute-silent(echo {} | cliphist decode | wl-copy)+reload(cliphist list)' \
         --bind 'ctrl-x:execute-silent(echo {} | cliphist delete)+reload(cliphist list)' \
         --bind 'ctrl-delete:execute-silent(echo {} | cliphist delete)+reload(cliphist list)' \
         --header 'Ctrl-Y: copy & stay | Ctrl-X or Ctrl-Del to delete entry'

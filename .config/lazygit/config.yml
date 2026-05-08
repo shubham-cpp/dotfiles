@@ -7,14 +7,11 @@ gui:
   border: rounded
 git:
   merging:
-    # If true, run merges in a subprocess so that if a commit message is required, Lazygit will not hang
-    # Only applicable to unix users.
     manualCommit: true
-  paging:
-    colorArg: always
-    # useConfig: true
-    pager: delta --dark --paging=never
+  pagers:
+    - pager: delta --dark --paging=never --line-numbers --hyperlinks
+        --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+    - colorArg: always
 
 os:
-  # Command for editing a file. Should contain "{{filename}}".
   editPreset: nvim

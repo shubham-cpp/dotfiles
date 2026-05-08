@@ -3,42 +3,93 @@
 amount=${2:-5}
 
 get_vol() {
-  vol=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2}' | xargs -I{} echo '({} * 100)/1' | bc)
-  echo "$vol"
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '
+    {
+      value = int($2 * 100 + 0.5)
+      if (value < 0) value = 0
+      if (value > 100) value = 100
+      print value
+    }
+  '
+}
+
+is_muted() {
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q '\[MUTED\]'
+}
+
+volume_icon() {
+  vol=$(get_vol)
+  if is_muted || [ "$vol" -eq 0 ]; then
+    echo audio-volume-muted-symbolic
+  elif [ "$vol" -lt 35 ]; then
+    echo audio-volume-low-symbolic
+  elif [ "$vol" -lt 70 ]; then
+    echo audio-volume-medium-symbolic
+  else
+    echo audio-volume-high-symbolic
+  fi
+}
+
+notify_volume() {
+  vol=$(get_vol)
+  if is_muted; then
+    label="Muted"
+    value=0
+  else
+    label="${vol}%"
+    value=$vol
+  fi
+
+  notify-send \
+    -a "System OSD" \
+    -c device \
+    -t 1800 \
+    -i "$(volume_icon)" \
+    -h string:x-canonical-private-synchronous:volume \
+    -h int:value:"$value" \
+    -r 10001 \
+    "Volume" "$label"
+}
+
+change_volume() {
+  direction=$1
+
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount%$direction"
+  notify_volume
 }
 
 case "$1" in
 inc)
-  # pactl set-sink-volume @DEFAULT_SINK@ +"$amount"%
-  wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
-  wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%+
-  # vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
-  notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h int:value:"$(get_vol)" -h string:x-canonical-private-synchronous:volume -r 10001
+  change_volume +
   ;;
 dec)
-  # pactl set-sink-volume @DEFAULT_SINK@ -"$amount"%
-  wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
-  wpctl set-volume @DEFAULT_AUDIO_SINK@ "$amount"%-
-  # vol=$(pactl get-sink-volume @DEFAULT_SINK@ | awk -F ' / ' '{print $2}' | tr -cd '[:digit:][=%=]')
-  notify-send "Volume" -t 2000 -i audio-volume-high-symbolic -h string:x-canonical-private-synchronous:volume -h int:value:"$(get_vol)" -r 10001
+  change_volume -
   ;;
 toggle)
-  # pactl set-sink-mute @DEFAULT_SINK@ toggle
-  # wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
   wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+  notify_volume
   pidof goblocks | xargs -r kill -40
   ;;
 toggle-mic)
   wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+  notify-send \
+    -a "System OSD" \
+    -c device \
+    -t 1800 \
+    -i microphone-sensitivity-high-symbolic \
+    -h string:x-canonical-private-synchronous:microphone \
+    -r 10002 \
+    "Microphone" "Toggled"
   pidof dwmblocks | xargs -r kill -38
   ;;
 *)
   echo "Program requires argument inc, dec, toggle, toggle-mic"
-  notify-send "Program requires argument inc,dec,toggle, toggle-mic" -t 2000 -i audio-volume-high-symbolic -r 10001
+  notify-send -u critical -i dialog-error "Audio" "Program requires argument inc, dec, toggle, or toggle-mic"
   exit 1
   ;;
 esac
 
-pgrep polybar && polybar-msg action mvol hook 0
+pgrep -x polybar >/dev/null && polybar-msg action mvol hook 0
 # pgrep dwmblocks && kill -37 "$(pidof dwmblocks)"
 pidof dwmblocks | xargs -r kill -37

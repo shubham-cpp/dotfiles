@@ -135,7 +135,7 @@ return {
       mappings = {
         n = {
           ["<Leader>le"] = {
-            function() vim.cmd "EslintFixAll" end,
+            function() vim.cmd "LspEslintFixAll" end,
             desc = "Eslint Fix",
             cond = function(client) return client.name == "eslint" end,
           },
@@ -197,8 +197,10 @@ return {
     "mason-org/mason-lspconfig.nvim",
     optional = true,
     opts = function(_, opts)
-      opts.ensure_installed =
-        require("astrocore").list_insert_unique(opts.ensure_installed, { "emmet_language_server" })
+      opts.ensure_installed = require("astrocore").list_insert_unique(
+        opts.ensure_installed,
+        { "emmet_language_server", "cssmodules_ls", "css_variables" }
+      )
       if type(opts.ensure_installed) == "table" then
         opts.ensure_installed = vim.tbl_filter(function(s) return s ~= "emmet_ls" end, opts.ensure_installed)
       end
@@ -209,8 +211,10 @@ return {
     optional = true,
     opts = function(_, opts)
       if type(opts.ensure_installed) == "table" then
-        opts.ensure_installed =
-          require("astrocore").list_insert_unique(opts.ensure_installed, { "emmet-language-server" })
+        opts.ensure_installed = require("astrocore").list_insert_unique(
+          opts.ensure_installed,
+          { "emmet-language-server", "prettierd", "css-variables-language-server", "cssmodules-language-server" }
+        )
         opts.ensure_installed = vim.tbl_filter(function(s) return s ~= "emmet-ls" end, opts.ensure_installed)
       end
     end,

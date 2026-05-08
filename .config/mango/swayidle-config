@@ -1,0 +1,5 @@
+timeout 420 'brightnessctl -s set 1%; pidof hyprlock >/dev/null || { hyprlock --grace 0 --immediate-render --no-fade-in & }; sleep 1' resume 'mmsg -d enable_monitor,eDP-1; brightnessctl -r'
+timeout 480 'mmsg -d disable_monitor,eDP-1' resume 'mmsg -d enable_monitor,eDP-1'
+timeout 720 'mmsg -d enable_monitor,eDP-1; pidof hyprlock >/dev/null || { hyprlock --grace 0 --immediate-render --no-fade-in & }; sleep 2; systemctl suspend'
+before-sleep 'mmsg -d enable_monitor,eDP-1; pidof hyprlock >/dev/null || { hyprlock --grace 0 --immediate-render --no-fade-in & }; sleep 2'
+after-resume 'mmsg -d enable_monitor,eDP-1; brightnessctl -r'
