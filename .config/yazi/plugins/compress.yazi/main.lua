@@ -1,228 +1,291 @@
--- Send error notification
-local function notify_error(message, urgency)
+--- @since 25.12.29
+
+local is_windows = ya.target_family() == "windows"
+
+local function notify(message, level)
 	ya.notify({
 		title = "Archive",
 		content = message,
-		level = urgency,
+		level = level,
 		timeout = 5,
 	})
 end
 
--- Check for windows
-local is_windows = ya.target_family() == "windows"
+local function extension_pattern(ext)
+	return "%." .. ext:gsub("%.", "%%.") .. "$"
+end
 
--- Make table of selected or hovered: path = filenames
-local selected_or_hovered = ya.sync(function()
-	local tab, paths, names, path_fnames = cx.active, {}, {}, {}
-	for _, u in pairs(tab.selected) do
-		paths[#paths + 1] = tostring(u:parent())
-		names[#names + 1] = tostring(u:name())
+local function is_valid_filename(name)
+	name = name:match("^%s*(.-)%s*$")
+	if name == "" then
+		return false
 	end
-	if #paths == 0 and tab.current.hovered then
-		paths[1] = tostring(tab.current.hovered.url:parent())
-		names[1] = tostring(tab.current.hovered.name)
-	end
-	for idx, name in ipairs(names) do
-		if not path_fnames[paths[idx]] then
-			path_fnames[paths[idx]] = {}
-		end
-		table.insert(path_fnames[paths[idx]], name)
-	end
-	return path_fnames, tostring(tab.current.cwd)
-end)
 
--- Check if archive command is available
+	if is_windows then
+		return not name:find('[<>:"/\\|%?%*]')
+	end
+
+	return not name:find("/") and not name:find("%z")
+end
+
 local function is_command_available(cmd)
 	local stat_cmd
-
 	if is_windows then
 		stat_cmd = string.format("where %s > nul 2>&1", cmd)
 	else
 		stat_cmd = string.format("command -v %s >/dev/null 2>&1", cmd)
 	end
 
-	local cmd_exists = os.execute(stat_cmd)
-	if cmd_exists then
-		return true
-	else
-		return false
-	end
+	return os.execute(stat_cmd)
 end
 
--- Archive command list --> string
-local function find_binary(cmd_list)
-	for _, cmd in ipairs(cmd_list) do
+local function find_command_name(cmds)
+	if type(cmds) == "string" then
+		return is_command_available(cmds) and cmds or nil
+	end
+
+	for _, cmd in ipairs(cmds) do
 		if is_command_available(cmd) then
 			return cmd
 		end
 	end
-	return cmd_list[1] -- Return first command as fallback
 end
 
--- Check if file exists
-local function file_exists(name)
-	local f = io.open(name, "r")
-	if f ~= nil then
-		io.close(f)
-		return true
-	else
-		return false
+local function combine_url(path, file)
+	return tostring(Url(path):join(Url(file)))
+end
+
+local function copy_table(items)
+	local out = {}
+	for i, item in ipairs(items or {}) do
+		out[i] = item
+	end
+	return out
+end
+
+local selected_or_hovered = ya.sync(function()
+	local tab = cx.active
+	local names, path_fnames = {}, {}
+
+	for _, u in pairs(tab.selected) do
+		local parent = tostring(u.parent)
+		local name = tostring(u.name)
+		path_fnames[parent] = path_fnames[parent] or {}
+		path_fnames[parent][#path_fnames[parent] + 1] = name
+		names[#names + 1] = name
+	end
+
+	if #names == 0 and tab.current.hovered then
+		local hovered = tab.current.hovered
+		local parent = tostring(hovered.url.parent)
+		path_fnames[parent] = { tostring(hovered.name) }
+		names[1] = tostring(hovered.name)
+	end
+
+	return path_fnames, names, tostring(tab.current.cwd)
+end)
+
+local function cleanup_temp_dir(temp_dir)
+	local ok, err = fs.remove("dir_all", Url(temp_dir))
+	if not ok then
+		notify(string.format("Failed to clean up %s: %s", ya.quote(temp_dir), tostring(err)), "warn")
 	end
 end
 
--- Append filename to it's parent directory
-local function combine_url(path, file)
-	path, file = Url(path), Url(file)
-	return tostring(path:join(file))
+local archive_commands = {
+	{
+		pattern = "%.zip$",
+		variants = {
+			{ command = "zip", args = { "-r" } },
+			{ command = { "7z", "7zz", "7za" }, args = { "a", "-tzip" } },
+		},
+	},
+	{
+		pattern = "%.rar$",
+		variants = {
+			{ command = "rar", args = { "a" } },
+		},
+	},
+	{
+		pattern = "%.7z$",
+		variants = {
+			{ command = { "7z", "7zz", "7za" }, args = { "a" } },
+		},
+	},
+	{
+		pattern = "%.tar%.gz$",
+		tar_name = function(name)
+			return name:match("^(.*)%.gz$")
+		end,
+		variants = {
+			{ command = { "tar", "bsdtar" }, args = { "rpf" }, compress = "gzip" },
+		},
+	},
+	{
+		pattern = "%.tar%.xz$",
+		tar_name = function(name)
+			return name:match("^(.*)%.xz$")
+		end,
+		variants = {
+			{ command = { "tar", "bsdtar" }, args = { "rpf" }, compress = "xz" },
+		},
+	},
+	{
+		pattern = "%.tar%.bz2$",
+		tar_name = function(name)
+			return name:match("^(.*)%.bz2$")
+		end,
+		variants = {
+			{ command = { "tar", "bsdtar" }, args = { "rpf" }, compress = "bzip2" },
+		},
+	},
+	{
+		pattern = "%.tar%.zst$",
+		tar_name = function(name)
+			return name:match("^(.*)%.zst$")
+		end,
+		variants = {
+			{ command = { "tar", "bsdtar" }, args = { "rpf" }, compress = "zstd", compress_args = { "--rm" } },
+		},
+	},
+	{
+		pattern = "%.tar$",
+		variants = {
+			{ command = { "tar", "bsdtar" }, args = { "rpf" } },
+		},
+	},
+}
+
+local function find_archive_command(output_name)
+	for _, archive in ipairs(archive_commands) do
+		if output_name:match(archive.pattern) then
+			for _, variant in ipairs(archive.variants) do
+				local cmd = find_command_name(variant.command)
+				if cmd and (not variant.compress or is_command_available(variant.compress)) then
+					return {
+						cmd = cmd,
+						args = copy_table(variant.args),
+						compress = variant.compress,
+						compress_args = copy_table(variant.compress_args),
+						tar_name = archive.tar_name,
+					}
+				end
+			end
+			return nil
+		end
+	end
+
+	return false
+end
+
+local function default_extension_from_job(job)
+	local default = "zip"
+	for _, arg in ipairs(job.args or {}) do
+		if arg:match("^[%w%.]+$") then
+			local pattern = extension_pattern(arg)
+			for _, archive in ipairs(archive_commands) do
+				if archive.pattern == pattern then
+					default = arg
+					break
+				end
+			end
+		end
+	end
+	return default
 end
 
 return {
-	entry = function()
-		-- Exit visual mode
-		ya.manager_emit("escape", { visual = true })
+	entry = function(_, job)
+		ya.emit("escape", { visual = true })
 
-		-- Define file table and output_dir (pwd)
-		local path_fnames, output_dir = selected_or_hovered()
+		local path_fnames, names, output_dir = selected_or_hovered()
+		if #names == 0 then
+			notify("No files selected or hovered", "warn")
+			return
+		end
 
-		-- Get input
+		local default_extension = default_extension_from_job(job)
+		local default_name = #names == 1 and names[1] or Url(output_dir).name
 		local output_name, event = ya.input({
 			title = "Create archive:",
-			position = { "top-center", y = 3, w = 40 },
+			value = string.format("%s.%s", default_name, default_extension),
+			pos = { "top-center", y = 3, w = 40 },
 		})
 		if event ~= 1 then
 			return
 		end
 
-		-- Use appropriate archive command
-		local archive_commands = {
-			["%.zip$"] = { command = "zip", args = { "-r" } },
-			["%.7z$"] = { command = { "7z", "7zz" }, args = { "a" } },
-			["%.tar.gz$"] = { command = "tar", args = { "rpf" }, compress = "gzip" },
-			["%.tar.xz$"] = { command = "tar", args = { "rpf" }, compress = "xz" },
-			["%.tar.bz2$"] = { command = "tar", args = { "rpf" }, compress = "bzip2" },
-			["%.tar.zst$"] = { command = "tar", args = { "rpf" }, compress = "zstd", compress_args = { "--rm" } },
-			["%.tar$"] = { command = "tar", args = { "rpf" } },
-		}
-
-		if is_windows then
-			archive_commands = {
-				["%.zip$"] = { command = "7z", args = { "a", "-tzip" } },
-				["%.7z$"] = { command = "7z", args = { "a" } },
-				["%.tar.gz$"] = {
-					command = "tar",
-					args = { "rpf" },
-					compress = "7z",
-					compress_args = { "a", "-tgzip", "-sdel", output_name },
-				},
-				["%.tar.xz$"] = {
-					command = "tar",
-					args = { "rpf" },
-					compress = "7z",
-					compress_args = { "a", "-txz", "-sdel", output_name },
-				},
-				["%.tar.bz2$"] = {
-					command = "tar",
-					args = { "rpf" },
-					compress = "7z",
-					compress_args = { "a", "-tbzip2", "-sdel", output_name },
-				},
-				["%.tar.zst$"] = { command = "tar", args = { "rpf" }, compress = "zstd", compress_args = { "--rm" } },
-				["%.tar$"] = { command = "tar", args = { "rpf" } },
-			}
+		output_name = output_name:match("^%s*(.-)%s*$")
+		if output_name == "" then
+			output_name = string.format("%s.%s", default_name, default_extension)
+		elseif not output_name:match("%.%w+$") then
+			output_name = string.format("%s.%s", output_name, default_extension)
 		end
 
-		-- Match user input to archive command
-		local archive_cmd, archive_args, archive_compress, archive_compress_args
-		for pattern, cmd_pair in pairs(archive_commands) do
-			if output_name:match(pattern) then
-				archive_cmd = cmd_pair.command
-				archive_args = cmd_pair.args
-				archive_compress = cmd_pair.compress
-				archive_compress_args = cmd_pair.compress_args or {}
-			end
-		end
-
-		-- Check if archive command has multiple names
-		if type(archive_cmd) == "table" then
-			archive_cmd = find_binary(archive_cmd)
-		end
-
-		-- Check if no archive command is available for the extention
-		if not archive_cmd then
-			notify_error("Unsupported file extention", "error")
+		if not is_valid_filename(output_name) then
+			notify("Invalid archive filename", "error")
 			return
 		end
 
-		-- Exit if archive command is not available
-		if not is_command_available(archive_cmd) then
-			notify_error(string.format("%s not available", archive_cmd), "error")
+		local archive = find_archive_command(output_name)
+		if archive == false then
+			notify("Unsupported file extension", "error")
+			return
+		elseif not archive then
+			notify("No archive program found for this extension", "error")
 			return
 		end
 
-		-- Exit if compress command is not available
-		if archive_compress and not is_command_available(archive_compress) then
-			notify_error(string.format("%s compression not available", archive_compress), "error")
+		local temp_dir = tostring(fs.unique_name(Url(combine_url(output_dir, ".tmp_compress"))))
+		local ok, err = fs.create("dir_all", Url(temp_dir))
+		if not ok then
+			notify(string.format("Failed to create temp directory: %s", tostring(err)), "error")
 			return
 		end
 
-		-- If file exists show overwrite prompt
-		local output_url = combine_url(output_dir, output_name)
-		while true do
-			if file_exists(output_url) then
-				local overwrite_answer = ya.input({
-					title = "Overwrite " .. output_name .. "? y/N:",
-					position = { "top-center", y = 3, w = 40 },
-				})
-				if overwrite_answer:lower() ~= "y" then
-					notify_error("Operation canceled", "warn")
-					return -- If no overwrite selected, exit
-				else
-					local rm_status, rm_err = os.remove(output_url)
-					if not rm_status then
-						notify_error(string.format("Failed to remove %s, exit code %s", output_name, rm_err), "error")
-						return
-					end -- If overwrite fails, exit
-				end
-			end
-			if archive_compress and not output_name:match("%.tar$") then
-				output_name = output_name:match("(.*%.tar)") -- Test for .tar and .tar.*
-				output_url = combine_url(output_dir, output_name) -- Update output_url
-			else
-				break
-			end
-		end
+		local original_name = output_name
+		local archive_name = archive.tar_name and archive.tar_name(output_name) or output_name
+		local temp_output = combine_url(temp_dir, archive_name)
 
-		-- Add to output archive in each path, their respective files
-		for path, names in pairs(path_fnames) do
-			local archive_status, archive_err =
-				Command(archive_cmd):args(archive_args):arg(output_url):args(names):cwd(path):spawn():wait()
-			if not archive_status or not archive_status.success then
-				notify_error(
-					string.format(
-						"%s with selected files failed, exit code %s",
-						archive_args,
-						archive_status and archive_status.code or archive_err
-					),
+		for path, filenames in pairs(path_fnames) do
+			local status, cmd_err = Command(archive.cmd):arg(archive.args):arg(temp_output):arg(filenames):cwd(path):spawn():wait()
+			if not status or not status.success then
+				notify(
+					string.format("Failed to create %s with %s: %s", ya.quote(archive_name), archive.cmd, tostring(cmd_err)),
 					"error"
 				)
+				cleanup_temp_dir(temp_dir)
+				return
 			end
 		end
 
-		-- Use compress command if needed
-		if archive_compress then
-			local compress_status, compress_err =
-				Command(archive_compress):args(archive_compress_args):arg(output_name):cwd(output_dir):spawn():wait()
-			if not compress_status or not compress_status.success then
-				notify_error(
-					string.format(
-						"%s with %s failed, exit code %s",
-						archive_compress,
-						output_name,
-						compress_status and compress_status.code or compress_err
-					),
+		if archive.compress then
+			local status, cmd_err = Command(archive.compress):arg(archive.compress_args):arg(temp_output):spawn():wait()
+			if not status or not status.success then
+				notify(
+					string.format("Failed to compress %s with %s: %s", ya.quote(archive_name), archive.compress, tostring(cmd_err)),
 					"error"
 				)
+				cleanup_temp_dir(temp_dir)
+				return
 			end
 		end
+
+		local final_output = tostring(fs.unique_name(Url(combine_url(output_dir, original_name))))
+		local temp_final = combine_url(temp_dir, original_name)
+		local moved, move_err = fs.rename(Url(temp_final), Url(final_output))
+		if not moved then
+			if move_err and move_err.kind == "CrossesDevices" then
+				moved, move_err = fs.copy(Url(temp_final), Url(final_output))
+			end
+			if not moved then
+				notify(string.format("Failed to move archive: %s", move_err and tostring(move_err.kind) or "unknown"), "error")
+				cleanup_temp_dir(temp_dir)
+				return
+			end
+		end
+
+		cleanup_temp_dir(temp_dir)
+		notify(string.format("Created archive: %s", ya.quote(Url(final_output).name)), "info")
 	end,
 }

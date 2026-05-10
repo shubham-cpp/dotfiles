@@ -90,6 +90,36 @@ button {
   margin-left: 0.5rem;
 }
 
+#custom-audio_idle_inhibitor {
+  background-color: #101010;
+  padding: 0.5rem 0.85rem;
+  margin: 5px 2px;
+  color: #626880;
+}
+
+#custom-audio_idle_inhibitor.output,
+#custom-audio_idle_inhibitor.input,
+#custom-audio_idle_inhibitor.output-input {
+  color: #e5c890;
+}
+
+#custom-audio_idle_inhibitor.output-input {
+  background-color: #1e1a12;
+}
+
+#custom-audio_idle_inhibitor.none {
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  min-height: 0;
+  border: none;
+}
+
+#custom-audio_idle_inhibitor:hover {
+  background: #1e1e1e;
+}
+
 #keyboard-state label.locked,
 #battery.charging {
   color: #a6d189;

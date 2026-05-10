@@ -48,16 +48,16 @@ xterm*trimSelection: true
 xterm*highlightTextColor: XtDefaultBackground
 
 ! Font settings
-xterm*faceName: JetBrainsMono Nerd Font
-xterm*faceSize: 11.5
+xterm*faceName: RecMonoDuotone Nerd Font
+xterm*faceSize: 13
 xterm*renderFont: true
 xterm*boldColors: true
 ! xterm*faceSize1: 9.5
-xterm*faceSize2: 12.5
-xterm*faceSize3: 15
-xterm*faceSize4: 18.25
-xterm*faceSize5: 20.5
-xterm*faceSize6: 25.5
+xterm*faceSize2: 15
+xterm*faceSize3: 18.25
+xterm*faceSize4: 20.5
+xterm*faceSize5: 25.5
+xterm*faceSize6: 28
 xterm*forceBoxChars: false
 xterm*limitFontsets: 5
 xterm*scaleHeight: 1.0
@@ -142,8 +142,8 @@ XTerm*fullscreen: never
 *.color15:      #a6b3cc
 
 ! st*font: FiraCode Nerd Font:size=11.5:antialias=true:autohint=true
-! st*font: RecMonoLinear Nerd Font:size=11.5:antialias=true:autohint=true
-st*font: CaskaydiaCove Nerd Font:size=12:antialias=true:autohint=true
+st*font: RecMonoDuotone Nerd Font:size=13:antialias=true:autohint=true
+! st*font: CaskaydiaCove Nerd Font:size=12:antialias=true:autohint=true
 
 URxvt*font: xft:JetBrains Mono:size=12,xft:FiraCode Nerd Font Mono:antialias=true:size=12
 URxvt.perl-ext-common: default,matcher,url-select,resize-font,tabbedex
