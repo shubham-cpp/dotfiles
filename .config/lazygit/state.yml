@@ -1,12 +1,12 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/Downloads/Packages/GitClones/waybar-module-music
     - /home/shubham/Documents/Programming/WebDev/sveltekit-trello-clone
     - /home/shubham/Documents/Programming/WebDev/ai-job-applier
     - /home/shubham/Documents/Personal-Vault/Travels/Trip-2026/trip-web-app
     - /home/shubham/Documents/Programming/WebDev/starter-templates
     - /home/shubham/Documents/Programming/WebDev/dexter-ai
-    - /home/shubham/.config/st-terminal
 startuppopupversion: 5
 didshowhunkstaginghint: true
 lastversion: 0.61.1

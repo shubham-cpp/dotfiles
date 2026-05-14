@@ -1,11 +1,13 @@
-# Path to your oh-my-zsh installation.
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+# Path to your Oh My Zsh installation.
 export ZSH="$ZDOTDIR/ohmyzsh"
 
 # Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
+# load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="powerlevel10k/powerlevel10k"
 ZSH_THEME=""
 
 # Set list of themes to pick from when loading at random
@@ -22,7 +24,7 @@ ZSH_THEME=""
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
-zstyle ':omz:update' mode disabled  # disable automatic updates
+zstyle ':omz:update' mode disabled # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
@@ -30,7 +32,7 @@ zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-DISABLE_MAGIC_FUNCTIONS="true"
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -39,13 +41,13 @@ DISABLE_MAGIC_FUNCTIONS="true"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # You can also set it to another string to have that shown instead of the default red dots.
 # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -60,58 +62,64 @@ ENABLE_CORRECTION="true"
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 export HISTIGNORE="&:[bf]g:c:clear:history:exit:q:pwd:* --help"
+HISTFILE=$HOME/.cache/zhistory
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
-
-# ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-plugins=(git bun vi-mode zoxide zsh-history-substring-search zsh-autosuggestions zsh-smartcache docker zsh-better-npm-completion fast-syntax-highlighting)
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
-fpath+=${XDG_DATA_HOME:-${HOME:-~/}/.local/share}/zsh/site-functions
-
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=7"
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#90A0B5"
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
+VI_MODE_SET_CURSOR=true
 
-HISTFILE=$HOME/.cache/zhistory
+# Which plugins would you like to load?
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(git docker bun vi-mode zsh-history-substring-search zsh-autosuggestions zsh-smartcache zsh-better-npm-completion fast-syntax-highlighting)
+fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+fpath+=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions
 
 zstyle ':completion:*:*:docker:*' option-stacking yes
 zstyle ':completion:*:*:docker-*:*' option-stacking yes
 
+autoload -U compinit && compinit
+
 source $ZSH/oh-my-zsh.sh
-# check if starship is available as executable in path
-if [ -x "$(which starship)" ]; then
-  smartcache eval starship init zsh
+
+source ~/Documents/dotfiles/.config/zsh/alias.zsh
+source $ZDOTDIR/keys.zsh
+alias mkd=take
+
+if (( $+commands[starship] )); then
+  smartcache eval starship init zsh --print-full-init
 fi
-[ -x $HOME/.local/bin/register-python-argcomplete ] && smartcache eval register-python-argcomplete pipx
-if [ -x "$(which fzf)" ]; then
+
+if command -v fzf >/dev/null 2>&1; then
   smartcache eval fzf --zsh
 fi
 
-smartcache eval $HOME/.local/bin/mise activate zsh
-if [ -x "$(which rustup)" ]; then
+if command -v zoxide >/dev/null 2>&1; then
+  smartcache eval zoxide init zsh
+fi
+
+if command -v mise >/dev/null 2>&1; then
+  smartcache eval mise activate zsh
+fi
+
+if command -v rustup >/dev/null 2>&1; then
   smartcache comp rustup completions zsh
 fi
-WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
-source ~/Documents/dotfiles/.config/zsh/alias.zsh
-source ~/Documents/dotfiles/.config/zsh/.zprofile
-# pkgfile "command not found" handler
-source /usr/share/doc/pkgfile/command-not-found.zsh
-source $ZDOTDIR/keys.zsh
+if command -v exa >/dev/null 2>&1; then
+  compdef exa=eza
+fi
 
-alias mkd=take
-compdef trash-put=rm
-[ -x /bin/exa ] && compdef exa=eza
-[ -x /bin/dnf5 ] && compdef dnf5=dnf
+if command -v dnf5 >/dev/null 2>&1; then
+  compdef dnf5=dnf
+fi
 
-bindkey -M viins '^[k' autosuggest-accept
-bindkey -M viins '^[[A' history-substring-search-up # or '\eOA'
-bindkey -M viins '^[[B' history-substring-search-down # or '\eOB'
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
-# eval "$(fnm env --use-on-cd)"
-
-if [ -x "$(which yazi)" ]; then
+if command -v yazi >/dev/null 2>&1; then
   function yy() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"
@@ -123,3 +131,6 @@ if [ -x "$(which yazi)" ]; then
 fi
 
 compdef _git gitc
+
+# Compilation flags
+# export ARCHFLAGS="-arch $(uname -m)"

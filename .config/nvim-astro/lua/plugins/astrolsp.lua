@@ -25,6 +25,14 @@ return {
       config = {
         clangd = { capabilities = { offsetEncoding = "utf-8" } },
         emmet_language_server = { filetypes = { "templ" } },
+        taplo = {
+          settings = {
+            evenBetterToml = {
+              schema = { enabled = true },
+              formatter = { alignEntries = true, columnWidth = 80, trailingNewline = true },
+            },
+          },
+        },
         vtsls = {
           settings = {
             complete_function_calls = true,

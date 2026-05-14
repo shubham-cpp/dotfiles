@@ -10,6 +10,7 @@ unset -f _set_my_PS1
 
 complete -cf doas
 
+export HISTFILE="$XDG_STATE_HOME"/bash/history
 export EDITOR=nvim
 export VISUAL=nvim
 
@@ -30,7 +31,8 @@ shopt -s globstar extglob dotglob
 
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-[ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+# [ -f /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+[ -f /etc/bash_completion ] && . /etc/bash_completion
 
 [[ "$(whoami)" = "root" ]] && return
 

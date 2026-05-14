@@ -1,9 +1,9 @@
-alias df="/bin/df -h"
-alias du="/bin/du -h"
-alias free="/bin/free -h"
+alias df="command df -h"
+alias du="command du -h"
+alias free="command free -h"
 
-# alias curl="/bin/curl -O -L -C -"
-alias grep="/bin/grep -Ei --color=auto"
+# alias curl="command curl -O -L -C -"
+alias grep="command grep -Ei --color=auto"
 
 # Changing "ls" to "exa"
 if command -q eza
@@ -20,11 +20,13 @@ else
     alias lt="ls --recursive"
 end
 
-alias rr="/bin/rm -rf"
+alias rr="command rm -rf"
 if command -q trash
     alias rm="trash"
-    alias rmd="trash-put -rf"
     alias tls="trash-list"
+else
+    alias rm="gio trash"
+    alias tls="gio trash --list"
 end
 alias cls="clear"
 alias xcp="xclip -i -r -sel clip"
@@ -102,7 +104,7 @@ alias gupav="git pull --rebase --autostash -v"
 alias gcl="git clone"
 alias gclr="git clone --recurse-submodules"
 
-if command -q eza
+if command -q corepack
     alias p="corepack pnpm"
 else
     alias p="pnpm"
