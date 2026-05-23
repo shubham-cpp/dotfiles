@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. "$HOME/.profile"
+[ -f "$HOME/.profile" ] && . "$HOME/.profile"
 
 export XCURSOR_THEME="${XCURSOR_THEME:-Breeze_Light}"
 export XCURSOR_SIZE="${XCURSOR_SIZE:-24}"
@@ -8,7 +8,7 @@ export XCURSOR_SIZE="${XCURSOR_SIZE:-24}"
 systemctl --user import-environment XCURSOR_THEME XCURSOR_SIZE
 dbus-update-activation-environment --systemd XCURSOR_THEME XCURSOR_SIZE
 
-xrdb -override ~/.config/X11/Xresources
+[ -f "$HOME/.config/X11/Xresources" ] && xrdb -override ~/.config/X11/Xresources
 
 if ! pgrep -x "mako" >/dev/null; then
   # swaync >/dev/null 2>&1 &
@@ -26,6 +26,10 @@ if ! pgrep -x "swayidle"; then
   swayidle -w -C ~/.config/mango/swayidle-config >/tmp/swayidle-watch.log 2>&1 &
   setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg -d reload_config' >/tmp/mango-config-watch.log
 fi
+
+# if ! pgrep -x "stasis" >/dev/null; then
+#   stasis --timestamps >/tmp/stasis.log 2>&1 &
+# fi
 
 if ! pgrep -x "wlsunset"; then
   wlsunset -l 18.5204 -L 73.8567 -t 3500 >/dev/null 2>&1 &
@@ -48,10 +52,10 @@ if ! pgrep -x "awww-daemon"; then
   awww img ~/.config/wall.png &
   # swaybg --image ~/.config/wall.png --mode stretch &
 fi
-
-gpu-diag watch &
+command -v gpu-diag >/dev/null 2>&1 && gpu-diag watch &
 sleep 2s
-setsid -f ~/.local/bin/sway-audio-idle-inhibit
+
+[ -x "$HOME/.local/bin/sway-audio-idle-inhibit" ] && setsid -f ~/.local/bin/sway-audio-idle-inhibit
 
 sleep 0.2
 # clipboard content manager

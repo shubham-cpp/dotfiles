@@ -1,10 +1,10 @@
 configuration {
     modi:                "drun,run,filebrowser,window";
     show-icons:          true;
-    display-drun:        "";
-    display-run:         "";
-    display-filebrowser: "";
-    display-window:      "";
+    display-drun:        "Apps";
+    display-run:         "Run";
+    display-filebrowser: "Files";
+    display-window:      "Windows";
     display-clipboard:   "󰆏";
     drun-display-format: "{name}";
     window-format:       "{w} · {c} · {t}";
@@ -18,20 +18,24 @@ configuration {
 }
 
 * {
-    font:              "JetBrainsMono Nerd Font 12";
+    font:              "Fira Sans 12";
 
-    bg0:               rgba(26, 27, 38, 0.92);
-    bg1:               rgba(255, 255, 255, 0.06);
-    bg2:               rgba(255, 255, 255, 0.12);
+    /* Raycast Obsidian: macOS command-palette glass translated to rofi. */
+    bg0:               rgba(8, 8, 10, 0.94);
+    bg1:               rgba(255, 255, 255, 0.07);
+    bg2:               rgba(255, 255, 255, 0.11);
+    bg3:               rgba(255, 255, 255, 0.045);
+    glow:              rgba(255, 99, 99, 0.18);
 
-    fg0:               #cdd6f4;
-    fg1:               #ffffff;
-    fg2:               rgba(255, 255, 255, 0.3);
+    fg0:               rgba(246, 246, 247, 0.78);
+    fg1:               rgba(255, 255, 255, 0.96);
+    fg2:               rgba(246, 246, 247, 0.42);
 
-    accent:            #89b4fa;
-    urgent:            #f38ba8;
-    active:            #a6e3a1;
-    border-col:        rgba(255, 255, 255, 0.12);
+    accent:            #ff6363;
+    accent-soft:       rgba(255, 99, 99, 0.14);
+    urgent:            #ff5d5d;
+    active:            #63f2b6;
+    border-col:        rgba(255, 255, 255, 0.16);
 
     background-color:  transparent;
     text-color:        @fg0;
@@ -44,12 +48,13 @@ configuration {
 window {
     transparency:      "real";
     background-color:  @bg0;
+    background-image:  linear-gradient(to bottom, rgba(35, 35, 42, 0.96), rgba(7, 7, 10, 0.94));
     location:          center;
     anchor:            center;
-    width:             750px;
+    width:             760px;
     border:            1px solid;
     border-color:      @border-col;
-    border-radius:     12px;
+    border-radius:     20px;
     cursor:            "default";
 }
 
@@ -63,9 +68,9 @@ mainbox {
 
 /*****----- Inputbar -----*****/
 inputbar {
-    padding:           14px 18px;
+    padding:           18px 20px 16px 20px;
     spacing:           12px;
-    background-color:  transparent;
+    background-color:  rgba(255, 255, 255, 0.025);
     border:            0 0 1px 0;
     border-color:      @bg1;
     text-color:        @fg1;
@@ -74,20 +79,20 @@ inputbar {
 
 textbox-prompt-colon {
     expand:            false;
-    str:               "";
-    font:              "JetBrainsMono Nerd Font 18";
+    str:               " ";
+    font:              "JetBrainsMono Nerd Font 14";
     text-color:        @fg2;
-    padding:           4px 0;
+    padding:           0px 0 0 0;
     vertical-align:    0.5;
     background-color:  transparent;
 }
 
 entry {
-    font:              "JetBrainsMono Nerd Font 16";
-    placeholder:       "Search...";
+    font:              "Fira Sans SemiBold 17";
+    placeholder:       "Search for apps and commands...";
     placeholder-color: @fg2;
     text-color:        @fg1;
-    padding:           4px 0;
+    padding:           1px 0;
     background-color:  transparent;
     cursor:            text;
     vertical-align:    0.5;
@@ -102,8 +107,8 @@ listview {
     scrollbar:         false;
     layout:            vertical;
     fixed-height:      true;
-    spacing:           4px;
-    padding:           8px;
+    spacing:           5px;
+    padding:           10px 12px 12px 12px;
     background-color:  transparent;
     cursor:            "default";
 }
@@ -111,8 +116,10 @@ listview {
 /*****----- Elements -----*****/
 element {
     spacing:           12px;
-    padding:           10px 14px;
-    border-radius:     8px;
+    padding:           10px 12px;
+    border:            1px solid;
+    border-radius:     12px;
+    border-color:      transparent;
     background-color:  transparent;
     text-color:        @fg0;
     cursor:            pointer;
@@ -120,46 +127,56 @@ element {
 
 element normal.normal {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @fg0;
 }
 
 element normal.urgent {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @urgent;
 }
 
 element normal.active {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @active;
 }
 
 element selected.normal {
     background-color:  @bg2;
+    background-image:  linear-gradient(to right, rgba(255, 99, 99, 0.16), rgba(255, 255, 255, 0.08));
+    border-color:      rgba(255, 255, 255, 0.12);
     text-color:        @fg1;
 }
 
 element selected.urgent {
-    background-color:  @urgent;
-    text-color:        @bg0;
+    background-color:  rgba(255, 93, 93, 0.18);
+    border-color:      rgba(255, 93, 93, 0.28);
+    text-color:        @fg1;
 }
 
 element selected.active {
-    background-color:  @active;
-    text-color:        @bg0;
+    background-color:  rgba(99, 242, 182, 0.15);
+    border-color:      rgba(99, 242, 182, 0.24);
+    text-color:        @fg1;
 }
 
 element alternate.normal {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @fg0;
 }
 
 element alternate.urgent {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @urgent;
 }
 
 element alternate.active {
     background-color:  transparent;
+    border-color:      transparent;
     text-color:        @active;
 }
 
@@ -172,12 +189,12 @@ element-icon {
 }
 
 element-text {
-    font:              "JetBrainsMono Nerd Font 13";
+    font:              "Fira Sans Medium 13";
     background-color:  transparent;
     text-color:        inherit;
     vertical-align:    0.5;
     horizontal-align:  0.0;
-    highlight:         bold underline;
+    highlight:         bold #ffffff;
     cursor:            inherit;
 }
 
@@ -188,11 +205,11 @@ message {
     border-color:      @bg1;
     background-color:  transparent;
     text-color:        @fg2;
-    font:              "JetBrainsMono Nerd Font 10";
+    font:              "Fira Sans 11";
 }
 
 textbox {
-    padding:           10px 18px;
+    padding:           10px 20px;
     background-color:  transparent;
     vertical-align:    0.5;
     horizontal-align:  0.0;
@@ -203,31 +220,34 @@ textbox {
 error-message {
     padding:           14px;
     border:            1px solid;
-    border-radius:     10px;
-    border-color:      @urgent;
+    border-radius:     12px;
+    border-color:      rgba(255, 93, 93, 0.32);
     background-color:  @bg0;
     text-color:        @urgent;
 }
 
-/*****----- Mode Switcher -----*****/
+/*****----- Mode Switcher / Raycast-style footer -----*****/
 mode-switcher {
     spacing:           8px;
-    padding:           10px 14px;
-    background-color:  transparent;
+    padding:           9px 12px;
+    background-color:  @bg3;
     border:            1px 0 0 0;
     border-color:      @bg1;
 }
 
 button {
-    padding:           6px 14px;
+    padding:           5px 11px;
+    border:            1px solid;
     border-radius:     8px;
-    background-color:  @bg1;
-    text-color:        @fg0;
+    border-color:      rgba(255, 255, 255, 0.06);
+    background-color:  rgba(255, 255, 255, 0.045);
+    text-color:        @fg2;
     cursor:            pointer;
-    font:              "JetBrainsMono Nerd Font 11";
+    font:              "Fira Sans Medium 11";
 }
 
 button selected {
-    background-color:  @accent;
-    text-color:        #1a1b26;
+    background-color:  @accent-soft;
+    border-color:      rgba(255, 99, 99, 0.26);
+    text-color:        @fg1;
 }

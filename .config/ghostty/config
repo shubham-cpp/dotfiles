@@ -34,4 +34,4 @@ keybind = ctrl+shift+page_down=move_tab:-1
 
 keybind = ctrl+shift+z=toggle_split_zoom
 # keybind = shift+enter=text:\x1b\r
-keybind = shift+enter=text:\x0a
+# keybind = shift+enter=text:\x0a

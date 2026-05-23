@@ -20,7 +20,9 @@ end
 if command -q mise
     mise activate fish | source
 end
-#fnm env --use-on-cd | source
+if command -q tirith
+    tirith init --shell fish | source
+end
 
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow -g '!{node_modules/,.venv/,venv,.git/,.github,dist,android/,ios/,build/,vendor/}'"
 set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"

@@ -144,7 +144,7 @@ return {
           end
 
           if client.name == "eslint" then
-            bufmap("n", "<leader>le", "<cmd>EslintFixAll<cr>", "Eslint Fix All")
+            bufmap("n", "<leader>le", "<cmd>LspEslintFixAll<cr>", "Eslint Fix All")
           end
 
           if client:supports_method("textDocument/foldingRange") then

@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TMUX_BIN=${TMUX_BIN:-tmux}
+XURLS_BIN=${XURLS_BIN:-xurls}
+
+notify() {
+  if [[ -n "${TMUX:-}" ]] && command -v "$TMUX_BIN" >/dev/null 2>&1; then
+    "$TMUX_BIN" display-message "$*" 2>/dev/null || true
+  else
+    printf '%s\n' "$*" >&2
+  fi
+}
+
+require() {
+  if ! command -v "$1" >/dev/null 2>&1; then
+    notify "tmux-url-fzf: missing command: $1"
+    exit 127
+  fi
+}
+
+clipboard_cmd() {
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v pbcopy >/dev/null 2>&1; then
+    printf '%s' 'pbcopy'
+  elif command -v wl-copy >/dev/null 2>&1 && { [[ -n "${WAYLAND_DISPLAY:-}" ]] || [[ "${XDG_SESSION_TYPE:-}" == "wayland" ]]; }; then
+    printf '%s' 'wl-copy'
+  elif command -v xclip >/dev/null 2>&1; then
+    printf '%s' 'xclip -selection clipboard'
+  elif command -v xsel >/dev/null 2>&1; then
+    printf '%s' 'xsel --clipboard --input'
+  else
+    return 1
+  fi
+}
+
+open_cmd() {
+  if [[ "$(uname -s)" == "Darwin" ]] && command -v open >/dev/null 2>&1; then
+    printf '%s' 'open'
+  elif command -v xdg-open >/dev/null 2>&1; then
+    printf '%s' 'xdg-open'
+  elif command -v gio >/dev/null 2>&1; then
+    printf '%s' 'gio open'
+  else
+    return 1
+  fi
+}
+
+require "$TMUX_BIN"
+require "$XURLS_BIN"
+
+if ! command -v fzf >/dev/null 2>&1 && ! command -v fzf-tmux >/dev/null 2>&1; then
+  notify 'tmux-url-fzf: missing command: fzf or fzf-tmux'
+  exit 127
+fi
+
+clip=$(clipboard_cmd || true)
+opener=$(open_cmd || true)
+
+if [[ -z "$clip" ]]; then
+  notify 'tmux-url-fzf: no clipboard command found: install pbcopy, wl-copy, xclip, or xsel'
+  exit 127
+fi
+
+if [[ -z "$opener" ]]; then
+  notify 'tmux-url-fzf: no opener found: install open, xdg-open, or gio'
+  exit 127
+fi
+
+urls=$("$TMUX_BIN" capture-pane -p -J -S - | "$XURLS_BIN" | sort -u || true)
+
+if [[ -z "$urls" ]]; then
+  notify 'No URLs in tmux scrollback'
+  exit 0
+fi
+
+fzf_args=(
+  --prompt='URL > '
+  --height=80%
+  --reverse
+  --border
+  --no-multi
+  --bind="ctrl-y:execute-silent(printf '%s' {} | ${clip})+abort"
+  --header='Enter: open · Ctrl-y: copy · Esc: cancel'
+)
+
+if [[ -n "${TMUX:-}" ]] && command -v fzf-tmux >/dev/null 2>&1; then
+  selected=$(printf '%s\n' "$urls" | fzf-tmux -p 80%,60% -- "${fzf_args[@]}" || true)
+else
+  selected=$(printf '%s\n' "$urls" | fzf "${fzf_args[@]}" || true)
+fi
+
+[[ -n "$selected" ]] || exit 0
+
+case "$selected" in
+  www.*) selected="https://$selected" ;;
+esac
+
+# Run opener detached so this script can exit immediately.
+nohup sh -c '"$@" >/dev/null 2>&1 &' sh $opener "$selected" >/dev/null 2>&1 || {
+  notify "Failed to open URL: $selected"
+  exit 1
+}
