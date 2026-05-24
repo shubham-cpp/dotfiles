@@ -256,6 +256,12 @@ return {
   },
   {
     "SmiteshP/nvim-navic",
-    opts = { lsp = { auto_attach = true }, highlight = true },
+    event = "LspAttach",
+    opts = {
+      lsp = { auto_attach = true },
+      highlight = true,
+      lazy_update_context = true,
+      depth_limit = 5,
+    },
   },
 }

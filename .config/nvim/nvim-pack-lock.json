@@ -94,6 +94,10 @@
       "rev": "e0601f75aa5137a5a13bb92a988c9a300f5bd3de",
       "src": "https://github.com/nvim-mini/mini.indentscope"
     },
+    "mini.misc": {
+      "rev": "37b585358662a90c360060da6c5e61810524542e",
+      "src": "https://github.com/nvim-mini/mini.misc"
+    },
     "mini.move": {
       "rev": "74d140143b1bb905c3d0aebcfc2f216fd237080e",
       "src": "https://github.com/nvim-mini/mini.move"
@@ -218,7 +222,8 @@
     },
     "rustaceanvim": {
       "rev": "58653e9a8b3008e32d38b46165c1dbd1a96763ae",
-      "src": "https://github.com/mrcjkb/rustaceanvim"
+      "src": "https://github.com/mrcjkb/rustaceanvim",
+      "version": "9.0.0 - 10.0.0"
     },
     "template-string.nvim": {
       "rev": "d3a26d3c449a97c44891a31736a101b60b64cf2b",

@@ -198,3 +198,5 @@ vim.keymap.set("n", "<Esc>", function()
   end
   return "<esc>"
 end, { expr = true })
+
+vim.keymap.set("t", "<C-]>", "<C-\\><C-n>", { desc = "Normal mode" })

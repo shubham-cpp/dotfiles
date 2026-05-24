@@ -15,6 +15,7 @@ return {
   },
   {
     "cbochs/grapple.nvim",
+    cmd = "Grapple",
     opts = { scope = "git_branch", icons = true, status = false },
     keys = {
       { "<leader>A", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle" },
@@ -35,7 +36,11 @@ return {
   },
   {
     "folke/persistence.nvim",
-    opts = { dir = vim.fn.stdpath("data") .. "/sessions/", branch = true },
+    config = function()
+      local dir = vim.fn.stdpath("data") .. "/sessions/"
+      vim.fn.mkdir(dir, "p")
+      require("persistence").setup({ dir = dir, branch = true })
+    end,
     keys = {
       {
         "<leader>ql",
@@ -69,7 +74,6 @@ return {
   },
   {
     "kylechui/nvim-surround",
-    lazy = false,
     opts = {},
     keys = {
       "ys",
@@ -80,10 +84,11 @@ return {
   },
   {
     "unblevable/quick-scope",
+    event = { "BufReadPost", "BufNewFile" },
     init = function()
       vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
-      vim.g.qs_buftype_blacklist = { "terminal", "nofile", "dashboard", "startify" }
-      vim.g.qs_lazy_highlight = 1
+      vim.g.qs_buftype_blacklist = { "terminal", "nofile", "prompt", "quickfix", "dashboard", "startify" }
+      vim.g.qs_max_chars = 240
     end,
   },
 }

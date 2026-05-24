@@ -1,7 +1,39 @@
+local move_keys = {
+  { "<", mode = "x", desc = "Move selection left" },
+  { ">", mode = "x", desc = "Move selection right" },
+  { "J", mode = "x", desc = "Move selection down" },
+  { "K", mode = "x", desc = "Move selection up" },
+  { "<M-h>", mode = { "n", "x" }, desc = "Move line left" },
+  { "<M-l>", mode = { "n", "x" }, desc = "Move line right" },
+  { "<M-j>", mode = { "n", "x" }, desc = "Move line down" },
+  { "<M-k>", mode = { "n", "x" }, desc = "Move line up" },
+}
+
 return {
-  { "nvim-mini/mini.align", opts = {} },
+  {
+    "nvim-mini/mini.align",
+    opts = {},
+    keys = {
+      { "ga", mode = { "n", "x" }, desc = "Align" },
+      { "gA", mode = { "n", "x" }, desc = "Align with preview" },
+    },
+  },
+  {
+    "nvim-mini/mini.misc",
+    opts = {},
+    keys = {
+      {
+        "<C-w>m",
+        function()
+          require("mini.misc").zoom()
+        end,
+        desc = "Zoom",
+      },
+    },
+  },
   {
     "nvim-mini/mini.move",
+    keys = move_keys,
     opts = {
       mappings = {
         left = "<",
@@ -17,6 +49,7 @@ return {
   },
   {
     "nvim-mini/mini.indentscope",
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
       draw = {
         animation = function()
@@ -53,6 +86,13 @@ return {
   },
   {
     "nvim-mini/mini.operators",
+    keys = {
+      { "g=", mode = { "n", "x" }, desc = "Evaluate operator" },
+      { "ge", mode = { "n", "x" }, desc = "Exchange operator" },
+      { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
+      { "x", mode = { "n", "x" }, desc = "Replace operator" },
+      { "gs", mode = { "n", "x" }, desc = "Sort operator" },
+    },
     opts = {
       evaluate = { prefix = "g=" },
       exchange = { prefix = "ge" },
@@ -67,7 +107,7 @@ return {
   },
   {
     "nvim-mini/mini.ai",
-    dependencies = {"nvim-mini/mini.extra"},
+    dependencies = { "nvim-mini/mini.extra" },
     config = function()
       local ai = require("mini.ai")
       local gen_ai_spec = require("mini.extra").gen_ai_spec

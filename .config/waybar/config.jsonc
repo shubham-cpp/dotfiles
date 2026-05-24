@@ -9,13 +9,12 @@
     "hyprland/workspaces",
     "memory",
     "cpu",
+    "idle_inhibitor",
     "keyboard-state",
     "wlr/taskbar",
-    "custom/music",
   ],
   "modules-center": [
-    "clock",
-    "custom/weather"
+    "clock"
   ],
   "modules-right": [
     "battery",
@@ -30,6 +29,13 @@
   ],
   "niri/workspaces": {
     // "current-only": true,
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": " ",
+      "deactivated": " ",
+    },
   },
   "hyprland/workspaces": {
     "active-only": false,

@@ -1,3 +1,16 @@
+local function trash_command()
+  if vim.fn.has("linux") == 1 and vim.fn.executable("gio") == 1 then
+    return { "gio", "trash" }
+  end
+  return { "trash" }
+end
+
+local function trash_path(path)
+  local cmd = trash_command()
+  table.insert(cmd, path)
+  return vim.system(cmd):wait()
+end
+
 local function trash(state)
   local inputs = require("neo-tree.ui.inputs")
   local node = state.tree:get_node()
@@ -10,7 +23,7 @@ local function trash(state)
     if not confirmed then
       return
     end
-    vim.system({ "trash", node.path }):wait()
+    trash_path(node.path)
     require("neo-tree.sources.manager").refresh(state)
   end)
 end
@@ -32,7 +45,7 @@ local function trash_visual(state, selected_nodes)
       return
     end
     for _, path in ipairs(paths_to_trash) do
-      vim.system({ "trash", path }):wait()
+      trash_path(path)
     end
     require("neo-tree.sources.manager").refresh(state)
   end)

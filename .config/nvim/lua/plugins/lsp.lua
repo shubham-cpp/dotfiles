@@ -1,6 +1,7 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
       local lsp_file_operations = require("core.lsp_file_operations")
 
@@ -57,7 +58,7 @@ return {
 
       local function smart_rename()
         local ok, autotag = pcall(require, "ts-autotag")
-        if ok and autotag.rename() then
+        if ok and autotag.rename(nil, true) then
           return
         end
         vim.lsp.buf.rename()
@@ -99,7 +100,6 @@ return {
 
           bufmap({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, "Code Action")
           bufmap("n", "<leader>lr", smart_rename, "Rename")
-          bufmap("n", "<leader>lc", vim.lsp.codelens.run, "Run Codelens")
           bufmap("n", "<leader>lw", function()
             lsp_pick("lsp_document_symbols", vim.lsp.buf.document_symbol)
           end, "Document Symbols")
@@ -110,6 +110,10 @@ return {
           if not client then
             return
           end
+          if client:supports_method("textDocument/codeLens") then
+            bufmap("n", "<leader>lc", vim.lsp.codelens.run, "Run Codelens")
+          end
+
           if client.name == "vtsls" then
             bufmap("n", "grs", function()
               require("vtsls").commands.goto_source_definition(0)
@@ -148,11 +152,16 @@ return {
           end
 
           if client:supports_method("textDocument/foldingRange") then
-            vim.wo[0].foldmethod = "expr"
-            vim.wo[0].foldexpr = "v:lua.vim.lsp.foldexpr()"
+            local win = vim.api.nvim_get_current_win()
+            vim.wo[win].foldmethod = "expr"
+            vim.wo[win].foldexpr = "v:lua.vim.lsp.foldexpr()"
           end
 
-          if client:supports_method("textDocument/inlayHint") and vim.bo[bufnr].filetype ~= "vue" then
+          if
+            client:supports_method("textDocument/inlayHint")
+            and not vim.b[bufnr].bigfile
+            and vim.bo[bufnr].filetype ~= "vue"
+          then
             vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
           end
         end,
@@ -288,7 +297,25 @@ return {
       vim.lsp.enable("emmet_language_server")
 
       vim.lsp.config("pyrefly", {
-        init_options = { pyrefly = { displayTypeErrors = "force-on" } },
+        settings = {
+          python = {
+            pyrefly = {
+              typeCheckingMode = "default",
+              diagnosticMode = "workspace",
+              streamDiagnostics = true,
+              analysis = {
+                showHoverGoToLinks = true,
+                inlayHints = {
+                  callArgumentNames = "partial",
+                  functionReturnTypes = true,
+                  variableTypes = true,
+                  pytestParameters = false,
+                },
+              },
+            },
+            analysis = { completeFunctionParens = true },
+          },
+        },
       })
       vim.lsp.enable("pyrefly")
     end,
@@ -336,24 +363,47 @@ return {
       local mr = require("mason-registry")
       local function ensure_installed()
         for _, tool in ipairs(tools) do
-          local p = mr.get_package(tool)
-          if not p:is_installed() then
+          local ok, p = pcall(mr.get_package, tool)
+          if ok and not p:is_installed() then
+            vim.notify(("Installing Mason package: %s"):format(tool), vim.log.levels.INFO)
             p:install()
           end
         end
       end
-      if mr.refresh then
-        mr.refresh(ensure_installed)
-      else
-        ensure_installed()
-      end
+
+      vim.api.nvim_create_user_command("MasonSyncTools", function()
+        if mr.refresh then
+          mr.refresh(ensure_installed)
+        else
+          ensure_installed()
+        end
+      end, { desc = "Install configured Mason tools" })
+
       vim.keymap.set("n", "<leader>lm", "<cmd>Mason<cr>", { desc = "Mason" })
     end,
   },
   {
     "yioneko/nvim-vtsls",
     config = function()
+      local function filter_react_dts(value)
+        return not (value.targetUri or value.uri or ""):match("/index%.d%.ts")
+      end
+
+      local function definition_handler(err, result, method, ...)
+        if vim.islist(result) and #result > 1 then
+          result = vim.tbl_filter(filter_react_dts, result)
+        end
+        return vim.lsp.handlers["textDocument/definition"](err, result, method, ...)
+      end
+
       local function resolve_ts_plugin(mason_pkg, plugin_subpath)
+        local project_root = vim.fs.root(0, "node_modules")
+        if project_root then
+          local project_path = project_root .. "/node_modules/" .. plugin_subpath
+          if vim.fn.isdirectory(project_path) == 1 then
+            return project_path
+          end
+        end
         local mason_path = vim.fn.stdpath("data")
           .. "/mason/packages/"
           .. mason_pkg
@@ -361,13 +411,6 @@ return {
           .. plugin_subpath
         if vim.fn.isdirectory(mason_path) == 1 then
           return mason_path
-        end
-        local project_root = vim.fs.root(0, "node_modules")
-        if project_root then
-          local project_path = project_root .. "/node_modules/" .. plugin_subpath
-          if vim.fn.isdirectory(project_path) == 1 then
-            return project_path
-          end
         end
         return nil
       end
@@ -385,8 +428,15 @@ return {
           vtsls = {
             autoUseWorkspaceTsdk = true,
             enableMoveToFileCodeAction = true,
-            experimental = { completion = { enableServerSideFuzzyMatch = false } },
+            experimental = {
+              completion = {
+                enableServerSideFuzzyMatch = true,
+                entriesLimit = 100,
+              },
+              maxInlayHintLength = 30,
+            },
             tsserver = {
+              maxTsServerMemory = 8192,
               globalPlugins = (function()
                 local plugins = {}
                 local svelte_path = resolve_ts_plugin("svelte-language-server", "typescript-svelte-plugin")
@@ -412,6 +462,9 @@ return {
             },
           },
           typescript = {
+            preferences = {
+              includePackageJsonAutoImports = "auto",
+            },
             inlayHints = {
               parameterNames = { enabled = "literals" },
               parameterTypes = { enabled = true },
@@ -421,9 +474,11 @@ return {
               enumMemberValues = { enabled = true },
             },
             updateImportsOnFileMove = "always",
-            enableMoveToFileCodeAction = true,
           },
           javascript = {
+            preferences = {
+              includePackageJsonAutoImports = "auto",
+            },
             inlayHints = {
               parameterNames = { enabled = "literals" },
               parameterTypes = { enabled = true },
@@ -433,8 +488,10 @@ return {
               enumMemberValues = { enabled = true },
             },
             updateImportsOnFileMove = "always",
-            enableMoveToFileCodeAction = true,
           },
+        },
+        handlers = {
+          ["textDocument/definition"] = definition_handler,
         },
       })
       vim.lsp.enable("vtsls")
@@ -442,6 +499,7 @@ return {
   },
   {
     "b0o/SchemaStore.nvim",
+    ft = { "json", "jsonc", "yaml", "yml" },
     config = function()
       vim.lsp.config("jsonls", {
         settings = {
@@ -465,24 +523,25 @@ return {
   },
   {
     "mrcjkb/rustaceanvim",
+    version = vim.version.range("^9"),
     init = function()
       vim.g.rustaceanvim = {
-        tools = { enable_clippy = true, reload_workspace_from_cargo_toml = true },
         server = {
           default_settings = {
             ["rust-analyzer"] = {
-              cargo = { allFeatures = true },
+              cargo = { features = "all" },
               check = { command = "clippy" },
               procMacro = { enable = true },
             },
           },
         },
-        dap = { autoload_configurations = true },
+        dap = { autoload_configurations = false },
       }
     end,
   },
   {
     "Saecki/crates.nvim",
+    event = { "BufRead Cargo.toml", "BufNewFile Cargo.toml" },
     opts = {
       smart_insert = true,
       autoload = true,

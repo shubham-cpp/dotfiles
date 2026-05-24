@@ -23,20 +23,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufWritePre", {
-  desc = "Format on save",
-  group = augroup,
-  callback = function(args)
-    if vim.b[args.buf].bigfile then
-      return
-    end
-    if vim.b[args.buf].disable_auto_format or vim.g.disable_auto_format then
-      return
-    end
-    require("conform").format({ async = false, lsp_fallback = true })
-  end,
-})
-
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight yanked text",
   group = augroup,
@@ -147,13 +133,13 @@ vim.api.nvim_create_autocmd("FileType", {
     "dockerfile",
     "html",
     "css",
-    "scss",
     "go",
     "python",
     "vim",
-    "git",
     "gitcommit",
     "gitignore",
+    "gitconfig",
+    "gitrebase",
     "svelte",
     "vue",
     "markdown",
@@ -165,8 +151,11 @@ vim.api.nvim_create_autocmd("FileType", {
     "sxhkdrc",
   },
   group = augroup,
-  callback = function()
-    vim.treesitter.start()
+  callback = function(args)
+    if vim.b[args.buf].bigfile then
+      return
+    end
+    pcall(vim.treesitter.start, args.buf)
   end,
 })
 
@@ -177,5 +166,17 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(ev)
     local bufnr = ev.buf
     vim.keymap.set("t", "<C-]>", "<C-\\><C-n>", { buffer = bufnr, desc = "Normal mode" })
+  end,
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  desc = "Simplify terminal window UI",
+  group = augroup,
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = false
+    vim.opt_local.foldcolumn = "0"
+    vim.opt_local.signcolumn = "no"
+    vim.opt_local.foldmethod = "manual"
   end,
 })

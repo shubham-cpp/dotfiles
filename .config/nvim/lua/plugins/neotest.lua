@@ -1,6 +1,7 @@
 return {
   "nvim-neotest/neotest",
   dependencies = { "nvim-neotest/neotest-jest" },
+  cmd = "Neotest",
   keys = {
     {
       "<leader>tt",

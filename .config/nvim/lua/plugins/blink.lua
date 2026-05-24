@@ -1,26 +1,31 @@
 return {
   {
     "saghen/blink.cmp",
+    event = "InsertEnter",
     dependencies = { "L3MON4D3/LuaSnip", "mikavilpas/blink-ripgrep.nvim" },
     sem_version = "^1",
     config = function()
       require("blink.cmp").setup({
+        appearance = {
+          nerd_font_variant = "mono",
+        },
         keymap = {
           preset = "enter",
           ["<CR>"] = { "select_and_accept", "fallback" },
           ["<C-j>"] = { "select_next", "fallback" },
           ["<C-k>"] = { "select_prev", "fallback" },
-          ["<C-s>"] = { "snippet_forward", "fallback" },
+          ["<C-n>"] = { "select_next", "snippet_forward", "fallback" },
+          ["<C-p>"] = { "select_prev", "snippet_backward", "fallback" },
           ["<C-h>"] = { "show_signature", "hide_signature", "fallback" },
           ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
           ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
         },
         completion = {
-          list = { selection = { preselect = false, auto_insert = false } },
+          list = { selection = { preselect = false, auto_insert = true } },
           ghost_text = { enabled = false },
           documentation = {
             auto_show = true,
-            auto_show_delay_ms = 200,
+            auto_show_delay_ms = 400,
             window = { border = "none" },
           },
           menu = {
@@ -82,23 +87,22 @@ return {
           default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
           providers = {
             lsp = { fallbacks = {} },
-            buffer = {
-              score_offset = -3,
-              opts = {
-                get_bufnrs = function()
-                  return vim.tbl_filter(function(bufnr)
-                    return vim.bo[bufnr].buftype == ""
-                  end, vim.api.nvim_list_bufs())
-                end,
-              },
-            },
+            buffer = { score_offset = -3, min_keyword_length = 3 },
             ripgrep = {
               module = "blink-ripgrep",
               name = "Ripgrep",
               score_offset = -5,
+              max_items = 20,
               opts = {
                 prefix_min_len = 4,
-                backend = { ripgrep = { search_casing = "--smart-case" } },
+                project_root_marker = { ".git", "package.json", "pyproject.toml", "Cargo.toml", ".root" },
+                backend = {
+                  use = "gitgrep-or-ripgrep",
+                  ripgrep = {
+                    search_casing = "--smart-case",
+                    max_filesize = "1M",
+                  },
+                },
               },
             },
             cmdline = {
@@ -109,14 +113,8 @@ return {
           },
         },
         snippets = { preset = "luasnip" },
-        fuzzy = {
-          implementation = "prefer_rust",
-          sorts = { "exact", "score", "sort_text" },
-        },
-        signature = {
-          enabled = true,
-          window = { border = "rounded" },
-        },
+        fuzzy = { implementation = "prefer_rust", sorts = { "exact", "score", "sort_text" } },
+        signature = { enabled = true, window = { border = "rounded" } },
         cmdline = {
           keymap = {
             preset = "cmdline",
@@ -146,13 +144,16 @@ return {
     sem_version = "^2",
     config = function()
       require("luasnip").setup({
-        history = true,
         delete_check_events = "TextChanged",
+        region_check_events = "CursorMoved",
       })
       require("luasnip.loaders.from_vscode").lazy_load({
         paths = { vim.fn.stdpath("config") .. "/snippets" },
+        override_priority = 2000,
       })
-      require("luasnip.loaders.from_vscode").lazy_load()
+      require("luasnip.loaders.from_vscode").lazy_load({
+        default_priority = 1000,
+      })
     end,
   },
 }
