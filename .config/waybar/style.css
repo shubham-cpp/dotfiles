@@ -189,6 +189,7 @@ button {
 
 #custom-launcher,
 #custom-swaync,
+#custom-mako,
 #custom-launcher button {
   background-color: #101010;
   padding: 0.35rem 0.8rem;
@@ -199,16 +200,19 @@ button {
 
 #custom-launcher:hover,
 #custom-swaync:hover,
+#custom-mako:hover,
 #custom-launcher button:hover {
   background: #1e1e1e;
   color: #99d1db;
 }
 /* Unread notifications highlight */
-#custom-swaync.notification {
+#custom-swaync.notification,
+#custom-mako.notification {
   color: #e5c890; /* warm yellow pop */
 }
 
 /* DND mode highlight */
-#custom-swaync.dnd {
+#custom-swaync.dnd,
+#custom-mako.dnd {
   color: #e78284; /* same red as your warning modules */
 }

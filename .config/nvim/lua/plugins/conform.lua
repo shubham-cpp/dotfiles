@@ -50,7 +50,7 @@ return {
         yaml = prettier,
         markdown = prettier,
         rust = { "rustfmt" },
-        ["_"] = { "trim_whitespace" },
+        -- ["_"] = { "trim_whitespace" },
       },
       formatters = {
         prettierd = { condition = disable_prettier_condition },

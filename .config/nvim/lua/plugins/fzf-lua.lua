@@ -109,14 +109,14 @@ return {
     {
       "<leader>fn",
       function()
-        require("fzf-lua").files({ cwd = vim.fn.stdpath("config"), winopts = vscode_layout("Neovim") })
+        require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
       end,
       desc = "Neovim files",
     },
     {
       "<leader>fd",
       function()
-        require("fzf-lua").files({ cwd = dotfiles_cwd(), winopts = vscode_layout("Dotfiles") })
+        require("fzf-lua").files({ cwd = dotfiles_cwd() })
       end,
       desc = "Find dotfiles",
     },

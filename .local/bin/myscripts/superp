@@ -1,71 +1,67 @@
 #!/bin/sh
 
-HOME_DIR="$HOME"
-# Create a temporary file to store the mapping from formatted display name to original path
-temp_map_file=$(mktemp)
-# Ensure the temporary file is deleted on script exit
-trap 'command rm -f "$temp_map_file"' EXIT
+# if [ ! -t 2 ]; then
+#     exec alacritty --class foot-prg-superp -e "$0" "$@"
+# fi
 
-rg --files ~/ --iglob '!.*' --iglob '!Git*' --iglob '!Project-Imgs' | while IFS= read -r original_path; do
-    filename=$(basename "$original_path")
-    dir=$(dirname "$original_path")
+HOME_DIR=${HOME}
+# Space-separated search roots. Override with e.g.:
+#   SUPERP_SEARCH_ROOTS=". $HOME" superp
+SUPERP_SEARCH_ROOTS=${SUPERP_SEARCH_ROOTS:-$HOME_DIR}
 
-    formatted_dir=""
-    display_name=""
+# shellcheck disable=SC2086 # intentional: SUPERP_SEARCH_ROOTS is space-separated config
+set -- $SUPERP_SEARCH_ROOTS
 
-    if [ "$original_path" = "$HOME_DIR" ]; then
-        # Handle the home directory itself as a special case for display
-        display_name="~"
-        formatted_dir="~" # For consistency in map file, though not strictly used for display
-    elif [ "$dir" = "$HOME_DIR" ]; then
-        # Files directly in the home directory
-        formatted_dir="~"
-        display_name="$filename (~)"
-    elif printf "%s" "$dir" | grep -q "^${HOME_DIR}/"; then
-        # Files in subdirectories of home
-        # Replace $HOME_DIR with ~
-        formatted_dir=$(printf "%s" "$dir" | sed "s|^${HOME_DIR}|~|")
-        display_name="$filename ($formatted_dir)"
-    elif [ "$dir" = "/" ]; then
-        # Files directly in the root directory
-        formatted_dir="/"
-        display_name="$filename (/)"
-    elif [ -z "$dir" ] || [ "$original_path" = "$filename" ]; then
-        # Fallback for paths without directory (e.g., if rg returned non-absolute paths, though it usually returns absolute)
-        formatted_dir="." # Represent current directory if no path info
-        display_name="$filename (./)"
-    else
-        # Absolute paths outside the home directory
-        formatted_dir="$dir"
-        display_name="$filename ($formatted_dir)"
+selected_row=$(
+    fd -t f \
+        -E 'game' -E 'lib' -E 'renpy' \
+        -E 'Games*' \
+        -E 'Backups' \
+        -E 'GitClones*' \
+        . "$@" |
+        awk -v home="$HOME_DIR" '
+            BEGIN { OFS = "\t" }
+            {
+                path = $0
+                file = path
+                sub(/^.*\//, "", file)
+
+                dir = path
+                if (dir == file) {
+                    dir = "."
+                } else {
+                    sub(/\/[^/]*$/, "", dir)
+                    if (dir == "") dir = "/"
+                }
+
+                display_dir = dir
+                if (display_dir == home) {
+                    display_dir = "~"
+                } else if (index(display_dir, home "/") == 1) {
+                    display_dir = "~" substr(display_dir, length(home) + 1)
+                }
+
+                print path, file, display_dir
+            }
+        ' |
+        fuzzel \
+            --dmenu \
+            --prompt "Open file> " \
+            --with-nth '{2}  {3}' \
+            --match-nth '{2} {3}' \
+            --accept-nth 1
+    # sk \
+    #     --reverse \
+    #     --algo clangd \
+    #     -p "Open file> " \
+    #     --delimiter '\t' \
+    #     --nth '2,3' \
+    #     --with-nth '2,3'
+)
+
+if [ -n "$selected_row" ]; then
+    selected_path=$(printf '%s\n' "$selected_row" | awk -F '\t' 'NR == 1 { print $1 }')
+    if [ -n "$selected_path" ]; then
+        setsid -f xdg-open "$selected_path" >/dev/null 2>&1
     fi
-
-    # Print the formatted display name to stdout, which fuzzel will read
-    printf "%s\n" "$display_name"
-
-    # Store the mapping: "formatted_display_name<TAB>original_path" in the temporary file
-    # Escape tabs in display_name just in case it contains any literal tabs, though unlikely.
-    printf "%s\t%s\n" "$(printf "%s" "$display_name" | sed 's/\t/\\t/g')" "$original_path" >>"$temp_map_file"
-
-    # Pipe the list of formatted names to fuzzel
-done | fuzzel --dmenu --placeholder 'Open File' | {
-# done | rofi -dmenu -theme-str  'window { width: 90%; height:50%;}' | {
-    # Read the selected formatted name from fuzzel's output
-    read -r selected_display_name
-
-    if [ -n "$selected_display_name" ]; then
-        # Look up the original path using the selected formatted name from the map file.
-        # Use grep -F for fixed string matching and -m 1 for first match.
-        # Escape special characters in selected_display_name for grep's regex interpretation.
-        # Then use awk to extract the second field (original path) from the matched line.
-        original_path_line=$(grep -F -m 1 -- "$(printf "%s" "$selected_display_name" | sed 's/[\*\.\[\]\/\\^$]/\\&/g')" "$temp_map_file")
-
-        # Extract the original path (which is the last tab-separated field)
-        selected_original_path=$(printf "%s" "$original_path_line" | awk -F'\t' '{print $NF}')
-
-        # If an original path was found, open it with xdg-open
-        if [ -n "$selected_original_path" ]; then
-            setsid -f xdg-open "$selected_original_path"
-        fi
-    fi
-}
+fi

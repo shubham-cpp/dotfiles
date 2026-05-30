@@ -5,9 +5,9 @@
 [mgr]
 sort_sensitive = true
 sort_dir_first = true
-show_hidden = true
-show_symlink = true
-scrolloff = 12
+show_hidden    = true
+show_symlink   = true
+scrolloff      = 12
 
 [open]
 append_rules = [

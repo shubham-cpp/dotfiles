@@ -8,6 +8,7 @@ require("core.options")
 require("core.keymaps")
 require("core.commands")
 require("core.autocmds")
+require("core.tab_buffers").setup()
 
 vim.pack.add({ 'https://github.com/zuqini/zpack.nvim' })
 require('zpack').setup()

@@ -3,6 +3,8 @@ return {
   "ibhagwan/fzf-lua",
   optional = true,
   opts = function(_, opts)
+    local actions = require "fzf-lua.actions"
+
     local rg_glob_fn = function(query)
       local split_index = query:find " --"
       if split_index then
@@ -13,41 +15,89 @@ return {
       return query
     end
 
-    local actions = require "fzf-lua.actions"
-    local vscode = {
-      height = 0.55,
-      width = 0.6,
-      row = 0,
+    local function vscode_layout(title)
+      return {
+        height = 0.55,
+        width = 0.6,
+        row = 0,
+        title = " " .. title .. " ",
+        title_pos = "center",
+      }
+    end
+
+    local function docs_layout(title)
+      return {
+        height = 0.70,
+        width = 0.65,
+        row = 0.5,
+        col = 0.5,
+        title = " " .. title .. " ",
+        title_pos = "center",
+        preview = {
+          layout = "vertical",
+          vertical = "up:50%",
+          scrollbar = "border",
+          winopts = {
+            number = false,
+            relativenumber = false,
+            signcolumn = "no",
+          },
+        },
+      }
+    end
+
+    local default_preview_layout = {
+      height = 0.70,
+      width = 0.65,
+      row = 0.5,
+      col = 0.5,
+      preview = {
+        default = "bat",
+        layout = "vertical",
+        vertical = "down:38%",
+        scrollbar = "border",
+        winopts = {
+          number = false,
+          relativenumber = false,
+          signcolumn = "no",
+        },
+      },
     }
+
     local action_keys = {
       ["ctrl-x"] = actions.file_split,
+      ["ctrl-t"] = actions.file_tabedit,
     }
-    opts.defaults = {
-      formatter = { "path.filename_first", 2 },
-    }
-    opts.winopts = { preview = { default = "bat", layout = "vertical" } }
+    opts.winopts = default_preview_layout
     opts.files = {
       actions = action_keys,
       previewer = false,
-      winopts = vscode,
+      winopts = vscode_layout "Files",
     }
     opts.git = {
       files = {
         actions = action_keys,
         previewer = false,
-        winopts = vscode,
+        winopts = vscode_layout "Git Files",
         cmd = "git ls-files --cached --others --exclude-standard",
       },
-      branches = {
-        cmd_add = { "git", "switch", "-c" },
-      },
+      branches = { cmd_add = { "git", "switch", "-c" } },
     }
-    opts.grep = {
-      -- rg_glob = true,
-      rg_glob_fn = rg_glob_fn,
-      actions = action_keys,
+    opts.grep = { rg_glob = true, rg_glob_fn = rg_glob_fn, actions = action_keys }
+    opts.buffers = { winopts = docs_layout "Buffers" }
+    opts.helptags = { winopts = docs_layout "Help" }
+    opts.manpages = { winopts = docs_layout "Man" }
+    opts.keymaps = { winopts = docs_layout "Keymaps" }
+    opts.autocmds = { winopts = docs_layout "Autocmds" }
+    opts.zoxide = { winopts = vscode_layout "Zoxide" }
+
+    opts.defaults = {
+      formatter = { "path.filename_first", 2 },
+      fzf_args = { "--ellipsis= " },
     }
-    opts[1] = { "border-fused", "hide" }
+    opts[1] = { "border-fused", "skim", "hide" }
+    opts.fzf_opts = { ["--algo"] = "fzy" }
+    opts.ui_select = true
   end,
   dependencies = {
     {
@@ -63,6 +113,8 @@ return {
         }
 
         maps.n["<Leader>fa"] = { "<cmd>FzfLua autocmds<cr>", desc = "Autocmds" }
+        maps.n["<Leader>fr"] = { "<cmd>FzfLua resume<cr>", desc = "Resume" }
+        maps.n["<Leader>fR"] = { "<cmd>FzfLua registers<cr>", desc = "Registers" }
         maps.n["<Leader>fz"] = { "<cmd>FzfLua zoxide<cr>", desc = "Zoxide" }
 
         maps.n["<Leader>fs"] = { "<cmd>FzfLua live_grep<cr>", desc = "Search" }

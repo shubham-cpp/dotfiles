@@ -14,6 +14,72 @@ for _, p in ipairs(rtps) do
   end
 end
 
+local function is_large_buffer(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then return false end
+
+  local astrocore = require "astrocore"
+
+  if require("astrocore.buffer").is_large(bufnr) then return true end
+
+  local large_buf = vim.tbl_get(astrocore.config, "features", "large_buf")
+
+  if not large_buf then return false end
+
+  local enabled = large_buf.enabled
+
+  if type(enabled) == "function" then
+    large_buf = vim.deepcopy(large_buf)
+    local ok, result = pcall(enabled, bufnr, large_buf)
+    if not ok or result == false then return false end
+
+    if type(result) == "table" then large_buf = result end
+  elseif enabled == false then
+    return false
+  end
+
+  local line_count = vim.api.nvim_buf_line_count(bufnr)
+  if large_buf.lines and line_count > large_buf.lines then return true end
+
+  local byte_count = vim.api.nvim_buf_get_offset(bufnr, line_count)
+  if large_buf.size and byte_count > large_buf.size then return true end
+
+  return large_buf.line_length and line_count > 0 and (byte_count / line_count) > large_buf.line_length or false
+end
+
+local function apply_large_buffer_guard(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) then return end
+
+  vim.b[bufnr].large_buf = true
+  vim.b[bufnr].autoformat = false
+  vim.b[bufnr].completion = false
+  vim.b[bufnr].minianimate_disable = true
+  vim.b[bufnr].minihipatterns_disable = true
+  vim.b[bufnr].ts_highlight = false
+
+  pcall(vim.diagnostic.enable, false, { bufnr = bufnr })
+
+  for _, client in ipairs(vim.lsp.get_clients { bufnr = bufnr }) do
+    pcall(vim.lsp.buf_detach_client, bufnr, client.id)
+  end
+
+  vim.api.nvim_buf_call(bufnr, function()
+    if vim.fn.exists ":NoMatchParen" ~= 0 then vim.cmd "NoMatchParen" end
+    if vim.fn.exists ":UfoDetach" ~= 0 then vim.cmd "UfoDetach" end
+    if vim.fn.exists ":TSContext" ~= 0 then vim.cmd "TSContext disable" end
+
+    pcall(vim.treesitter.stop, bufnr)
+
+    vim.opt_local.foldmethod = "indent"
+    vim.opt_local.swapfile = false
+    vim.opt_local.undolevels = -1
+    vim.opt_local.statuscolumn = ""
+    vim.opt_local.conceallevel = 0
+    vim.opt_local.list = false
+  end)
+end
+
+-- apply_large_buffer_guard(0)
+
 ---@type LazySpec
 return {
   {
@@ -139,6 +205,31 @@ return {
         },
       },
       autocmds = {
+        dynamic_large_buf_settings = {
+          {
+            event = { "TextChanged", "TextChangedI", "BufEnter" },
+            desc = "Detect buffers that become large after creation",
+            callback = function(args)
+              if vim.b[args.buf].large_buf or not is_large_buffer(args.buf) then return end
+              apply_large_buffer_guard(args.buf)
+              require("astrocore").event("LargeBuf", true)
+            end,
+          },
+          {
+            event = "User",
+            pattern = "AstroLargeBuf",
+            desc = "Apply local large buffer guardrails",
+            callback = function(args) apply_large_buffer_guard(args.buf) end,
+          },
+          -- {
+          --   event = "LspAttach",
+          --   desc = "Detach LSP from large buffers",
+          --   callback = function(args)
+          --     if not vim.b[args.buf].large_buf then return end
+          --     pcall(vim.lsp.buf_detach_client, args.buf, args.data.client_id)
+          --   end,
+          -- },
+        },
         fix_comment_continuation = {
           {
             event = "FileType",

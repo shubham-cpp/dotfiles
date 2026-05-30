@@ -113,7 +113,7 @@
     "multicursor.nvim": {
       "rev": "704b99f10a72cc05d370cfeb294ff83412a8ab55",
       "src": "https://github.com/jake-stewart/multicursor.nvim",
-      "version": "1.0.0 - 2.0.0"
+      "version": "'main'"
     },
     "neo-tree.nvim": {
       "rev": "aa3500f7038a32ed4b0b765cd458b9c429062cac",
@@ -134,10 +134,6 @@
     "neotest-jest": {
       "rev": "0e7979d51301dfae5ef839d771bd28cf593fde3f",
       "src": "https://github.com/nvim-neotest/neotest-jest"
-    },
-    "neowiki.nvim": {
-      "rev": "b3f544e63ecb55a3c741e15ea025a7c8a6886713",
-      "src": "https://github.com/echaya/neowiki.nvim"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",
@@ -216,10 +212,6 @@
       "rev": "54d4b5431e9634ee3d8d30784e017239b5b89d41",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
-    "resolve.nvim": {
-      "rev": "1ed8bcc9ce7d43a0e8e05d0001c9cadb822d95a8",
-      "src": "https://github.com/spacedentist/resolve.nvim"
-    },
     "rustaceanvim": {
       "rev": "58653e9a8b3008e32d38b46165c1dbd1a96763ae",
       "src": "https://github.com/mrcjkb/rustaceanvim",
@@ -236,10 +228,6 @@
     "todo-comments.nvim": {
       "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
       "src": "https://github.com/folke/todo-comments.nvim"
-    },
-    "toggleterm.nvim": {
-      "rev": "9a88eae817ef395952e08650b3283726786fb5fb",
-      "src": "https://github.com/akinsho/toggleterm.nvim"
     },
     "ts-autotag.nvim": {
       "rev": "35f79f6253dff5cc43cf943d74c4b2734370a81d",

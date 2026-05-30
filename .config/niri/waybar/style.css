@@ -338,7 +338,7 @@ window#waybar {
   border-color: #bd93f9;
   transition: 0.3s;
 }
-#custom-swaync {
+#custom-mako {
   font-size: 15px;
   margin-top: 10px;
   margin-left: 8px;
@@ -357,7 +357,7 @@ window#waybar {
 }
 
 #custom-lock:hover,
-#custom-swaync:hover {
+#custom-mako:hover {
   background: #fab387;
   color: #292c3c;
   border-color: #fab387;
@@ -467,4 +467,17 @@ window#waybar {
   min-width: 0;
   min-height: 0;
   border: none;
+}
+
+#custom-mako {
+  background-color: #101010;
+  padding: 0.35rem 0.8rem;
+  margin: 5px 2px;
+  color: #babbf1;
+  border-radius: 5px;
+}
+
+#custom-mako:hover {
+  background: #1e1e1e;
+  color: #99d1db;
 }

@@ -15,12 +15,14 @@ return {
         end
         return result
       end
-      tab_bufs.setup()
       local colors = {
         bg = "#141415",
         fg = "#cdcdcd",
-        inactive_bg = "#1c1c24",
+        inactive_bg = "#18181d",
+        active_bg = "#292b33",
+        active_tab_bg = "#242731",
         comment = "#606079",
+        muted = "#858599",
         error = "#d8647e",
         warning = "#f3be7c",
         hint = "#7e98e8",
@@ -70,10 +72,10 @@ return {
               show_filename_only = true,
               show_modified_status = true,
               buffers_color = {
-                active = { fg = "#141415", bg = "#b4d4cf", gui = "bold" },
-                inactive = { fg = "#606079", bg = "#1c1c24" },
+                active = { fg = colors.fg, bg = colors.active_bg },
+                inactive = { fg = colors.comment, bg = colors.bg },
               },
-              symbols = { modified = " ●", alternate_file = "" },
+              symbols = { modified = " ", alternate_file = "" },
             },
           },
           lualine_x = {},
@@ -84,8 +86,8 @@ return {
               mode = 0,
               show_modified_status = true,
               tabs_color = {
-                active = { fg = "#141415", bg = "#90a0b5", gui = "bold" },
-                inactive = { fg = "#606079", bg = "#1c1c24" },
+                active = { fg = colors.muted, bg = colors.active_tab_bg },
+                inactive = { fg = colors.comment, bg = colors.bg },
               },
               symbols = { modified = " ●" },
             },

@@ -119,8 +119,12 @@ vim.keymap.set(
 )
 
 -- Buffer navigation
-vim.keymap.set("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-vim.keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+vim.keymap.set("n", "<S-h>", function()
+  require("core.tab_buffers").prev(1)
+end, { desc = "Prev buffer (tab)" })
+vim.keymap.set("n", "<S-l>", function()
+  require("core.tab_buffers").next(1)
+end, { desc = "Next buffer (tab)" })
 
 -- Tab-scoped buffer cycling
 vim.keymap.set("n", "]b", function()
@@ -137,7 +141,7 @@ end, { desc = "Delete buffer" })
 vim.keymap.set("n", "<leader>bD", function()
   require("core.tab_buffers").buf_delete(0, true)
 end, { desc = "Delete buffer (force)" })
-vim.keymap.set("n", "<leader>bo", function()
+vim.keymap.set("n", "<leader>bc", function()
   require("core.tab_buffers").buf_delete(nil)
 end, { desc = "Delete other buffers (tab)" })
 

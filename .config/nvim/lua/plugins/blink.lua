@@ -87,11 +87,11 @@ return {
           default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
           providers = {
             lsp = { fallbacks = {} },
-            buffer = { score_offset = -3, min_keyword_length = 3 },
+            buffer = { score_offset = -5, min_keyword_length = 3 },
             ripgrep = {
               module = "blink-ripgrep",
               name = "Ripgrep",
-              score_offset = -5,
+              score_offset = -8,
               max_items = 20,
               opts = {
                 prefix_min_len = 4,
@@ -113,7 +113,25 @@ return {
           },
         },
         snippets = { preset = "luasnip" },
-        fuzzy = { implementation = "prefer_rust", sorts = { "exact", "score", "sort_text" } },
+        fuzzy = {
+          implementation = "prefer_rust",
+          sorts = {
+            -- function(a, b)
+            --   local function is_emmet(source)
+            --     return source.client_name == "emmet_ls" or source.client_name == "emmet_language_server"
+            --   end
+            --   local a_emmet = is_emmet(a)
+            --   local b_emmet = is_emmet(b)
+            --
+            --   if a_emmet ~= b_emmet then
+            --     return not a_emmet
+            --   end
+            -- end,
+            "score",
+            "sort_text",
+            "exact",
+          },
+        },
         signature = { enabled = true, window = { border = "rounded" } },
         cmdline = {
           keymap = {

@@ -13,7 +13,7 @@ return {
   { import = "astrocommunity.pack.tailwindcss" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.python.base" },
-  { import = "astrocommunity.pack.python.basedpyright" },
+  { import = "astrocommunity.pack.python.pyrefly" },
   { import = "astrocommunity.pack.python.ruff" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.sql" },
@@ -34,5 +34,8 @@ return {
 
   { import = "astrocommunity.motion.nvim-surround" },
 
+  -- { import = "astrocommunity.utility.lua-json5" },
+  { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
+  { import = "astrocommunity.debugging.nvim-dap-view" },
   { import = "astrocommunity.test.neotest" },
 }

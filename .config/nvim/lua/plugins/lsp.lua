@@ -2,15 +2,20 @@ return {
   {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
+    dependencies = { "saghen/blink.cmp" },
     config = function()
       local lsp_file_operations = require("core.lsp_file_operations")
 
+      local capabilities =
+        vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), lsp_file_operations.capabilities())
+      pcall(vim.cmd.packadd, "blink.cmp")
+      local blink_ok, blink = pcall(require, "blink.cmp")
+      if blink_ok then
+        capabilities = vim.tbl_deep_extend("force", capabilities, blink.get_lsp_capabilities({}, false))
+      end
+
       vim.lsp.config("*", {
-        capabilities = vim.tbl_deep_extend(
-          "force",
-          vim.lsp.protocol.make_client_capabilities(),
-          lsp_file_operations.capabilities()
-        ),
+        capabilities = capabilities,
       })
 
       local diag_icons = require("core.icons")
@@ -143,7 +148,7 @@ return {
               })
             end, "Fix All")
             bufmap("n", "<leader>lV", function()
-              vim.cmd("VtslsSelectTsVersion")
+              vim.cmd("VtsExec select_ts_version")
             end, "Select TS Version")
           end
 
@@ -336,6 +341,7 @@ return {
       local tools = {
         "emmylua_ls",
         "vtsls",
+        "js-debug-adapter",
         "gopls",
         "html-lsp",
         "css-lsp",
@@ -425,16 +431,11 @@ return {
           "vue",
         },
         settings = {
+          complete_function_calls = true,
           vtsls = {
             autoUseWorkspaceTsdk = true,
             enableMoveToFileCodeAction = true,
-            experimental = {
-              completion = {
-                enableServerSideFuzzyMatch = true,
-                entriesLimit = 100,
-              },
-              maxInlayHintLength = 30,
-            },
+            experimental = { maxInlayHintLength = 30 },
             tsserver = {
               maxTsServerMemory = 8192,
               globalPlugins = (function()
@@ -462,9 +463,9 @@ return {
             },
           },
           typescript = {
-            preferences = {
-              includePackageJsonAutoImports = "auto",
-            },
+            -- suggest = { completeFunctionCalls = true },
+            -- preferences = { includePackageJsonAutoImports = "auto" },
+            -- updateImportsOnFileMove = { enabled = "always" },
             inlayHints = {
               parameterNames = { enabled = "literals" },
               parameterTypes = { enabled = true },
@@ -473,12 +474,11 @@ return {
               functionLikeReturnTypes = { enabled = true },
               enumMemberValues = { enabled = true },
             },
-            updateImportsOnFileMove = "always",
           },
           javascript = {
-            preferences = {
-              includePackageJsonAutoImports = "auto",
-            },
+            -- suggest = { completeFunctionCalls = true },
+            -- preferences = { includePackageJsonAutoImports = "auto" },
+            -- updateImportsOnFileMove = { enabled = "always" },
             inlayHints = {
               parameterNames = { enabled = "literals" },
               parameterTypes = { enabled = true },
@@ -487,12 +487,9 @@ return {
               functionLikeReturnTypes = { enabled = true },
               enumMemberValues = { enabled = true },
             },
-            updateImportsOnFileMove = "always",
           },
         },
-        handlers = {
-          ["textDocument/definition"] = definition_handler,
-        },
+        -- handlers = { ["textDocument/definition"] = definition_handler, },
       })
       vim.lsp.enable("vtsls")
     end,

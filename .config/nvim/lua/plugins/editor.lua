@@ -36,11 +36,8 @@ return {
   },
   {
     "folke/persistence.nvim",
-    config = function()
-      local dir = vim.fn.stdpath("data") .. "/sessions/"
-      vim.fn.mkdir(dir, "p")
-      require("persistence").setup({ dir = dir, branch = true })
-    end,
+    event = "BufReadPre",
+    opts = {},
     keys = {
       {
         "<leader>ql",
@@ -74,13 +71,14 @@ return {
   },
   {
     "kylechui/nvim-surround",
+    event = "VeryLazy",
     opts = {},
-    keys = {
-      "ys",
-      "ds",
-      "cs",
-      { "S", mode = "x", desc = "Surround (visual)" },
-    },
+    -- keys = {
+    --   "ys",
+    --   "ds",
+    --   "cs",
+    --   { "S", mode = "x", desc = "Surround (visual)" },
+    -- },
   },
   {
     "unblevable/quick-scope",

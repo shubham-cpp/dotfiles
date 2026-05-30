@@ -90,8 +90,9 @@ return {
       { "g=", mode = { "n", "x" }, desc = "Evaluate operator" },
       { "ge", mode = { "n", "x" }, desc = "Exchange operator" },
       { "gm", mode = { "n", "x" }, desc = "Multiply operator" },
-      { "x", mode = { "n", "x" }, desc = "Replace operator" },
       { "gs", mode = { "n", "x" }, desc = "Sort operator" },
+      { "x", mode = { "n", "x" }, desc = "Replace operator" },
+      { "X", "x$", desc = "Replace to end of line", remap = true },
     },
     opts = {
       evaluate = { prefix = "g=" },
@@ -100,10 +101,9 @@ return {
       replace = { prefix = "x" },
       sort = { prefix = "gs" },
     },
-    config = function(_, opts)
-      require("mini.operators").setup(opts)
-      vim.keymap.set("n", "X", "x$", { desc = "Replace to end of line", remap = true })
-    end,
+    -- config = function(_, opts)
+    --   require("mini.operators").setup(opts)
+    -- end,
   },
   {
     "nvim-mini/mini.ai",

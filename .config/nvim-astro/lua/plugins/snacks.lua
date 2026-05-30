@@ -7,18 +7,18 @@ return {
     terminal = {},
     lazygit = {},
     zen = {
-      zoom = {
-        show = { statusline = true, tabline = true },
+      win = {
+        width = 0, -- full width
+        height = 0, -- full width
         wo = {
           number = true,
           relativenumber = true,
           signcolumn = "yes",
-        },
-        win = {
-          width = 0, -- full width
-          height = 0, -- full width
+          wrap = true, -- sets vim.opt.wrap
+          showbreak = "󰄾 ",
         },
       },
+      zoom = { show = { statusline = true, tabline = true } },
     },
     picker = {
       layout = { preset = "dropdown" },

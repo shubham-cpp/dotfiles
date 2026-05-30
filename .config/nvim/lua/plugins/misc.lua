@@ -1,15 +1,21 @@
 return {
   {
     "jake-stewart/multicursor.nvim",
-    sem_version = "^1",
-    dependencies = { "nvimtools/hydra.nvim" },
+    version = "main",
+    lazy = true,
+    opts = {},
+    config = function(_, opts)
+      require("multicursor-nvim").setup(opts)
+    end,
+  },
+  {
+    "nvimtools/hydra.nvim",
+    dependencies = { "jake-stewart/multicursor.nvim" },
     keys = {
       { "<leader>m", desc = "MultiCursors" },
     },
     config = function()
       local mc = require("multicursor-nvim")
-      mc.setup()
-
       vim.keymap.set("n", "<Esc>", function()
         if not mc.cursorsEnabled() then
           mc.enableCursors()
@@ -114,6 +120,10 @@ return {
           { "<Esc>", nil, { exit = true, desc = false } },
         },
       })
+
+      -- vim.keymap.set("x", "<leader>ma", function()
+      --   mc.matchAllAddCursors()
+      -- end, { desc = "MultiCursors all matches" })
     end,
   },
   {

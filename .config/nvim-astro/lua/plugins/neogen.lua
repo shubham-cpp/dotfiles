@@ -1,6 +1,7 @@
 ---@type LazySpec
 return {
   "danymat/neogen",
+  optional = true,
   opts = {
     languages = {
       lua = { template = { annotation_convention = "emmylua" } },

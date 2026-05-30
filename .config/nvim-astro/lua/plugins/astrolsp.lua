@@ -17,7 +17,7 @@ return {
     ---@type AstroLSPOpts
     opts = {
       features = {
-        codelens = true,
+        codelens = false,
         inlay_hints = true,
         semantic_tokens = true,
         signature_help = true,
@@ -30,6 +30,27 @@ return {
             evenBetterToml = {
               schema = { enabled = true },
               formatter = { alignEntries = true, columnWidth = 80, trailingNewline = true },
+            },
+          },
+        },
+        pyrefly = {
+          settings = {
+            python = {
+              pyrefly = {
+                typeCheckingMode = "default",
+                diagnosticMode = "workspace",
+                streamDiagnostics = true,
+                analysis = {
+                  showHoverGoToLinks = true,
+                  inlayHints = {
+                    callArgumentNames = "partial",
+                    functionReturnTypes = true,
+                    variableTypes = true,
+                    pytestParameters = false,
+                  },
+                },
+              },
+              analysis = { completeFunctionParens = true },
             },
           },
         },
@@ -87,55 +108,9 @@ return {
             end,
           },
         },
-        -- emmylua_ls = {
-        --   settings = {
-        --     Lua = {
-        --       runtime = {
-        --         version = "LuaJIT",
-        --         requirePattern = {
-        --           "lua/?/init.lua",
-        --           "lua/?.lua",
-        --           "?/lua/?/init.lua",
-        --           "?/lua/?.lua",
-        --           "?.lua",
-        --         },
-        --       },
-        --       diagnostics = {
-        --         enable = true,
-        --         globals = { "vim" },
-        --         disable = { "undefined-doc-param" },
-        --       },
-        --       workspace = {
-        --         -- library = {
-        --         --   vim.env.VIMRUNTIME,
-        --         --   vim.fn.stdpath "data" .. "/lazy",
-        --         --   vim.fn.stdpath "config" .. "/lua",
-        --         -- },
-        --         library = vim.tbl_map(function(p) return p .. "/" end, vim.api.nvim_list_runtime_paths()),
-        --         ignoreDir = { ".git", "node_modules", ".cache" },
-        --       },
-        --       hint = {
-        --         enable = true,
-        --         paramHint = true,
-        --         indexHint = true,
-        --         localHint = true,
-        --         overrideHint = true,
-        --       },
-        --       completion = {
-        --         enable = true,
-        --         autoRequire = true,
-        --         callSnippet = false,
-        --       },
-        --       strict = {
-        --         arrayIndex = true,
-        --         requirePath = false,
-        --         typeCall = false,
-        --       },
-        --     },
-        --   },
-        -- },
       },
       handlers = {
+        basedpyright = false,
         emmet_ls = false,
         -- lua_ls = false,
       },
