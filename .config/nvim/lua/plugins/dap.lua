@@ -1,112 +1,107 @@
+---@type LazySpec
 return {
-  {
-    "mfussenegger/nvim-dap",
-    dependencies = { "rcarriga/nvim-dap-ui" },
-    lazy = false,
-    keys = {
-      { "<leader>dc", "<cmd>DapContinue<cr>", desc = "DAP: Continue" },
-      { "<leader>db", "<cmd>DapToggleBreakpoint<cr>", desc = "DAP: Toggle breakpoint" },
-      { "<leader>dC", "<cmd>DapClearBreakpoints<cr>", desc = "DAP: Clear breakpoints" },
-      { "<leader>dt", "<cmd>DapTerminate<cr>", desc = "DAP: Terminate" },
-      { "<leader>dd", "<cmd>DapDisconnect<cr>", desc = "DAP: Disconnect" },
-      { "<leader>dr", "<cmd>DapRestartFrame<cr>", desc = "DAP: Restart frame" },
-      { "<leader>dp", "<cmd>DapPause<cr>", desc = "DAP: Pause" },
-      { "<leader>do", "<cmd>DapStepOver<cr>", desc = "DAP: Step over" },
-      { "<leader>di", "<cmd>DapStepInto<cr>", desc = "DAP: Step into" },
-      { "<leader>du", "<cmd>DapStepOut<cr>", desc = "DAP: Step out" },
-      { "<leader>dR", "<cmd>DapToggleRepl<cr>", desc = "DAP: Toggle REPL" },
-      { "<leader>dl", "<cmd>DapShowLog<cr>", desc = "DAP: Show log" },
-    },
-    config = function()
-      local dap = require("dap")
-
-      local function get_free_port()
-        return math.random(30000, 60000)
-      end
-
-      local function executable(cmd, fallback)
-        return function()
-          local root = vim.fs.root(0, { "package.json", "tsconfig.json", "jsconfig.json", ".git" })
-          if root then
-            local local_cmd = root .. "/node_modules/.bin/" .. cmd
-            if vim.fn.executable(local_cmd) == 1 then
-              return local_cmd
-            end
-          end
-          return vim.fn.executable(cmd) == 1 and cmd or fallback
-        end
-      end
-
-      dap.adapters["pwa-node"] = function(callback)
-        local port = get_free_port()
-        callback({
-          type = "server",
-          host = "127.0.0.1",
-          port = port,
-          executable = {
-            command = vim.fn.stdpath("data") .. "/mason/bin/js-debug-adapter",
-            args = { tostring(port), "127.0.0.1" },
-          },
-        })
-      end
-
-      local js_node_configs = {
-        {
-          type = "pwa-node",
-          request = "attach",
-          name = "Attach to Node process",
-          processId = require("dap.utils").pick_process,
-          cwd = "${workspaceFolder}",
-        },
-        {
-          type = "pwa-node",
-          request = "launch",
-          name = "Launch current file with tsx",
-          runtimeExecutable = executable("tsx"),
-          runtimeArgs = { "${file}" },
-          cwd = "${workspaceFolder}",
-          console = "integratedTerminal",
-        },
-        {
-          type = "pwa-node",
-          request = "launch",
-          name = "Launch current file with node",
-          program = "${file}",
-          cwd = "${workspaceFolder}",
-          console = "integratedTerminal",
+  "mfussenegger/nvim-dap",
+  optional = true,
+  opts = function()
+    local dap = require "dap"
+    local adapterType = "node"
+    local pwaType = "pwa-" .. "node"
+    if not dap.adapters[pwaType] then
+      dap.adapters[pwaType] = {
+        type = "server",
+        host = "localhost",
+        port = "${port}",
+        executable = {
+          command = "js-debug-adapter",
+          args = { "${port}" },
         },
       }
+    end
+    local function executable(cmd, fallback)
+      return function()
+        local root = vim.fs.root(0, { "package.json", "tsconfig.json", "jsconfig.json", ".git" })
+        if root then
+          local local_cmd = root .. "/node_modules/.bin/" .. cmd
+          if vim.fn.executable(local_cmd) == 1 then return local_cmd end
+        end
+        return vim.fn.executable(cmd) == 1 and cmd or fallback
+      end
+    end
 
-      for _, ft in ipairs({
-        "javascript",
-        "javascriptreact",
-        "javascript.jsx",
-        "typescript",
-        "typescriptreact",
-        "typescript.tsx",
-      }) do
-        dap.configurations[ft] = js_node_configs
+    if not dap.adapters[adapterType] then
+      dap.adapters[adapterType] = function(cb, config)
+        local nativeAdapter = dap.adapters[pwaType]
+
+        config.type = pwaType
+
+        if type(nativeAdapter) == "function" then
+          nativeAdapter(cb, config)
+        else
+          cb(nativeAdapter)
+        end
       end
-    end,
-  },
-  {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { "nvim-neotest/nvim-nio" },
-    config = function()
-      local dap, dapui = require("dap"), require("dapui")
-      dapui.setup()
-      dap.listeners.before.attach.dapui_config = function()
-        dapui.open()
+    end
+    local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
+
+    local vscode = require "dap.ext.vscode"
+    vscode.type_to_filetypes["node"] = js_filetypes
+    vscode.type_to_filetypes["pwa-node"] = js_filetypes
+
+    for _, language in ipairs(js_filetypes) do
+      if not dap.configurations[language] then
+        dap.configurations[language] = {
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file(Node)",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+            runtimeExecutable = executable "node",
+            skipFiles = {
+              "<node_internals>/**",
+              "node_modules/**",
+            },
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**",
+            },
+          },
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file(tsx)",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            runtimeExecutable = executable("tsx", "node"),
+            skipFiles = {
+              "<node_internals>/**",
+              "node_modules/**",
+            },
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**",
+            },
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            processId = require("dap.utils").pick_process,
+            cwd = "${workspaceFolder}",
+            sourceMaps = true,
+            runtimeExecutable = executable "node",
+            skipFiles = {
+              "<node_internals>/**",
+              "node_modules/**",
+            },
+            resolveSourceMapLocations = {
+              "${workspaceFolder}/**",
+              "!**/node_modules/**",
+            },
+          },
+        }
       end
-      dap.listeners.before.launch.dapui_config = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated.dapui_config = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited.dapui_config = function()
-        dapui.close()
-      end
-    end,
-  },
+    end
+  end,
 }

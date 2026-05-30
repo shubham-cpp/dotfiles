@@ -1,51 +1,40 @@
-local function trash_command()
-  if vim.fn.has("linux") == 1 and vim.fn.executable("gio") == 1 then
-    return { "gio", "trash" }
-  end
-  return { "trash" }
-end
-
-local function trash_path(path)
-  local cmd = trash_command()
-  table.insert(cmd, path)
-  return vim.system(cmd):wait()
-end
-
 local function trash(state)
-  local inputs = require("neo-tree.ui.inputs")
+  local inputs = require "neo-tree.ui.inputs"
   local node = state.tree:get_node()
-  if not node or node.type == "message" then
-    return
-  end
+  if not node or node.type == "message" then return end
   local _, name = require("neo-tree.utils").split_path(node.path)
   local msg = string.format("Are you sure you want to trash '%s'?", name)
   inputs.confirm(msg, function(confirmed)
-    if not confirmed then
-      return
+    if not confirmed then return end
+    local os_name = vim.uv.os_uname().sysname
+    if os_name == "Linux" then
+      vim.system({ "gio", "trash", node.path }):wait()
+    else
+      -- Macos
+      vim.system({ "trash", node.path }):wait()
     end
-    trash_path(node.path)
     require("neo-tree.sources.manager").refresh(state)
   end)
 end
 
 local function trash_visual(state, selected_nodes)
-  local inputs = require("neo-tree.ui.inputs")
+  local inputs = require "neo-tree.ui.inputs"
   local paths_to_trash = {}
   for _, node in ipairs(selected_nodes) do
-    if node.type ~= "message" then
-      table.insert(paths_to_trash, node.path)
-    end
+    if node.type ~= "message" then table.insert(paths_to_trash, node.path) end
   end
-  if #paths_to_trash == 0 then
-    return
-  end
+  if #paths_to_trash == 0 then return end
   local msg = "Are you sure you want to trash " .. #paths_to_trash .. " items?"
   inputs.confirm(msg, function(confirmed)
-    if not confirmed then
-      return
-    end
+    if not confirmed then return end
+    local os_name = vim.uv.os_uname().sysname
     for _, path in ipairs(paths_to_trash) do
-      trash_path(path)
+      if os_name == "Linux" then
+        vim.system({ "gio", "trash", path }):wait()
+      else
+        -- Macos
+        vim.system({ "trash", path }):wait()
+      end
     end
     require("neo-tree.sources.manager").refresh(state)
   end)
@@ -63,9 +52,7 @@ local function copy_selector(state)
     ["PATH (HOME)"] = modify(filepath, ":~"),
     ["URI"] = vim.uri_from_fname(filepath),
   }
-  local options = vim.tbl_filter(function(val)
-    return vals[val] ~= ""
-  end, vim.tbl_keys(vals))
+  local options = vim.tbl_filter(function(val) return vals[val] ~= "" end, vim.tbl_keys(vals))
   if vim.tbl_isempty(options) then
     vim.notify("No values to copy", vim.log.levels.WARN)
     return
@@ -73,9 +60,7 @@ local function copy_selector(state)
   table.sort(options)
   vim.ui.select(options, {
     prompt = "Choose to copy to clipboard:",
-    format_item = function(item)
-      return ("%s: %s"):format(item, vals[item])
-    end,
+    format_item = function(item) return ("%s: %s"):format(item, vals[item]) end,
   }, function(choice)
     local result = vals[choice]
     if result then
@@ -85,122 +70,91 @@ local function copy_selector(state)
   end)
 end
 
-local function system_open(state)
-  local node = state.tree:get_node()
-  vim.ui.open(node:get_id())
-end
-
-local function child_or_open(state)
-  local node = state.tree:get_node()
-  if node:has_children() then
-    if not node:is_expanded() then
-      state.commands.toggle_node(state)
-    elseif node.type == "file" then
-      state.commands.open(state)
-    else
-      require("neo-tree.ui.renderer").focus_node(state, node:get_child_ids()[1])
-    end
-  else
-    state.commands.open(state)
-  end
-end
-
-local function parent_or_close(state)
-  local node = state.tree:get_node()
-  if node:has_children() and node:is_expanded() then
-    state.commands.toggle_node(state)
-  else
-    require("neo-tree.ui.renderer").focus_node(state, node:get_parent_id())
-  end
-end
-
 local function collapse_or_open(state)
   local node = state.tree:get_node()
   if node:has_children() then
-    if not node:is_expanded() then
+    if not node:is_expanded() then -- if unexpanded, expand
       state.commands.toggle_node(state)
-    elseif node.type == "file" then
-      state.commands.open(state)
-    else
-      state.commands.toggle_node(state)
+    else -- if expanded and has children, seleect the next child
+      if node.type == "file" then
+        state.commands.open(state)
+      else
+        state.commands.toggle_node(state)
+      end
     end
-  else
+  else -- if has no children
     state.commands.open(state)
   end
 end
 
+---@type LazySpec
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-      "antosha417/nvim-lsp-file-operations",
-    },
-    config = function()
-      local lsp_file_operations = require("core.lsp_file_operations")
-      require("neo-tree").setup({
-        close_if_last_window = true,
-        window = {
-          position = "right",
-          insert_as = "sibling",
-          mappings = { ["<space>"] = "none" },
+    optional = true,
+    opts = {
+      commands = {
+        trash = trash,
+        trash_visual = trash_visual,
+        copy_selector = copy_selector,
+      },
+      window = {
+        mappings = {
+          ["d"] = "trash",
+          ["D"] = "delete",
         },
+      },
+      filesystem = {
         commands = {
-          trash = trash,
-          trash_visual = trash_visual,
-          copy_selector = copy_selector,
-          system_open = system_open,
-          parent_or_close = parent_or_close,
-          child_or_open = child_or_open,
           collapse_or_open = collapse_or_open,
         },
-        filesystem = {
-          bind_to_cwd = false,
-          follow_current_file = { enabled = true },
-          hijack_netrw_behavior = "disabled",
-          use_libuv_file_watcher = true,
-          window = {
-            mappings = {
-              ["d"] = "trash",
-              ["D"] = "delete",
-              ["h"] = "parent_or_close",
-              ["Y"] = "copy_selector",
-              ["o"] = "system_open",
-              ["l"] = "collapse_or_open",
-              ["L"] = "child_or_open",
+        window = {
+          position = "right", -- left, right, top, bottom, float, current
+          width = 45,
+          mappings = {
+            ["l"] = "collapse_or_open",
+            ["L"] = "child_or_open",
+            ["F"] = "fuzzy_finder_directory",
+            ["Y"] = "copy_selector",
+          },
+        },
+      },
+    },
+  },
+  {
+    "mikavilpas/yazi.nvim",
+    cmd = "Yazi",
+    dependencies = {
+      { "nvim-lua/plenary.nvim", lazy = true },
+      {
+        "AstroNvim/astrocore",
+        ---@type AstroCoreOpts
+        opts = {
+          mappings = {
+            n = {
+              ["<Leader>-"] = { "<Cmd>Yazi<CR>", desc = "Open yazi at the current file" },
+              ["<Leader>_"] = { "<Cmd>Yazi cwd<CR>", desc = "Open yazi in nvim's working directory" },
+              ["<Leader>uY"] = { "<Cmd>Yazi toggle<CR>", desc = "Resume the last yazi session" },
+            },
+            v = {
+              ["<Leader>-"] = { "<Cmd>Yazi<CR>", desc = "Open yazi at the current file" },
             },
           },
         },
-      })
-      require("lsp-file-operations").setup({
-        operations = lsp_file_operations.operations,
-      })
-    end,
-    keys = {
-      {
-        "<leader>e",
-        function()
-          require("neo-tree.command").execute({
-            toggle = true,
-            source = "filesystem",
-            dir = vim.uv.cwd(),
-            reveal = true,
-          })
-        end,
-        desc = "Toggle Neo-tree",
       },
-      {
-        "<leader>E",
-        function()
-          require("neo-tree.command").execute({
-            toggle = true,
-            source = "filesystem",
-            dir = vim.uv.cwd(),
-          })
-        end,
-        desc = "Toggle Neo-tree",
+    },
+    ---@type YaziConfig | {}
+    opts = {
+      open_for_directories = false,
+      keymaps = {
+        show_help = "<f1>",
       },
-      { "<leader>oe", "<cmd>Neotree focus<CR>", desc = "Toggle Neo-tree" },
+      ---@type 'none'| 'rounded'| 'single'| 'double'| 'shadow'
+      yazi_floating_window_border = "rounded",
+      integrations = {
+        grep_in_directory = "fzf-lua",
+        grep_in_selected_files = "fzf-lua",
+      },
     },
   },
 }

@@ -1,9 +1,10 @@
+---@type LazySpec
 return {
   "ssundarraj/local-review.nvim",
   keys = {
-    { "<leader>ca", desc = "Review: Add" },
-    { "<leader>cd", desc = "Review: Delete" },
-    { "<leader>ce", desc = "Review: Export" },
+    { "<Leader>ca", desc = "Review: Add" },
+    { "<Leader>cd", desc = "Review: Delete" },
+    { "<Leader>ce", desc = "Review: Export" },
     { "]r", desc = "Review: Next" },
     { "[r", desc = "Review: Prev" },
   },
