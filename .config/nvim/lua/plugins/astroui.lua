@@ -17,8 +17,8 @@ return {
   },
   {
     "vague2k/vague.nvim",
-    lazy = true,
     enabled = true,
+    lazy = true,
     opts = { transparent = false },
     specs = {
       {
@@ -29,8 +29,6 @@ return {
           colorscheme = "vague",
           status = {
             colors = function(hl)
-              -- astrodark
-              -- hl.buffer_active_bg = "#032240"
               hl.buffer_active_bg = "#393960"
               return hl
             end,
@@ -40,7 +38,6 @@ return {
               ["@tag.attribute"] = { fg = "#c3c3d5" },
               StatusLine = { bg = "#181818" },
               WinBar = { bg = "#141415" },
-              SnacksPickerMatch = { fg = "#f3be7c" },
               QuickScopePrimary = { fg = "#f3be7c", bg = "#333738", bold = true, undercurl = true },
               QuickScopeSecondary = { fg = "#7e98e8", bg = "#333738", bold = true, undercurl = true },
               -- blink.cmp

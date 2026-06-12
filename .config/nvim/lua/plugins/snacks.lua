@@ -4,7 +4,6 @@ return {
   optional = true,
   ---@type snacks.Config
   opts = {
-    terminal = {},
     lazygit = {},
     zen = {
       win = {
@@ -26,29 +25,27 @@ return {
       ---@class snacks.picker.formatters.Config
       formatters = { file = { filename_first = true } },
       sources = {
-        buffers = {
-          layout = { preset = "vscode" },
-          win = {
-            input = {
-              keys = {
-                ["<a-x>"] = { "bufdelete", mode = { "n", "i" } },
-                ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-              },
-            },
-            list = { keys = { ["dd"] = "bufdelete" } },
-          },
-        },
+        buffers = { layout = { preset = "vscode" } },
         git_files = { untracked = true },
         git_grep = { untracked = true },
       },
       win = {
         input = {
-          ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
-          ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
-          ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
-          ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
-          ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-          ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
+          keys = {
+            ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+            ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+            ["<c-f>"] = { "list_scroll_down", mode = { "i", "n" } },
+            ["<c-b>"] = { "list_scroll_up", mode = { "i", "n" } },
+            -- ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
+            ["<c-t>"] = { "edit_tab", mode = { "i", "n" } },
+
+            ["<C-Up>"] = false,
+            ["<C-Down>"] = false,
+          },
+          b = {
+            minipairs_disable = true,
+            completion = false,
+          },
         },
         list = {
           keys = {
@@ -67,26 +64,31 @@ return {
       "AstroNvim/astrocore",
       opts = function(_, opts)
         local maps = opts.mappings
-        local has_fzf = pcall(require, "fzf-lua")
+
+        local has_fzf = require("astrocore").is_available "fzf-lua"
+        local has_toggle_term = require("astrocore").is_available "toggleterm.nvim"
 
         maps.n["<Leader>fN"] = {
           function() require("snacks.picker").notifications { layout = { preset = "vertical" } } end,
           desc = "Find notifications",
         }
         maps.n["<Leader>gg"] = { function() require("snacks.lazygit").open() end, desc = "Lazygit" }
-        local toggle_terminal = {
-          function()
-            if vim.v.count ~= 0 then vim.g.previous_term_count = vim.v.count1 end
 
-            require("snacks.terminal").toggle(nil, {
-              win = { position = "float", border = "rounded" },
-              count = vim.g.previous_term_count,
-            })
-          end,
-          desc = "Terminal",
-        }
-        maps.n["<C-\\>"] = toggle_terminal
-        maps.t["<C-\\>"] = toggle_terminal
+        if not has_toggle_term then
+          local toggle_terminal = {
+            function()
+              if vim.v.count ~= 0 then vim.g.previous_term_count = vim.v.count1 end
+
+              require("snacks.terminal").toggle(nil, {
+                win = { position = "float", border = "rounded" },
+                count = vim.g.previous_term_count,
+              })
+            end,
+            desc = "Terminal",
+          }
+          maps.n["<C-\\>"] = toggle_terminal
+          maps.t["<C-\\>"] = toggle_terminal
+        end
 
         maps.n["<C-w>m"] = {
           function() require("snacks").zen.zoom() end,
@@ -123,10 +125,14 @@ return {
             function() require("snacks.picker").grep_word { cwd = vim.fn.expand "%:p:h" } end,
             desc = "Grep(Cwd)",
           }
-          -- maps.n["<Leader>fW"] = {
-          --   function() require("snacks.picker").grep { cwd = vim.fn.expand "%:p:h" } end,
-          --   desc = "Grep(Cwd)",
-          -- }
+          maps.n["<Leader>fw"] = {
+            function() require("snacks.picker").grep_word {} end,
+            desc = "Grep",
+          }
+          maps.n["<Leader>fW"] = {
+            function() require("snacks.picker").grep_word { cwd = vim.fn.expand "%:p:h" } end,
+            desc = "Grep(Cwd)",
+          }
 
           maps.n["<Leader>fn"] = {
             function() require("snacks.picker").files { cwd = vim.fn.stdpath "config", layout = { preset = "vscode" } } end,
@@ -175,32 +181,34 @@ return {
     {
       "AstroNvim/astrolsp",
       optional = true,
-      opts = {
-        mappings = {
-          n = {
-            grr = {
-              function() require("snacks.picker").lsp_references { include_declaration = true } end,
-              desc = "References",
-              cond = "textDocument/references",
-            },
-            gri = {
-              function() require("snacks.picker").lsp_implementations() end,
-              desc = "Implementation",
-              cond = "textDocument/implementation",
-            },
-            grs = {
-              function() require("snacks.picker").lsp_symbols { workspace = false } end,
-              desc = "Document symbols",
-              cond = "textDocument/documentSymbol",
-            },
-            grS = {
-              function() require("snacks.picker").lsp_workspace_symbols {} end,
-              desc = "Workspace symbols",
-              cond = "workspace/symbol",
-            },
-          },
-        },
-      },
+      opts = function(_, opts)
+        local maps = opts.mappings
+
+        local has_fzf = require("astrocore").is_available "fzf-lua"
+
+        if has_fzf then return end
+
+        maps.n.grr = {
+          function() require("snacks.picker").lsp_references { include_declaration = true } end,
+          desc = "References",
+          cond = "textDocument/references",
+        }
+        maps.n.gri = {
+          function() require("snacks.picker").lsp_implementations() end,
+          desc = "Implementation",
+          cond = "textDocument/implementation",
+        }
+        maps.n.grs = {
+          function() require("snacks.picker").lsp_symbols { workspace = false } end,
+          desc = "Document symbols",
+          cond = "textDocument/documentSymbol",
+        }
+        maps.n.grS = {
+          function() require("snacks.picker").lsp_workspace_symbols {} end,
+          desc = "Workspace symbols",
+          cond = "workspace/symbol",
+        }
+      end,
     },
   },
 }

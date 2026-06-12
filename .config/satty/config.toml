@@ -1,0 +1,23 @@
+[general]
+fullscreen            = false
+corner-roundness      = 4
+copy-command          = "wl-copy --type image/png"
+disable-notifications = true
+
+[keybinds]
+highlight = "h"
+arrow     = "a"
+pointer   = "p"
+crop      = "c"
+brush     = "b"
+line      = "l"
+rectangle = "r"
+ellipse   = "e"
+text      = "t"
+marker    = "m"
+blur      = "u"
+
+[font]
+family   = "Fira Sans Book"
+style    = "Regular"
+fallback = ["CaskaydiaCove NF", "Comic Sans MS"]

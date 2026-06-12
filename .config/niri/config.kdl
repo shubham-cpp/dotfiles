@@ -50,9 +50,6 @@ output "eDP-1" {
 binds {
   Mod+Shift+Slash                     { show-hotkey-overlay; }
   // Super+Control+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
-  Super+Control+L hotkey-overlay-title="Lock the Screen" { spawn-sh "qs -c noctalia-shell ipc call sessionMenu lock"; }
-  Super+N hotkey-overlay-title="Open: Notifications" { spawn-sh "qs -c noctalia-shell ipc call notifications toggleHistory"; }
-  Super+Shift+N hotkey-overlay-title="Open: Notifications" { spawn-sh "qs -c noctalia-shell ipc call notifications toggleDND"; }
 
   // ─── Applications ───
   Mod+Return hotkey-overlay-title="Open a Terminal: wezterm" { spawn "foot"; }
@@ -61,10 +58,11 @@ binds {
   Mod+E hotkey-overlay-title="Open file-manager" { spawn "thunar"; }
   Mod+Shift+E hotkey-overlay-title="Open file-manager: Yazi" { spawn "foot" "-a" "foot-prg-yazi" "-e" "yazi"; }
 
-  Mod+Shift+W hotkey-overlay-title="Open secondary browser" { spawn "gtk-launch" "com.brave.Browser.desktop"; }
+  // Mod+Shift+W hotkey-overlay-title="Open secondary browser" { spawn "gtk-launch" "com.brave.Browser.desktop"; }
+  Mod+Shift+W hotkey-overlay-title="Open secondary browser" { spawn "gtk-launch" "io.gitlab.LibreWolf.desktop"; }
   Mod+W       hotkey-overlay-title="Open main browser"      { spawn "gtk-launch" "helium"; }
 
-  // Mod+D  repeat=false      hotkey-overlay-title="Open: App Finder" { spawn "rofi" "-show" "drun" "-matching" "fuzzy"; }
+  Mod+D  repeat=false      hotkey-overlay-title="Open: App Finder" { spawn "rofi" "-show" "drun" "-matching" "fuzzy"; }
   Mod+Shift+D repeat=false hotkey-overlay-title="Open: Rofi-Demu"   { spawn "rofi" "-show" "run" "-config" "~/.config/rofi/dmenu.rasi"; }
   Mod+Shift+P repeat=false hotkey-overlay-title="Open: File Picker" { spawn "/home/shubham/.local/bin/myscripts/superp"; }
 
@@ -73,9 +71,13 @@ binds {
   Ctrl+Alt+T hotkey-overlay-title="System monitor"      { spawn "foot" "-a" "foot-prg-btop" "-e" "btop"; }
   Ctrl+Alt+N hotkey-overlay-title="Network manager"     { spawn "foot" "-a" "foot-prg-nmtui" "-e" "nmtui"; }
   Ctrl+Alt+C hotkey-overlay-title="Color Picker"        { spawn-sh "hyprpicker -a ||notify-send -u critical 'Program not Installed' 'hyprpicker is not installed'"; }
-  Ctrl+Alt+S hotkey-overlay-title="Voice-To-Text"       { spawn-sh "pkill -USR2 -n handy";    }
+
   Mod+G      hotkey-overlay-title="Open Steam: NVIDIA gaming profile" { spawn "~/.config/niri/scripts/steam-gaming.sh"; }
-  // Mod+Y      hotkey-overlay-title="Clipboard History"   { spawn "foot" "-a" "should_be_floating" "cliphist-fzf-sixel"; }
+  Mod+Y      hotkey-overlay-title="Clipboard History"   { spawn "foot" "-a" "should_be_floating" "cliphist-fzf-sixel"; }
+
+  Ctrl+Alt+S hotkey-overlay-title="Voice-To-Text"              { spawn-sh "pkill -USR2 -n handy";    }
+  Mod+Period hotkey-overlay-title="Voice-To-Text" repeat=false { spawn-sh "nvstt toggle"; }
+
   // Mod+P hotkey-overlay-title="Open: Window picker"      { spawn "rofi" "-show" "window"; }
   // Ctrl+Alt+E hotkey-overlay-title="Open: Emoji Picker"  { spawn "rofi" "-show" "emoji"; }
   // Mod+Ctrl+S                          { spawn-sh "~/.local/bin/myscripts/logout_prompt"; }
@@ -96,28 +98,59 @@ binds {
   // XF86MonBrightnessDown allow-when-locked=true { spawn "~/.local/bin/myscripts/brightness" "dec"; }
   // XF86MonBrightnessUp   allow-when-locked=true { spawn "~/.local/bin/myscripts/brightness" "inc"; }
 
-  // Noctalia
-  Mod+D       repeat=false  hotkey-overlay-title="Open: App Finder"    { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
-  Mod+Y       repeat=false  hotkey-overlay-title="Open: Clipboard"     { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard"; }
-  Mod+P       repeat=false  hotkey-overlay-title="Open: Window Picker" { spawn-sh "qs -c noctalia-shell ipc call launcher windows"; }
-  Ctrl+Alt+E  repeat=false  hotkey-overlay-title="Open: Emoji Picker"  { spawn-sh "qs -c noctalia-shell ipc call launcher emoji"; }
-  Mod+Ctrl+S                          { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+  // Noctalia v4
+  // Super+Control+L hotkey-overlay-title="Lock the Screen" { spawn-sh "qs -c noctalia-shell ipc call sessionMenu lock"; }
+  // Super+N         hotkey-overlay-title="Open: Notifications" { spawn-sh "qs -c noctalia-shell ipc call notifications toggleHistory"; }
+  // Super+Shift+N   hotkey-overlay-title="Open: Notifications" { spawn-sh "qs -c noctalia-shell ipc call notifications toggleDND"; }
+  //
+  // Mod+D       repeat=false  hotkey-overlay-title="Open: App Finder"    { spawn-sh "qs -c noctalia-shell ipc call launcher toggle"; }
+  // Mod+Y       repeat=false  hotkey-overlay-title="Open: Clipboard"     { spawn-sh "qs -c noctalia-shell ipc call launcher clipboard"; }
+  // Mod+P       repeat=false  hotkey-overlay-title="Open: Window Picker" { spawn-sh "qs -c noctalia-shell ipc call launcher windows"; }
+  // Ctrl+Alt+E  repeat=false  hotkey-overlay-title="Open: Emoji Picker"  { spawn-sh "qs -c noctalia-shell ipc call launcher emoji"; }
+  // Mod+Ctrl+S  repeat=false                                             { spawn-sh "qs -c noctalia-shell ipc call sessionMenu toggle"; }
+  //
+  // XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }
+  // XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease"; }
+  // XF86AudioMute         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput"; }
+  // XF86AudioMicMute      allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
+  // Ctrl+F5               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
+  //
+  // XF86AudioNext         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media next"; }
+  // XF86AudioPrev         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media previous"; }
+  // XF86AudioPause        allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+  // XF86AudioPlay         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+  //
+  // XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
+  // XF86MonBrightnessDown allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
+  //
+  // Mod+Comma             repeat=false { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
+  // Noctalia End
+  // Noctalia v5
+  Super+Control+L hotkey-overlay-title="Lock the Screen" { spawn-sh "noctalia msg notification-dnd-toggle"; }
+  Super+N         hotkey-overlay-title="Open: Notifications" { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
+  Super+Shift+N   hotkey-overlay-title="Open: Notifications" { spawn-sh "noctalia msg notification-dnd-toggle"; }
 
-  XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume increase"; }
-  XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume decrease"; }
-  XF86AudioMute         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteOutput"; }
-  XF86AudioMicMute      allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
-  Ctrl+F5               allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call volume muteInput"; }
+  // Mod+D       repeat=false  hotkey-overlay-title="Open: App Finder"    { spawn-sh "noctalia msg panel-toggle launcher"; }
+  // Mod+Y       repeat=false  hotkey-overlay-title="Open: Clipboard"     { spawn-sh "noctalia msg panel-toggle clipboard"; }
+  Mod+P       repeat=false  hotkey-overlay-title="Open: Window Picker" { spawn-sh "rofi -show window -matching fuzzy"; }
+  Ctrl+Alt+E  repeat=false  hotkey-overlay-title="Open: Emoji Picker"  { spawn-sh "noctalia msg panel-toggle launcher /emo"; }
+  Mod+Ctrl+S  repeat=false                                             { spawn-sh "noctalia msg panel-toggle session"; }
 
-  XF86AudioNext         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media next"; }
-  XF86AudioPrev         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media previous"; }
-  XF86AudioPause        allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
-  XF86AudioPlay         allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call media playPause"; }
+  XF86AudioRaiseVolume  allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+  XF86AudioLowerVolume  allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+  XF86AudioMute         allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+  XF86AudioMicMute      allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
+  Ctrl+F5               allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
 
-  XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness increase"; }
-  XF86MonBrightnessDown allow-when-locked=true { spawn-sh "qs -c noctalia-shell ipc call brightness decrease"; }
+  XF86AudioNext         allow-when-locked=true { spawn-sh "noctalia msg media next"; }
+  XF86AudioPrev         allow-when-locked=true { spawn-sh "noctalia msg media prev"; }
+  XF86AudioPause        allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
+  XF86AudioPlay         allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
 
-  Mod+Comma             repeat=false { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
+  XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
+  XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
+
+  Mod+Comma             repeat=false { spawn-sh "noctalia msg settings-toggle"; }
   // Noctalia End
 
   XF86Calculator         { spawn-sh "qalculate-gtk || gnome-calculator || galculator || notify-send 'Error' 'Calculator App not installed' -u critical"; }
@@ -365,7 +398,7 @@ window-rule {
   match title=r#"(?i).*(proton|wine|directx|vulkan).*"#
 
   variable-refresh-rate true
-  open-fullscreen true
+  // open-fullscreen true
   geometry-corner-radius 0
   clip-to-geometry false
   shadow {
@@ -469,9 +502,10 @@ window-rule {
 
 window-rule {
   match app-id=r#"^foot-prg-*"#
+  match app-id="dev.noctalia.Noctalia.Settings"
 
   default-column-width { fixed 1000; }
-  default-window-height { fixed 700; }
+  default-window-height { fixed 840; }
   open-floating true
 }
 
@@ -572,9 +606,9 @@ hotkey-overlay {
   skip-at-startup
 }
 
-switch-events {
-    lid-close {spawn "hyprlock";}
-}
+// switch-events {
+//     lid-close {spawn "hyprlock";}
+// }
 
 // ────────────── Startup Applications ──────────────
 // Keep startup commands in one script instead of many spawn-at-startup entries.

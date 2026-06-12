@@ -9,7 +9,9 @@ return {
   { import = "astrocommunity.pack.fish" },
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.html-css" },
-  { import = "astrocommunity.pack.json" },
+  { import = "astrocommunity.pack.typescript" },
+  { import = "astrocommunity.pack.svelte" },
+  { import = "astrocommunity.pack.vue" },
   { import = "astrocommunity.pack.tailwindcss" },
   { import = "astrocommunity.pack.markdown" },
   { import = "astrocommunity.pack.python.base" },
@@ -17,12 +19,11 @@ return {
   { import = "astrocommunity.pack.python.ruff" },
   { import = "astrocommunity.pack.rust" },
   { import = "astrocommunity.pack.sql" },
-  { import = "astrocommunity.pack.svelte" },
-  { import = "astrocommunity.pack.vue" },
+  { import = "astrocommunity.pack.json" },
   { import = "astrocommunity.pack.toml" },
-  { import = "astrocommunity.pack.typescript" },
+  { import = "astrocommunity.pack.yaml" },
 
-  -- { import = "astrocommunity.fuzzy-finder.fzf-lua" },
+  { import = "astrocommunity.fuzzy-finder.fzf-lua" },
 
   -- { import = "astrocommunity.recipes.astrolsp-no-insert-inlay-hints" },
   { import = "astrocommunity.recipes.heirline-vscode-winbar" },
@@ -34,7 +35,6 @@ return {
 
   { import = "astrocommunity.motion.nvim-surround" },
 
-  -- { import = "astrocommunity.utility.lua-json5" },
   { import = "astrocommunity.debugging.nvim-dap-virtual-text" },
   { import = "astrocommunity.debugging.nvim-dap-view" },
   { import = "astrocommunity.test.neotest" },

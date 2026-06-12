@@ -22,13 +22,44 @@ return {
         semantic_tokens = true,
         signature_help = true,
       },
+      -- servers = { "taplo" },
       config = {
         clangd = { capabilities = { offsetEncoding = "utf-8" } },
         emmet_language_server = { filetypes = { "templ" } },
+        jsonls = {
+          before_init = function(_, config)
+            if not config.settings.json.schemas then config.settings.json.schemas = {} end
+            vim.list_extend(config.settings.json.schemas, require("schemastore").json.schemas())
+          end,
+        },
+        yamlls = {
+          before_init = function(_, new_config)
+            new_config.settings.yaml.schemas = vim.tbl_deep_extend(
+              "force",
+              new_config.settings.yaml.schemas or {},
+              require("schemastore").yaml.schemas()
+            )
+          end,
+          settings = {
+            redhat = { telemetry = { enabled = false } },
+            yaml = {
+              keyOrdering = false,
+              format = { enable = true },
+              validate = true,
+              schemaStore = { enable = false, url = "" },
+            },
+          },
+        },
         taplo = {
+          root_markers = { "starship.toml", ".taplo.toml", "taplo.toml", ".git" },
           settings = {
             evenBetterToml = {
-              schema = { enabled = true },
+              schema = {
+                enabled = true,
+                associations = {
+                  ["starship.toml"] = "https://starship.rs/config-schema.json",
+                },
+              },
               formatter = { alignEntries = true, columnWidth = 80, trailingNewline = true },
             },
           },

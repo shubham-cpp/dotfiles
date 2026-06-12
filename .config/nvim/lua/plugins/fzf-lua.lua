@@ -52,7 +52,6 @@ return {
       row = 0.5,
       col = 0.5,
       preview = {
-        default = "bat",
         layout = "vertical",
         vertical = "down:38%",
         scrollbar = "border",

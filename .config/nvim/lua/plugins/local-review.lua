@@ -1,6 +1,14 @@
 ---@type LazySpec
 return {
   "ssundarraj/local-review.nvim",
+  cmd = {
+    "LocalReviewComment",
+    "LocalReviewDelete",
+    "LocalReviewNext",
+    "LocalReviewPrev",
+    "LocalReviewExport",
+    "LocalReviewClear",
+  },
   keys = {
     { "<Leader>ca", desc = "Review: Add" },
     { "<Leader>cd", desc = "Review: Delete" },

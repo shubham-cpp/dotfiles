@@ -1,10 +1,13 @@
 lastupdatecheck: 0
 recentrepos:
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/Downloads/Packages/GitClones/wtype
+    - /home/shubham/Downloads/Packages/GitClones/lspx
+    - /home/shubham/Downloads/Packages/GitClones/swappy
+    - /home/shubham/Documents/Programming/JobPreparations/Rust/nvstt
+    - /home/shubham/Downloads/Packages/GitClones/noctalia-shell
     - /home/shubham/Downloads/Packages/GitClones/Satty
     - /home/shubham/Downloads/Packages/GitClones/herdr
-    - /home/shubham/Documents/Programming/JobPreparations/WebDevs/demo/job-extension
-    - /home/shubham/Documents/Programming/JobPreparations/WebDevs/sideman-coder
     - /home/shubham/.pi
     - /home/shubham/Downloads/Packages/GitClones/waybar-module-music
 startuppopupversion: 5

@@ -12,12 +12,12 @@ return {
       sources = {
         default = { "ripgrep" },
         providers = {
-          lsp = { fallbacks = {} },
+          lsp = { score_offset = 20, fallbacks = {} },
+          snippets = { score_offset = 12 },
           buffer = {
+            score_offset = 2,
             -- each provider can be customized with their `opts`
-            opts = {
-              get_bufnrs = function() return vim.api.nvim_list_bufs() end,
-            },
+            opts = { get_bufnrs = function() return vim.api.nvim_list_bufs() end },
           },
           ripgrep = {
             module = "blink-ripgrep",
