@@ -112,7 +112,7 @@ return {
           showbreak = "󰄾 ",
           undolevels = 10000,
           exrc = true, -- allows to create project specific settings
-          sessionoptions = { "blank", "buffers", "curdir", "globals", "help", "tabpages", "winsize", "terminal" },
+          sessionoptions = { "blank", "buffers", "curdir", "globals", "help", "tabpages", "winsize", "skiprtp" },
           smoothscroll = true,
           wrap = true, -- sets vim.opt.wrap
           grepprg = vim.fn.executable "rg" == 1 and "rg --vimgrep --smart-case --no-heading --sort=path"
@@ -160,30 +160,6 @@ return {
             desc = "Format buffer",
           },
           ["<Leader>bn"] = { "<cmd>tabnew<cr>", desc = "New tab" },
-          -- ["<LocalLeader>a"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@parameter.inner" end,
-          --   desc = "Swap next argument",
-          -- },
-          -- ["<LocalLeader>A"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@parameter.inner" end,
-          --   desc = "Swap prev argument",
-          -- },
-          -- ["<LocalLeader>k"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@block.outer" end,
-          --   desc = "Swap next block",
-          -- },
-          -- ["<LocalLeader>K"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@block.outer" end,
-          --   desc = "Swap prev block",
-          -- },
-          -- ["<LocalLeader>f"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_next "@function.outer" end,
-          --   desc = "Swap next function",
-          -- },
-          -- ["<LocalLeader>F"] = {
-          --   function() require("nvim-treesitter-textobjects.swap").swap_previous "@function.outer" end,
-          --   desc = "Swap prev function",
-          -- },
         },
         v = {
           ["0"] = { "^", desc = "Goto Beginning" },
@@ -221,14 +197,6 @@ return {
             desc = "Apply local large buffer guardrails",
             callback = function(args) apply_large_buffer_guard(args.buf) end,
           },
-          -- {
-          --   event = "LspAttach",
-          --   desc = "Detach LSP from large buffers",
-          --   callback = function(args)
-          --     if not vim.b[args.buf].large_buf then return end
-          --     pcall(vim.lsp.buf_detach_client, args.buf, args.data.client_id)
-          --   end,
-          -- },
         },
         fix_comment_continuation = {
           {

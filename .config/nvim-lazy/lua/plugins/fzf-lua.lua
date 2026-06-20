@@ -3,21 +3,16 @@ local vscode = {
   width = 0.6,
   row = 0,
 }
--- local actions = require("fzf-lua.actions")
--- local action_keys = {
---   ["ctrl-q"] = {
---     fn = actions.file_edit_or_qf,
---     prefix = "select-all+",
---   },
--- }
 
 ---@type LazySpec
 return {
   "ibhagwan/fzf-lua",
   opts = {
     { "border-fused", "skim" },
+    fzf_opts = { ["--algo"] = "fzy" },
     defaults = {
       formatter = { "path.filename_first", 2 },
+      fzf_args = { "--ellipsis= " },
     },
     keymap = {
       builtin = {

@@ -60,17 +60,17 @@ return {
       },
       fuzzy = {
         implementation = "prefer_rust",
-        -- sorts = {
-        --   function(a, b)
-        --     if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
-        --       return
-        --     end
-        --     return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-        --   end,
-        --   "score",
-        --   "sort_text",
-        --   "exact",
-        -- },
+        sorts = {
+          function(a, b)
+            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+              return
+            end
+            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+          end,
+          "score",
+          "sort_text",
+          "exact",
+        },
       },
     },
   },
@@ -81,34 +81,30 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
-      -- snippets = { score_offset = 9 },
       sources = {
         default = { "ripgrep" },
         providers = {
-          -- snippets = { score_offset = 9 },
-          -- lsp = { score_offset = 10 },
           -- path = { score_offset = 30 },
+          snippets = { score_offset = 16 },
+          lsp = { score_offset = 20, fallbacks = {} },
           buffer = {
-            score_offset = -3,
+            score_offset = 5,
+            -- each provider can be customized with their `opts`
             opts = {
               get_bufnrs = function()
-                return vim.tbl_filter(function(bufnr)
-                  return vim.bo[bufnr].buftype == ""
-                end, vim.api.nvim_list_bufs())
+                return vim.api.nvim_list_bufs()
               end,
             },
           },
           ripgrep = {
             module = "blink-ripgrep",
             name = "Ripgrep",
-            score_offset = -5,
+            score_offset = 1,
             ---@module "blink-ripgrep"
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              backend = {
-                ripgrep = { search_casing = "--smart-case" },
-              },
+              backend = { ripgrep = { search_casing = "--smart-case" } },
             },
           },
         },

@@ -13,7 +13,7 @@ return {
         default = { "ripgrep" },
         providers = {
           lsp = { score_offset = 20, fallbacks = {} },
-          snippets = { score_offset = 12 },
+          snippets = { score_offset = 16 },
           buffer = {
             score_offset = 2,
             -- each provider can be customized with their `opts`
@@ -27,9 +27,7 @@ return {
             ---@type blink-ripgrep.Options
             opts = {
               prefix_min_len = 4,
-              backend = {
-                ripgrep = { search_casing = "--smart-case" },
-              },
+              backend = { ripgrep = { search_casing = "--smart-case" } },
             },
           },
         },

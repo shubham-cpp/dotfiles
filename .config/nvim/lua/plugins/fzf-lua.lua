@@ -69,12 +69,16 @@ return {
     }
     opts.winopts = default_preview_layout
     opts.files = {
+      -- fzf_bin = "sk",
+      -- fzf_opts = { ["--algo"] = "fzy" },
       actions = action_keys,
       previewer = false,
       winopts = vscode_layout "Files",
     }
     opts.git = {
       files = {
+        -- fzf_bin = "sk",
+        -- fzf_opts = { ["--algo"] = "fzy" },
         actions = action_keys,
         previewer = false,
         winopts = vscode_layout "Git Files",
@@ -90,12 +94,14 @@ return {
     opts.autocmds = { winopts = docs_layout "Autocmds" }
     opts.zoxide = { winopts = vscode_layout "Zoxide" }
 
-    opts.defaults = {
-      formatter = { "path.filename_first", 2 },
-      fzf_args = { "--ellipsis= " },
-    }
-    opts[1] = { "border-fused", "skim", "hide" }
-    opts.fzf_opts = { ["--algo"] = "fzy" }
+    opts.defaults = { formatter = { "path.filename_first", 2 } }
+    opts[1] = { "border-fused", "skim" }
+
+    if vim.tbl_contains(opts[1], "skim") then
+      opts.defaults.fzf_args = vim.tbl_extend("force", opts.defaults.fzf_args or {}, { "--ellipsis= " })
+      opts.fzf_opts = { ["--algo"] = "fzy" }
+    end
+
     opts.ui_select = true
   end,
   dependencies = {

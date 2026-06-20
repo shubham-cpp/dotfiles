@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-# Layout name to mmsg code mapping
+# Layout name to mmsg symbol mapping
 declare -A LAYOUT_CODES=(
     ["tile"]="T"
     ["grid"]="G"
@@ -24,6 +24,20 @@ declare -A LAYOUT_CODES=(
     ["center_tile"]="CT"
     ["vertical_tile"]="VT"
     ["tgmix"]="TG"
+)
+
+declare -A LAYOUT_NAMES=(
+    ["T"]="tile"
+    ["G"]="grid"
+    ["VG"]="vertical_grid"
+    ["S"]="scroller"
+    ["VS"]="vertical_scroller"
+    ["M"]="monocle"
+    ["K"]="deck"
+    ["VK"]="vertical_deck"
+    ["CT"]="center_tile"
+    ["VT"]="vertical_tile"
+    ["TG"]="tgmix"
 )
 
 # State file location
@@ -49,17 +63,28 @@ get_layout_code() {
     echo "$code"
 }
 
+is_known_layout() {
+    local layout="$1"
+
+    [[ -n "${LAYOUT_NAMES[$layout]:-}" || -n "${LAYOUT_CODES[$layout]:-}" ]]
+}
+
 # Get current layout code from mmsg
 get_current_layout() {
-    # mmsg -g -l output format: "eDP-1 T" or similar
-    local output
-    output=$(mmsg -g -l 2>/dev/null | head -n1)
-    if [[ -z "$output" ]]; then
+    local layout
+    layout=$(mmsg get all-monitors | jq -r '.monitors[0].layout_symbol // empty')
+    if [[ -z "$layout" ]]; then
         echo "Error: Failed to get current layout from mmsg" >&2
         exit 1
     fi
-    # Extract the layout code (last word)
-    echo "${output##* }"
+    echo "$layout"
+}
+
+set_layout() {
+    local layout="$1"
+    local name="${LAYOUT_NAMES[$layout]:-$layout}"
+
+    mmsg dispatch "setlayout,$name"
 }
 
 # Toggle to the specified layout
@@ -88,20 +113,20 @@ toggle_layout() {
             local saved_code
             saved_code=$(cat "$STATE_FILE")
             # Validate saved code is non-empty
-            if [[ -n "$saved_code" ]]; then
-                mmsg -l "$saved_code"
+            if is_known_layout "$saved_code"; then
+                set_layout "$saved_code"
             else
-                mmsg -l "T"  # Fallback to tile
+                set_layout "T"  # Fallback to tile
             fi
         else
-            mmsg -l "T"  # No state saved, fallback to tile
+            set_layout "T"  # No state saved, fallback to tile
         fi
     else
         # Not on target layout - save current and switch
         echo "$current_code" > "$STATE_FILE"
-        mmsg -l "$target_code"
+        set_layout "$target_code"
     fi
 }
 
 # Main entry point
-toggle_layout "$1"
+toggle_layout "${1:-}"

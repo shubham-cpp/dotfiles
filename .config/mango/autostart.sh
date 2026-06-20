@@ -34,11 +34,11 @@ if ! pgrep -x "waybar"; then
 fi
 if ! pgrep -x "swayidle"; then
   swayidle -w -C ~/.config/mango/swayidle-config >/tmp/swayidle-watch.log 2>&1 &
-  setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg -d reload_config' >/tmp/mango-config-watch.log
+  setsid -f sh -c 'echo ~/.config/mango/config.conf | entr -n mmsg dispatch reload_config' >/tmp/mango-config-watch.log
 fi
 
 if ! pgrep -x "wlsunset"; then
-  wlsunset -l 18.5204 -L 73.8567 -t 3500 >/dev/null 2>&1 &
+  wlsunset -l 18.5204 -L 73.8567 -T 5800 -t 2700 >/dev/null 2>&1 &
 fi
 if ! pgrep -x "foot"; then
   foot --server >/tmp/foot-server.log 2>&1 &
