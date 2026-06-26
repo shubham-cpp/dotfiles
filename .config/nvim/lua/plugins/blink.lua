@@ -1,75 +1,166 @@
----@type LazySpec
-return {
-  {
-    "saghen/blink.cmp",
-    optional = true,
-    dependencies = { "mikavilpas/blink-ripgrep.nvim" },
-    opts = {
-      keymap = {
-        ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-        ["<CR>"] = { "select_and_accept", "fallback" },
-      },
-      sources = {
-        default = { "ripgrep" },
-        providers = {
-          lsp = { score_offset = 20, fallbacks = {} },
-          snippets = { score_offset = 16 },
-          buffer = {
-            score_offset = 2,
-            -- each provider can be customized with their `opts`
-            opts = { get_bufnrs = function() return vim.api.nvim_list_bufs() end },
-          },
-          ripgrep = {
-            module = "blink-ripgrep",
-            name = "Ripgrep",
-            score_offset = -5,
-            ---@module "blink-ripgrep"
-            ---@type blink-ripgrep.Options
-            opts = {
-              prefix_min_len = 4,
-              backend = { ripgrep = { search_casing = "--smart-case" } },
-            },
-          },
-        },
-      },
-      cmdline = {
-        enabled = true,
-        keymap = {
-          preset = "cmdline",
-          ["<Left>"] = {},
-          ["<Right>"] = {},
-          ["<C-j>"] = { "select_next", "fallback" },
-          ["<C-k>"] = { "select_prev", "fallback" },
-        },
-        completion = {
-          list = { selection = { preselect = false } },
-          menu = { auto_show = true },
-        },
-      },
-      fuzzy = {
-        implementation = "prefer_rust",
-        sorts = {
-          function(a, b)
-            if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then return end
-            return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
-          end,
-          -- default sorts
-          "score",
-          "sort_text",
-          "exact",
-        },
-      },
-    },
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    config = function(plugin, opts)
-      -- include the default astronvim config that calls the setup call
-      require "astronvim.plugins.configs.luasnip"(plugin, opts)
-      -- load snippets paths
-      require("luasnip.loaders.from_vscode").lazy_load {
-        paths = { vim.fn.expand "~/.config/nvim/snippets/" },
-      }
-    end,
-  },
-}
+local gh = function(x)
+	return "https://github.com/" .. x
+end
+
+vim.pack.add({
+	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1.*") },
+	{ src = gh("mikavilpas/blink-ripgrep.nvim"), version = vim.version.range("2.*") },
+})
+
+local blink_icon = function(ctx)
+	if ctx.source_name == "Path" then
+		local data = ctx.item.data or {}
+		local category = ctx.kind == "Folder" and "directory" or "file"
+		local name = data.full_path or data.path or ctx.label
+		local icon, hl = MiniIcons.get(category, name)
+		return icon or ctx.kind_icon, hl or ctx.kind_hl
+	end
+
+	local icon, hl = MiniIcons.get("lsp", ctx.kind)
+	return icon or ctx.kind_icon, hl or ctx.kind_hl
+end
+
+local blink_normal_buffers = function()
+	return vim.tbl_filter(function(buf)
+		return vim.api.nvim_buf_is_loaded(buf) and vim.bo[buf].buftype == ""
+	end, vim.api.nvim_list_bufs())
+end
+
+local prefer_shorter_prefix = function(a, b)
+	if a.label == b.label then
+		return
+	end
+
+	local a_prefixes_b = b.label:sub(1, #a.label) == a.label
+	local b_prefixes_a = a.label:sub(1, #b.label) == b.label
+	if a_prefixes_b ~= b_prefixes_a then
+		return a_prefixes_b
+	end
+end
+
+require("blink.cmp").setup({
+	snippets = { preset = "mini_snippets" },
+	keymap = {
+		preset = "none",
+		["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+		["<C-e>"] = { "cancel", "fallback" },
+		["<C-y>"] = { "select_and_accept" },
+		["<CR>"] = { "accept", "fallback" },
+		["<C-n>"] = { "select_next", "fallback" },
+		["<C-p>"] = { "select_prev", "fallback" },
+		["<C-j>"] = { "select_next", "fallback" },
+		["<C-k>"] = { "select_prev", "fallback" },
+		["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+	},
+	-- appearance = { nerd_font_variant = "mono" },
+	completion = {
+		accept = { auto_brackets = { enabled = true } },
+		documentation = {
+			auto_show = true,
+			auto_show_delay_ms = 0,
+			window = { border = "rounded" },
+		},
+		list = { selection = { preselect = true, auto_insert = true } },
+		menu = {
+			auto_show_delay_ms = 0,
+			border = "rounded",
+			draw = {
+				columns = {
+					{ "kind_icon" },
+					{ "label", "label_description", gap = 1 },
+					{ "source_name" },
+				},
+				components = {
+					kind_icon = {
+						text = function(ctx)
+							local icon = blink_icon(ctx)
+							return icon .. ctx.icon_gap
+						end,
+						highlight = function(ctx)
+							local _, hl = blink_icon(ctx)
+							return hl
+						end,
+					},
+					source_name = {
+						width = { max = 12 },
+						text = function(ctx)
+							return ctx.source_name
+						end,
+						highlight = "BlinkCmpSource",
+					},
+				},
+				treesitter = { "lsp" },
+			},
+		},
+	},
+	cmdline = {
+		enabled = true,
+		keymap = {
+			preset = "cmdline",
+			["<Left>"] = false,
+			["<Right>"] = false,
+			["<C-j>"] = { "select_next", "fallback" },
+			["<C-k>"] = { "select_prev", "fallback" },
+		},
+		completion = {
+			list = { selection = { preselect = false, auto_insert = true } },
+			menu = {
+				auto_show = function()
+					return vim.tbl_contains({ ":", "/", "?" }, vim.fn.getcmdtype())
+				end,
+			},
+		},
+	},
+	fuzzy = {
+		implementation = "prefer_rust",
+		-- sorts = {
+		-- 	function(a, b)
+		-- 		if (a.client_name == nil or b.client_name == nil) or (a.client_name == b.client_name) then
+		-- 			return
+		-- 		end
+		-- 		return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
+		-- 	end,
+		-- 	"exact",
+		-- 	"score",
+		-- 	"sort_text",
+		-- 	"kind",
+		-- 	"label",
+		-- },
+	},
+	signature = { enabled = true, window = { border = "rounded" } },
+	sources = {
+		default = { "path", "lsp", "snippets", "buffer", "ripgrep" },
+		providers = {
+			-- path = { score_offset = 40, fallbacks = {} },
+			-- lsp = { score_offset = 30, fallbacks = {} },
+			lsp = { fallbacks = {} },
+			snippets = { score_offset = -1 },
+			buffer = {
+				-- score_offset = 0,
+				opts = { get_bufnrs = blink_normal_buffers },
+			},
+			ripgrep = {
+				module = "blink-ripgrep",
+				name = "Ripgrep",
+				score_offset = -10,
+				async = true,
+				timeout_ms = 100,
+				min_keyword_length = 4,
+				opts = {
+					prefix_min_len = 4,
+					project_root_marker = { ".git", "package.json", "pyproject.toml", "Cargo.toml", "go.mod" },
+					fallback_to_regex_highlighting = true,
+					backend = {
+						customize_icon_highlight = true,
+						ripgrep = {
+							max_filesize = "1M",
+							project_root_fallback = true,
+							search_casing = "--smart-case",
+						},
+					},
+				},
+			},
+		},
+	},
+})
