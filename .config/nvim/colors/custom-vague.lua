@@ -1,70 +1,70 @@
 local colors = {
-	bg = "#141415",
-	inactive_bg = "#1c1c24",
-	fg = "#cdcdcd",
-	float_border = "#878787",
-	line = "#252530",
-	comment = "#606079",
-	builtin = "#b4d4cf",
-	func = "#c48282",
-	string = "#e8b589",
-	number = "#e0a363",
-	property = "#c3c3d5",
-	constant = "#aeaed1",
-	parameter = "#bb9dbd",
-	visual = "#333738",
-	error = "#d8647e",
-	warning = "#f3be7c",
-	hint = "#7e98e8",
-	operator = "#90a0b5",
-	keyword = "#6e94b2",
-	type = "#9bb4bc",
-	search = "#405065",
-	plus = "#7fa563",
-	delta = "#f3be7c",
-	diff_add = "#293125",
-	diff_change = "#41362a",
-	diff_delete = "#3b242a",
-	diff_text = "#6d583e",
+  bg = "#141415",
+  inactive_bg = "#1c1c24",
+  fg = "#cdcdcd",
+  float_border = "#878787",
+  line = "#252530",
+  comment = "#606079",
+  builtin = "#b4d4cf",
+  func = "#c48282",
+  string = "#e8b589",
+  number = "#e0a363",
+  property = "#c3c3d5",
+  constant = "#aeaed1",
+  parameter = "#bb9dbd",
+  visual = "#333738",
+  error = "#d8647e",
+  warning = "#f3be7c",
+  hint = "#7e98e8",
+  operator = "#90a0b5",
+  keyword = "#6e94b2",
+  type = "#9bb4bc",
+  search = "#405065",
+  plus = "#7fa563",
+  delta = "#f3be7c",
+  diff_add = "#293125",
+  diff_change = "#41362a",
+  diff_delete = "#3b242a",
+  diff_text = "#6d583e",
 }
 
 vim.g.custom_vague_palette = colors
 
 require("mini.base16").setup({
-	palette = {
-		base00 = colors.bg,
-		base01 = colors.inactive_bg,
-		base02 = colors.line,
-		base03 = colors.comment,
-		base04 = colors.float_border,
-		base05 = colors.fg,
-		base06 = colors.property,
-		base07 = "#f4f4f4",
-		base08 = colors.error,
-		base09 = colors.number,
-		base0A = colors.warning,
-		base0B = colors.plus,
-		base0C = colors.builtin,
-		base0D = colors.func,
-		base0E = colors.keyword,
-		base0F = colors.parameter,
-	},
-	use_cterm = true,
-	plugins = {
-		default = true,
-		["nvim-mini/mini.nvim"] = true,
-		["saghen/blink.cmp"] = true,
-	},
+  palette = {
+    base00 = colors.bg,
+    base01 = colors.inactive_bg,
+    base02 = colors.line,
+    base03 = colors.comment,
+    base04 = colors.float_border,
+    base05 = colors.fg,
+    base06 = colors.property,
+    base07 = "#f4f4f4",
+    base08 = colors.error,
+    base09 = colors.number,
+    base0A = colors.warning,
+    base0B = colors.plus,
+    base0C = colors.builtin,
+    base0D = colors.func,
+    base0E = colors.keyword,
+    base0F = colors.parameter,
+  },
+  use_cterm = true,
+  plugins = {
+    default = true,
+    ["nvim-mini/mini.nvim"] = true,
+    ["saghen/blink.cmp"] = true,
+  },
 })
 
 vim.g.colors_name = "custom-vague"
 
 local hi = function(group, opts)
-	vim.api.nvim_set_hl(0, group, opts)
+  vim.api.nvim_set_hl(0, group, opts)
 end
 
 local link = function(group, target)
-	hi(group, { link = target })
+  hi(group, { link = target })
 end
 
 hi("Normal", { fg = colors.fg, bg = colors.bg })
@@ -246,6 +246,8 @@ hi("MiniPickPrompt", { fg = colors.constant, bg = colors.inactive_bg })
 hi("MiniPickPromptCaret", { fg = colors.warning, bg = colors.inactive_bg })
 hi("MiniPickIconDirectory", { fg = colors.hint })
 hi("MiniPickIconFile", { fg = colors.fg })
+hi("MiniPickMatchCurrent", { fg = colors.fg, bg = colors.visual })
+hi("MiniPickMatchMarked", { fg = colors.fg, bg = colors.line, bold = true })
 hi("MiniFilesBorder", { fg = colors.float_border, bg = colors.inactive_bg })
 hi("MiniFilesCursorLine", { bg = colors.line })
 hi("MiniFilesDirectory", { fg = colors.hint })
@@ -265,6 +267,8 @@ hi("MiniTablineModifiedCurrent", { fg = colors.warning, bg = colors.bg, bold = t
 hi("MiniTablineModifiedVisible", { fg = colors.warning, bg = colors.inactive_bg })
 hi("MiniTablineModifiedHidden", { fg = colors.warning, bg = colors.inactive_bg })
 hi("MiniTablineTabpagesection", { fg = colors.fg, bg = colors.line, bold = true })
+hi("MiniCursorwordCurrent", {})
+-- hi("MiniCursorword", { bg = colors.property, underline = true })
 
 hi("CmpItemAbbrDeprecated", { fg = colors.error, strikethrough = true })
 hi("CmpItemAbbrMatch", { fg = colors.delta, bold = true })

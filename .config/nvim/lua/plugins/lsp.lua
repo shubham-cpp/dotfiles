@@ -10,16 +10,17 @@ vim.pack.add({
 
 local mason_packages = {
   "tree-sitter-cli",
-  "lua-language-server",
-  "stylua",
-  "tailwindcss-language-server",
   "prettierd",
+  "stylua",
+  "ruff",
+  "lua-language-server",
+  "tailwindcss-language-server",
   "css-variables-language-server",
   "cssmodules-language-server",
   "docker-compose-language-service",
   "dockerfile-language-server",
-  "ruff",
-  "tsgo",
+  -- "tsgo",
+  "vtsls",
   "pyrefly",
   "html-lsp",
   "css-lsp",
@@ -27,6 +28,7 @@ local mason_packages = {
   "eslint-lsp",
   "yaml-language-server",
   "taplo",
+  "emmet-language-server",
   "gopls",
   "goimports",
   "gofumpt",
@@ -37,13 +39,21 @@ local mason_packages = {
 local servers = {
   "lua_ls",
   "eslint",
-  "tsgo",
+  -- "tsgo",
+  "vtsls",
   "pyrefly",
+  "emmet_language_server",
   "html",
   "cssls",
+  "css_variables",
+  "cssmodules_ls",
   "jsonls",
   "yamlls",
   "taplo",
+  "gopls",
+  "tailwindcss",
+  "docker_compose_language_service",
+  "docker_language_server",
 }
 
 local pick_fallbacks = {
@@ -91,10 +101,12 @@ function M.pick_or_fallback(scope)
   end
 end
 
+---@param bufnr number
 local function toggle_inlay_hints(bufnr)
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }), { bufnr = bufnr })
 end
 
+---@param bufnr number
 local function enable_lsp_folding(bufnr)
   for _, win in ipairs(vim.fn.win_findbuf(bufnr)) do
     vim.api.nvim_set_option_value("foldmethod", "expr", { win = win })
@@ -108,15 +120,9 @@ function M.on_attach(client, bufnr)
     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc, silent = true })
   end
 
-  local is_vtsls = client.name == "vtsls"
-  local function change_ts_version()
-    vim.cmd "VtsExec select_ts_version"
-  end
+  -- local is_vtsls = client.name == "vtsls"
+
   local function organize_imports()
-    if is_vtsls then
-      vim.cmd "VtsExec organize_imports"
-      return
-    end
     vim.lsp.buf.code_action({
       apply = true,
       context = {
@@ -134,6 +140,9 @@ function M.on_attach(client, bufnr)
   map("n", "<leader>ls", M.pick_or_fallback "document_symbol", "Document Symbols")
   map("n", "<leader>lS", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
 
+  map("n", "grr", M.pick_or_fallback "references", "References")
+  map("n", "grd", vim.lsp.buf.definition, "Defination")
+  map("n", "gd", vim.lsp.buf.definition, "Defination")
   map("n", "grD", M.pick_or_fallback "declaration", "Declaration")
   map("n", "grs", M.pick_or_fallback "document_symbol", "Document Symbols")
   map("n", "grS", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
@@ -148,11 +157,6 @@ function M.on_attach(client, bufnr)
   map("n", "grh", function()
     toggle_inlay_hints(bufnr)
   end, "Toggle Inlay Hints")
-
-  if is_vtsls then
-    map("n", "grv", change_ts_version, "Change TS version")
-    map("n", "<leader>lv", change_ts_version, "Change TS version")
-  end
 
   map({ "n", "x" }, "<leader>la", vim.lsp.buf.code_action, "Code Action")
   map("n", "<leader>lr", vim.lsp.buf.rename, "Rename")
@@ -183,7 +187,8 @@ end
 
 local function setup_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+  -- capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+  capabilities = vim.tbl_deep_extend("force", capabilities, require("mini.completion").get_lsp_capabilities())
 
   vim.lsp.config("*", {
     capabilities = capabilities,
@@ -196,48 +201,46 @@ local function setup_servers()
 
   vim.lsp.config("lua_ls", {
     settings = {
-      Lua = {
-        workspace = {
-          -- library = {
-          --   vim.env.VIMRUNTIME,
-          --   -- For LSP Settings Type Annotations: https://github.com/neovim/nvim-lspconfig#lsp-settings-type-annotations
-          --   vim.api.nvim_get_runtime_file("lua/lspconfig", false)[1],
-          -- },
-          library = vim.api.nvim_get_runtime_file("", true),
-        },
-      },
-      -- 	emmylua = {
-      -- 		runtime = { version = "LuaJIT" },
-      -- 		diagnostics = { globals = { "vim" } },
-      -- 		workspace = {
-      -- 			library = library,
-      -- 		},
-      -- 	},
+      Lua = { workspace = { library = library } },
     },
   })
 
   vim.lsp.config("tsgo", {
     settings = {
-      javascript = {
-        inlayHints = {
-          enumMemberValues = { enabled = true },
-          functionLikeReturnTypes = { enabled = true },
-          parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
-          parameterTypes = { enabled = true },
-          propertyDeclarationTypes = { enabled = true },
-          variableTypes = { enabled = true },
+      ["js/ts"] = {
+        preferGoToSourceDefinition = true,
+        updateImportsOnFileMove = { enabled = "always" },
+        preferences = {
+          jsxAttributeCompletionStyle = "auto",
+          preferTypeOnlyAutoImports = true,
         },
       },
-      typescript = {
-        inlayHints = {
-          enumMemberValues = { enabled = true },
-          functionLikeReturnTypes = { enabled = true },
-          parameterNames = { enabled = "literals", suppressWhenArgumentMatchesName = true },
-          parameterTypes = { enabled = true },
-          propertyDeclarationTypes = { enabled = true },
-          variableTypes = { enabled = true },
-        },
+    },
+  })
+
+  local typescript = {
+    updateImportsOnFileMove = { enabled = "always" },
+    preferGoToSourceDefinition = true,
+    preferences = { preferTypeOnlyAutoImports = true },
+    inlayHints = {
+      enumMemberValues = { enabled = true },
+      functionLikeReturnTypes = { enabled = true },
+      parameterNames = { enabled = "literals" },
+      parameterTypes = { enabled = true },
+      propertyDeclarationTypes = { enabled = true },
+      variableTypes = { enabled = false },
+    },
+  }
+  vim.lsp.config("vtsls", {
+    settings = {
+      complete_function_calls = true,
+      vtsls = {
+        enableMoveToFileCodeAction = true,
+        autoUseWorkspaceTsdk = true,
+        experimental = { maxInlayHintLength = 30 },
       },
+      javascript = typescript,
+      typescript = typescript,
     },
   })
 
