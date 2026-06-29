@@ -92,6 +92,42 @@ hi("TabLine", { fg = colors.comment, bg = colors.inactive_bg })
 hi("TabLineSel", { fg = colors.fg, bg = colors.bg, bold = true })
 hi("TabLineFill", { bg = colors.bg })
 
+local barbar_statuses = {
+  Current = { fg = colors.fg, bg = colors.bg, accent = colors.builtin, bold = true },
+  Visible = { fg = colors.fg, bg = colors.inactive_bg, accent = colors.type, bold = false },
+  Inactive = { fg = colors.comment, bg = colors.inactive_bg, accent = colors.comment },
+  Alternate = { fg = colors.fg, bg = colors.line, accent = colors.parameter, bold = true },
+}
+
+for status, spec in pairs(barbar_statuses) do
+  local group = "Buffer" .. status
+  hi(group, { fg = spec.fg, bg = spec.bg, bold = spec.bold })
+  hi(group .. "Icon", { fg = spec.accent, bg = spec.bg, bold = spec.bold })
+  hi(group .. "Index", { fg = spec.accent, bg = spec.bg, bold = spec.bold })
+  hi(group .. "Number", { link = group .. "Index" })
+  hi(group .. "Btn", { fg = spec.fg, bg = spec.bg })
+  hi(group .. "Sign", { fg = spec.accent, bg = spec.bg, bold = spec.bold })
+  hi(group .. "SignRight", { link = group .. "Sign" })
+  hi(group .. "Mod", { fg = colors.warning, bg = spec.bg, bold = true })
+  hi(group .. "ModBtn", { link = group .. "Mod" })
+  hi(group .. "Pin", { fg = spec.accent, bg = spec.bg, bold = true })
+  hi(group .. "PinBtn", { link = group .. "Pin" })
+  hi(group .. "Target", { fg = colors.error, bg = spec.bg, bold = true })
+  hi(group .. "ADDED", { fg = colors.plus, bg = spec.bg })
+  hi(group .. "CHANGED", { fg = colors.delta, bg = spec.bg })
+  hi(group .. "DELETED", { fg = colors.error, bg = spec.bg })
+  hi(group .. "ERROR", { fg = colors.error, bg = spec.bg, bold = true })
+  hi(group .. "WARN", { fg = colors.warning, bg = spec.bg, bold = true })
+  hi(group .. "INFO", { fg = colors.constant, bg = spec.bg })
+  hi(group .. "HINT", { fg = colors.hint, bg = spec.bg })
+end
+
+hi("BufferOffset", { fg = colors.comment, bg = colors.bg })
+hi("BufferScrollArrow", { fg = colors.float_border, bg = colors.bg })
+hi("BufferTabpageFill", { bg = colors.bg })
+hi("BufferTabpages", { fg = colors.comment, bg = colors.bg, bold = true })
+hi("BufferTabpagesSep", { fg = colors.float_border, bg = colors.bg })
+
 hi("Comment", { fg = colors.comment, italic = true })
 hi("String", { fg = colors.string, italic = true })
 hi("Character", { fg = colors.string })

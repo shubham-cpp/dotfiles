@@ -22,8 +22,8 @@ map("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Win: Decrease Height" })
 map("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Win: Decrease Width" })
 map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Win: Increase Width" })
 
-map("n", "<leader>bb", "<C-^>", { desc = "Buffer: Alternate" })
-map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Buffer: Delete" })
+-- map("n", "<leader>bb", "<C-^>", { desc = "Buffer: Alternate" })
+-- map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Buffer: Delete" })
 
 map("n", "<Esc>", "<cmd>nohlsearch<cr><Esc>", { desc = "Search: Clear Highlight" })
 map("n", "n", "nzzzv", { desc = "Search: Next" })

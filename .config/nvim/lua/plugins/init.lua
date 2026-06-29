@@ -47,6 +47,7 @@ end, {
 
 require "plugins.treesitter"
 require "plugins.mini"
+require "plugins.workspace-session"
 require "plugins.blink"
 require "plugins.lsp"
 require "plugins.multicursor"

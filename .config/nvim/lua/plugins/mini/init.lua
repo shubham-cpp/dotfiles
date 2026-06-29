@@ -10,7 +10,6 @@ vim.pack.add({
 --- {{{ Mini icons
 require("mini.icons").setup({})
 require("mini.icons").mock_nvim_web_devicons()
-require "plugins.barbar"
 --- }}}
 
 --- {{{ Mini move
@@ -158,7 +157,7 @@ require "plugins.mini.mini-clue"
 require "plugins.mini.mini-files"
 require "plugins.mini.mini-pairs"
 require "plugins.mini.mini-pick"
-require "plugins.mini.mini-session-starter"
+require "plugins.mini.mini-starter"
 require "plugins.mini.mini-snippets"
 require "plugins.mini.mini-statusline"
 require "plugins.mini.mini-visits"
