@@ -80,10 +80,11 @@ end, { desc = "Git Show At Cursor" })
 --- }}}
 
 --- {{{ Mini diff
+local char = "┊"
 require("mini.diff").setup({
   view = {
     style = "sign",
-    signs = { add = "+", change = "~", delete = "-" },
+    signs = { add = char, change = char, delete = char },
   },
 })
 --- }}}

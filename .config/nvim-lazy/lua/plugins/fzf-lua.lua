@@ -3,6 +3,43 @@ local vscode = {
   width = 0.6,
   row = 0,
 }
+local function docs_layout(title)
+  return {
+    height = 0.70,
+    width = 0.65,
+    row = 0.5,
+    col = 0.5,
+    title = " " .. title .. " ",
+    title_pos = "center",
+    preview = {
+      layout = "vertical",
+      vertical = "up:50%",
+      scrollbar = "border",
+      winopts = {
+        number = false,
+        relativenumber = false,
+        signcolumn = "no",
+      },
+    },
+  }
+end
+
+local default_preview_layout = {
+  height = 0.70,
+  width = 0.65,
+  row = 0.5,
+  col = 0.5,
+  preview = {
+    layout = "vertical",
+    vertical = "down:38%",
+    scrollbar = "border",
+    winopts = {
+      number = false,
+      relativenumber = false,
+      signcolumn = "no",
+    },
+  },
+}
 
 ---@type LazySpec
 return {
@@ -27,7 +64,7 @@ return {
         ["ctrl-q"] = "select-all+accept",
       },
     },
-    winopts = { preview = { layout = "vertical" } },
+    winopts = default_preview_layout,
     files = {
       -- actions = action_keys,
       previewer = false,
@@ -40,9 +77,7 @@ return {
         previewer = false,
         winopts = vscode,
       },
-      branches = {
-        cmd_add = { "git", "switch", "-c" },
-      },
+      branches = { cmd_add = { "git", "switch", "-c" } },
     },
     grep = {
       -- actions = action_keys,
@@ -57,6 +92,12 @@ return {
         return (regex or query), flags
       end,
     },
+    buffers = { winopts = docs_layout("Buffers") },
+    helptags = { winopts = docs_layout("Help") },
+    manpages = { winopts = docs_layout("Man") },
+    keymaps = { winopts = docs_layout("Keymaps") },
+    autocmds = { winopts = docs_layout("Autocmds") },
+    zoxide = { winopts = vscode },
   },
   keys = {
     { "gr", false },

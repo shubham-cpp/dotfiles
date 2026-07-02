@@ -3,57 +3,66 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      -- setup = {
-      --   tailwindcss = function()
-      --     Snacks.util.lsp.on({ name = "tailwindcss" }, function(_, client)
-      --       client.server_capabilities.completionProvider.triggerCharacters =
-      --       { '"', "'", "`", ".", "(", "[", "!", "/", ":" }
-      --     end)
-      --   end,
-      -- },
-      -- make sure mason installs the server
       servers = {
+        taplo = { enabled = false },
+        tombi = {},
         ols = {},
-        lua_ls = { enabled = false },
-        emmylua_ls = { enabled = true },
         vtsls = {
           settings = {
             vtsls = { experimental = { completion = { enableServerSideFuzzyMatch = false } } },
           },
         },
         eslint = { keys = { { "<leader>le", "<cmd>EslintFixAll<cr>", desc = "Eslint Fix" } } },
-        pyright = { enabled = false },
-        basedpyright = {
-          settings = {
-            basedpyright = {
+        pyrefly = {
+          init_options = {
+            pyrefly = {
+              typeCheckingMode = "auto",
               analysis = {
-                ---@type "standard"|"basic"
-                typeCheckingMode = "standard",
-                autoImportCompletions = true,
-                diagnosticSeverityOverrides = {
-                  reportUnusedImport = "information",
-                  reportUnusedFunction = "information",
-                  reportUnusedVariable = "information",
-                  reportGeneralTypeIssues = "none",
-                  reportOptionalMemberAccess = "warning",
-                  reportOptionalSubscript = "none",
-                  reportIgnoreCommentWithoutRule = "warning",
-                  reportUnreachable = "error",
-                  reportPrivateLocalImportUsage = "error",
-                  reportImplicitRelativeImport = "error",
-                  reportInvalidCast = "error",
-                  -- reportPrivateImportUsage = "none",
+                diagnosticMode = "openFilesOnly",
+                inlayHints = {
+                  callArgumentNames = "off",
+                  functionReturnTypes = true,
+                  variableTypes = true,
                 },
+                showHoverGoToLinks = true,
               },
+              streamDiagnostics = true,
             },
+            commentFoldingRanges = true,
           },
         },
+        -- basedpyright = {
+        --   settings = {
+        --     basedpyright = {
+        --       analysis = {
+        --         ---@type "standard"|"basic"
+        --         typeCheckingMode = "standard",
+        --         autoImportCompletions = true,
+        --         diagnosticSeverityOverrides = {
+        --           reportUnusedImport = "information",
+        --           reportUnusedFunction = "information",
+        --           reportUnusedVariable = "information",
+        --           reportGeneralTypeIssues = "none",
+        --           reportOptionalMemberAccess = "warning",
+        --           reportOptionalSubscript = "none",
+        --           reportIgnoreCommentWithoutRule = "warning",
+        --           reportUnreachable = "error",
+        --           reportPrivateLocalImportUsage = "error",
+        --           reportImplicitRelativeImport = "error",
+        --           reportInvalidCast = "error",
+        --           -- reportPrivateImportUsage = "none",
+        --         },
+        --       },
+        --     },
+        --   },
+        -- },
       },
     },
   },
   {
     "neovim/nvim-lspconfig",
     opts = {
+      folds = { enabled = true },
       servers = {
         ["*"] = {
           keys = {
@@ -207,6 +216,14 @@ return {
               end,
               ft = { "heex", "elixir" },
               desc = "From Pipe",
+            },
+          },
+          capabilities = {
+            textDocument = {
+              foldingRange = {
+                dynamicRegistration = false,
+                lineFoldingOnly = true,
+              },
             },
           },
         },

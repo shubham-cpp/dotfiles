@@ -5,26 +5,24 @@ return {
     branch = "1.0",
     enabled = true,
     opts = {},
-    keys = function()
-      local mc = require("multicursor-nvim")
-      return {
-        {
-          "<esc>",
-          function()
-            if not mc.cursorsEnabled() then
-              mc.enableCursors()
-            elseif mc.hasCursors() then
-              mc.clearCursors()
-            else
-              vim.cmd("nohl")
-              return "<esc>"
-            end
-          end,
-          desc = "Escape cursor, No-Highlight",
-          expr = true,
-        },
-      }
-    end,
+    keys = {
+      {
+        "<esc>",
+        function()
+          local mc = require("multicursor-nvim")
+          if not mc.cursorsEnabled() then
+            mc.enableCursors()
+          elseif mc.hasCursors() then
+            mc.clearCursors()
+          else
+            vim.cmd("nohl")
+            return "<esc>"
+          end
+        end,
+        desc = "Escape cursor, No-Highlight",
+        expr = true,
+      },
+    },
     specs = {
       {
         "nvimtools/hydra.nvim",
@@ -129,5 +127,20 @@ return {
         },
       },
     },
+  },
+  {
+    "nvimtools/hydra.nvim",
+    event = "VeryLazy",
+    config = function(_, opts)
+      local Hydra = require("hydra")
+      for name, hydra in pairs(opts) do
+        if hydra then
+          if not hydra.name then
+            hydra.name = name
+          end
+          hydra.hydra = Hydra(hydra)
+        end
+      end
+    end,
   },
 }

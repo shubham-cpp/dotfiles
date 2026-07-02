@@ -38,9 +38,11 @@ local mason_packages = {
 
 local servers = {
   "lua_ls",
+  -- "emmylua_ls",
+  -- "lua-lang-server",
   "eslint",
-  -- "tsgo",
-  "vtsls",
+  "tsgo",
+  -- "vtsls",
   "pyrefly",
   "emmet_language_server",
   "html",
@@ -140,12 +142,14 @@ function M.on_attach(client, bufnr)
   map("n", "<leader>ls", M.pick_or_fallback "document_symbol", "Document Symbols")
   map("n", "<leader>lS", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
 
-  map("n", "grr", M.pick_or_fallback "references", "References")
-  map("n", "grd", vim.lsp.buf.definition, "Defination")
-  map("n", "gd", vim.lsp.buf.definition, "Defination")
+  map("n", "gd", M.pick_or_fallback "definition", "Defination")
+  map("n", "grd", M.pick_or_fallback "definition", "Defination")
   map("n", "grD", M.pick_or_fallback "declaration", "Declaration")
-  map("n", "grs", M.pick_or_fallback "document_symbol", "Document Symbols")
-  map("n", "grS", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
+  map("n", "grr", M.pick_or_fallback "references", "References")
+  map("n", "gri", M.pick_or_fallback "implementation", "Implementation")
+  map("n", "grt", M.pick_or_fallback "type_definition", "Type Definition")
+  map("n", "gro", M.pick_or_fallback "document_symbol", "Document Symbols")
+  map("n", "grO", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
   map({ "n", "x" }, "grf", function()
     local ok, conform = pcall(require, "conform")
     if ok then
@@ -174,7 +178,7 @@ function M.on_attach(client, bufnr)
   map("n", "<leader>ll", "<cmd>checkhealth vim.lsp<cr>", "Info")
   map("n", "<leader>lL", "<cmd>lsp restart<cr>", "Restart")
   map("n", "<leader>lo", organize_imports, "Organize Imports")
-  map("n", "gro", organize_imports, "Organize Imports")
+  map("n", "grs", organize_imports, "Sort Imports")
 
   if client:supports_method "textDocument/foldingRange" then
     enable_lsp_folding(bufnr)
@@ -187,8 +191,8 @@ end
 
 local function setup_capabilities()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  -- capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
-  capabilities = vim.tbl_deep_extend("force", capabilities, require("mini.completion").get_lsp_capabilities())
+  capabilities = require("blink.cmp").get_lsp_capabilities(capabilities)
+  -- capabilities = vim.tbl_deep_extend("force", capabilities, require("mini.completion").get_lsp_capabilities())
 
   vim.lsp.config("*", {
     capabilities = capabilities,

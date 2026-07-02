@@ -40,6 +40,11 @@ vim.keymap.del("n", "<leader>cd")
 vim.keymap.del("n", "<leader>cf")
 vim.keymap.set("n", "<leader>L", "<cmd>Lazy<cr>")
 
+vim.keymap.set("n", "<leader>bd", function()
+  require("config.tabscope").close_buffer()
+end, { desc = "Delete Buffer" })
+vim.keymap.set("n", "<leader>bo", "<cmd>BufferLineCloseOthers<cr>", { desc = "Delete Other Buffers" })
+
 vim.keymap.set("n", "<leader>fc", "<cmd>CreateFileInDir<cr>")
 
 vim.keymap.set({ "n", "v" }, "<leader>lf", function()

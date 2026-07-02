@@ -41,29 +41,19 @@ end
 require("blink.cmp").setup({
   snippets = { preset = "mini_snippets" },
   keymap = {
-    preset = "none",
-    ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
-    ["<C-e>"] = { "cancel", "fallback" },
-    ["<C-y>"] = { "select_and_accept" },
-    ["<CR>"] = { "accept", "fallback" },
-    ["<C-n>"] = { "select_next", "fallback" },
-    ["<C-p>"] = { "select_prev", "fallback" },
+    preset = "enter",
     ["<C-j>"] = { "select_next", "fallback" },
     ["<C-k>"] = { "select_prev", "fallback" },
+
     ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
     ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
   },
-  -- appearance = { nerd_font_variant = "mono" },
+  appearance = { nerd_font_variant = "mono" },
   completion = {
     accept = { auto_brackets = { enabled = true } },
-    documentation = {
-      auto_show = true,
-      auto_show_delay_ms = 0,
-      window = { border = "rounded" },
-    },
+    documentation = { auto_show = true, window = { border = "rounded" } },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
-      auto_show_delay_ms = 0,
       border = "rounded",
       draw = {
         columns = {
@@ -71,25 +61,25 @@ require("blink.cmp").setup({
           { "label", "label_description", gap = 1 },
           { "source_name" },
         },
-        components = {
-          kind_icon = {
-            text = function(ctx)
-              local icon = blink_icon(ctx)
-              return icon .. ctx.icon_gap
-            end,
-            highlight = function(ctx)
-              local _, hl = blink_icon(ctx)
-              return hl
-            end,
-          },
-          source_name = {
-            width = { max = 12 },
-            text = function(ctx)
-              return ctx.source_name
-            end,
-            highlight = "BlinkCmpSource",
-          },
-        },
+        -- components = {
+        --   kind_icon = {
+        --     text = function(ctx)
+        --       local icon = blink_icon(ctx)
+        --       return icon .. ctx.icon_gap
+        --     end,
+        --     highlight = function(ctx)
+        --       local _, hl = blink_icon(ctx)
+        --       return hl
+        --     end,
+        --   },
+        --   source_name = {
+        --     width = { max = 12 },
+        --     text = function(ctx)
+        --       return ctx.source_name
+        --     end,
+        --     highlight = "BlinkCmpSource",
+        --   },
+        -- },
         treesitter = { "lsp" },
       },
     },
@@ -128,16 +118,11 @@ require("blink.cmp").setup({
   },
   signature = { enabled = true, window = { border = "rounded" } },
   sources = {
-    default = { "path", "lsp", "snippets", "buffer", "ripgrep" },
+    default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
     providers = {
-      -- path = { score_offset = 40, fallbacks = {} },
-      -- lsp = { score_offset = 30, fallbacks = {} },
       lsp = { fallbacks = {} },
       snippets = { score_offset = -1 },
-      buffer = {
-        -- score_offset = 0,
-        opts = { get_bufnrs = blink_normal_buffers },
-      },
+      buffer = { opts = { get_bufnrs = blink_normal_buffers } },
       ripgrep = {
         module = "blink-ripgrep",
         name = "Ripgrep",

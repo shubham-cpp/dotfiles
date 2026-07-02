@@ -132,14 +132,19 @@ return {
         formatters = { file = { filename_first = true } },
         sources = {
           buffers = {
+            actions = {
+              scope_bufdelete = function(picker)
+                require("config.tabscope").close_selected_picker_buffers(picker)
+              end,
+            },
             win = {
               input = {
                 keys = {
                   ["<c-x>"] = { "edit_split", mode = { "i", "n" } },
-                  ["<a-x>"] = { "bufdelete", mode = { "n", "i" } },
+                  ["<a-x>"] = { "scope_bufdelete", mode = { "n", "i" } },
                 },
               },
-              list = { keys = { ["dd"] = "bufdelete" } },
+              list = { keys = { ["dd"] = "scope_bufdelete" } },
             },
           },
           git_files = { untracked = true },

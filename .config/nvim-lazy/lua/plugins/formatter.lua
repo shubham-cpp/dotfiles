@@ -1,4 +1,4 @@
-local prettier = { "prettierd", "prettier", stop_after_first = true }
+local prettier = { "oxfmt", "prettierd", "prettier", stop_after_first = true }
 ---@param bufnr integer
 ---@param ... string
 ---@return string
@@ -14,8 +14,8 @@ local function first(bufnr, ...)
 end
 
 local function prettier_eslint(bufnr)
-  return { first(bufnr, "prettierd", "prettier"), "eslint_d" }
-  -- return { first(bufnr, "prettierd", "prettier") }
+  -- return { first(bufnr, "prettierd", "prettier"), "eslint_d" }
+  return { first(bufnr, "oxfmt", "prettierd", "prettier") }
 end
 ---@type LazySpec
 return {
@@ -27,7 +27,7 @@ return {
       function()
         require("conform").format({ async = true, lsp_fallback = true })
       end,
-      mode = "",
+      mode = { "n", "v" },
       desc = "Format buffer(c)",
     },
   },
@@ -65,12 +65,12 @@ return {
     formatters = {
       prettierd = {
         condition = function()
-          return not (vim.b.disable_prettier or vim.g.disabled_prettier)
+          return not (vim.b.disable_prettier or vim.g.disable_prettier)
         end,
       },
       prettier = {
         condition = function()
-          return not (vim.b.disable_prettier or vim.g.disabled_prettier)
+          return not (vim.b.disable_prettier or vim.g.disable_prettier)
         end,
       },
     },

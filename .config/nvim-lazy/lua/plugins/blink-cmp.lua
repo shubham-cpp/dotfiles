@@ -7,6 +7,10 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      completion = {
+        ghost_text = { enabled = false },
+        list = { selection = { preselect = true, auto_insert = true } },
+      },
       keymap = {
         preset = "enter",
         ["<C-s>"] = {
@@ -39,21 +43,11 @@ return {
           ["<S-Tab>"] = { "select_prev", "fallback" },
         },
         completion = {
-          list = { selection = { preselect = false } },
+          list = { selection = { preselect = false, auto_insert = true } },
           menu = {
             auto_show = function()
               local type = vim.fn.getcmdtype()
               return (type == ":" and not type:match("^[%%0-9,'<>%-]*!")) or type == "@" or type == "?" or type == "/"
-            end,
-          },
-        },
-      },
-      completion = {
-        ghost_text = { enabled = false },
-        list = {
-          selection = {
-            preselect = function(ctx)
-              return ctx.mode ~= "cmdline"
             end,
           },
         },

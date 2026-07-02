@@ -4,6 +4,7 @@ return {
   cmd = "Neogit",
   keys = {
     { "<leader>gn", "<cmd>Neogit kind=floating<cr>", desc = "Neogit" },
+    { "<leader>gN", "<cmd>Neogit kind=auto<cr>", desc = "Neogit" },
   },
   dependencies = {
     "nvim-lua/plenary.nvim",

@@ -38,15 +38,6 @@ return {
       local cmp = require("cmp")
       local defaults = require("cmp.config.default")()
 
-      -- vim.opt.completeopt:append("noselect")
-      -- opts.completion = { completeopt = "menu,menuone,noselect", }
-      -- opts.completion = { completeopt = "menu,menuone,noinsert" }
-      -- opts.preselect = cmp.PreselectMode.None
-      -- opts.confirm_opts = {
-      --   behavior = cmp.ConfirmBehavior.Replace,
-      --   select = false,
-      -- }
-
       opts.mapping["<C-x><C-x>"] = cmp.mapping.complete({
         config = { sources = { { name = "luasnip" } } },
       })

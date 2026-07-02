@@ -39,6 +39,8 @@ return {
           vim.api.nvim_set_hl(0, "QuickScopePrimary", { fg = c.delta, bg = c.visual, bold = true, undercurl = true })
           vim.api.nvim_set_hl(0, "QuickScopeSecondary", { fg = c.hint, bg = c.visual, bold = true, undercurl = true })
 
+          vim.api.nvim_set_hl(0, "BufferLineTabSelected", { fg = c.delta })
+
           vim.api.nvim_set_hl(0, "CmpItemKindSnippet", { link = "@lsp.type.macro" })
           vim.api.nvim_set_hl(0, "CmpItemKindKeyword", { link = "@lsp.type.class" })
           vim.api.nvim_set_hl(0, "CmpItemKindText", { link = "@lsp.type.comment" })
