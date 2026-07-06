@@ -51,6 +51,7 @@ prepend_keymap = [
 
   { on = [ "b", "d" ], run = "plugin bookmarks delete",     desc = "Delete a bookmark" },
   { on = [ "b", "D" ], run = "plugin bookmarks delete_all", desc = "Delete all bookmarks" },
+  { on = [ "g", "X" ], run = "shell -- dragon -x -i -T \"$@\"", desc = "Drag'n'Drop" },
   { on = [ "g", "x" ], run  = '''
     shell -- for file in %s; do
       if [[ "$OSTYPE" == "darwin"* ]]; then

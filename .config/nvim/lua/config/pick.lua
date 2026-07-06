@@ -12,6 +12,7 @@ local function split_path(path)
 	local basename = path:sub(to + 1)
 	return basename ~= "" and basename or path, dirname
 end
+M.split_path = split_path
 
 local function path_text(path)
 	if type(path) == "table" then
@@ -19,6 +20,7 @@ local function path_text(path)
 	end
 	return tostring(path or "")
 end
+M.path_text = path_text
 
 local function display_parts(path)
 	local basename, dirname = split_path(path)
@@ -27,12 +29,14 @@ local function display_parts(path)
 	end
 	return basename .. " " .. dirname, #basename + 1
 end
+M.display_parts = display_parts
 
 function M.filename_first(path)
 	return display_parts(path)
 end
 
-function M.show_filename_first(buf_id, items, query)
+function M.show_filename_first(buf_id, items, query, opts)
+	opts = opts or {}
 	local display_items, dim_from = {}, {}
 
 	for i, item in ipairs(items) do
@@ -42,9 +46,25 @@ function M.show_filename_first(buf_id, items, query)
 		dim_from[i] = dir_col
 	end
 
-	MiniPick.default_show(buf_id, display_items, query, { show_icons = true })
+	local show_query = opts.match_ranges and {} or query
+	MiniPick.default_show(buf_id, display_items, show_query, { show_icons = true })
 
 	vim.api.nvim_buf_clear_namespace(buf_id, ns_id, 0, -1)
+	for i, ranges in pairs(opts.match_ranges or {}) do
+		local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1] or ""
+		local start = line:find(display_items[i].text, 1, true)
+		if start ~= nil then
+			for _, range in ipairs(ranges) do
+				vim.api.nvim_buf_set_extmark(buf_id, ns_id, i - 1, start + range[1] - 1, {
+					end_col = start + range[2] - 1,
+					hl_group = "MiniPickMatchRanges",
+					hl_mode = "combine",
+					priority = 204,
+				})
+			end
+		end
+	end
+
 	for i, col in ipairs(dim_from) do
 		if col ~= nil then
 			local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1] or ""

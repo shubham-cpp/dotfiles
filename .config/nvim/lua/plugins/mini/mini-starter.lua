@@ -5,6 +5,7 @@ local my_items = {
   starter.sections.sessions(9, true),
   { name = "Recent Files", action = ":Pick oldfiles", section = "MiniPick" },
   { name = "File Picker", action = ":Pick files", section = "MiniPick" },
+  { name = "Git Files", action = ':Pick files tool="git"', section = "MiniPick" },
   { name = "Select Sessions", action = ":lua MiniSessions.select()", section = "MiniPick" },
   starter.sections.recent_files(5, true),
 }

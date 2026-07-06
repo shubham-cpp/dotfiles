@@ -55,6 +55,10 @@
       "rev": "43ea1a0854052e583f647e0b35879f0158a70a78",
       "src": "https://github.com/NeogitOrg/neogit"
     },
+    "neovim-buckler": {
+      "rev": "bf8e2a17bfe57607ea0ae86ccc93483952b921bc",
+      "src": "https://github.com/Coacher/neovim-buckler"
+    },
     "nvim-highlight-colors": {
       "rev": "e4c7af0211866162d999ce0bdd6a029302e19139",
       "src": "https://github.com/brenoprata10/nvim-highlight-colors"
@@ -77,17 +81,9 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
-    "nvim-ts-autotag": {
-      "rev": "88c1453db4ba7dd24131086fe51fdf74e587d275",
-      "src": "https://github.com/windwp/nvim-ts-autotag"
-    },
     "overseer.nvim": {
       "rev": "a93d9f6d6defdac4bcd6d2c8ba988650e42e0a0e",
       "src": "https://github.com/stevearc/overseer.nvim"
-    },
-    "quick-scope": {
-      "rev": "6cee1d9e0b9ac0fbffeb538d4a5ba9f5628fabbc",
-      "src": "https://github.com/unblevable/quick-scope"
     },
     "scope.nvim": {
       "rev": "228aabdb1b9cc74f0c0ccec88e79873857236e49",
@@ -96,6 +92,10 @@
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
       "src": "https://github.com/folke/snacks.nvim"
+    },
+    "ts-autotag.nvim": {
+      "rev": "6178353d9003e91eb053d69cf9a4d72e28137daa",
+      "src": "https://github.com/tronikelis/ts-autotag.nvim"
     }
   }
 }

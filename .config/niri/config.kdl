@@ -55,7 +55,8 @@ binds {
   Mod+Return hotkey-overlay-title="Open a Terminal: wezterm" { spawn "foot"; }
   Mod+Shift+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "kitty"; }
 
-  Mod+E hotkey-overlay-title="Open file-manager" { spawn "thunar"; }
+  // Mod+E hotkey-overlay-title="Open file-manager" { spawn "thunar"; }
+  Mod+E hotkey-overlay-title="Open file-manager" { spawn "nautilus"; }
   Mod+Shift+E hotkey-overlay-title="Open file-manager: Yazi" { spawn "foot" "-a" "foot-prg-yazi" "-e" "yazi"; }
 
   // Mod+Shift+W hotkey-overlay-title="Open secondary browser" { spawn "gtk-launch" "com.brave.Browser.desktop"; }
@@ -346,37 +347,187 @@ layout {
 
 // ────────────── Animation Settings ──────────────
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
+// animations {
+//   workspace-switch {
+//     spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+//   }
+//   window-open {
+//     duration-ms 200
+//     curve "ease-out-quad"
+//   }
+//   window-close {
+//     duration-ms 200
+//     curve "ease-out-cubic"
+//   }
+//   horizontal-view-movement {
+//     spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+//   }
+//   window-movement {
+//     spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+//   }
+//   window-resize {
+//     spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+//   }
+//   config-notification-open-close {
+//     spring damping-ratio=0.6 stiffness=1200 epsilon=0.001
+//   }
+//   screenshot-ui-open {
+//     duration-ms 300
+//     curve "ease-out-quad"
+//   }
+//   overview-open-close {
+//     spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
+//   }
+// }
+
+/*
+Title: glide
+Authors: Justin Garza <JGarza9788@gmail.com>
+Desc: a softer Apple-like glide preset for niri.
+Demo: ./demos/glide.gif
+Notes:
+- Smooth, polished, low-bounce motion.
+- Open is slightly more luxurious than close.
+- Uses custom shaders where niri supports them.
+*/
+
 animations {
-  workspace-switch {
-    spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
-  }
-  window-open {
-    duration-ms 200
-    curve "ease-out-quad"
-  }
-  window-close {
-    duration-ms 200
-    curve "ease-out-cubic"
-  }
-  horizontal-view-movement {
-    spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
-  }
-  window-movement {
-    spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
-  }
-  window-resize {
-    spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
-  }
-  config-notification-open-close {
-    spring damping-ratio=0.6 stiffness=1200 epsilon=0.001
-  }
-  screenshot-ui-open {
-    duration-ms 300
-    curve "ease-out-quad"
-  }
-  overview-open-close {
-    spring damping-ratio=1.0 stiffness=900 epsilon=0.0001
-  }
+    // Uncomment while tuning.
+    slowdown 1.5
+
+
+    window-open {
+        duration-ms 200
+        // close to a polished macOS-style ease-out feel
+        curve "cubic-bezier" 0.22 1.0 0.36 1.0
+
+        custom-shader r"
+            vec4 open_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+
+                // Slight up-to-down settle.
+                float slide_px = (1.0 - p) * 60.0;
+                float slide_geo = slide_px / max(size_geo.x, 1.0);
+
+                // Very subtle scale-up into place.
+                float scale = 0.985 + 0.015 * p;
+
+                vec2 uv = coords_geo.xy;
+                uv -= vec2(0.5, 0.5);
+                uv /= scale;
+                uv += vec2(0.5, 0.5);
+
+                uv.y -= slide_geo;
+
+                vec3 coords_tex = niri_geo_to_tex * vec3(uv, 1.0);
+                vec4 color = texture2D(niri_tex, coords_tex.st);
+
+                // Gentle fade-in.
+                color *= p;
+
+                return color;
+            }
+        "
+    }
+
+    window-close {
+        duration-ms 180
+        // quick, clean exit
+        curve "cubic-bezier" 0.32 0.0 0.67 0.0
+
+        custom-shader r"
+            vec4 close_color(vec3 coords_geo, vec3 size_geo) {
+                float p = niri_clamped_progress;
+                float inv = 1.0 - p;
+
+                // Slight downward departure.
+                float slide_px = p * 40.0;
+                float slide_geo = slide_px / max(size_geo.x, 1.0);
+
+                // Tiny scale-down on exit.
+                float scale = 1.0 - 0.012 * p;
+
+                vec2 uv = coords_geo.xy;
+                uv -= vec2(0.5, 0.5);
+                uv /= scale;
+                uv += vec2(0.5, 0.5);
+
+                uv.y -= slide_geo;
+
+                vec3 coords_tex = niri_geo_to_tex * vec3(uv, 1.0);
+                vec4 color = texture2D(niri_tex, coords_tex.st);
+
+                color *= inv;
+                return color;
+            }
+        "
+    }
+
+    window-resize {
+        // Resizes should feel soft but controlled.
+        spring damping-ratio=1.0 stiffness=720 epsilon=0.0001
+
+        custom-shader r"
+            vec4 resize_color(vec3 coords_curr_geo, vec3 size_curr_geo) {
+                // Show the next texture, but with a very mild softening
+                // toward the edges during motion for a less harsh resize feel.
+                vec3 coords_tex_next = niri_geo_to_tex_next * coords_curr_geo;
+                vec4 color = texture2D(niri_tex_next, coords_tex_next.st);
+
+                vec2 uv = coords_curr_geo.xy;
+                float edge =
+                    min(min(uv.x, 1.0 - uv.x), min(uv.y, 1.0 - uv.y));
+
+                float vignette = smoothstep(0.0, 0.06, edge);
+                color.rgb *= mix(0.985, 1.0, vignette);
+
+                return color;
+            }
+        "
+    }
+
+// ***animations below do not use a shaders ***
+// these are not required
+
+
+    workspace-switch {
+        // Smooth, composed, no bounce.
+        spring damping-ratio=1.0 stiffness=760 epsilon=0.0001
+    }
+    
+    horizontal-view-movement {
+        // Main "camera glide" for scrollable movement.
+        spring damping-ratio=1.0 stiffness=640 epsilon=0.0001
+    }
+
+    window-movement {
+        // Individual windows shift with a slightly tighter response
+        // than the camera, so it feels organized.
+        spring damping-ratio=1.0 stiffness=700 epsilon=0.0001
+    }
+
+    config-notification-open-close {
+        // Less playful, more refined than the default underdamped feel.
+        spring damping-ratio=1.0 stiffness=820 epsilon=0.001
+    }
+
+    exit-confirmation-open-close {
+        spring damping-ratio=1.0 stiffness=560 epsilon=0.01
+    }
+
+    screenshot-ui-open {
+        duration-ms 220
+        curve "cubic-bezier" 0.22 1.0 0.36 1.0
+    }
+
+    overview-open-close {
+        // Overview should feel smooth and premium, not springy/bouncy.
+        spring damping-ratio=1.0 stiffness=620 epsilon=0.0001
+    }
+
+    recent-windows-close {
+        spring damping-ratio=1.0 stiffness=680 epsilon=0.001
+    }
 }
 
 window-rule {
@@ -588,15 +739,15 @@ environment {
   QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
   XDG_SESSION_TYPE                    "wayland"
   XDG_CURRENT_DESKTOP                 "niri"
-  HYPRCURSOR_THEME                    "Breeze_Light"
-  HYPRCURSOR_SIZE                     "24"
-  XCURSOR_THEME                       "Breeze_Light"
-  XCURSOR_SIZE                        "24"
+  // HYPRCURSOR_THEME                    "Breeze_Light"
+  // HYPRCURSOR_SIZE                     "24"
+  // XCURSOR_THEME                       "Breeze_Light"
+  // XCURSOR_SIZE                        "24"
 }
 
 debug {
   // Render niri on the AMD iGPU; keep NVIDIA available for explicit game offload scripts.
-  render-drm-device "/dev/dri/by-path/pci-0000:05:00.0-render"
+  // render-drm-device "/dev/dri/by-path/pci-0000:05:00.0-render"
 
   // Allows notification actions and window activation from Noctalia.
   honor-xdg-activation-with-invalid-serial

@@ -9,6 +9,7 @@ return {
   { import = "astrocommunity.pack.fish" },
   { import = "astrocommunity.pack.go" },
   { import = "astrocommunity.pack.html-css" },
+  { import = "astrocommunity.pack.oxlint" },
   { import = "astrocommunity.pack.typescript" },
   { import = "astrocommunity.pack.svelte" },
   { import = "astrocommunity.pack.vue" },

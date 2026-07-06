@@ -2,7 +2,7 @@
 import = ["~/.config/alacritty/themes/default.toml"]
 
 [scrolling]
-history = 25000
+history = 75000
 
 [colors]
 draw_bold_text_with_bright_colors = true
@@ -413,9 +413,9 @@ mouse = "Left"
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
 
-# [terminal.shell]
-# args = ["-l"]
-# program = "fish"
+[terminal.shell]
+args = ["-l"]
+program = "fish"
 
 [window]
 opacity = 0.9

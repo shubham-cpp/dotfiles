@@ -36,6 +36,7 @@
   "mini.operators": { "branch": "main", "commit": "59c7f7362461a5db830a5752b22ce9f5cd25a966" },
   "mini.pairs": { "branch": "main", "commit": "1a3e73649c0eaef2f6c48ce1e761c6f0a7c11918" },
   "mini.surround": { "branch": "main", "commit": "580e4cb98c5900d9fe743865fb5a5b2178b4ab18" },
+  "mini.visits": { "branch": "main", "commit": "848858d4141f1cc6f98de79212a63270b09191a1" },
   "multicursor.nvim": { "branch": "1.0", "commit": "704b99f10a72cc05d370cfeb294ff83412a8ab55" },
   "neogen": { "branch": "main", "commit": "23e7e9f883d01289ebd90e98025acc860ea26366" },
   "neogit": { "branch": "master", "commit": "43ea1a0854052e583f647e0b35879f0158a70a78" },

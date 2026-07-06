@@ -144,4 +144,37 @@ return {
       },
     },
   },
+  {
+    "nvim-mini/mini.visits",
+    opts = {},
+    keys = function()
+      local visit_marks = require("config.visit_marks")
+      visit_marks.setup({})
+
+      local ks = {
+        { "<Leader>va", visit_marks.toggle, desc = "Toggle File" },
+        { "<Leader>vv", visit_marks.toggle_window, desc = "Toggle List" },
+        { "<Leader>vj", visit_marks.jump_input, desc = "Jump Index" },
+      }
+
+      for index = 1, 9 do
+        table.insert(ks, {
+          "<Leader>v" .. index,
+          function()
+            visit_marks.jump(index)
+          end,
+          desc = "Jump " .. index,
+        })
+        table.insert(ks, {
+          "<LocalLeader>" .. index,
+          function()
+            visit_marks.jump(index)
+          end,
+          desc = "Jump " .. index,
+        })
+      end
+
+      return ks
+    end,
+  },
 }

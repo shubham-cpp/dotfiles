@@ -8,6 +8,8 @@ font-feature = -dlig
 font-feature = -clig
 theme = Catppuccin Mocha
 
+split-preserve-zoom = navigation
+
 background = #0f0f11
 background-opacity=0.92
 # background-blur = 30

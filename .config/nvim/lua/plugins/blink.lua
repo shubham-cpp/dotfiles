@@ -48,7 +48,7 @@ require("blink.cmp").setup({
     ["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
     ["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
   },
-  appearance = { nerd_font_variant = "mono" },
+  -- appearance = { nerd_font_variant = "mono" },
   completion = {
     accept = { auto_brackets = { enabled = true } },
     documentation = { auto_show = true, window = { border = "rounded" } },

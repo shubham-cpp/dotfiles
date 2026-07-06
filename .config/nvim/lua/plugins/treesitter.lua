@@ -3,7 +3,8 @@ local u = require "config.utils"
 vim.pack.add({
   { src = u.gh "nvim-treesitter/nvim-treesitter", version = "main" },
   { src = u.gh "nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
-  u.gh "windwp/nvim-ts-autotag",
+  -- u.gh "windwp/nvim-ts-autotag",
+  u.gh "tronikelis/ts-autotag.nvim",
 })
 
 local group = vim.api.nvim_create_augroup("ConfigTreesitter", { clear = true })
@@ -75,7 +76,8 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 require("nvim-treesitter").setup({})
-require("nvim-ts-autotag").setup({})
+require("ts-autotag").setup({})
+-- require("nvim-ts-autotag").setup({})
 require("nvim-treesitter-textobjects").setup({
   select = { lookahead = true },
 })

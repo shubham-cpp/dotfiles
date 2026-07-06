@@ -227,9 +227,12 @@ return {
       if type(opts.ensure_installed) == "table" then
         opts.ensure_installed = require("astrocore").list_insert_unique(
           opts.ensure_installed,
-          { "emmet-language-server", "prettierd", "css-variables-language-server", "cssmodules-language-server" }
+          { "emmet-language-server", "css-variables-language-server", "cssmodules-language-server" }
         )
-        opts.ensure_installed = vim.tbl_filter(function(s) return s ~= "emmet-ls" end, opts.ensure_installed)
+        opts.ensure_installed = vim.tbl_filter(
+          function(s) return s ~= "emmet-ls" and s ~= "prettierd" end,
+          opts.ensure_installed
+        )
       end
     end,
   },

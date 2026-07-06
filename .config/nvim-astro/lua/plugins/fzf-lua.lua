@@ -69,16 +69,12 @@ return {
     }
     opts.winopts = default_preview_layout
     opts.files = {
-      -- fzf_bin = "sk",
-      -- fzf_opts = { ["--algo"] = "fzy" },
       actions = action_keys,
       previewer = false,
       winopts = vscode_layout "Files",
     }
     opts.git = {
       files = {
-        -- fzf_bin = "sk",
-        -- fzf_opts = { ["--algo"] = "fzy" },
         actions = action_keys,
         previewer = false,
         winopts = vscode_layout "Git Files",

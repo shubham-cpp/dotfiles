@@ -141,6 +141,8 @@ local cursorword_blocklist = {
   ["true"] = true,
   ["until"] = true,
   ["while"] = true,
+  ["--"] = true,
+  ["//"] = true,
 }
 
 vim.api.nvim_create_autocmd("CursorMoved", {
@@ -162,3 +164,4 @@ require "plugins.mini.mini-starter"
 require "plugins.mini.mini-snippets"
 require "plugins.mini.mini-statusline"
 require "plugins.mini.mini-visits"
+-- require "plugins.mini.mini-jump2d"

@@ -64,7 +64,13 @@ o.timeoutlen = 500
 o.virtualedit = "block"
 o.matchpairs:append "<:>"
 
-o.fillchars = "eob: ,foldinner: ,foldsep: ,foldopen:>,foldclose:"
+o.fillchars = {
+  eob = " ",
+  foldopen = "",
+  foldclose = "", -- fold close icon
+  foldsep = " ",
+  foldinner = vim.fn.has "nvim-0.12" == 1 and " " or nil,
+}
 o.foldcolumn = "1"
 o.foldenable = true
 o.foldlevel = 99
@@ -75,6 +81,7 @@ o.fillchars:append({ eob = " " })
 o.path:append({ "**" })
 o.shortmess:append "c"
 
+o.diffopt:append({ "algorithm:histogram", "linematch:60" })
 g.markdown_recommended_style = 0
 g.tsc_makeprg = "npx tsc"
 

@@ -5,7 +5,7 @@ ai.setup({
     B = gen_ai_spec.buffer(),
     D = gen_ai_spec.diagnostic(),
     I = gen_ai_spec.indent(),
-    L = gen_ai_spec.line(),
+    l = gen_ai_spec.line(),
     N = gen_ai_spec.number(),
     o = ai.gen_spec.treesitter({ -- code block
       a = { "@block.outer", "@conditional.outer", "@loop.outer" },

@@ -51,7 +51,7 @@ function M.setup()
       ["markdown.mdx"] = prettier,
       vue = prettier,
       svelte = prettier,
-      toml = { "taplo" },
+      -- toml = { "taplo" },
       bash = { "shfmt" },
       sh = { "shfmt" },
       fish = { "fish_indent" },

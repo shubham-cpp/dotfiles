@@ -30,7 +30,6 @@ fi
 
 alias cls="clear"
 
-# alias d="sudo dnf"
 if command -v dnf >/dev/null; then
   alias di="sudo dnf install"
   alias dr="sudo dnf remove"
@@ -75,11 +74,12 @@ if command -v nvim >/dev/null; then
 fi
 
 alias xcp="xclip -i -r -sel clip"
-alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
+if command -v nproc >/dev/null; then
+  alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
+fi
 
 # alias gpg-retrieve="gpg --keyserver pool.sks-keyservers.net --recv-keys"
 
-# alias tmux="TERM=xterm-256color /usr/bin/tmux"
 # some helpful git aliases
 # alias g='git'
 
@@ -103,8 +103,14 @@ alias mci="make -j$(expr $(nproc) - 1) && sudo make install clean"
 # alias gcl='git clone'
 # alias gch='git checkout'
 
-alias p="corepack pnpm"
-alias y='yazi'
+if command -v corepack >/dev/null; then
+  alias p="corepack pnpm"
+elfi command -v pnpm >/dev/null; then
+  alias p="pnpm"
+fi
+if command -v yazi >/dev/null; then
+  alias y='yazi'
+fi
 
 alias sc="./vendor/bin/sail composer"
 alias sa="./vendor/bin/sail artisan"

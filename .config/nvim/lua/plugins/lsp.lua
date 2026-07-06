@@ -37,12 +37,12 @@ local mason_packages = {
 }
 
 local servers = {
-  "lua_ls",
-  -- "emmylua_ls",
+  -- "lua_ls",
+  "emmylua_ls",
   -- "lua-lang-server",
   "eslint",
-  "tsgo",
-  -- "vtsls",
+  -- "tsgo",
+  "vtsls",
   "pyrefly",
   "emmet_language_server",
   "html",
@@ -117,6 +117,58 @@ local function enable_lsp_folding(bufnr)
   end
 end
 
+local lsp_highlight_group = vim.api.nvim_create_augroup("ConfigLspHighlight", { clear = true })
+
+---@param bufnr number
+local function has_lsp_highlight_client(bufnr, except_client_id)
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+    if client.id ~= except_client_id and client:supports_method("textDocument/documentHighlight", bufnr) then
+      return true
+    end
+  end
+  return false
+end
+
+---@param bufnr number
+local function enable_lsp_highlight(bufnr)
+  if vim.b[bufnr].config_lsp_highlight then
+    return
+  end
+
+  vim.b[bufnr].config_lsp_highlight = true
+
+  vim.api.nvim_create_autocmd("CursorHold", {
+    group = lsp_highlight_group,
+    buffer = bufnr,
+    desc = "Highlight symbol references with LSP",
+    callback = vim.lsp.buf.document_highlight,
+  })
+
+  vim.api.nvim_create_autocmd({ "CursorMoved", "BufLeave" }, {
+    group = lsp_highlight_group,
+    buffer = bufnr,
+    desc = "Clear LSP symbol reference highlights",
+    callback = function(event)
+      vim.lsp.util.buf_clear_references(event.buf)
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("LspDetach", {
+    group = lsp_highlight_group,
+    buffer = bufnr,
+    desc = "Clean up LSP symbol reference highlights",
+    callback = function(event)
+      if has_lsp_highlight_client(event.buf, event.data.client_id) then
+        return
+      end
+
+      vim.lsp.util.buf_clear_references(event.buf)
+      vim.api.nvim_clear_autocmds({ group = lsp_highlight_group, buffer = event.buf })
+      vim.b[event.buf].config_lsp_highlight = nil
+    end,
+  })
+end
+
 function M.on_attach(client, bufnr)
   local map = function(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc, silent = true })
@@ -142,7 +194,7 @@ function M.on_attach(client, bufnr)
   map("n", "<leader>ls", M.pick_or_fallback "document_symbol", "Document Symbols")
   map("n", "<leader>lS", M.pick_or_fallback "workspace_symbol", "Workspace Symbols")
 
-  map("n", "gd", M.pick_or_fallback "definition", "Defination")
+  map("n", "gd", vim.lsp.buf.definition, "Defination")
   map("n", "grd", M.pick_or_fallback "definition", "Defination")
   map("n", "grD", M.pick_or_fallback "declaration", "Declaration")
   map("n", "grr", M.pick_or_fallback "references", "References")
@@ -180,8 +232,24 @@ function M.on_attach(client, bufnr)
   map("n", "<leader>lo", organize_imports, "Organize Imports")
   map("n", "grs", organize_imports, "Sort Imports")
 
+  if client:supports_method("textDocument/colorPresentation", bufnr) then
+    map("n", "<leader>lc", vim.lsp.document_color.color_presentation, "Color Presentation")
+  end
+
   if client:supports_method "textDocument/foldingRange" then
     enable_lsp_folding(bufnr)
+  end
+
+  if client:supports_method("textDocument/documentHighlight", bufnr) then
+    enable_lsp_highlight(bufnr)
+  end
+
+  if client:supports_method("textDocument/documentColor", bufnr) and client.name ~= "tailwindcss" then
+    vim.lsp.document_color.enable(true, { bufnr = bufnr })
+  end
+
+  if client:supports_method("textDocument/linkedEditingRange", bufnr) then
+    vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
   end
 
   if client:supports_method "textDocument/semanticTokens/full" then
@@ -206,6 +274,11 @@ local function setup_servers()
   vim.lsp.config("lua_ls", {
     settings = {
       Lua = { workspace = { library = library } },
+    },
+  })
+  vim.lsp.config("emmylua_ls", {
+    settings = {
+      emmylua = { workspace = { library = library } },
     },
   })
 

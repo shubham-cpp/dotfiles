@@ -14,6 +14,7 @@ start() {
 
 # start "polkit-gnome-authentication-agent-1" /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 # start "gnome-keyring-daemon" gnome-keyring-daemon
+start "pam_kwallet_init" /usr/lib/pam_kwallet_init
 
 # start "awww-daemon" awww-daemon
 # (
@@ -48,4 +49,4 @@ start "noctalia" noctalia
   sleep 2s
   start "footclient -e tmux" footclient -e tmux
 ) &
-start "nvsst serve" ~/.local/bin/nvstt serve
+# start "nvsst serve" ~/.local/bin/nvstt serve
