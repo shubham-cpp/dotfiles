@@ -1,6 +1,10 @@
 [general]
 import = ["~/.config/alacritty/themes/default.toml"]
 
+[terminal.shell]
+program = "/usr/bin/fish"
+args    = ["--login"]   
+
 [scrolling]
 history = 75000
 
@@ -412,10 +416,6 @@ mouse = "Left"
 [selection]
 save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>\t"
-
-[terminal.shell]
-args = ["-l"]
-program = "fish"
 
 [window]
 opacity = 0.9

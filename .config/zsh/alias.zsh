@@ -105,7 +105,7 @@ fi
 
 if command -v corepack >/dev/null; then
   alias p="corepack pnpm"
-elfi command -v pnpm >/dev/null; then
+elif command -v pnpm >/dev/null; then
   alias p="pnpm"
 fi
 if command -v yazi >/dev/null; then

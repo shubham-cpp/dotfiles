@@ -45,6 +45,7 @@ end, {
   desc = "Delete vim.pack plugins not active in the current session",
 })
 
+require "plugins.theme"
 require "plugins.treesitter"
 require "plugins.mini"
 require "plugins.workspace-session"

@@ -23,6 +23,9 @@ end
 if command -q tirith
     tirith init --shell fish | source
 end
+if command -q wtp
+    wtp shell-init fish | source
+end
 
 set -gx FZF_DEFAULT_COMMAND "rg --files --hidden --follow -g '!{node_modules/,.venv/,venv,.git/,.github,dist,android/,ios/,build/,vendor/}'"
 set -gx FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"

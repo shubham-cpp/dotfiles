@@ -89,6 +89,10 @@ if vim.fn.executable "rg" == 1 then
   o.grepprg = "rg --vimgrep --smart-case -uu --sort=path"
 end
 
+if vim.fn.executable "fish" == 1 then
+  o.shell = "fish"
+end
+
 vim.schedule(function()
   local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil or vim.env.SSH_TTY ~= nil
   if not is_ssh then

@@ -1,5 +1,6 @@
 # vim: commentstring=#\ %s
-window-padding-color = background
+command = fish
+
 font-size=13
 font-family = "RecMonoDuotone Nerd Font"
 font-feature = -calt
@@ -10,6 +11,7 @@ theme = Catppuccin Mocha
 
 split-preserve-zoom = navigation
 
+window-padding-color = background
 background = #0f0f11
 background-opacity=0.92
 # background-blur = 30
