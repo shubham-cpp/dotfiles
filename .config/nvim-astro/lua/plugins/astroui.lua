@@ -11,6 +11,7 @@ return {
         astrodark = {
           QuickScopePrimary = { fg = "#dfbb78", bg = "#505050", bold = true, undercurl = true },
           QuickScopeSecondary = { fg = "#61afef", bg = "#505050", bold = true, undercurl = true },
+          MiniPickMatchCurrent = { link = "CursorLine" },
         },
       },
     },
@@ -40,6 +41,7 @@ return {
               WinBar = { bg = "#141415" },
               QuickScopePrimary = { fg = "#f3be7c", bg = "#333738", bold = true, undercurl = true },
               QuickScopeSecondary = { fg = "#7e98e8", bg = "#333738", bold = true, undercurl = true },
+              MiniPickMatchCurrent = { link = "CursorLine" },
               -- blink.cmp
               BlinkCmpLabelMatch = { fg = "#f3be7c", bold = true },
               BlinkCmpLabelDetail = { fg = "#606079" },
@@ -75,6 +77,36 @@ return {
               BlinkCmpDocBorder = { fg = "#878787" },
               BlinkCmpMenuBorder = { fg = "#878787" },
               BlinkCmpSignatureHelpBorder = { fg = "#878787" },
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    "WTFox/luna.nvim",
+    enabled = false,
+    lazy = true,
+    opts = { transparent = false },
+    specs = {
+      {
+        "AstroNvim/astroui",
+        ---@type AstroUIOpts
+        opts = {
+          ---@type "vague"|"astrodark"|"luna"
+          colorscheme = "luna",
+          status = {
+            colors = function(hl)
+              hl.buffer_active_bg = "#393960"
+              return hl
+            end,
+          },
+          highlights = {
+            vague = {
+              -- StatusLine = { bg = "#181818" },
+              -- WinBar = { bg = "#141415" },
+              QuickScopePrimary = { fg = "#f3be7c", bg = "#333738", bold = true, undercurl = true },
+              QuickScopeSecondary = { fg = "#7e98e8", bg = "#333738", bold = true, undercurl = true },
             },
           },
         },

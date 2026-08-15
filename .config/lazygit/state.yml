@@ -2,14 +2,9 @@ lastupdatecheck: 0
 recentrepos:
     - /var/home/shubham/Documents/dotfiles
     - /home/shubham/Projects/home-decor
-    - /home/shubham/Projects/nvstt
-    - /home/shubham/Projects/dentist-management-system
     - /home/shubham/Documents/dotfiles
-    - /home/shubham/Downloads/Packages/GitClones/lspx
-    - /home/shubham/Downloads/Packages/GitClones/Satty
 startuppopupversion: 5
 didshowhunkstaginghint: true
-lastversion: 0.63.1
+lastversion: 0.64.0
 customcommandshistory: []
 hidecommandlog: false
-githubPullRequests: {}

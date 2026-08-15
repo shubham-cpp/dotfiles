@@ -66,6 +66,7 @@ return {
         local maps = opts.mappings
 
         local has_fzf = require("astrocore").is_available "fzf-lua"
+        local has_mini_pick = require("astrocore").is_available "mini.pick"
         local has_toggle_term = require("astrocore").is_available "toggleterm.nvim"
 
         maps.n["<Leader>fN"] = {
@@ -95,7 +96,7 @@ return {
           desc = "Window Zoom",
         }
 
-        if not has_fzf then
+        if not has_fzf and not has_mini_pick then
           maps.n["<Leader>fg"] = {
             function() require("snacks.picker").git_files { layout = { preset = "vscode" } } end,
             desc = "Git Files",
@@ -185,8 +186,9 @@ return {
         local maps = opts.mappings
 
         local has_fzf = require("astrocore").is_available "fzf-lua"
+        local has_mini_pick = require("astrocore").is_available "mini.pick"
 
-        if has_fzf then return end
+        if has_fzf or has_mini_pick then return end
 
         maps.n.grr = {
           function() require("snacks.picker").lsp_references { include_declaration = true } end,

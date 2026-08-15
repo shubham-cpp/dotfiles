@@ -8,10 +8,9 @@ gui:
 git:
   merging:
     manualCommit: true
-  pagers:
-    - pager: delta --dark --paging=never --line-numbers --hyperlinks
-        --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
+  diffRenderers:
+    - command: delta --dark --paging=never --line-numbers --hyperlinks --hyperlinks-file-link-format="lazygit-edit://{path}:{line}"
     - colorArg: always
-
+      type: rawGit
 os:
   editPreset: nvim

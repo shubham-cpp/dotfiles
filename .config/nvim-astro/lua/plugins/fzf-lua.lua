@@ -98,7 +98,7 @@ return {
       opts.fzf_opts = { ["--algo"] = "fzy" }
     end
 
-    opts.ui_select = true
+    opts.ui_select = {}
   end,
   dependencies = {
     {

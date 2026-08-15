@@ -13,7 +13,8 @@ local mason_packages = {
   "prettierd",
   "stylua",
   "ruff",
-  "lua-language-server",
+  "emmylua_ls",
+  -- "lua-language-server",
   "tailwindcss-language-server",
   "css-variables-language-server",
   "cssmodules-language-server",
@@ -88,6 +89,14 @@ end
 
 function M.pick_or_fallback(scope)
   return function()
+    if scope == "workspace_symbol" then
+      local pick_ok, pick = pcall(require, "mini.pick")
+      if pick_ok and type(pick.registry.workspace_symbol) == "function" then
+        local started = pcall(pick.registry.workspace_symbol)
+        if started then return end
+      end
+    end
+
     local ok, extra = pcall(require, "mini.extra")
     if ok then
       local picked = pcall(extra.pickers.lsp, { scope = scope })
