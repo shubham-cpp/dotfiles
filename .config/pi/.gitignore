@@ -1,0 +1,25 @@
+# Deny by default. Pi drops caches, sessions, and credentials
+# next to the files you actually want in git.
+*
+!.gitignore
+
+!agent/
+agent/*
+
+!agent/AGENTS.md
+!agent/APPEND_SYSTEM.md
+!agent/settings.json
+!agent/mcp.json
+!agent/keybindings.json
+
+!agent/bin/
+!agent/bin/**
+
+!agent/extensions/
+!agent/extensions/**
+
+!agent/lib/
+!agent/lib/**
+
+!agent/docs/
+!agent/docs/**

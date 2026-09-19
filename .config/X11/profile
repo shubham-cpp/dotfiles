@@ -29,21 +29,39 @@ done
 # export BROWSER=brave
 # export READER=zathura
 
-if test "$DESKTOP_SESSION" != "plasma"; then
-  export QT_QPA_PLATFORMTHEME="qt6ct"
-  export QT_AUTO_SCREEN_SCALE_FACTOR=0
-else
-  export GTK_USE_PORTAL=1
-fi
+# if test "$XDG_CURRENT_DESKTOP" != "KDE"; then
+#   export QT_QPA_PLATFORMTHEME="qt6ct"
+#   export QT_AUTO_SCREEN_SCALE_FACTOR=0
+# else
+#   export GTK_USE_PORTAL=1
+# fi
+
+case "${XDG_CURRENT_DESKTOP}:${DESKTOP_SESSION}:${XDG_SESSION_DESKTOP}" in
+  *KDE*|*plasma*|*Plasma*)
+    export GTK_USE_PORTAL=1
+    ;;
+  *)
+    export QT_QPA_PLATFORMTHEME="qt6ct"
+    export QT_AUTO_SCREEN_SCALE_FACTOR=0
+    ;;
+esac
 
 if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
   export MOZ_ENABLE_WAYLAND=1
   export _JAVA_AWT_WM_NONREPARENTING=1
 fi
+
 export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}"/claude
 export CODEX_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"/codex
-export GTK_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-1.0/gtkrc
-export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc":"${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc.mine"
+export PI_CODING_AGENT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/pi/agent"
+export GROK_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/grok"
+export T3CODE_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/t3"
+export HERMES_HOME="${XDG_CONFIG_HOME:-$HOME/.config}/hermes"
+export GH_TELEMETRY=false
+export DO_NOT_TRACK=true
+
+# export GTK_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}"/gtk-1.0/gtkrc
+# export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc":"${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc.mine"
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
@@ -131,7 +149,7 @@ export FFMPEG_DATADIR="$XDG_CONFIG_HOME"/ffmpeg
 export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgreprc"
 export BASH_COMPLETION_USER_FILE="$XDG_CONFIG_HOME"/bash-completion/bash_completion
 # export ODIN_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/odin-linux"
-export XCURSOR_THEME="${XCURSOR_THEME:-Breeze_Light}"
+export XCURSOR_THEME="${XCURSOR_THEME:-Future-cursors}"
 export XCURSOR_SIZE="$(gsettings get org.gnome.desktop.interface cursor-size)"
 
 checked_paths=(

@@ -1,10 +1,13 @@
 lastupdatecheck: 0
 recentrepos:
-    - /var/home/shubham/Documents/dotfiles
-    - /home/shubham/Projects/home-decor
     - /home/shubham/Documents/dotfiles
+    - /home/shubham/Projects/nvstt
+    - /home/shubham/Projects/home-decor
+    - /home/shubham/Downloads/Packages/GitClones/vicinae
+    - /home/shubham/Projects/dentist-management-system
 startuppopupversion: 5
 didshowhunkstaginghint: true
-lastversion: 0.64.0
-customcommandshistory: []
+lastversion: 0.65.0
+customcommandshistory:
+    - qa
 hidecommandlog: false

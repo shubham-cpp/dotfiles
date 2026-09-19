@@ -125,6 +125,280 @@ function M.source_opts(source)
   return { source = vim.tbl_extend("force", { show = M.show_filename_first }, source or {}) }
 end
 
+local buf_line_hl_cache = {}
+
+local function parse_buf_line_item(item)
+  local raw = type(item) == "table" and item.text or item
+  if type(raw) ~= "string" then return nil end
+
+  local path, lnum_text, line = raw:match "^(.-)%z(%s*%d+)%z(.*)$"
+  if lnum_text == nil then
+    lnum_text, line = raw:match "^(%s*%d+)%z(.*)$"
+  elseif path == "" then
+    path = nil
+  end
+  if lnum_text == nil then return nil end
+
+  return {
+    path = path,
+    lnum = tonumber(lnum_text),
+    lnum_text = lnum_text,
+    line = line or "",
+    bufnr = type(item) == "table" and item.bufnr or nil,
+  }
+end
+
+local function buf_line_display_text(parsed)
+  local line = parsed.line or ""
+  if parsed.path ~= nil then
+    local basename = vim.fn.fnamemodify(parsed.path, ":t")
+    if basename == "" then basename = parsed.path end
+    local lnum = tostring(parsed.lnum or vim.trim(parsed.lnum_text or ""))
+    local prefix = basename .. ":" .. lnum .. "  "
+    return prefix .. line, {
+      name_end = #basename,
+      lnum_end = #prefix - 2,
+      content_start = #prefix,
+    }
+  end
+
+  local lnum_text = parsed.lnum_text or tostring(parsed.lnum or "")
+  local prefix = lnum_text .. "  "
+  return prefix .. line, {
+    lnum_end = #lnum_text,
+    content_start = #prefix,
+  }
+end
+
+local function buf_line_highlights(bufnr, lnum)
+  if type(bufnr) ~= "number" or not vim.api.nvim_buf_is_valid(bufnr) then return {} end
+  local tick = vim.api.nvim_buf_get_changedtick(bufnr)
+  local cached = buf_line_hl_cache[bufnr]
+  if cached ~= nil and cached.tick == tick and cached.lines[lnum] ~= nil then return cached.lines[lnum] end
+  if cached == nil or cached.tick ~= tick then
+    cached = { tick = tick, lines = {} }
+    buf_line_hl_cache[bufnr] = cached
+  end
+
+  local ok_parser, parser = pcall(vim.treesitter.get_parser, bufnr)
+  if not ok_parser or parser == nil then
+    cached.lines[lnum] = {}
+    return cached.lines[lnum]
+  end
+
+  local row = lnum - 1
+  pcall(function() parser:parse { row, row + 1 } end)
+  local highlights = {}
+  parser:for_each_tree(function(tstree, tree)
+    if tstree == nil then return end
+    local query = vim.treesitter.query.get(tree:lang(), "highlights")
+    if query == nil then return end
+    for capture, node, metadata in query:iter_captures(tstree:root(), bufnr, row, row + 1) do
+      local name = query.captures[capture]
+      if name ~= nil and name ~= "spell" and not vim.startswith(name, "_") then
+        local start_row, start_col, end_row, end_col = node:range()
+        if start_row <= row and end_row >= row then
+          highlights[#highlights + 1] = {
+            col = start_row == row and start_col or 0,
+            end_col = end_row == row and end_col or -1,
+            hl_group = "@" .. name .. "." .. tree:lang(),
+            priority = tonumber(metadata.priority or (metadata[capture] and metadata[capture].priority)) or 100,
+          }
+        end
+      end
+    end
+  end)
+  cached.lines[lnum] = highlights
+  return highlights
+end
+
+local function buf_line_match_ranges(line, query)
+  if type(line) ~= "string" or line == "" or type(query) ~= "table" or query[1] == nil then return {} end
+  local needle = table.concat(query)
+  if needle == "" then return {} end
+
+  local ignorecase = needle == needle:lower()
+  local haystack = ignorecase and line:lower() or line
+  local pattern = ignorecase and needle:lower() or needle
+  local from = haystack:find(pattern, 1, true)
+  if from ~= nil then return { { from, from + #pattern } } end
+
+  local ranges, col = {}, 1
+  for _, piece in ipairs(vim.fn.split(pattern, "\\zs")) do
+    local found = haystack:find(piece, col, true)
+    if found == nil then return {} end
+    ranges[#ranges + 1] = { found, found + #piece }
+    col = found + #piece
+  end
+  return ranges
+end
+
+local function set_buf_line_hl(buf_id, row, start_col, end_col, hl_group, priority)
+  local line = vim.api.nvim_buf_get_lines(buf_id, row, row + 1, false)[1] or ""
+  local line_len = #line
+  start_col = math.max(0, math.min(start_col, line_len))
+  end_col = math.max(start_col, math.min(end_col, line_len))
+  if start_col >= end_col then return end
+  vim.api.nvim_buf_set_extmark(buf_id, ns_id, row, start_col, {
+    end_col = end_col,
+    hl_group = hl_group,
+    hl_mode = "combine",
+    priority = priority,
+  })
+end
+
+local function show_buf_lines(buf_id, items, query)
+  local MiniPick = require "mini.pick"
+  local display_items, meta, show_icons = {}, {}, false
+
+  for i, item in ipairs(items) do
+    local parsed = parse_buf_line_item(item)
+    if parsed == nil then
+      display_items[i] = item
+    else
+      local text, spans = buf_line_display_text(parsed)
+      display_items[i] = {
+        text = text,
+        path = parsed.path,
+        bufnr = parsed.bufnr,
+        lnum = parsed.lnum,
+      }
+      meta[i] = { spans = spans, parsed = parsed }
+      if parsed.path ~= nil then show_icons = true end
+    end
+  end
+
+  MiniPick.default_show(buf_id, display_items, {}, { show_icons = show_icons })
+
+  vim.api.nvim_buf_clear_namespace(buf_id, ns_id, 0, -1)
+  for i, decoration in pairs(meta) do
+    local line = vim.api.nvim_buf_get_lines(buf_id, i - 1, i, false)[1] or ""
+    local text = display_items[i].text
+    local start = type(text) == "string" and line:find(text, 1, true) or nil
+    if start ~= nil then
+      local prefix = start - 1
+      local spans = decoration.spans
+      local parsed = decoration.parsed
+      set_buf_line_hl(buf_id, i - 1, prefix + (spans.name_end or 0), prefix + spans.lnum_end, "LineNr", 190)
+      if parsed.bufnr ~= nil and parsed.lnum ~= nil and not parsed.line:find("\t", 1, true) then
+        for _, hl in ipairs(buf_line_highlights(parsed.bufnr, parsed.lnum)) do
+          local end_col = hl.end_col == -1 and #line or (prefix + spans.content_start + hl.end_col)
+          set_buf_line_hl(
+            buf_id,
+            i - 1,
+            prefix + spans.content_start + hl.col,
+            end_col,
+            hl.hl_group,
+            hl.priority
+          )
+        end
+      end
+      for _, range in ipairs(buf_line_match_ranges(parsed.line, query)) do
+        set_buf_line_hl(
+          buf_id,
+          i - 1,
+          prefix + spans.content_start + range[1] - 1,
+          prefix + spans.content_start + range[2] - 1,
+          "MiniPickMatchRanges",
+          200
+        )
+      end
+    end
+  end
+end
+
+local function choose_buf_line(item)
+  if item == nil then return end
+  local MiniPick = require "mini.pick"
+  local parsed = parse_buf_line_item(item)
+  local ranges = parsed ~= nil and buf_line_match_ranges(parsed.line, MiniPick.get_picker_query()) or {}
+  local chosen = vim.tbl_extend("force", {}, item)
+  if ranges[1] ~= nil then chosen.col = ranges[1][1] end
+  return MiniPick.default_choose(chosen)
+end
+
+local function nearest_buf_line_index(items, bufnr, cursor)
+  local best_i, best_dist
+  for i, item in ipairs(items) do
+    if item.bufnr == bufnr and type(item.lnum) == "number" then
+      local dist = math.abs(item.lnum - cursor)
+      if best_dist == nil or dist < best_dist then
+        best_i, best_dist = i, dist
+      end
+      if dist == 0 then break end
+    end
+  end
+  return best_i
+end
+
+local function buf_line_items(buffers, is_all)
+  local MiniPick = require "mini.pick"
+  local items = {}
+  for _, buf_id in ipairs(buffers) do
+    if not MiniPick.poke_is_picker_active() then return nil end
+    if not vim.api.nvim_buf_is_loaded(buf_id) then pcall(vim.fn.bufload, buf_id) end
+    local buf_name = vim.api.nvim_buf_get_name(buf_id)
+    if buf_name ~= "" then buf_name = vim.fn.fnamemodify(buf_name, ":~:.") end
+    local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+    local n_digits = math.max(1, math.floor(math.log10(math.max(#lines, 1))) + 1)
+    local format_pattern = "%s%" .. n_digits .. "d\0%s"
+    for lnum, line in ipairs(lines) do
+      if type(line) == "string" and line:find("%S") ~= nil then
+        local prefix = is_all and (buf_name .. "\0") or ""
+        items[#items + 1] = {
+          text = format_pattern:format(prefix, lnum, line),
+          bufnr = buf_id,
+          lnum = lnum,
+        }
+      end
+    end
+  end
+  return items
+end
+
+function M.start_buf_lines(scope)
+  local MiniPick = require "mini.pick"
+  local bufnr = vim.api.nvim_get_current_buf()
+  local cursor = vim.api.nvim_win_get_cursor(0)[1]
+  local is_all = scope == "all"
+  local buffers = {}
+
+  if is_all then
+    for _, buf_id in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.bo[buf_id].buflisted and vim.bo[buf_id].buftype == "" then buffers[#buffers + 1] = buf_id end
+    end
+  else
+    buffers = { bufnr }
+  end
+
+  local collect = vim.schedule_wrap(coroutine.wrap(function()
+    local items = buf_line_items(buffers, is_all)
+    if items == nil then return end
+    local current = nearest_buf_line_index(items, bufnr, cursor)
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "MiniPickMatch",
+      once = true,
+      callback = function()
+        vim.schedule(function()
+          if current ~= nil and MiniPick.is_picker_active() then
+            MiniPick.set_picker_match_inds({ current }, "current")
+          end
+        end)
+      end,
+    })
+    MiniPick.set_picker_items(items)
+  end))
+
+  return MiniPick.start {
+    source = {
+      name = string.format("Buffer lines (%s)", scope),
+      items = collect,
+      show = show_buf_lines,
+      choose = choose_buf_line,
+    },
+  }
+end
+
 local function normalize_path(path)
   if type(path) ~= "string" or path == "" then return "" end
   if vim.startswith(path, "file://") then path = vim.uri_to_fname(path) end

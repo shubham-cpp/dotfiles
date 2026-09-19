@@ -1,232 +1,259 @@
 #!/usr/bin/env python3
 
-import sys
+"""Command-line client for the Quickshell calendar reminder service."""
+
 import json
 import os
 import re
+import shlex
+import shutil
 import subprocess
-import hashlib
+import sys
 from datetime import datetime, timedelta
-from dateutil import parser as dateutil_parser
-from dateutil.relativedelta import relativedelta
-
-STATE_DIR = os.path.expanduser("~/.local/state/remind")
-NOTIFY_SEND = "/usr/bin/notify-send"
+from pathlib import Path
+from zoneinfo import ZoneInfo
 
 
-def ensure_state_dir():
-    os.makedirs(STATE_DIR, exist_ok=True)
+IST = ZoneInfo("Asia/Kolkata")
+CONFIG_DIR = Path(
+    os.environ.get(
+        "REMIND_QUICKSHELL_PATH",
+        Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "quickshell",
+    )
+)
+REMINDER_ID = re.compile(r"r_\d+(?:_\d+)?")
 
 
-def generate_id(title: str, now: str) -> str:
-    raw = f"{title}-{now}".encode()
-    return hashlib.sha256(raw).hexdigest()[:6]
+class RemindError(Exception):
+    """An error that can be shown directly to the user."""
 
 
-def print_usage():
+def print_usage() -> None:
     print(
         "Usage:\n"
-        "  remind <time> <title> [description]   Set a reminder\n"
-        "  remind list                            List active reminders\n"
-        "  remind cancel <id>                     Cancel a reminder\n"
+        "  remind [--urgent] <time> <title> [description]\n"
+        "  remind list\n"
+        "  remind cancel <id>\n"
         "\n"
-        "Time formats:\n"
-        "  Relative:  10s, 5m, 2h, 1d\n"
-        "  Natural:   in 30 minutes, in 2 hours\n"
-        "  Tomorrow:  tomorrow, 2:30pm tomorrow, tomorrow 3pm\n"
-        "  Absolute:  2:30pm, 14:30, 2pm, 2026-04-13 2:30pm"
+        "Quote times that contain spaces. Examples:\n"
+        '  remind 10m "Take a break"\n'
+        '  remind --urgent "in 2 hours" "Leave for the airport"\n'
+        '  remind "tomorrow 3pm" "Call Mum" "Ask about the appointment"\n'
+        '  remind "2026-09-26 18:30" "Pay electricity"'
     )
 
 
-def parse_time(time_str: str) -> datetime:
-    now = datetime.now()
-
-    # Relative shorthand: 10s, 5m, 2h, 1d
-    m = re.fullmatch(r"(\d+)([smhd])", time_str)
-    if m:
-        amount = int(m.group(1))
-        unit = m.group(2)
-        deltas = {"s": "seconds", "m": "minutes", "h": "hours", "d": "days"}
-        return now + timedelta(**{deltas[unit]: amount})
-
-    # Natural relative: "in 30 minutes", "in 2 hours"
-    m = re.fullmatch(r"in\s+(\d+)\s+(seconds?|minutes?|hours?|days?)", time_str, re.IGNORECASE)
-    if m:
-        amount = int(m.group(1))
-        unit = m.group(2).rstrip("s")
-        deltas = {"second": "seconds", "minute": "minutes", "hour": "hours", "day": "days"}
-        return now + timedelta(**{deltas[unit]: amount})
-
-    # "tomorrow" alone
-    if re.fullmatch(r"tomorrow", time_str, re.IGNORECASE):
-        return now + relativedelta(days=1)
-
-    # "2:30pm tomorrow"
-    m = re.match(r"(.+?)\s+tomorrow$", time_str, re.IGNORECASE)
-    if m:
-        parsed = dateutil_parser.parse(m.group(1))
-        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
-        return parsed + relativedelta(days=1)
-
-    # "tomorrow 2:30pm"
-    m = re.match(r"tomorrow\s+(.+)$", time_str, re.IGNORECASE)
-    if m:
-        parsed = dateutil_parser.parse(m.group(1))
-        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
-        return parsed + relativedelta(days=1)
-
-    # Absolute: fallback to dateutil
-    parsed = dateutil_parser.parse(time_str)
-    if parsed.year == 1900:
-        parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
-    return parsed
-
-
-def get_active_timer_ids():
-    result = subprocess.run(
-        ["systemctl", "--user", "list-timers", "--all", "--no-legend", "--output=json"],
-        capture_output=True, text=True,
+def parse_clock(value: str) -> tuple[int, int, int]:
+    match = re.fullmatch(
+        r"(\d{1,2})(?::(\d{2}))?(?::(\d{2}))?\s*(am|pm)?",
+        value.strip(),
+        re.IGNORECASE,
     )
-    ids = set()
-    if result.returncode == 0:
+    if not match:
+        raise ValueError("expected a time such as 14:30 or 2:30pm")
+    hour = int(match.group(1))
+    minute = int(match.group(2) or 0)
+    second = int(match.group(3) or 0)
+    meridiem = (match.group(4) or "").lower()
+    if minute > 59 or second > 59:
+        raise ValueError("minute and second must be between 00 and 59")
+    if meridiem:
+        if not 1 <= hour <= 12:
+            raise ValueError("12-hour times need an hour from 1 to 12")
+        hour = hour % 12 + (12 if meridiem == "pm" else 0)
+    elif hour > 23:
+        raise ValueError("hour must be between 0 and 23")
+    return hour, minute, second
+
+
+def parse_time(value: str, now: datetime | None = None) -> datetime:
+    now = now or datetime.now(IST)
+    value = value.strip()
+
+    shorthand = re.fullmatch(r"(\d+)([smhd])", value, re.IGNORECASE)
+    if shorthand:
+        amount = int(shorthand.group(1))
+        unit = shorthand.group(2).lower()
+        names = {"s": "seconds", "m": "minutes", "h": "hours", "d": "days"}
+        return now + timedelta(**{names[unit]: amount})
+
+    relative = re.fullmatch(
+        r"in\s+(\d+)\s+(seconds?|minutes?|hours?|days?)",
+        value,
+        re.IGNORECASE,
+    )
+    if relative:
+        amount = int(relative.group(1))
+        unit = relative.group(2).lower().rstrip("s") + "s"
+        return now + timedelta(**{unit: amount})
+
+    if value.lower() == "tomorrow":
+        return now + timedelta(days=1)
+
+    tomorrow = re.fullmatch(r"tomorrow\s+(.+)|(.+?)\s+tomorrow", value, re.IGNORECASE)
+    if tomorrow:
+        clock = tomorrow.group(1) or tomorrow.group(2)
+        hour, minute, second = parse_clock(clock)
+        target = now.date() + timedelta(days=1)
+        return datetime(target.year, target.month, target.day, hour, minute, second, tzinfo=IST)
+
+    dated = re.fullmatch(r"(\d{4}-\d{2}-\d{2})(?:[ T](.+))?", value)
+    if dated:
         try:
-            timers = json.loads(result.stdout)
-            for t in timers:
-                unit = t.get("unit", "")
-                if unit.startswith("remind-") and unit.endswith(".timer"):
-                    remind_id = unit[len("remind-"):-len(".timer")]
-                    ids.add(remind_id)
-        except json.JSONDecodeError:
-            for line in result.stdout.strip().splitlines():
-                parts = line.split()
-                for p in parts:
-                    if p.startswith("remind-") and p.endswith(".timer"):
-                        remind_id = p[len("remind-"):-len(".timer")]
-                        ids.add(remind_id)
-    return ids
+            target = datetime.strptime(dated.group(1), "%Y-%m-%d").date()
+        except ValueError as error:
+            raise ValueError("invalid calendar date") from error
+        if not dated.group(2):
+            return datetime(target.year, target.month, target.day, tzinfo=IST)
+        clock = dated.group(2)
+        try:
+            parsed = datetime.fromisoformat(f"{dated.group(1)}T{clock.replace('Z', '+00:00')}")
+        except ValueError:
+            hour, minute, second = parse_clock(clock)
+            parsed = datetime(target.year, target.month, target.day, hour, minute, second)
+        return parsed.replace(tzinfo=IST) if parsed.tzinfo is None else parsed.astimezone(IST)
+
+    hour, minute, second = parse_clock(value)
+    return now.replace(hour=hour, minute=minute, second=second, microsecond=0)
 
 
-def cmd_set(args):
-    time_str, title = args[0], args[1]
-    description = args[2] if len(args) > 2 else ""
+def parse_set_arguments(arguments: list[str], now: datetime | None = None) -> dict:
+    urgent = False
+    positional = []
+    for argument in arguments:
+        if argument in {"-u", "--urgent"}:
+            urgent = True
+        else:
+            positional.append(argument)
+    if len(positional) < 2:
+        raise RemindError("A time and title are required.")
 
+    when_text, title = positional[:2]
+    description = " ".join(positional[2:]).strip()
+    if not title.strip():
+        raise RemindError("Title cannot be empty.")
+    if len(title) > 200:
+        raise RemindError("Title must be at most 200 characters.")
+    if len(description) > 1000:
+        raise RemindError("Description must be at most 1000 characters.")
+    now = now or datetime.now(IST)
     try:
-        trigger_at = parse_time(time_str)
-    except (ValueError, OverflowError) as e:
-        print(f"Error: could not parse time '{time_str}': {e}")
-        print_usage()
-        sys.exit(1)
-
-    if trigger_at <= datetime.now():
-        print(f"Error: that time has already passed ({trigger_at})")
-        sys.exit(1)
-
-    remind_id = generate_id(title, str(datetime.now()))
-
-    ensure_state_dir()
-    state = {
-        "id": remind_id,
-        "title": title,
+        trigger_at = parse_time(when_text, now)
+    except (OverflowError, ValueError) as error:
+        raise RemindError(f"Could not parse time {when_text!r}: {error}") from error
+    if trigger_at <= now:
+        raise RemindError(f"That time has already passed ({trigger_at:%Y-%m-%d %H:%M:%S %Z}).")
+    return {
+        "title": title.strip(),
         "description": description,
-        "trigger_at": trigger_at.strftime("%Y-%m-%dT%H:%M:%S"),
+        "at": trigger_at.isoformat(timespec="seconds"),
+        "urgent": urgent,
     }
-    state_path = os.path.join(STATE_DIR, f"{remind_id}.json")
-    with open(state_path, "w") as f:
-        json.dump(state, f, indent=2)
 
-    unit_name = f"remind-{remind_id}"
-    calendar_expr = trigger_at.strftime("%Y-%m-%d %H:%M:%S")
+
+def parse_command_line(value: str, now: datetime | None = None) -> dict:
     try:
-        subprocess.run(
-            [
-                "systemd-run", "--user",
-                f"--on-calendar={calendar_expr}",
-                f"--unit={unit_name}",
-                f"--description=remind: {title}",
-                "--",
-                NOTIFY_SEND, title, description,
-            ],
-            check=True,
+        arguments = shlex.split(value)
+    except ValueError as error:
+        raise RemindError(f"Could not read command: {error}") from error
+    if arguments and arguments[0] == "remind":
+        arguments = arguments[1:]
+    return parse_set_arguments(arguments, now)
+
+
+def call_quickshell(function: str, *arguments: str) -> str:
+    executable = shutil.which("qs")
+    if not executable:
+        raise RemindError("Quickshell CLI 'qs' was not found in PATH.")
+    try:
+        result = subprocess.run(
+            [executable, "-p", str(CONFIG_DIR), "ipc", "call", "reminders", function, *arguments],
             capture_output=True,
             text=True,
+            timeout=10,
+            check=False,
         )
-    except subprocess.CalledProcessError as e:
-        print(f"Error creating timer: {e.stderr.strip()}")
-        os.remove(state_path)
-        sys.exit(1)
-
-    print(f"Reminder set: {title}")
-    print(f"  ID: {remind_id}")
-    print(f"  At: {trigger_at.strftime('%Y-%m-%d %H:%M:%S')}")
+    except subprocess.TimeoutExpired as error:
+        raise RemindError("Quickshell did not answer within 10 seconds.") from error
+    if result.returncode != 0:
+        detail = result.stderr.strip() or result.stdout.strip() or "unknown IPC error"
+        raise RemindError(f"Could not contact the Quickshell reminder service: {detail}")
+    return result.stdout.strip()
 
 
-def cmd_list(args):
-    ensure_state_dir()
-    active_ids = get_active_timer_ids()
+def command_set(arguments: list[str]) -> None:
+    reminder = parse_set_arguments(arguments)
 
-    if not active_ids:
-        print("No active reminders.")
-        return
+    reminder_id = call_quickshell(
+        "add",
+        reminder["title"],
+        reminder["at"],
+        "true" if reminder["urgent"] else "false",
+        reminder["description"],
+    )
+    if not reminder_id:
+        raise RemindError("The calendar rejected the reminder. Open it to see the validation error.")
+    trigger_at = datetime.fromisoformat(reminder["at"])
+    print(f"Reminder set: {reminder['title']}")
+    print(f"  ID: {reminder_id}")
+    print(f"  At: {trigger_at:%Y-%m-%d %H:%M:%S %Z}")
 
-    reminders = []
-    for fname in os.listdir(STATE_DIR):
-        if not fname.endswith(".json"):
-            continue
-        with open(os.path.join(STATE_DIR, fname)) as f:
-            state = json.load(f)
-        if state["id"] in active_ids:
-            reminders.append(state)
 
+def command_list() -> None:
+    raw = call_quickshell("list")
+    try:
+        reminders = json.loads(raw)
+    except json.JSONDecodeError as error:
+        raise RemindError("Quickshell returned an invalid reminder list.") from error
+    if not isinstance(reminders, list):
+        raise RemindError("Quickshell returned an invalid reminder list.")
     if not reminders:
         print("No active reminders.")
         return
-
-    reminders.sort(key=lambda r: r["trigger_at"])
-    for r in reminders:
-        desc = f" — {r['description']}" if r.get("description") else ""
-        print(f"  {r['id']}  {r['trigger_at']}  {r['title']}{desc}")
-
-
-def cmd_cancel(args):
-    remind_id = args[0]
-    unit_name = f"remind-{remind_id}"
-
-    subprocess.run(["systemctl", "--user", "stop", f"{unit_name}.timer"], capture_output=True)
-    subprocess.run(["systemctl", "--user", "stop", f"{unit_name}.service"], capture_output=True)
-
-    state_path = os.path.join(STATE_DIR, f"{remind_id}.json")
-    if os.path.exists(state_path):
-        os.remove(state_path)
-        print(f"Cancelled: {remind_id}")
-    else:
-        print(f"No reminder found with id: {remind_id}")
-        sys.exit(1)
+    for reminder in reminders:
+        try:
+            when = datetime.fromisoformat(reminder["at"]).astimezone(IST)
+            reminder_id = reminder["id"]
+            title = reminder["title"]
+        except (KeyError, TypeError, ValueError) as error:
+            raise RemindError("Quickshell returned a malformed reminder.") from error
+        description = reminder.get("description", "")
+        urgent = "  [urgent]" if reminder.get("urgent") is True else ""
+        suffix = f" - {description}" if description else ""
+        print(f"  {reminder_id}  {when:%Y-%m-%d %H:%M:%S}  {title}{urgent}{suffix}")
 
 
-def main():
-    if len(sys.argv) < 2:
+def command_cancel(arguments: list[str]) -> None:
+    if len(arguments) != 1 or not REMINDER_ID.fullmatch(arguments[0]):
+        raise RemindError("Usage: remind cancel <id>")
+    reminder_id = arguments[0]
+    if call_quickshell("cancel", reminder_id) != "true":
+        raise RemindError(f"No active reminder found with id: {reminder_id}")
+    print(f"Cancelled: {reminder_id}")
+
+
+def main(arguments: list[str]) -> int:
+    if not arguments or arguments[0] in {"-h", "--help", "help"}:
         print_usage()
-        sys.exit(1)
-
-    subcommand = sys.argv[1]
-
-    if subcommand == "list":
-        cmd_list(sys.argv[2:])
-    elif subcommand == "cancel":
-        if len(sys.argv) < 3:
-            print("Usage: remind cancel <id>")
-            sys.exit(1)
-        cmd_cancel(sys.argv[2:])
-    else:
-        if len(sys.argv) < 3:
-            print("Error: need at least <time> and <title>")
-            print_usage()
-            sys.exit(1)
-        time_str = sys.argv[1]
-        title = sys.argv[2]
-        description = " ".join(sys.argv[3:]) if len(sys.argv) > 3 else ""
-        cmd_set([time_str, title, description])
+        return 0 if arguments else 1
+    try:
+        if arguments[0] == "parse":
+            if len(arguments) != 2:
+                raise RemindError("Usage: remind parse '<reminder command>'")
+            print(json.dumps(parse_command_line(arguments[1]), separators=(",", ":")))
+        elif arguments[0] == "list":
+            if len(arguments) != 1:
+                raise RemindError("Usage: remind list")
+            command_list()
+        elif arguments[0] == "cancel":
+            command_cancel(arguments[1:])
+        else:
+            command_set(arguments)
+    except RemindError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main(sys.argv[1:]))

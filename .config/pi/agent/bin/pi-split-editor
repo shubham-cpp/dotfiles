@@ -1,0 +1,248 @@
+#!/usr/bin/env bash
+# Open Pi's external-editor tempfile in a neighboring terminal pane when possible.
+# Fallback is the normal inline editor behavior.
+
+set -u
+
+launched=0
+
+have() {
+	command -v "$1" >/dev/null 2>&1
+}
+
+q() {
+	printf '%q' "$1"
+}
+
+sq() {
+	local value=${1//\'/\'\\\'\'}
+	printf "'%s'" "$value"
+}
+
+quote_args() {
+	local arg
+	for arg in "$@"; do
+		printf ' %q' "$arg"
+	done
+}
+
+editor_command() {
+	if [[ -n "${PI_SPLIT_EDITOR:-}" ]]; then
+		printf '%s' "$PI_SPLIT_EDITOR"
+	elif [[ -n "${VISUAL:-}" ]]; then
+		printf '%s' "$VISUAL"
+	elif [[ -n "${EDITOR:-}" ]]; then
+		printf '%s' "$EDITOR"
+	elif have nvim; then
+		printf 'nvim'
+	elif have vim; then
+		printf 'vim'
+	else
+		printf 'nano'
+	fi
+}
+
+state_dir() {
+	mktemp -d "${TMPDIR:-/tmp}/pi-split-editor.XXXXXX"
+}
+
+write_runner() {
+	local dir=$1
+	local status_file=$2
+	shift 2
+	local editor invocation runner
+	editor=$(editor_command)
+	invocation="${editor}$(quote_args "$@")"
+	runner="$dir/run-editor"
+
+	{
+		printf '%s\n' '#!/usr/bin/env bash'
+		printf '%s\n' 'set +e'
+		printf '%s\n' "$invocation"
+		printf '%s\n' 'status=$?'
+		printf "printf '%%s\\n' \"\$status\" > %s\n" "$(q "$status_file")"
+		printf '%s\n' 'exit "$status"'
+	} >"$runner"
+	chmod +x "$runner"
+	printf '%s' "$runner"
+}
+
+build_launch_command() {
+	local dir=$1
+	local status_file=$2
+	shift 2
+	local runner
+	runner=$(write_runner "$dir" "$status_file" "$@")
+	printf 'exec bash %s' "$(sq "$runner")"
+}
+
+status_from_file() {
+	local status_file=$1
+	local status
+	[[ -s "$status_file" ]] || return 1
+	IFS= read -r status <"$status_file" || status=1
+	if [[ ! "$status" =~ ^[0-9]+$ ]] || (( status > 255 )); then
+		status=1
+	fi
+	return "$status"
+}
+
+wait_for_status() {
+	local status_file=$1
+	local kind=${2:-}
+	local pane_id=${3:-}
+
+	while true; do
+		if [[ -s "$status_file" ]]; then
+			status_from_file "$status_file"
+			return $?
+		fi
+
+		case "$kind" in
+			herdr)
+				if ! herdr pane get "$pane_id" >/dev/null 2>&1; then
+					# The pane vanished before it wrote a status. Treat that as a cancelled editor.
+					if [[ -s "$status_file" ]]; then
+						status_from_file "$status_file"
+						return $?
+					fi
+					return 1
+				fi
+				;;
+			tmux)
+				if ! tmux display-message -p -t "$pane_id" '#{pane_id}' >/dev/null 2>&1; then
+					if [[ -s "$status_file" ]]; then
+						status_from_file "$status_file"
+						return $?
+					fi
+					return 1
+				fi
+				;;
+		esac
+
+		sleep 0.2
+	done
+}
+
+json_pane_id() {
+	if have jq; then
+		jq -r '.result.pane.pane_id // empty'
+	elif have python3; then
+		python3 -c 'import json, sys; print(json.load(sys.stdin).get("result", {}).get("pane", {}).get("pane_id", ""))'
+	else
+		sed -n 's/.*"pane_id"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | sed -n '1p'
+	fi
+}
+
+try_herdr() {
+	[[ -n "${HERDR_PANE_ID:-}" ]] || return 1
+	have herdr || return 1
+
+	local dir status_file command split pane_id
+	dir=$(state_dir) || return 1
+	status_file="$dir/status"
+	command=$(build_launch_command "$dir" "$status_file" "$@")
+
+	split=$(herdr pane split --current --direction right --cwd "$PWD" --focus 2>/dev/null) || return 1
+	pane_id=$(printf '%s\n' "$split" | json_pane_id)
+	if [[ -z "$pane_id" ]]; then
+		# Split succeeded but the response shape was unexpected. Avoid opening a
+		# second editor inline; close the focused split when we can identify it.
+		local current_pane
+		current_pane=$(herdr pane current 2>/dev/null | json_pane_id)
+		if [[ -n "$current_pane" && "$current_pane" != "${HERDR_PANE_ID:-}" ]]; then
+			herdr pane close "$current_pane" >/dev/null 2>&1 || true
+		fi
+		launched=1
+		return 1
+	fi
+
+	# Give the new shell a moment to finish drawing its prompt before submitting text.
+	sleep "${PI_SPLIT_EDITOR_HERDR_SETTLE:-0.5}"
+	if ! herdr pane run "$pane_id" "$command" >/dev/null 2>&1; then
+		herdr pane close "$pane_id" >/dev/null 2>&1 || true
+		return 1
+	fi
+
+	launched=1
+	wait_for_status "$status_file" herdr "$pane_id"
+}
+
+try_tmux() {
+	[[ -n "${TMUX:-}" ]] || return 1
+	have tmux || return 1
+
+	local dir status_file command pane_id
+	dir=$(state_dir) || return 1
+	status_file="$dir/status"
+	command=$(build_launch_command "$dir" "$status_file" "$@")
+
+	pane_id=$(tmux split-window -h -P -F '#{pane_id}' -c "$PWD" "$command" 2>/dev/null) || return 1
+	[[ -n "$pane_id" ]] || return 1
+
+	launched=1
+	wait_for_status "$status_file" tmux "$pane_id"
+}
+
+try_kitty() {
+	[[ -n "${KITTY_WINDOW_ID:-}${KITTY_LISTEN_ON:-}" ]] || return 1
+	have kitten || return 1
+
+	local dir status_file runner
+	dir=$(state_dir) || return 1
+	status_file="$dir/status"
+	runner=$(write_runner "$dir" "$status_file" "$@")
+
+	kitten @ launch \
+		--type=window \
+		--location=vsplit \
+		--cwd "$PWD" \
+		--wait-for-child-to-exit \
+		bash "$runner" >/dev/null 2>&1 || return 1
+
+	if [[ -s "$status_file" ]]; then
+		launched=1
+		status_from_file "$status_file"
+		return $?
+	fi
+	return 1
+}
+
+run_inline() {
+	local editor invocation
+	editor=$(editor_command)
+	invocation="${editor}$(quote_args "$@")"
+	bash -lc "exec $invocation"
+}
+
+main() {
+	local rc
+
+	try_herdr "$@"
+	rc=$?
+	if (( rc == 0 )); then
+		exit 0
+	elif [[ "$launched" == 1 ]]; then
+		exit "$rc"
+	fi
+
+	try_tmux "$@"
+	rc=$?
+	if (( rc == 0 )); then
+		exit 0
+	elif [[ "$launched" == 1 ]]; then
+		exit "$rc"
+	fi
+
+	try_kitty "$@"
+	rc=$?
+	if (( rc == 0 )); then
+		exit 0
+	elif [[ "$launched" == 1 ]]; then
+		exit "$rc"
+	fi
+
+	run_inline "$@"
+}
+
+main "$@"

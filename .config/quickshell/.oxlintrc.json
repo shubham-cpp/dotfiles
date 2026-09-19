@@ -1,0 +1,11 @@
+{
+  "categories": { "correctness": "off" },
+  "jsPlugins": ["oxlint-plugin-complexity"],
+  "rules": {
+    "complexity/complexity": ["error", {
+      "cyclomatic": 10,
+      "cognitive": 15,
+      "minLines": 0
+    }]
+  }
+}

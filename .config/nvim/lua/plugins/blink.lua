@@ -111,8 +111,8 @@ require("blink.cmp").setup({
         end
         return b.client_name == "emmet_ls" or b.client_name == "emmet_language_server"
       end,
-      "score",
       "exact",
+      "score",
       "sort_text",
     },
   },
@@ -120,8 +120,8 @@ require("blink.cmp").setup({
   sources = {
     default = { "lsp", "path", "snippets", "buffer", "ripgrep" },
     providers = {
-      lsp = { fallbacks = {} },
-      snippets = { score_offset = -1 },
+      lsp = { fallbacks = {}, max_items = 50 },
+      snippets = { score_offset = 8 },
       buffer = { opts = { get_bufnrs = blink_normal_buffers } },
       ripgrep = {
         module = "blink-ripgrep",
@@ -140,6 +140,7 @@ require("blink.cmp").setup({
               max_filesize = "1M",
               project_root_fallback = true,
               search_casing = "--smart-case",
+              additional_rg_options = { "-g", "!node_modules/**" },
             },
           },
         },

@@ -1,0 +1,20 @@
+[tools]
+go = "1.27.1"
+
+[tasks.build]
+run = "bash scripts/build-go-helpers"
+
+[tasks.test-go]
+run = "go test ./..."
+
+[tasks.lint-go]
+run = "golangci-lint run ./..."
+
+[tasks.lint-js]
+run = "npm run lint"
+
+[tasks.lint-python]
+run = ["uv run --locked ruff check scripts tests", "uv run --locked complexipy scripts tests --failed"]
+
+[tasks.lint]
+depends = ["lint-go", "lint-js", "lint-python"]

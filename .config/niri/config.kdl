@@ -20,7 +20,7 @@ input {
     scroll-method "two-finger"
   }
 
-  focus-follows-mouse // Automatically focus windows under the mouse pointer
+  focus-follows-mouse max-scroll-amount="0%"
   workspace-auto-back-and-forth // Enable workspace back & forth switching
 }
 
@@ -52,8 +52,8 @@ binds {
   // Super+Control+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
 
   // ─── Applications ───
-  Mod+Return hotkey-overlay-title="Open a Terminal: wezterm" { spawn "foot"; }
-  Mod+Shift+Return hotkey-overlay-title="Open a Terminal: ghostty" { spawn "kitty"; }
+  Mod+Return hotkey-overlay-title="Open a Terminal: foot" { spawn "foot"; }
+  Mod+Shift+Return hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
 
   // Mod+E hotkey-overlay-title="Open file-manager" { spawn "thunar"; }
   Mod+E hotkey-overlay-title="Open file-manager" { spawn "nautilus"; }
@@ -127,9 +127,9 @@ binds {
   // Mod+Comma             repeat=false { spawn-sh "qs -c noctalia-shell ipc call settings toggle"; }
   // Noctalia End
   // Noctalia v5
-  Super+Control+L hotkey-overlay-title="Lock the Screen" { spawn-sh "noctalia msg notification-dnd-toggle"; }
+  Super+Control+L hotkey-overlay-title="Lock the Screen" { spawn-sh "noctalia msg session lock"; }
   Super+N         hotkey-overlay-title="Open: Notifications" { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
-  Super+Shift+N   hotkey-overlay-title="Open: Notifications" { spawn-sh "noctalia msg notification-dnd-toggle"; }
+  Super+Shift+N   hotkey-overlay-title="Toggle Do Not Disturb" { spawn-sh "noctalia msg notification-dnd-toggle"; }
 
   // Mod+D       repeat=false  hotkey-overlay-title="Open: App Finder"    { spawn-sh "noctalia msg panel-toggle launcher"; }
   // Mod+Y       repeat=false  hotkey-overlay-title="Open: Clipboard"     { spawn-sh "noctalia msg panel-toggle clipboard"; }
@@ -298,9 +298,20 @@ binds {
   Mod+O                  repeat=false { toggle-overview; }
 }
 
+// Alt-Tab switcher. Custom binds {} replaces the defaults; Mod+Tab stays
+// as focus-workspace-previous above.
+recent-windows {
+  binds {
+    Alt+Tab         { next-window; }
+    Alt+Shift+Tab   { previous-window; }
+    Alt+grave       { next-window     filter="app-id"; }
+    Alt+Shift+grave { previous-window filter="app-id"; }
+  }
+}
+
 cursor {
   // xcursor-theme "Bibata-Modern-Ice"
-  xcursor-theme "Breeze_Light"
+  xcursor-theme "Future-cursors"
   xcursor-size 24
 }
 
@@ -342,6 +353,17 @@ layout {
     // length total-proportion=1.0
     // position "bottom"
     place-within-column
+  }
+}
+
+overview {
+  zoom 0.5
+  backdrop-color "#262626"
+}
+
+gestures {
+  hot-corners {
+    off
   }
 }
 
@@ -626,7 +648,6 @@ window-rule {
 // Bluetooth manager
 window-rule {
   match app-id="^blueman-manager$"
-  match app-id="^qalculate-gtk$"
   match app-id="chrome-nngceckbapebfimnlniiiahkandclblb-Default"
 
   open-floating true
@@ -640,6 +661,7 @@ window-rule {
 
   default-column-width { fixed 800; }
   default-window-height { fixed 450; }
+  default-floating-position x=32 y=32 relative-to="bottom-right"
   open-floating true
 }
 
@@ -712,22 +734,25 @@ window-rule {
 }
 
 window-rule {
-  match title=r#"^((Choose wallpaper)(.*))|((Open Folder)(.*))|((Save As)(.*))$"#
-  match is-active=true
-  match is-focused=true
-  match is-floating=true
-}
-
-window-rule {
   match app-id=r#"^org\.keepassxc\.KeePassXC$"#
   match app-id=r#"^org\.gnome\.World\.Secrets$"#
-  match app-id="chrome.+"
+  match app-id="chrome-nngceckbapebfimnlniiiahkandclblb-Default"
   match app-id="should_be_floating" title="clipboard-cliphist"
 
   block-out-from "screen-capture"
 
   // Use this instead if you want them visible on third-party screenshot tools.
   // block-out-from "screencast"
+}
+
+layer-rule {
+  match namespace="^noctalia-backdrop"
+  place-within-backdrop true
+}
+
+layer-rule {
+  match namespace="^noctalia-notification"
+  block-out-from "screencast"
 }
 
 // ────────────── Environment Variables ──────────────
@@ -739,9 +764,9 @@ environment {
   QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
   XDG_SESSION_TYPE                    "wayland"
   XDG_CURRENT_DESKTOP                 "niri"
-  // HYPRCURSOR_THEME                    "Breeze_Light"
+  // HYPRCURSOR_THEME                    "Future-cursors"
   // HYPRCURSOR_SIZE                     "24"
-  // XCURSOR_THEME                       "Breeze_Light"
+  // XCURSOR_THEME                       "Future-cursors"
   // XCURSOR_SIZE                        "24"
 }
 

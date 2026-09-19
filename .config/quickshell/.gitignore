@@ -1,0 +1,23 @@
+# Secrets
+secrets.json
+
+# Dependencies and virtualenvs
+node_modules/
+.venv/
+
+# Caches and generated QML
+.local/
+.ruff_cache/
+.complexipy_cache/
+__pycache__/
+.qmlls.ini
+*.qmlc
+
+# Build / test leftovers
+*.test
+*.out
+coverage.out
+
+# Large study screenshots, not config
+research/lock-screen-study/*.png
+research/lock-screen-study/assets/

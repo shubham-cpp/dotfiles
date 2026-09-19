@@ -1,0 +1,20 @@
+{
+  "packages": [
+    "git:github.com/obra/superpowers",
+    "npm:@narumitw/pi-subagents",
+    "npm:pi-mcp-adapter"
+  ],
+  "lastChangelogVersion": "0.85.1",
+  "theme": "dark",
+  "defaultProvider": "xai",
+  "defaultModel": "grok-4.6",
+  "terminal": {
+    "showTerminalProgress": true
+  },
+  "quietStartup": true,
+  "enableInstallTelemetry": false,
+  "tuiMode": "fullscreen",
+  "externalEditor": "/home/shubham/.config/pi/agent/bin/pi-split-editor",
+  "editorPaddingX": 1,
+  "showHardwareCursor": false
+}

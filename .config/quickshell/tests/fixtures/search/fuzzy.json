@@ -1,0 +1,2594 @@
+[
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": " ",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " ",
+    "text": "a b",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": " fire ",
+    "text": "fire",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "fire ",
+    "text": "fire ",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "foo bar",
+    "text": "Bar Foo",
+    "matched": true,
+    "score": 216
+  },
+  {
+    "query": "fb",
+    "text": "fooBar",
+    "matched": true,
+    "score": 55
+  },
+  {
+    "query": "FB",
+    "text": "fooBar",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "FB",
+    "text": "FooBar",
+    "matched": true,
+    "score": 55
+  },
+  {
+    "query": "fs",
+    "text": "foo/something",
+    "matched": true,
+    "score": 56
+  },
+  {
+    "query": "a1",
+    "text": "abc123",
+    "matched": true,
+    "score": 55
+  },
+  {
+    "query": "aaa",
+    "text": "abaca",
+    "matched": true,
+    "score": 62
+  },
+  {
+    "query": "aa",
+    "text": "a aaaa",
+    "matched": true,
+    "score": 59
+  },
+  {
+    "query": "δ",
+    "text": "Δ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "ος",
+    "text": "ΟΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "i",
+    "text": "İ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "İ",
+    "text": "i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "i̇",
+    "text": "İ",
+    "matched": true,
+    "score": 72
+  },
+  {
+    "query": "é",
+    "text": "é",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "a😀b",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "😀b",
+    "text": "a😀b",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "💻",
+    "text": "👩🏽‍💻",
+    "matched": true,
+    "score": 53
+  },
+  {
+    "query": "x",
+    "text": "xy\u0000z",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "x y",
+    "text": "x___y",
+    "matched": true,
+    "score": 68
+  },
+  {
+    "query": "x﻿y",
+    "text": "x y",
+    "matched": true,
+    "score": 72
+  },
+  {
+    "query": "xy",
+    "text": "x y",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "\tfoo\tbar\n",
+    "text": "bar foo",
+    "matched": true,
+    "score": 216
+  },
+  {
+    "query": "A b",
+    "text": "aa bb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "a b",
+    "text": "A B",
+    "matched": true,
+    "score": 72
+  },
+  {
+    "query": "ABC",
+    "text": "A___B___C",
+    "matched": true,
+    "score": 74
+  },
+  {
+    "query": "abc",
+    "text": "ABC",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "abc",
+    "text": "a---b-----c",
+    "matched": true,
+    "score": 72
+  },
+  {
+    "query": "-σ",
+    "text": "́CΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áCΣ1",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "😀",
+    "text": "/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 136
+  },
+  {
+    "query": "a",
+    "text": "İς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "CΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "bİ",
+    "text": "/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "CΣ1D/",
+    "text": "é-σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "é-σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "a",
+    "text": "CΣ1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1D/",
+    "text": "CΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "İς😀 a",
+    "text": "é-σbİς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "D/",
+    "text": "CΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "é-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "áC",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "áC",
+    "text": "1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié",
+    "text": "1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 68
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "İς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "é",
+    "text": "áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "İ",
+    "text": "CΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İς😀",
+    "text": "😀 áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 68
+  },
+  {
+    "query": "😀 áC",
+    "text": "σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 172
+  },
+  {
+    "query": "İς😀 a",
+    "text": "1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié",
+    "text": "CΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "C",
+    "text": "σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́C",
+    "text": "1D/ié-σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "İς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "1",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié-σ",
+    "text": "/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "İ",
+    "text": "İς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "",
+    "text": "😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "ié",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 68
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "é-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİς😀",
+    "text": "1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "ié-σ",
+    "text": "İς😀 áCΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀",
+    "text": "İς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "σ",
+    "text": "áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "é",
+    "text": "İς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "1D/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "é-σbİς😀 á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "CΣ1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié",
+    "text": "σbİς😀 áCΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀",
+    "text": "σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "Σ1D/",
+    "text": "áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "İς😀 áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "1D/",
+    "text": "/ié-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié-σ",
+    "text": "é-σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σbİ",
+    "text": "CΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "😀 áCΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "σ",
+    "text": "😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "́C",
+    "text": "CΣ1D/ié-σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "",
+    "text": "İς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "İς😀 a",
+    "text": "σbİς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "ié",
+    "text": "CΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1D/",
+    "text": "é-σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "😀 áC",
+    "text": "é-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "é-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "😀 áCΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "/ié-σ",
+    "text": "CΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "áCΣ1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "áCΣ1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́CΣ1",
+    "text": "/ié-σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "İ",
+    "text": "σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σbİ",
+    "text": "😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "/ié-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́CΣ1",
+    "text": "😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "áC",
+    "text": "/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "/",
+    "text": "σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "é-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİς😀",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "",
+    "text": "áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "CΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 136
+  },
+  {
+    "query": "́C",
+    "text": "İς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "bİ",
+    "text": "é-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İς😀 a",
+    "text": "😀 áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " áC",
+    "text": "/ié-σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "σbİς😀",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "C",
+    "text": "CΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "σbİ",
+    "text": "1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 86
+  },
+  {
+    "query": "bİ",
+    "text": "σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "́C",
+    "text": "😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "CΣ1D/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "áCΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́CΣ1",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "",
+    "text": "/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "İς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "/ié-σ",
+    "text": "İς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áCΣ1",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "é-σbİ",
+    "text": "/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 16
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "İ",
+    "text": "CΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 16
+  },
+  {
+    "query": "ς😀 a",
+    "text": "é-σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "/ié",
+    "text": "CΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1",
+    "text": "σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "é-σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "İ",
+    "text": "CΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "😀 áCΣ1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "CΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "CΣ1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "/ié",
+    "text": "é-σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1",
+    "text": "σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σbİ",
+    "text": "/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "😀 áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 66
+  },
+  {
+    "query": "́C",
+    "text": "σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "é-σbİ",
+    "text": "σbİς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "😀 áCΣ1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "😀 áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́C",
+    "text": "😀 áCΣ1D/ié-σbİς😀 ",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "İς😀 a",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "Σ1",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": " a",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "Σ1",
+    "text": "á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "D/ié",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 86
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": " áC",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "CΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "é-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "İς😀 áCΣ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "/ié-σbİς😀 áCΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́CΣ1",
+    "text": "σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "/ié-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "σb",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "CΣ1",
+    "text": "CΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "é",
+    "text": "/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "ς😀",
+    "text": "σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "C",
+    "text": "áCΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "σ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "",
+    "text": "İς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 16
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "İς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": " a",
+    "text": "CΣ1D/ié-σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "́CΣ1",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1",
+    "text": "😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "C",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İς😀",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "",
+    "text": "áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "σbİς😀 á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "/ié-σbİς😀 áCΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " áC",
+    "text": "σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "İς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "é-σ",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "Σ1",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": " a",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 72
+  },
+  {
+    "query": "áC",
+    "text": "CΣ1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "1",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "σbİς😀",
+    "text": "/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "-σ",
+    "text": "áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "İς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áCΣ1",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "σbİς😀",
+    "text": "/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "İς😀 a",
+    "text": "😀 áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 86
+  },
+  {
+    "query": "İ",
+    "text": "σbİς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "é-σ",
+    "text": "σbİς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1D/ié",
+    "text": "İς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "é-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "é-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İ",
+    "text": "/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áC",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "é-σbİ",
+    "text": "/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "😀 áCΣ1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "CΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "σbİς😀",
+    "text": "İς😀 áCΣ1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σ",
+    "text": "áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "é-σ",
+    "text": "İς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "İς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 86
+  },
+  {
+    "query": "/ié",
+    "text": "σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 172
+  },
+  {
+    "query": "/",
+    "text": "1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "é-σbİς😀 á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "é-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "İ",
+    "text": "😀 áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": " áC",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "ς😀 a",
+    "text": "1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "İς😀",
+    "text": "1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "İς😀",
+    "text": "İς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 144
+  },
+  {
+    "query": "",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "a",
+    "text": "/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "CΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σ",
+    "text": "σbİς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "İς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "😀 áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "İς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "CΣ1",
+    "text": "CΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "",
+    "text": "/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "😀 á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "a",
+    "text": "σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "CΣ1D/",
+    "text": "CΣ1D/ié-σbİς😀 a",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "σbİς😀",
+    "text": "é-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "ς😀 a",
+    "text": "áCΣ1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İς😀",
+    "text": "CΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1",
+    "text": "/ié-σbİς😀 á",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "İς😀",
+    "text": "σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": " áC",
+    "text": "İς😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "C",
+    "text": "İς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "1D/",
+    "text": "é-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "é-σbİς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "İ",
+    "text": "CΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áC",
+    "text": "1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "",
+    "text": "İς😀 áCΣ1D/ié-σb",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "bİς😀",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "σ",
+    "text": "áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "D/",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "σ",
+    "text": "é-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "CΣ1D/",
+    "text": "İς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σ",
+    "text": "é-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "áCΣ1",
+    "text": "İς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 172
+  },
+  {
+    "query": "σ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "áC",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 108
+  },
+  {
+    "query": "ié-σ",
+    "text": "1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 136
+  },
+  {
+    "query": "İς😀 a",
+    "text": "İς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 176
+  },
+  {
+    "query": "σbİς😀",
+    "text": "CΣ1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "áCΣ1D/i",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "1",
+    "text": "σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/ié",
+    "text": "İς😀 áCΣ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "σbİς",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "İς😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "İς😀 a",
+    "text": "é-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "Σ1D/",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "é-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "İς😀",
+    "text": "İς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 144
+  },
+  {
+    "query": " áC",
+    "text": "áCΣ1D/ié-σbİς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "1D/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " áC",
+    "text": "😀 áCΣ1D/ié-σbİς",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "",
+    "text": "1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "σbİς😀",
+    "text": "é-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "bİ",
+    "text": "áCΣ1D/ié-",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "😀 áCΣ1D",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": " a",
+    "text": "İς",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "C",
+    "text": "σbİς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áCΣ1",
+    "text": "1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é-σbİ",
+    "text": "σbİς😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "😀 áCΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "σbİς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "İς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "́CΣ1",
+    "text": "é-σbİς😀 ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "/ié-σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "σbİς😀",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 192
+  },
+  {
+    "query": "İς😀",
+    "text": "áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "áCΣ1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "CΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "a",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 32
+  },
+  {
+    "query": "é-σbİ",
+    "text": "CΣ1D/",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/ié",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 66
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "İς😀 áCΣ1D/i",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "σbİς😀",
+    "text": "1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "D/",
+    "text": "áCΣ1D/ié-σbİς😀 áCΣ",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "İ",
+    "text": "é-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀",
+    "text": "😀 áCΣ1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "İ",
+    "text": "áCΣ1D/ié-σ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "😀 áCΣ1D/ié-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 a",
+    "text": "CΣ1D/ié-σbİ",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "σbİ",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "1D/",
+    "text": "😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "áCΣ1",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİς😀",
+    "matched": true,
+    "score": 180
+  },
+  {
+    "query": "ié-σ",
+    "text": "",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "İς😀 áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "/",
+    "text": "áCΣ1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "😀 áC",
+    "text": "é-σbİς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 172
+  },
+  {
+    "query": "é-σbİ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 160
+  },
+  {
+    "query": "",
+    "text": "😀 áCΣ1D/ié-σbİς😀 á",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "/",
+    "text": "1",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "é",
+    "text": "é-σbİς😀 áCΣ1D/",
+    "matched": true,
+    "score": 36
+  },
+  {
+    "query": "",
+    "text": "σbİς😀 ",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "-σbİ",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 128
+  },
+  {
+    "query": "/ié-σ",
+    "text": "😀 áCΣ1D/ié-σbİς😀 áCΣ1",
+    "matched": true,
+    "score": 116
+  },
+  {
+    "query": "CΣ1",
+    "text": "İς😀 a",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "ié-σ",
+    "text": "/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 136
+  },
+  {
+    "query": "İς😀 a",
+    "text": "İς😀 áCΣ1D/ié-σ",
+    "matched": true,
+    "score": 176
+  },
+  {
+    "query": "áCΣ1",
+    "text": "CΣ1D/ié-σbİς😀",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "-σ",
+    "text": "/ié-σbİς😀 áCΣ1D/i",
+    "matched": true,
+    "score": 64
+  },
+  {
+    "query": "😀 áC",
+    "text": "İς😀 áCΣ1D/ié-σbİ",
+    "matched": true,
+    "score": 172
+  },
+  {
+    "query": "σbİ",
+    "text": "1D/ié-σbİς😀 áCΣ1D/ié",
+    "matched": true,
+    "score": 96
+  },
+  {
+    "query": "σbİς😀",
+    "text": "😀 áCΣ1D/ié",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "áCΣ1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "ς😀 a",
+    "text": "é-σb",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "",
+    "text": "CΣ1D/ié-σbİς😀 áCΣ1D",
+    "matched": true,
+    "score": 0
+  },
+  {
+    "query": "1D/",
+    "text": "é-σbİς😀 áC",
+    "matched": false,
+    "score": 0
+  },
+  {
+    "query": "bİ",
+    "text": "é-σbİς😀 áCΣ1D/ié-",
+    "matched": true,
+    "score": 64
+  }
+]

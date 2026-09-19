@@ -1,0 +1,45 @@
+{
+  "settings": {
+    "mcpFooterStatus": "off"
+  },
+  "mcpServers": {
+    "codebase-memory-mcp": {
+      "command": "/home/shubham/.local/bin/codebase-memory-mcp"
+    },
+    "ketch": {
+      "command": "ketch",
+      "args": [
+        "mcp",
+        "serve"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "env": {
+        "NPM_CONFIG_USERCONFIG": "${HOME}/.config/npm/npmrc"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.80",
+        "--executable-path",
+        "${HOME}/.local/bin/chromium"
+      ]
+    },
+    "ddg-search": {
+      "command": "uvx",
+      "args": [
+        "duckduckgo-mcp-server"
+      ],
+      "env": {
+        "DDG_SAFE_SEARCH": "STRICT"
+      }
+    }
+  }
+}

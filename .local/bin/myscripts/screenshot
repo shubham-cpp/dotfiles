@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  printf 'Usage: %s [screen|window] [save-directory]\n' "${0##*/}" >&2
+  exit 2
+}
+
+(( $# <= 2 )) || usage
+
+mode="${1:-screen}"
+default_directory="$HOME/Pictures/Screenshots"
+save_directory="${2:-$default_directory}"
+
+case "$mode" in
+  screen | window) ;;
+  *) usage ;;
+esac
+
+mkdir -p -- "$save_directory"
+
+focused_client="$(mmsg get focusing-client)"
+app_name="$(
+  jq -r '.title // .appid // "desktop"' <<<"$focused_client" |
+    tr -cs '[:alnum:]_.' '_' |
+    sed -e 's/^_*//' -e 's/_*$//'
+)"
+app_name="${app_name:-desktop}"
+
+timestamp="$(date '+%Y-%m-%d_%H-%M-%S')"
+destination="$save_directory/Screenshot-${app_name}-${timestamp}.png"
+
+case "$mode" in
+  screen)
+    monitor="$(jq -er '.monitor' <<<"$focused_client")"
+    grim -o "$monitor" "$destination"
+    ;;
+  window)
+    toplevel="$(jq -er '.foreign_toplevel_id' <<<"$focused_client")"
+    grim -T "$toplevel" "$destination"
+    ;;
+esac
+
+printf '%s\n' "$destination"

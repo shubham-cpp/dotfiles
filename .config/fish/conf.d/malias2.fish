@@ -1,9 +1,9 @@
-alias df="command df -h"
-alias du="command du -h"
-alias free="command free -h"
-
-# alias curl="command curl -O -L -C -"
-alias grep="command grep -Ei --color=auto"
+alias df="df -h"
+alias du="du -h"
+alias free="free -h"
+# alias curl="curl -O -L -C -"
+alias grep="grep -Ei --color=auto"
+alias chx="chmod 744"
 
 # Changing "ls" to "exa"
 if command -q eza
@@ -14,8 +14,8 @@ if command -q eza
     alias lt="eza -aT --color=auto --icons --group-directories-first"
     alias l="ll --no-filesize --no-permissions --no-time"
 else
-    alias ls="command ls -lhv --classify --color=auto --group-directories-first"
-    alias la="command ls -hv --classify --color=auto --group-directories-first"
+    alias ls="ls -lhv --classify --color=auto --group-directories-first"
+    alias la="ls -hv --classify --color=auto --group-directories-first"
     alias ll="ls -a"
     alias lt="ls --recursive"
 end
@@ -29,7 +29,11 @@ else
     alias tls="gio trash --list"
 end
 alias cls="clear"
-alias xcp="xclip -i -r -sel clip"
+if set -q WAYLAND_DISPLAY; and command -q wl-copy
+    alias xcp="wl-copy -n"
+else if command -q xclip
+    alias xcp="xclip -i -r -sel clip"
+end
 
 if command -q dnf
     # alias d="sudo dnf5"
@@ -47,7 +51,6 @@ if command -q nala
     alias as="nala search"
 end
 # alias up="a update;and a upgrade;and a autopurge"
-# alias sea="nala search"
 [ -x /usr/bin/paru ] && alias yay="paru"
 if command -q paru
     or command -q yay

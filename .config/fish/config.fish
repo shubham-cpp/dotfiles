@@ -56,6 +56,6 @@ bind -M insert \cl 'history merge; commandline -f clear-screen'
 bind -M visual \cl 'history merge; commandline -f clear-screen'
 complete -c dnf5 -w dnf
 
-if status --is-login; and not set -q CARGO_HOME
+if status --is-login; and not set -q CARGO_HOME; and test -f ~/.profile
     bass source ~/.profile
 end

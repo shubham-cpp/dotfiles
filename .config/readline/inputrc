@@ -9,7 +9,7 @@ $include /etc/inputrc
 
 $if Bash
     set editing-mode vi
-    set bell-style visible
+    set bell-style none
     set completion-ignore-case on
     set mark-directories on
     set mark-symlinked-directories on
@@ -46,6 +46,11 @@ $if Bash
     "\C-a": beginning-of-line
     "\C-e": end-of-line
     "\M-k": accept-line
+    # Ctrl-W and Ctrl-Backspace: bash-style word kill (stops at /)
+    "\C-w": backward-kill-word
+    "\C-h": backward-kill-word
+    "\e[127;5u": backward-kill-word
+    "\e[8;5u": backward-kill-word
 
     # insert a backslash (testing backslash escapes in sequences and macros)
     # Quote the current or previous word
@@ -66,5 +71,12 @@ $if Bash
     "\C-x\"": "\"\"\C-b"
 
     $endif
+
+    set keymap emacs
+    "\C-w": backward-kill-word
+    "\C-h": backward-kill-word
+    "\e[127;5u": backward-kill-word
+    "\e[8;5u": backward-kill-word
+    set keymap vi-insert
 
 $endif

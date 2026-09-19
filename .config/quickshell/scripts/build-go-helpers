@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$root"
+mkdir -p .local/bin
+# Build every output before publishing any command. Staging is kept on failure.
+stage="$(mktemp -d "$root/.local/go-build-XXXXXX")"
+for command in qs-search qs-resources qs-session qs-reminder qs-lock-wait qs-clipboard qs-notification-images qs-build-emoji; do
+    mise exec -- go build -trimpath -o "$stage/$command" "./cmd/$command"
+done
+"$stage/qs-search" --emoji-catalog "$root/data/emoji.json" --export-display > "$stage/emoji-display.json"
+for command in qs-search qs-resources qs-session qs-reminder qs-lock-wait qs-clipboard qs-notification-images qs-build-emoji; do
+    mv "$stage/$command" "$root/.local/bin/$command"
+done
+mv "$stage/emoji-display.json" "$root/.local/emoji-display.json"
+gio trash "$stage"

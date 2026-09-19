@@ -47,7 +47,7 @@ notify_volume() {
     -i "$(volume_icon)" \
     -h string:x-canonical-private-synchronous:volume \
     -h int:value:"$value" \
-    -r 10001 \
+    -h boolean:transient:true \
     "Volume" "$label"
 }
 
@@ -79,7 +79,7 @@ toggle-mic)
     -t 1800 \
     -i microphone-sensitivity-high-symbolic \
     -h string:x-canonical-private-synchronous:microphone \
-    -r 10002 \
+    -h boolean:transient:true \
     "Microphone" "Toggled"
   pidof dwmblocks | xargs -r kill -38
   ;;

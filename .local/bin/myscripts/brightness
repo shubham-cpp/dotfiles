@@ -22,7 +22,7 @@ update_brightness() {
     -i display-brightness-symbolic \
     -h int:value:"$value" \
     -h string:x-canonical-private-synchronous:backlight \
-    -r 10011 \
+    -h boolean:transient:true \
     "Brightness" "${value}%"
   pidof dwmblocks | xargs -r kill -36
   pgrep polybar && polybar-msg action mbrightness hook 0

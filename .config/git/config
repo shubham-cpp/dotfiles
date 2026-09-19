@@ -4,7 +4,7 @@
 
 [core]
 	excludesfile = ~/.config/git/ignore
-    pager = delta
+  pager = delta
 [init]
 	defaultBranch = main
 
@@ -13,17 +13,22 @@
 	ll = log --graph --pretty=format:'%C(ul red)%h%Creset %Cgreen%as%Creset |%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 
 [interactive]
-    diffFilter = delta --color-only
+  diffFilter = delta --color-only
 
 [delta]
-    navigate = true    # use n and N to move between diff sections
-    light = false
+  navigate = true    # use n and N to move between diff sections
+  light = false
+  features = mellow-barbet
 
 [diff]
   algorithm = histogram
-  colorMoved = plain
+  colorMoved = default
+  ; colorMoved = plain
   mnemonicPrefix = true
   renames = true
+
+[rerere]
+  enabled = true
 
 [merge]
   tool = diffview

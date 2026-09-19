@@ -56,10 +56,10 @@ local function configure_mappings(_, opts)
 
   map_picker(maps, "n", "<Leader>f<CR>", function() MiniPick.builtin.resume() end, "Resume")
   map_picker(maps, "n", "<Leader>f'", pick "marks", "Marks")
-  map_picker(maps, "n", "<Leader>f/", function() MiniExtra.pickers.buf_lines { scope = "current" } end, "Buffer lines")
+  map_picker(maps, "n", "<Leader>f/", function() pick_utils.start_buf_lines "current" end, "Buffer lines")
   map_picker(maps, "n", "<Leader>fa", pick "autocmds", "Autocmds")
   map_picker(maps, "n", "<Leader>fb", pick "buffers", "Buffers")
-  map_picker(maps, "n", "<Leader>fB", pick "buf_lines", "Buffer lines")
+  map_picker(maps, "n", "<Leader>fB", function() pick_utils.start_buf_lines "all" end, "Buffer lines")
   map_picker(maps, "n", "<Leader>fc", function() MiniPick.registry.grep { pattern = vim.fn.expand "<cword>" } end, "Grep word")
   map_picker(maps, "n", "<Leader>fC", pick "commands", "Commands")
   map_picker(maps, "n", "<Leader>fd", function()
@@ -264,6 +264,10 @@ return {
       }
 
       MiniExtra.setup()
+
+      MiniPick.registry.buf_lines = function(local_opts)
+        return pick_utils.start_buf_lines((local_opts or {}).scope or "all")
+      end
 
       local function picker_cwd(local_opts)
         local opts = vim.deepcopy(local_opts or {})
