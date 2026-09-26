@@ -1,0 +1,26 @@
+# Installed packages
+node_modules/
+
+# Local service credentials
+service.json
+auth.json
+.env
+.env.*
+
+# Runtime state
+opencode-notifier-state.json
+*-state.json
+
+# Backups and editor junk
+*.bkp
+*.bak
+*.tmp
+*~
+*.swp
+.DS_Store
+
+# Logs and build output
+*.log
+dist/
+coverage/
+.cache/

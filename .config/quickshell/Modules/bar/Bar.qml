@@ -79,7 +79,7 @@ Scope {
 
                 Flickable {
                     width: Math.min(tasks.implicitWidth, Math.max(0, clockWidget.x - leftGroup.x - tags.width - systemStats.width - 2 * leftGroup.spacing - Tokens.padSm))
-                    height: Tokens.barModuleHeight
+                    height: Tokens.barWorkspaceHeight
                     contentWidth: tasks.implicitWidth
                     contentHeight: height
                     clip: true
@@ -94,6 +94,7 @@ Scope {
 
                 SystemMeter {
                     id: systemStats
+                    anchors.verticalCenter: parent.verticalCenter
                     onXChanged: root.systemAnchorMoved()
                     onWidthChanged: root.systemAnchorMoved()
                 }

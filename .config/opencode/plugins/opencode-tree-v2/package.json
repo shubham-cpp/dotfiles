@@ -1,0 +1,9 @@
+{
+  "name": "local-opencode-tree-v2",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./tui": "./tui.tsx"
+  }
+}

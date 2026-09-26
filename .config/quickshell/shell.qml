@@ -67,6 +67,21 @@ ShellRoot {
     Notifs.Toasts {}
     OsdMod.OsdPill {}
 
+    // Fast path for compositor bindings; the socket lives under the user's private runtime directory.
+    SocketServer {
+        readonly property string runtimeDir: Quickshell.env("XDG_RUNTIME_DIR") || ""
+        active: runtimeDir.length > 0
+        path: runtimeDir ? `${runtimeDir}/qs-shell-toggle.sock` : ""
+        handler: Socket {
+            parser: SplitParser {
+                onRead: command => {
+                    if (command === "L") LauncherStats.toggle();
+                    else if (command === "C") Clipboard.toggle();
+                }
+            }
+        }
+    }
+
     LazyLoader {
         active: Notifications.centerOpen
         Notifs.Center {

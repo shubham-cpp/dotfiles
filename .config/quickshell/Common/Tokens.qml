@@ -34,8 +34,9 @@ Singleton {
     readonly property int fontSm: 12
     readonly property int fontMd: 14
     readonly property int fontLg: 16
-    readonly property int barHeight: 44
-    readonly property int barModuleHeight: 36
+    readonly property int barHeight: 40
+    readonly property int barModuleHeight: 32
+    readonly property int barWorkspaceHeight: 36
     readonly property int barGap: 4
     readonly property int rowHeight: 30
     readonly property int overlayGap: 6

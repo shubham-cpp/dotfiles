@@ -54,7 +54,10 @@ command -v gpu-diag >/dev/null 2>&1 && gpu-diag watch &
 sleep 2s
 
 # clipboard content manager
-start "wl-paste.*--watch (cliphist store|/usr/bin/python3 -I .*clipboard-watch.py|.*/qs-clipboard watch)" \
-  wl-paste --watch "$HOME/.config/quickshell/.local/bin/qs-clipboard" watch
+# Untyped wl-paste --watch never delivers image offers; text stays on qs-clipboard.
+start "wl-paste.*--watch" \
+  wl-paste --type text --watch "$HOME/.config/quickshell/.local/bin/qs-clipboard" watch
+start "wl-paste --type image --watch cliphist store" \
+  wl-paste --type image --watch cliphist store
 
 start "nvsst daemon" prime-run ~/.local/bin/nvstt daemon

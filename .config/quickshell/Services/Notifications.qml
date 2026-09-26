@@ -23,6 +23,7 @@ Singleton {
     }
     property var history: []
     property var toasts: []
+    property var lockNotifications: []
     property int unread: 0
     property int gen: 0
     signal toastUpdated(int notificationId)
@@ -54,13 +55,29 @@ Singleton {
     }
 
     function shouldToast(n) {
-        if (centerOpen)
+        if (centerOpen || Lock.locked)
             return false;
         if (!dnd)
             return true;
         if (n.urgency === NotificationUrgency.Critical && isAllowlisted(n))
             return true;
         return false;
+    }
+
+    function lockStateChanged() {
+        if (!Lock.locked) {
+            lockNotifications = [];
+            return;
+        }
+        for (const n of toasts.slice())
+            expireToast(n);
+    }
+
+    function recordLockNotification(n) {
+        if (!Lock.locked || Policy.isOsd(n)
+                || (dnd && !(n.urgency === NotificationUrgency.Critical && isAllowlisted(n))))
+            return;
+        lockNotifications = [String(n.appName || n.desktopEntry || "Unknown app"), ...lockNotifications].slice(0, 5);
     }
 
     function shouldHistory(n) {
@@ -289,6 +306,7 @@ Singleton {
             } else
                 n.expire();
         } else {
+            recordLockNotification(n);
             refreshNotification(n);
         }
     }
@@ -508,6 +526,11 @@ Singleton {
             job.exitCode = -1;
             root.finishImageWork();
         }
+    }
+
+    Connections {
+        target: Lock
+        function onLockedChanged() { root.lockStateChanged(); }
     }
 
     NotificationServer {

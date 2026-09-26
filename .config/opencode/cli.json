@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/v2/cli.json",
+  "keybinds": {
+    "which-key.toggle": "<leader>k"
+  },
+  "plugins": [
+    "-@ishaksebsib/opencode-tree",
+    "-opencode.sidebar.context"
+  ],
+  "scroll": {
+    "acceleration": true
+  },
+  "prompt": {
+    "image_preview": true
+  }
+}

@@ -13,7 +13,17 @@ try:
         ("Glyph", (root / "Common/Glyph.qml").read_text(), False)])
     stage.module("Quickshell.Widgets", [("IconImage", Path("/usr/lib/qt6/qml/Quickshell/Widgets/IconImage.qml").read_text(), False)])
     stage.module("Quickshell.Wayland", [("ToplevelManager", 'pragma Singleton\nimport QtQuick\nQtObject { property var toplevels: [] }', True)])
+    stage.module("Quickshell.WindowManager", [("WindowManager", 'pragma Singleton\nimport QtQuick\nQtObject { function screenProjection(screen) { return null; } }', True)])
     stage.module("qs.Services", [
+        ("Workspaces", '''pragma Singleton
+import QtQuick
+QtObject {
+    property var tagsByMonitor: ({})
+    property int gen: 0
+    function tagsFor(name) { gen; return tagsByMonitor[name] || []; }
+    function step(delta) {}
+    function activate(index) {}
+}''', True),
         ("Network", (root / "tests/qml/fixtures/BarNetwork.qml").read_text(), True),
         ("Agenda", '''pragma Singleton
 import QtQuick
@@ -24,7 +34,7 @@ QtObject {
 }''', True),
         ("Clock", 'pragma Singleton\nimport QtQuick\nQtObject { property string text: "1:00 PM  13 Sep" }', True)])
     stage.module("qs.Modules.bar", [(name, (root / f"Modules/bar/{name}.qml").read_text().replace("import Quickshell\n", ""), False)
-                                  for name in ("TaskList", "NetworkStatus", "BarModule", "BarLabel", "ClockWidget")])
+                                  for name in ("TagList", "TaskList", "NetworkStatus", "BarModule", "BarLabel", "ClockWidget")])
     result = stage.run(root / "tests/qml/tst_BarLifetime.qml")
 finally:
     stage.close()

@@ -24,6 +24,20 @@ TestCase {
         submissions.clear();
     }
 
+    function test_lockNotificationListOnlyShowsNames() {
+        content.lockNotifications = ["Mail", "Chat"];
+        const list = findChild(content, "lockNotificationList");
+        const rows = findChild(content, "lockNotificationRows");
+        verify(list.height > 0);
+        compare(rows.count, 2);
+        compare(rows.itemAt(0).text, "Mail");
+        compare(rows.itemAt(1).text, "Chat");
+        content.lockNotifications = [];
+        compare(list.height, 0);
+        const field = findChild(content, "lockPassword");
+        verify(field.activeFocus);
+    }
+
     function test_maskedPasswordAndEnter() {
         const field = findChild(content, "lockPassword");
         compare(field.echoMode, TextInput.Password);

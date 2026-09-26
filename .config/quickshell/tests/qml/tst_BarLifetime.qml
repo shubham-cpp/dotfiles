@@ -23,10 +23,11 @@ TestCase {
         property bool activated: false
         function activate() {}
     }
-    TagList { id: tags; y: 100; screen: screenOne }
-    TaskList { id: firstTasks; screen: screenOne }
-    TaskList { id: secondTasks; y: 50; screen: screenTwo }
+    TagList { id: tags; y: 100; screen: screenOne; width: implicitWidth; height: implicitHeight }
+    TaskList { id: firstTasks; screen: screenOne; width: implicitWidth; height: implicitHeight }
+    TaskList { id: secondTasks; y: 50; screen: screenTwo; width: implicitWidth; height: implicitHeight }
     Component { id: rates; NetworkStatus {} }
+    Component { id: barPill; BarModule { icon: "coffee" } }
     Component { id: clockWidget; ClockWidget { anchorWindow: screenOne } }
 
     function task(list) {
@@ -43,7 +44,7 @@ TestCase {
         const cell = tags.children[0].children.find(child => child.modelData && child.modelData.index === 1);
         verify(cell !== undefined);
         const highlight = cell.children[0];
-        compare(tags.width, cell.width);
+        tryCompare(tags, "width", cell.width);
         compare(tags.radius, 8);
         compare(highlight.x, 0);
         compare(highlight.y, 0);
@@ -56,7 +57,7 @@ TestCase {
         browser.activated = true;
         const cell = task(firstTasks).item;
         const highlight = cell.children[0];
-        compare(firstTasks.width, cell.width);
+        tryCompare(firstTasks, "width", cell.width);
         compare(firstTasks.radius, 8);
         compare(highlight.x, 0);
         compare(highlight.y, 0);
@@ -78,13 +79,13 @@ TestCase {
     function test_task_contents_follow_screen_changes_and_parenting() {
         verify(task(firstTasks).item !== null);
         compare(task(secondTasks).item, null);
-        tryCompare(firstTasks, "implicitWidth", Tokens.barModuleHeight);
+        tryCompare(firstTasks, "implicitWidth", Tokens.barWorkspaceHeight);
         compare(secondTasks.implicitWidth, 0);
         browser.screens = [screenTwo];
         tryCompare(task(firstTasks), "item", null);
         verify(task(secondTasks).item !== null);
         tryCompare(firstTasks, "implicitWidth", 0);
-        tryCompare(secondTasks, "implicitWidth", Tokens.barModuleHeight);
+        tryCompare(secondTasks, "implicitWidth", Tokens.barWorkspaceHeight);
         browser.parent = root;
         tryCompare(task(secondTasks), "item", null);
         browser.parent = null;
@@ -112,6 +113,23 @@ TestCase {
         tryCompare(Network, "consumerCount", 1);
         first.destroy();
         tryCompare(Network, "consumerCount", 0);
+    }
+    function test_compact_bar_keeps_pill_spacing() {
+        const module = createTemporaryObject(barPill, root);
+        compare(Tokens.barHeight, 40);
+        compare((Tokens.barHeight - tags.implicitHeight) / 2, 2);
+        compare((Tokens.barHeight - module.implicitHeight) / 2, 4);
+    }
+    function test_other_pills_are_shorter_than_workspace_and_tasklist() {
+        const module = createTemporaryObject(barPill, root);
+        const network = createTemporaryObject(rates, root, {showRates: true});
+        const clock = createTemporaryObject(clockWidget, root);
+        compare(tags.implicitHeight, 36);
+        compare(firstTasks.implicitHeight, 36);
+        compare(task(firstTasks).item.implicitHeight, 36);
+        compare(module.implicitHeight, 32);
+        compare(network.implicitHeight, 32);
+        compare(clock.implicitHeight, 32);
     }
     function test_clock_click_passes_its_window_to_calendar() {
         const widget = createTemporaryObject(clockWidget, root, {x: 250, y: 150});

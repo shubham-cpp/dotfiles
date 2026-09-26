@@ -28,9 +28,10 @@ function service() {
         imageCacheDir: "/tmp/notification-fixture/notif-images",
         imageEpoch: "fixture", imageSerial: 0, imageJob: null, imagesDirty: false,
         Quickshell: { shellPath: value => value },
+        Lock: { locked: false },
         reminderAction(id, action) { reminderActions.push([id, action]); },
         toastUpdated(id) { updates.push(id); },
-        history: [], toasts: [], unread: 0, gen: 0, dnd: false, centerOpen: false,
+        history: [], toasts: [], lockNotifications: [], unread: 0, gen: 0, dnd: false, centerOpen: false,
         historyCap: 80, toastCap: 4, defaultExpireSec: 6
     });
     context.root = context;
@@ -73,6 +74,68 @@ function service() {
 function tagged(tag, extra = {}) {
     return { hints: { "x-canonical-private-synchronous": tag }, ...extra };
 }
+
+test("locking hides existing toasts without dismissing their history", () => {
+    const { context, receive } = service();
+    receive(1, { appName: "Mail" });
+    context.Lock.locked = true;
+    context.lockStateChanged();
+    assert.equal(context.toasts.length, 0);
+    assert.equal(context.history.length, 1);
+    assert.deepEqual(Array.from(context.lockNotifications), []);
+});
+
+test("new locked notifications show app names only, stay in history, and never toast", () => {
+    const { context, receive } = service();
+    context.Lock.locked = true;
+    context.lockStateChanged();
+    receive(1, { appName: "Mail", summary: "Secret title", body: "Secret body" });
+    assert.deepEqual(Array.from(context.lockNotifications), ["Mail"]);
+    assert.equal(context.toasts.length, 0);
+    assert.equal(context.history[0].summary, "Secret title");
+});
+
+test("lock list retains five newest names across repeated lock requests and clears on unlock", () => {
+    const { context, receive } = service();
+    context.Lock.locked = true;
+    context.lockStateChanged();
+    for (let id = 1; id <= 6; id++)
+        receive(id, { appName: `App ${id}` });
+    assert.deepEqual(Array.from(context.lockNotifications), ["App 6", "App 5", "App 4", "App 3", "App 2"]);
+    context.lockStateChanged();
+    assert.equal(context.lockNotifications[0], "App 6");
+    context.Lock.locked = false;
+    context.lockStateChanged();
+    assert.deepEqual(Array.from(context.lockNotifications), []);
+    context.Lock.locked = true;
+    context.lockStateChanged();
+    assert.deepEqual(Array.from(context.lockNotifications), []);
+});
+
+test("locked list obeys DND and ignores OSD, but keeps ordinary notifications in history", () => {
+    const { context, receive } = service();
+    context.Lock.locked = true;
+    context.dnd = true;
+    receive(1, { appName: "Mail" });
+    receive(2, { appName: "System OSD", hints: { category: "device", "x-dunst-stack-tag": "volume" } });
+    receive(3, { appName: "reminders", urgency: 2 });
+    assert.deepEqual(Array.from(context.lockNotifications), ["reminders"]);
+    assert.equal(context.toasts.length, 0);
+    assert.equal(context.history.length, 2);
+});
+
+test("updates to an existing notification cannot add a second lock row", () => {
+    const { context, receive, flush } = service();
+    const old = receive(1, { appName: "Mail" });
+    context.Lock.locked = true;
+    old.bodyChanged.emit();
+    flush();
+    assert.deepEqual(Array.from(context.lockNotifications), []);
+    const incoming = receive(2, { appName: "Chat" });
+    incoming.bodyChanged.emit();
+    flush();
+    assert.deepEqual(Array.from(context.lockNotifications), ["Chat"]);
+});
 
 test("only known noncritical volume and backlight events are filtered", () => {
     for (const key of ["x-canonical-private-synchronous", "x-dunst-stack-tag"]) {

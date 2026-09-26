@@ -12,6 +12,9 @@ dir="$(cd "$(dirname "$0")" && pwd)"
 if [[ ! -x "$dir/.local/bin/lock-auth" || "$dir/scripts/lock-auth.c" -nt "$dir/.local/bin/lock-auth" ]]; then
     sh "$dir/scripts/build-lock-auth"
 fi
+if [[ ! -x "$dir/.local/bin/qs-toggle" || "$dir/scripts/qs-toggle.c" -nt "$dir/.local/bin/qs-toggle" ]]; then
+    sh "$dir/scripts/build-qs-toggle"
+fi
 for helper in qs-search qs-resources qs-session qs-reminder qs-lock-wait qs-clipboard qs-notification-images; do
     if [[ ! -x "$dir/.local/bin/$helper" ]]; then
         printf 'Missing Go helpers. Run: cd %s && bash scripts/build-go-helpers\n' "$dir" >&2

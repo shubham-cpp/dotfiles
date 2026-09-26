@@ -12,7 +12,7 @@ Rectangle {
     required property var screen
 
     implicitWidth: tags.implicitWidth
-    implicitHeight: Tokens.barModuleHeight
+    implicitHeight: Tokens.barWorkspaceHeight
     radius: 8
     color: Tokens.barModule
 
@@ -75,7 +75,7 @@ Rectangle {
                 }
 
                 implicitWidth: 32
-                implicitHeight: Tokens.barModuleHeight
+                implicitHeight: Tokens.barWorkspaceHeight
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {

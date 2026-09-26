@@ -1,0 +1,14 @@
+node_modules/
+service.json
+auth.json
+.env
+.env.*
+opencode-notifier-state.json
+*-state.json
+*.bkp
+*.bak
+*.tmp
+*.log
+dist/
+coverage/
+.cache/

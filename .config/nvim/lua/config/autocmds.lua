@@ -67,7 +67,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = augroup("Prose"),
+	group = augroup("FormatOptions"),
 	desc = "Fix Comment Continuation",
 	callback = function()
 		vim.opt_local.formatoptions = "jcrqlnt"

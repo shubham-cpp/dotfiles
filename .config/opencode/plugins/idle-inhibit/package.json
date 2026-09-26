@@ -1,0 +1,12 @@
+{
+  "name": "local-opencode-idle-inhibit",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test *.test.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  }
+}

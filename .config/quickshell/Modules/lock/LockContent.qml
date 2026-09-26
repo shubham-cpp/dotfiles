@@ -8,6 +8,7 @@ Rectangle {
     property date dateTime: new Date()
     property string wallpaperSource: ""
     property string userName: ""
+    property var lockNotifications: []
     property bool secure: false
     property bool busy: false
     property bool sleeping: false
@@ -110,8 +111,9 @@ Rectangle {
     }
 
     Column {
+        id: clockBlock
         anchors.horizontalCenter: parent.horizontalCenter
-        visible: root.height >= 300
+        visible: root.height >= 300 && !(root.shortScreen && root.lockNotifications.length > 0)
         y: root.shortScreen ? root.edge + 30 : Math.max(root.edge + 65, root.height * 0.12)
         spacing: root.shortScreen ? 4 : root.compact ? 12 : 24
 
@@ -142,6 +144,44 @@ Rectangle {
             font.family: Tokens.fontFamily
             font.pixelSize: root.compact ? 16 : 20
             renderType: Text.NativeRendering
+        }
+    }
+
+    Flickable {
+        id: lockNotificationList
+        objectName: "lockNotificationList"
+        width: Math.min(Tokens.lockInputWidth, root.width - root.edge * 2)
+        anchors.horizontalCenter: parent.horizontalCenter
+        y: root.shortScreen ? root.edge + 48 : clockBlock.y + clockBlock.implicitHeight + 16
+        height: Math.min(contentHeight, Math.max(0, authBlock.y - y - 16))
+        contentHeight: root.lockNotifications.length * 24 + Math.max(0, root.lockNotifications.length - 1) * 6
+        visible: root.lockNotifications.length > 0
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+
+        Column {
+            id: lockNotificationRowsColumn
+            width: parent.width
+            spacing: 6
+
+            Repeater {
+                id: lockNotificationRows
+                objectName: "lockNotificationRows"
+                model: root.lockNotifications
+                delegate: Text {
+                    required property string modelData
+                    width: parent.width
+                    height: 24
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    elide: Text.ElideRight
+                    text: modelData
+                    textFormat: Text.PlainText
+                    color: Tokens.text
+                    font.family: Tokens.fontFamily
+                    font.pixelSize: 14
+                }
+            }
         }
     }
 

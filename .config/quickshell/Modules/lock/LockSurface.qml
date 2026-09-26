@@ -10,6 +10,7 @@ LockContent {
     dateTime: clock.date
     wallpaperSource: Qt.resolvedUrl("../../Assets/lock-mountains.jpg")
     userName: Quickshell.env("USER")
+    lockNotifications: Notifications.lockNotifications
     secure: Lock.secure
     busy: Lock.unlockInProgress
     sleeping: Logind.preparingForSleep

@@ -1,0 +1,8 @@
+{
+  "name": "local-openai-usage",
+  "type": "module",
+  "exports": { ".": "./index.ts", "./tui": "./tui.tsx" },
+  "dependencies": {
+    "zod": "4.1.8"
+  }
+}

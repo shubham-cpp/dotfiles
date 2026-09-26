@@ -125,7 +125,7 @@ vim.schedule(function()
     underline = false,
     severity_sort = true,
   })
-  if vim.fn.has "nvim-0.11" == 1 and vim.fn.executable "fd" then
+  if vim.fn.has "nvim-0.11" == 1 and vim.fn.executable "fd" == 1 then
     vim.opt.findfunc = "v:lua.Fd"
   end
   if vim.fn.has "nvim-0.12" == 1 then

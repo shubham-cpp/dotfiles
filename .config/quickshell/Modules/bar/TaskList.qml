@@ -12,7 +12,7 @@ Rectangle {
     required property var screen
 
     implicitWidth: tasks.implicitWidth
-    implicitHeight: Tokens.barModuleHeight
+    implicitHeight: Tokens.barWorkspaceHeight
     radius: 8
     color: Tokens.barModule
 
@@ -46,8 +46,8 @@ Rectangle {
                     readonly property string appId: task.modelData.appId || ""
                     readonly property string iconSrc: Icons.fromAppId(appId)
 
-                    implicitWidth: Tokens.barModuleHeight
-                    implicitHeight: Tokens.barModuleHeight
+                    implicitWidth: Tokens.barWorkspaceHeight
+                    implicitHeight: Tokens.barWorkspaceHeight
                     hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: task.modelData.activate()
