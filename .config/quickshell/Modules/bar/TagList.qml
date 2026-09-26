@@ -11,9 +11,9 @@ Rectangle {
 
     required property var screen
 
-    implicitWidth: tags.implicitWidth > 0 ? tags.implicitWidth + 8 : 0
+    implicitWidth: tags.implicitWidth
     implicitHeight: Tokens.barModuleHeight
-    radius: 4
+    radius: 8
     color: Tokens.barModule
 
     readonly property var mangoTags: {
@@ -87,7 +87,7 @@ Rectangle {
 
                 Rectangle {
                     anchors.fill: parent
-                    radius: 4
+                    radius: root.radius
                     color: cell.isActive || cell.containsMouse ? Tokens.barHover : "transparent"
                     border.width: cell.isUrgent ? 1 : 0
                     border.color: Tokens.danger

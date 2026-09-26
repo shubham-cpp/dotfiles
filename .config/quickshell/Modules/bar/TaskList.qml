@@ -11,9 +11,9 @@ Rectangle {
 
     required property var screen
 
-    implicitWidth: tasks.implicitWidth > 0 ? tasks.implicitWidth + 8 : 0
+    implicitWidth: tasks.implicitWidth
     implicitHeight: Tokens.barModuleHeight
-    radius: 4
+    radius: 8
     color: Tokens.barModule
 
     Row {
@@ -54,7 +54,7 @@ Rectangle {
 
                     Rectangle {
                         anchors.fill: parent
-                        radius: 4
+                        radius: root.radius
                         color: task.modelData.activated || cell.containsMouse ? Tokens.barHover : "transparent"
                     }
 

@@ -13,7 +13,7 @@ TestCase {
     width: 700
     height: 300
 
-    QtObject { id: screenOne }
+    QtObject { id: screenOne; property string name: "test-screen" }
     QtObject { id: screenTwo }
     QtObject {
         id: browser
@@ -23,6 +23,7 @@ TestCase {
         property bool activated: false
         function activate() {}
     }
+    TagList { id: tags; y: 100; screen: screenOne }
     TaskList { id: firstTasks; screen: screenOne }
     TaskList { id: secondTasks; y: 50; screen: screenTwo }
     Component { id: rates; NetworkStatus {} }
@@ -36,8 +37,39 @@ TestCase {
         }
         return null;
     }
+    function test_workspace_highlight_fills_rounded_segment() {
+        Workspaces.tagsByMonitor = {"test-screen": [{index: 1, name: "1", active: true, urgent: false, occupied: true}]};
+        Workspaces.gen++;
+        const cell = tags.children[0].children.find(child => child.modelData && child.modelData.index === 1);
+        verify(cell !== undefined);
+        const highlight = cell.children[0];
+        compare(tags.width, cell.width);
+        compare(tags.radius, 8);
+        compare(highlight.x, 0);
+        compare(highlight.y, 0);
+        compare(highlight.width, cell.width);
+        compare(highlight.height, cell.height);
+        compare(highlight.radius, tags.radius);
+        compare(highlight.color, Tokens.barHover);
+    }
+    function test_task_highlight_fills_rounded_segment() {
+        browser.activated = true;
+        const cell = task(firstTasks).item;
+        const highlight = cell.children[0];
+        compare(firstTasks.width, cell.width);
+        compare(firstTasks.radius, 8);
+        compare(highlight.x, 0);
+        compare(highlight.y, 0);
+        compare(highlight.width, cell.width);
+        compare(highlight.height, cell.height);
+        compare(highlight.radius, firstTasks.radius);
+        compare(highlight.color, Tokens.barHover);
+    }
     function init() {
         ToplevelManager.toplevels = [];
+        browser.activated = false;
+        Workspaces.tagsByMonitor = ({});
+        Workspaces.gen++;
         browser.screens = [screenOne];
         browser.parent = null;
         ToplevelManager.toplevels = [browser];
@@ -46,13 +78,13 @@ TestCase {
     function test_task_contents_follow_screen_changes_and_parenting() {
         verify(task(firstTasks).item !== null);
         compare(task(secondTasks).item, null);
-        tryCompare(firstTasks, "implicitWidth", Tokens.barModuleHeight + 8);
+        tryCompare(firstTasks, "implicitWidth", Tokens.barModuleHeight);
         compare(secondTasks.implicitWidth, 0);
         browser.screens = [screenTwo];
         tryCompare(task(firstTasks), "item", null);
         verify(task(secondTasks).item !== null);
         tryCompare(firstTasks, "implicitWidth", 0);
-        tryCompare(secondTasks, "implicitWidth", Tokens.barModuleHeight + 8);
+        tryCompare(secondTasks, "implicitWidth", Tokens.barModuleHeight);
         browser.parent = root;
         tryCompare(task(secondTasks), "item", null);
         browser.parent = null;
